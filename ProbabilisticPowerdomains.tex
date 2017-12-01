@@ -194,6 +194,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 % Macros %
 \DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\subtype}{\ulcorner}{\urcorner}
 
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
@@ -354,7 +355,47 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Type theory stuff}
 
+Given a function $f:X\to\Prop$, we write $\subtype{f}\ss X$ to denote the associated subtype, $\subtype{f}=\{x:X\mid fx\}$.
+
+\begin{definition}
+Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to\Prop$ satisfying
+\begin{enumerate}
+	\item $\forall(x:X)\ldotp L(x,x)$.
+	\item $\forall(x,y,z:X)\ldotp L(x,y)\imp L(y,z)\imp L(x,z)$.
+\end{enumerate}
+We usually denote $L(x,y)$ as $x L y$. We call $(X,L)$ a \emph{poset}.
+\end{definition}
+
+\begin{example}
+For any type $Y$, the type $X\coloneqq (Y\to\Prop)$ has a natural poset structure given by $\lambda(f,g:Y\to\Prop)\ldotp\forall(y:Y)\ldotp (fy\imp gy)$.
+\end{example}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if it satisfies the following:
+\begin{enumerate}
+	\item $\exists(x:X)\ldotp Dx$.
+	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $P$ is an element $s_P:X$ satisfying
+\begin{enumerate}
+	\item $\forall(x:\subtype{P})\ldotp x\leq s_P$.
+	\item $\forall(s':X)\ldotp[\forall(x:\subtype{P})\ldotp x\leq s']\imp s_P\leq s'$.
+\end{enumerate}
+Similarly, a \emph{meet} of $P$ is an element satisfying the dual statements (the arguments to every $\leq$ symbol are swapped).
+
+We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp x=x_1\vee x=x_2$ has a join (resp.\ meet). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join.
+
+\end{definition}
 
 
+%%%%%%%%% Chapter %%%%%%%%%
+\chapter{Questions}
+
+\begin{enumerate}
+	\item Does every internal frame embed into a discrete frame?
+\end{enumerate}
 
 \end{document}
