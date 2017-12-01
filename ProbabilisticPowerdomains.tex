@@ -376,6 +376,7 @@ Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if 
 	\item $\exists(x:X)\ldotp Dx$.
 	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
 \end{enumerate}
+Denote the conjunction of these two conditions as $\const{Drct}:(X\to\Prop)\to\Prop$.
 \end{definition}
 
 \begin{definition}
@@ -386,9 +387,21 @@ Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $
 \end{enumerate}
 Similarly, a \emph{meet} of $P$ is an element satisfying the dual statements (the arguments to every $\leq$ symbol are swapped).
 
-We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp x=x_1\vee x=x_2$ has a join (resp.\ meet). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join.
+We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp (x=x_1) \vee (x=x_2)$ has a join, in which case we denote it $x_1\vee x_2$ (resp.\ meet $x_1\wedge x_2$). 
 
+We say that $X$ has a \emph{bottom element} if $\lambda(x:X)\ldotp \bot$ has a join, in which case we denote it $\varnothing:X$. We say that $X$ has \emph{finite joins} if $X$ has binary joins and a bottom element (resp.\ binary meets and a top element). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join, denoted $\sup P$.
 \end{definition}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset with finite joins, binary meets, and directed joins. A \emph{valuation} on $X$ is a function $\mu:X\to\RR$ satisfying the following:
+\begin{enumerate}
+	\item $\mu(\varnothing)=0$.
+	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
+	\item $\forall(x,x':X)\ldotp\mu(x)+\mu(x')=\mu(x\vee x')+\mu(x\wedge x')$.
+	\item $\forall(D:X\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
+\end{enumerate}
+\end{definition}
+
 
 
 %%%%%%%%% Chapter %%%%%%%%%
