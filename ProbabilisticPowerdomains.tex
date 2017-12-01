@@ -1,0 +1,426 @@
+\documentclass[11pt, book]{memoir}
+
+\settrims{0pt}{0pt} % page and stock same size
+\settypeblocksize{*}{36pc}{*} % {height}{width}{ratio}
+\setlrmargins{*}{*}{1} % {spine}{edge}{ratio}
+\setulmarginsandblock{1in}{1in}{*} % height of typeblock computed
+\setheadfoot{\onelineskip}{2\onelineskip} % {headheight}{footskip}
+\setheaderspaces{*}{1.5\onelineskip}{*} % {headdrop}{headsep}{ratio}
+\checkandfixthelayout
+
+
+
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{bbm}
+\usepackage{accents}
+\usepackage{newpxtext}
+\usepackage[utf8]{inputenc}
+\usepackage[varg,bigdelims]{newpxmath}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{mathpartir}
+\usepackage[bookmarks=true, colorlinks=true, linkcolor=blue!50!red, citecolor=orange,
+pdfencoding=unicode]{hyperref}
+\usepackage{subfiles}
+\usepackage[capitalize]{cleveref}
+  \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
+\usepackage[backend=biber,style = alphabetic]{biblatex}
+  \addbibresource{Library20171004.bib}
+\usepackage{ebproof}
+
+\usepackage{makeidx}
+
+
+\makeindex
+\crefname{axiom}{Axiom}{Axioms}
+\usetikzlibrary{
+	cd,
+	math,
+	decorations.markings,
+	positioning,
+	arrows.meta,
+	shapes,
+	calc,
+	fit,
+	quotes,
+	intersections}
+\hypersetup{final}
+\setlist{nosep}
+
+\tikzset{
+   oriented WD/.style={%everything after equals replaces "oriented WD" in key.
+      every to/.style={out=0,in=180,draw},
+      label/.style={
+         font=\everymath\expandafter{\the\everymath\scriptstyle},
+         inner sep=0pt,
+         node distance=2pt and -2pt},
+      semithick,
+      node distance=1 and 1,
+      decoration={markings, mark=at position .5 with {\arrow{stealth};}},
+      ar/.style={postaction={decorate}},
+      execute at begin picture={\tikzset{
+         x=\bbx, y=\bby,
+         every fit/.style={inner xsep=\bbx, inner ysep=\bby}}}
+      },
+   bbx/.store in=\bbx,
+   bbx = 1.5cm,
+   bby/.store in=\bby,
+   bby = 1.75ex,
+   bb port sep/.store in=\bbportsep,
+   bb port sep=2,
+   % bb wire sep/.store in=\bbwiresep,
+   % bb wire sep=1.75ex,
+   bb port length/.store in=\bbportlen,
+   bb port length=4pt,
+   bb min width/.store in=\bbminwidth,
+   bb min width=1cm,
+   bb rounded corners/.store in=\bbcorners,
+   bb rounded corners=2pt,
+   bb small/.style={bb port sep=1, bb port length=2.5pt, bbx=.4cm, bb min width=.4cm, bby=.7ex},
+   bb/.code 2 args={%When you see this key, run the code below:
+      \pgfmathsetlengthmacro{\bbheight}{\bbportsep * (max(#1,#2)+1) * \bby}
+      \pgfkeysalso{draw,minimum height=\bbheight,minimum width=\bbminwidth,outer sep=0pt,
+         rounded corners=\bbcorners,thick,
+         prefix after command={\pgfextra{\let\fixname\tikzlastnode}},
+         append after command={\pgfextra{\draw
+            \ifnum #1=0{} \else foreach \i in {1,...,#1} {
+               ($(\fixname.north west)!{\i/(#1+1)}!(\fixname.south west)$) +(-\bbportlen,0) 
+coordinate (\fixname_in\i) -- +(\bbportlen,0) coordinate (\fixname_in\i')}\fi %Define the endpoints 
+%of tickmarks
+            \ifnum #2=0{} \else foreach \i in {1,...,#2} {
+               ($(\fixname.north east)!{\i/(#2+1)}!(\fixname.south east)$) +(-\bbportlen,0) 
+coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
+         }}}
+   },
+   bb name/.style={append after command={\pgfextra{\node[anchor=north] at (\fixname.north) {#1};}}}
+}
+
+
+\tikzset{
+	unoriented WD/.style={
+		every to/.style={draw},
+		shorten <=-\portlen, shorten >=-\portlen,
+		label distance=-2pt,
+		thick,
+		node distance=\spacing,
+		execute at begin picture={\tikzset{
+			x=\spacing, y=\spacing}}
+		},
+	pack size/.store in=\psize,
+	pack size = 8pt,
+	spacing/.store in=\spacing,
+	spacing = \psize,
+	link size/.store in=\lsize,
+	link size = 2pt,
+	port len/.store in=\portlen,
+	port len = \lsize,
+	pack color/.store in=\pcolor,
+	pack color=blue,
+	surround sep/.store in=\ssep,
+	surround sep=\psize,
+	link/.style={
+		circle,
+		anchor=center,
+		draw=black,
+		fill=black,
+		inner sep=0pt,
+		minimum size=\lsize
+	},
+	pack/.style={
+		circle,
+		anchor=center,
+		draw = \pcolor!50!black,
+		fill = \pcolor!20,
+		inner sep = .25*\psize,
+		minimum size = \psize
+	},
+	outer pack/.style={
+		ellipse,
+		anchor=center,
+		draw,
+		inner sep=\ssep,
+		color=\pcolor!50!black,
+	},
+	intermediate pack/.style={
+		ellipse,
+		anchor=center,
+		dashed,
+		draw,
+		inner sep=\ssep,
+		color=\pcolor!50!black,
+	},
+}
+
+\newcommand{\mypic}[4]{
+	\node (lend) {};
+	\node [right=#1 of lend] (L) {#4};
+	\node [right=#2 of L] (R) {#4};
+	\node [right=#1 of R] (rend) {};
+	\node at ($(L)!.5!(R)+(0,#2/2)$) (M) {};
+	\draw[thick, black, #3] (L.center) -- (M.center) -- (R.center);
+	\fill[fill=black!15] (L.center) -- (M.center) -- (R.center) -- cycle;
+	\draw[thick, <->] (lend) -- (rend);
+}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter] %change [] to chapter if we want to change global numbering
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{axiom}{Axiom}
+\newtheorem*{axiom*}{Axiom}
+
+\theoremstyle{remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{warning}[theorem]{Warning}
+
+\setcounter{axiom}{-1}
+
+% Renewed commands
+
+\renewcommand{\ss}{\subseteq}
+
+% Macros %
+\newcommand{\const}[1]{\mathtt{#1}}
+\newcommand{\Set}[1]{\mathrm{#1}}
+\newcommand{\cat}[1]{\mathcal{#1}}
+\newcommand{\Cat}[1]{\mathbf{#1}}
+\newcommand{\fun}[1]{\mathit{#1}}
+\newcommand{\Fun}[1]{\mathsf{#1}}
+\DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
+%\newcommand{\church}[1]{\llbracket#1\rrbracket}
+\DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
+%\newcommand{\Church}[1]{\left\llbracket#1\right\rrbracket}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\newcommand{\mach}[1]{\mathcal{#1}}
+
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator*{\colim}{colim}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Ob}{Ob}
+
+\newcommand{\cocolon}{:\!}
+\newcommand{\iso}{\cong}
+\newcommand{\To}[1]{\xrightarrow{#1}}
+\newcommand{\Too}[1]{\xrightarrow{\;\;#1\;\;}}
+\newcommand{\from}{\leftarrow}
+\newcommand{\From}[1]{\xleftarrow{#1}}
+\newcommand{\Fromm}[1]{\xleftarrow{\;\;#1\;\;}}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\inj}{\rightarrowtail}
+\newcommand{\wavyto}{\rightsquigarrow}
+
+\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+
+\newcommand{\hs}{\hspace{1.1pt}}
+\newcommand{\delnext}[1]{}
+
+\newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\QQub}{\QQ^\infty}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\RRub}{\RR^\infty}
+\newcommand{\RRubhalf}{\RRub_{\geq0}}
+\newcommand{\IR}{\mathbb{I\hs R}}
+\newcommand{\II}{\bar{\ubar{\RR}}}
+\newcommand{\LR}{\ubar{\RR}}
+\newcommand{\UR}{\bar{\RR}}
+\newcommand{\LRub}{\ubar{\RR}^\infty}
+\newcommand{\URub}{\bar{\RR}^\infty}
+\newcommand{\IRub}[1][\delnext]{\IR^\infty}
+\newcommand{\IIub}{\II^\infty}
+\newcommand{\IRpre}[1][\delnext]{\IR\hs_{#1,\tn{pre}}}
+\newcommand{\IIpre}{\II_{\tn{pre}}}
+\newcommand{\LRpre}{\ubar{\RR}_{\tn{pre}}}
+\newcommand{\URpre}{\bar{\RR}_{\tn{pre}}}
+\newcommand{\LRplus}{\ubar{\RR}^{+}}
+\newcommand{\URplus}{\bar{\RR}^{+}}
+\newcommand{\IIubpre}{\bar{\ubar{\RR}}^\infty_{\tn{pre}}}
+\newcommand{\IRubpre}[1][\delnext]{\IR\hs^\infty_{#1,\tn{pre}}}
+\newcommand{\LRubpre}{\ubar{\RR}^\infty_{\tn{pre}}}
+\newcommand{\URubpre}{\bar{\RR}^\infty_{\tn{pre}}}
+\newcommand{\LRpluspre}{\ubar{\RR}^{+}_{\tn{pre}}}
+\newcommand{\URpluspre}{\bar{\RR}^{+}_{\tn{pre}}}
+\newcommand{\tNN}{\internal{N}\hs}
+\newcommand{\tQQ}{\internal{Q}\hs}
+\newcommand{\tZZ}{\internal{Z}\hs}
+\newcommand{\tQQub}{\QQ^\infty}
+\newcommand{\tRR}{\internal{R}\hs}
+\newcommand{\tIR}{\internal{I\hs R}\hs}
+\newcommand{\tII}{\bar{\ubar{\tRR}}\hs}
+\newcommand{\tLR}{\ubar{\tRR}\hs}
+\newcommand{\tUR}{\bar{\tRR}\hs}
+\newcommand{\tRRub}{\tRR^\infty}
+\newcommand{\tIRub}{\internal{I\hs R}^\infty}
+\newcommand{\tLRub}{\ubar{\tRR}^{\infty}}
+\newcommand{\tURub}{\bar{\tRR}^{\infty}}
+\newcommand{\tIIub}{\bar{\ubar{\tRR}}^{\infty}}
+\newcommand{\ctRR}{\mathrm{c}\tRR}
+\newcommand{\ctIR}{\mathrm{c}\tIR}
+\newcommand{\ctII}{\mathrm{c}\tII}
+\newcommand{\ctLR}{\mathrm{c}\tLR}
+\newcommand{\ctUR}{\mathrm{c}\tUR}
+\newcommand{\ctRRub}{\mathrm{c}\tRRub}
+\newcommand{\ctIRub}{\mathrm{c}\tIRub}
+\newcommand{\ctIIub}{\mathrm{c}\tIIub}
+\newcommand{\ctLRub}{\mathrm{c}\tLRub}
+\newcommand{\ctURub}{\mathrm{c}\tURub}
+\newcommand{\tIRpre}[1][\delnext]{\tIR\hs_{#1,\tn{pre}}}
+\newcommand{\tIIpre}{\tII_{\tn{pre}}}
+\newcommand{\tLRpre}{\ubar{\tRR}_{\tn{pre}}}
+\newcommand{\tURpre}{\bar{\tRR}_{\tn{pre}}}
+\newcommand{\tLRplus}{\ubar{\tRR}^{+}}
+\newcommand{\tURplus}{\bar{\tRR}^{+}}
+\newcommand{\tIIubpre}{\bar{\ubar{\tRR}}^\infty_{\tn{pre}}}
+\newcommand{\tIRubpre}[1][\delnext]{\tIR\hs^\infty_{#1,\tn{pre}}}
+\newcommand{\tLRubpre}[1][\delnext]{\ubar{\tRR}^\infty_{#1,\tn{pre}}}
+\newcommand{\tURubpre}{\bar{\tRR}^\infty_{\tn{pre}}}
+\newcommand{\tLRpluspre}{\ubar{\tRR}^{+}_{\tn{pre}}}
+\newcommand{\tURpluspre}{\bar{\tRR}^{+}_{\tn{pre}}}
+\newcommand{\IRinvInline}{\IR/\rhd}
+%\newcommand{\IRinv}{\textstyle{\frac{\IR}{\rhd}}}
+\newcommand{\IRinv}{\IR_{/\rhd}}
+\newcommand{\tConst}{\mathtt{C}}
+\newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
+
+\newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
+\newcommand{\Psh}[1]{\Fun{Psh}(#1)}
+\newcommand{\Shv}[1]{\Fun{Shv}(#1)}
+\newcommand{\Cont}[1]{\Fun{Cont}(#1)}
+
+\newcommand{\Tw}[1]{\Fun{Tw}(#1)}
+\newcommand{\B}{\Fun{B}}
+
+\newcommand{\textoverline}[1]{$\overline{\mbox{#1}}$}
+
+\newcommand{\AD}{\mathrm{AD}}
+
+\newcommand{\Filt}{\Set{Filt}}
+\newcommand{\Prop}{\const{Prop}}
+\newcommand{\Time}{\const{Time}}
+\newcommand{\unit}{\const{1}}
+\newcommand{\Poset}{\Cat{Poset}}
+\newcommand{\Int}{\Cat{Int}}
+\renewcommand{\Top}{\Cat{Top}}
+\newcommand{\Predom}{\Cat{Predom}}
+\newcommand{\unitspeed}{\mathrm{unit\_speed\ }}
+\newcommand{\Bool}{2}
+%\newcommand{\Bool}{\Set{Bool}}
+
+\newcommand{\BaseTopos}{\cat{B}}
+\newcommand{\BaseSite}{S_{\IRinvInline}}
+
+
+\newcommand{\op}{^\tn{op}}
+\newcommand{\el}[1]{\tn{el}#1}
+\newcommand{\binmeet}{\curlywedge}
+\newcommand{\binjoin}{\curlyvee}
+\newcommand{\join}{\mathbin{\star}}
+\newcommand{\asSh}{\Fun{sh}}
+\newcommand{\bang}{\,!}
+
+\newcommand{\subint}[2]{\langle #1,#2\rangle}
+\newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
+\newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
+\newcommand{\basicCover}{\rightslice}
+\newcommand{\sqss}{\sqsubseteq}
+\newcommand{\specupclose}{{\uparrow}}
+\newcommand{\specdownclose}{{\downarrow}}
+\newcommand{\upclose}{{\rotatebox[origin=c]{90}{$\twoheadrightarrow$}}}
+\newcommand{\downclose}{{\rotatebox[origin=c]{90}{$\twoheadleftarrow$}}}
+\newcommand{\down}{\mathord{\downarrow}}
+\newcommand{\up}{\mathord{\uparrow}}
+\newcommand{\specord}{\leqslant}
+\newcommand{\upspecord}{\eqslantless}
+\newcommand{\PoShv}[1]{\Fun{Shv}_0(#1)}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\RId}{\mathrm{RId}}
+\newcommand{\cRId}{\mathrm{cRId}}
+\newcommand{\RFilt}{\Omega_{\mathrm{Filt}}}
+\newcommand{\Opens}{\Omega}
+\renewcommand{\U}{\mathcal{U}}
+\newcommand{\amap}[3]{#2(#1,#3)}
+\newcommand{\ti}[1]{#1/\rhd}
+\newcommand{\apart}{\,\#\,}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\Op}{\Omega}
+\newcommand{\WB}[2]{\langle\!\langle#1,#2\rangle\!\rangle}
+\newcommand{\wb}{W}
+\newcommand{\ddt}{\frac{d}{dt}}
+
+\newcommand{\imp}{\Rightarrow}
+\renewcommand{\iff}{\Leftrightarrow}
+
+\newcommand{\Pointwise}{\pi}
+\newcommand{\AtSymbol}{{@}}
+\newcommand{\SeeSymbol}{{\down}}  % Old: \xi
+\newcommand{\InSymbol}{{\upclose}}% Old: \iota
+\newcommand{\At}[2][]{\AtSymbol^{#1}_{#2}}
+\newcommand{\See}[2][]{\SeeSymbol^{#1}_{#2}}
+\newcommand{\In}[2][]{\InSymbol^{#1}_{#2}}
+\newcommand{\AtInline}[1]{@{#1}}
+\newcommand{\SeeInline}[1]{\SeeSymbol{#1}}
+\newcommand{\InInline}[1]{\InSymbol{#1}}
+
+\newcommand{\Until}{\mathbin{\mathcal{U}}}
+\newcommand{\Since}{\mathbin{\mathcal{S}}}
+\newcommand{\Release}{\mathbin{\mathcal{R}}}
+
+\newcommand{\vertss}{\rotatebox{270}{\!$\ss$}}
+
+\newcommand{\hybrid}{\mathrm{Hyb}}
+
+\newcommand{\smbullet}{{\small$\bullet$}}
+
+\newcommand{\side}[1]{$\scriptstyle #1$}
+\newcommand{\fv}{\mathrm{fv}}
+\newcommand{\Prem}{\;\mathit{Prem}}
+
+
+\newcommand{\erase}[1]{}
+\newcommand{\dtodo}[2][]{\todo[linecolor=white, backgroundcolor=white, bordercolor=gray, #1]{#2}}
+\newcommand{\ptodo}[2][]{\todo[color=red!30, #1]{#2}}
+
+
+\linespread{1.2}
+\allowdisplaybreaks
+\setsecnumdepth{subsection}
+\settocdepth{section}
+\setlength{\parindent}{15pt}
+
+%%%%%%%%%% Document %%%%%%%%%%
+\begin{document}
+
+\title{Notes on probabilistic powerdomains in a sheaf topos}
+
+\author{Tobias and David}
+
+\maketitle
+
+\tableofcontents*
+
+
+
+\end{document}
