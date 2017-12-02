@@ -237,9 +237,11 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\QQp}{\QQ_{+}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\VV}{\mathbb{V}}
 \newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\LR}{\ul{\mathbb{R}}}
 
 
 \newcommand{\tConst}{\mathtt{C}}
@@ -298,7 +300,9 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Type theory stuff}
 
-Given a function $f:X\to\Prop$, we write $\subtype{f}\ss X$ to denote the associated subtype, $\subtype{f}=\{x:X\mid fx\}$.
+\begin{notation}
+We write $\QQp\coloneqq\{q:\QQ\mid q\geq0\}$. Given a function $f:X\to\Prop$, we write $\subtype{f}\ss X$ to denote the associated subtype, $\subtype{f}\coloneqq\{x:X\mid fx\}$.
+\end{notation}
 
 \begin{definition}
 Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to\Prop$ satisfying
@@ -314,7 +318,27 @@ For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset struc
 \end{example}
 
 \begin{example}
-The type $\RR$ of real numbers has a poset structure given by $r\leq r'\iff\forall(q:\QQ)\ldotp(q<r)\imp(q<r')$. Here $q<r$ is shorthand for ``$q$ is in the lower cut of $r$''.
+The type $\LR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\QQp\to\Prop$ satisfying the following:
+\begin{description}
+	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\QQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
+	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\QQp)\ldotp\delta q\imp\exists(q':\QQ)\ldotp(q<q')\wedge\delta q'$.
+\end{description}
+The type $\LR$ has the structure of an ordered semi-field. That is, it has the structure of
+\begin{itemize}
+	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
+	\item a commutative monoid $(0,+)$:
+	\begin{itemize}
+		\item identity $0$ given by $\lambda q\ldotp \bot$,
+		\item  addition given by $(\delta_1+\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1+q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
+	\end{itemize}
+	\item a commutative monoid $(1,*)$:
+	\begin{itemize}
+		\item identity $1$ given by $\lambda q\ldotp q<1$,
+		\item multiplication given by $(\delta_1*\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1*q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
+	\end{itemize}
+	\item reciprocals: $\delta 0\imp\exists(\delta':\LR)\ldotp\delta*\delta'=1$.
+\end{itemize}
+where multiplication distributes over addition, and both preserve order.
 \end{example}
 
 \begin{definition}
@@ -344,13 +368,15 @@ For any type $Y$, the poset $\Phi\coloneqq Y\to\Prop$ has all joins and meets. T
 \end{example}
 
 \begin{example}
-The poset $(\RR,\leq)$ has binary joins (given by $\max$) and binary meets (given by $\min$) and it has directed joins (given by $\sup$), but it does not have a bottom or top element.
+The poset $(\LR,\leq)$ has arbitrary joins: the join of $P:\LR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
+
+In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\LR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
 \end{example}
 
 \begin{definition}
 We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Feel free to suggest better terminology; I just don't want to repeat "binary meets, finite joins, directed joins".}if it has binary meets, finite joins, and directed joins.
 
-Suppose $(X,\leq)$ has valuations. A \emph{valuation} on $X$ is a function $\mu:X\to\RR$ satisfying the following:
+Suppose $(X,\leq)$ has valuations. A \emph{valuation} on $X$ is a function $\mu:X\to\LR$ satisfying the following:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$.
 	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
