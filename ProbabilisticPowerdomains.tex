@@ -323,7 +323,7 @@ The type $\LR$ of nonnegative lower real numbers is defined as the type of funct
 	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\QQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
 	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\QQp)\ldotp\delta q\imp\exists(q':\QQ)\ldotp(q<q')\wedge\delta q'$.
 \end{description}
-The type $\LR$ has the structure of an ordered semi-field. That is, it has the structure of
+The type $\LR$ has the structure of an ordered semi-ring. That is, it has the structure of
 \begin{itemize}
 	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
 	\item a commutative monoid $(0,+)$:
@@ -336,7 +336,6 @@ The type $\LR$ has the structure of an ordered semi-field. That is, it has the s
 		\item identity $1$ given by $\lambda q\ldotp q<1$,
 		\item multiplication given by $(\delta_1*\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1*q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
 	\end{itemize}
-	\item reciprocals: $\delta 0\imp\exists(\delta':\LR)\ldotp\delta*\delta'=1$.
 \end{itemize}
 where multiplication distributes over addition, and both preserve order.
 \end{example}
