@@ -257,6 +257,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\unit}{\const{1}}
 \newcommand{\Poset}{\Cat{Poset}}
 \renewcommand{\Top}{\Cat{Top}}
+\renewcommand{\C}{\Cat{C}}
 
 \newcommand{\op}{^\tn{op}}
 \newcommand{\el}[1]{\tn{el}#1}
@@ -312,6 +313,8 @@ Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to
 \end{enumerate}
 We usually denote $L(x,y)$ as $x L y$. We call $(X,L)$ a \emph{poset}.
 \end{definition}
+
+In terms of sheaf semantics on some site $(\C,J)$, an internal poset is the same thing as a sheaf with values in $\Poset$; since the theory of posets is essentially algebraic, this is a consequence of Diaconescu's theorem, but it is also instructive to check it by hand.
 
 \begin{example}
 For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset structure given by $\lambda(f,g:Y\to\Prop)\ldotp\forall(y:Y)\ldotp (fy\imp gy)$.
