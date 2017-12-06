@@ -29,7 +29,7 @@ pdfencoding=unicode]{hyperref}
 \usepackage[capitalize]{cleveref}
   \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
 \usepackage[backend=biber,style = alphabetic]{biblatex}
-  \addbibresource{Library20171004.bib}
+  \addbibresource{Library20171206.bib}
 \usepackage{ebproof}
 \usepackage{todonotes}
 
@@ -232,16 +232,34 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 
 
 \newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
+\newcommand{\hs}{\hspace{1.1pt}}
 
 
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\QQ}{\mathbb{Q}}
-\newcommand{\QQp}{\QQ_{+}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\VV}{\mathbb{V}}
 \newcommand{\ZZ}{\mathbb{Z}}
 \newcommand{\LR}{\ul{\mathbb{R}}}
+
+\newcommand{\tNN}{\internal{N}\hs}
+\newcommand{\tQQ}{\internal{Q}\hs}
+\newcommand{\tQQp}{\tQQ_{+}}
+\newcommand{\tZZ}{\internal{Z}\hs}
+\newcommand{\tQQub}{\QQ^\infty}
+\newcommand{\tRR}{\internal{R}\hs}
+\newcommand{\tIR}{\internal{I\hs R}\hs}
+\newcommand{\tII}{\bar{\ubar{\tRR}}\hs}
+\newcommand{\tLR}{\ubar{\tRR}\hs}
+\newcommand{\tUR}{\bar{\tRR}\hs}
+\newcommand{\tRRub}{\tRR^\infty}
+\newcommand{\tIRub}{\internal{I\hs R}^\infty}
+\newcommand{\tLRub}{\ubar{\tRR}^{\infty}}
+\newcommand{\tURub}{\bar{\tRR}^{\infty}}
+\newcommand{\tIIub}{\bar{\ubar{\tRR}}^{\infty}}
+
+\newcommand{\tRRat}[1]{\tRR_{\AtInline{#1}}}
 
 
 \newcommand{\tConst}{\mathtt{C}}
@@ -265,6 +283,18 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 
 \newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
 \newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
+
+\newcommand{\Pointwise}{\pi}
+\newcommand{\AtSymbol}{{@}}
+\newcommand{\SeeSymbol}{{\down}}  % Old: \xi
+\newcommand{\InSymbol}{{\upclose}}% Old: \iota
+\newcommand{\At}[2][]{\AtSymbol^{#1}_{#2}}
+\newcommand{\See}[2][]{\SeeSymbol^{#1}_{#2}}
+\newcommand{\In}[2][]{\InSymbol^{#1}_{#2}}
+\newcommand{\AtInline}[1]{@{#1}}
+\newcommand{\SeeInline}[1]{\SeeSymbol{#1}}
+\newcommand{\InInline}[1]{\InSymbol{#1}}
+
 
 \newcommand{\sqss}{\sqsubseteq}
 \newcommand{\specupclose}{{\uparrow}}
@@ -302,7 +332,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \chapter{Type theory stuff}
 
 \begin{notation}
-We write $\QQp\coloneqq\{q:\QQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
+We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
 \end{notation}
 
 \begin{definition}
@@ -321,12 +351,12 @@ For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset struc
 \end{example}
 
 \begin{example}
-The type $\LR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\QQp\to\Prop$ satisfying the following:
+The type $\tLR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\tQQp\to\Prop$ satisfying the following:
 \begin{description}
-	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\QQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
-	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\QQp)\ldotp\delta q\imp\exists(q':\QQ)\ldotp(q<q')\wedge\delta q'$.
+	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\tQQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
+	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\tQQp)\ldotp\delta q\imp\exists(q':\tQQ)\ldotp(q<q')\wedge\delta q'$.
 \end{description}
-The type $\LR$ has the structure of an ordered semi-ring. That is, it has the structure of
+The type $\tLR$ has the structure of an ordered semi-ring. That is, it has the structure of
 \begin{itemize}
 	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
 	\item a commutative monoid $(0,+)$:
@@ -370,15 +400,15 @@ For any type $Y$, the poset $\Phi\coloneqq Y\to\Prop$ has all joins and meets. T
 \end{example}
 
 \begin{example}
-The poset $(\LR,\leq)$ has arbitrary joins: the join of $P:\LR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
+The poset $(\tLR,\leq)$ has arbitrary joins: the join of $P:\tLR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
 
-In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\LR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
+In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\tLR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
 \end{example}
 
 \begin{definition}
 We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Feel free to suggest better terminology; I just don't want to repeat "binary meets, finite joins, directed joins".}if it has binary meets, finite joins, and directed joins.
 
-Suppose $(X,\leq)$ has valuations. A \emph{valuation} on $X$ is a function $\mu:X\to\LR$ satisfying the following:
+Suppose $(X,\leq)$ has valuations. A \emph{valuation} on $X$ is a function $\mu:X\to\tLR$ satisfying the following:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$.
 	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
@@ -393,6 +423,29 @@ Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\
 
 Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
 
+%%%%%%%%% Chapter %%%%%%%%%
+\chapter{Riesz approach}
+
+One idea is to follow the spirit of the Riesz representation theorem (reference?). We could try to define a measure on a type $X$ to be a positive linear functional on the type $(X\to\tRR)$. However, there is a semantic problem with this idea, namely the Dedekind reals $\tRR$ are constant, so the value of a sheaf homomorphism $X\to\tRR$ on a section $x$ must remain constant as we restrict $x$. This is too strong.
+
+One possibility is to replace $\tRR$ with $\tRRat{[d,u]}$ in the above formulation, where $d\leq u$ are elements of $\tRR$.%
+\footnote{
+It is shown in \cite[Prop 7.9]{Schultz.Spivak:2017a} that there is an isomorphism $\tRRat{[d,u]}\cong\tRR_{\SeeInline{[d,u]}}$.
+}
+The semantics of the sheaf $\tRRat{[d,u]}$ are as follows. For any interval $(a,b)\ss\RR$, if $a<d\leq u<b$ then $\RR\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ sections on intervals containing $[d,u]$ are constant reals. If $d\leq a$ or $b\leq u$, then $1\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ on intervals missing either endpoint of $[d,u]$ there is exactly one section.
+
+The semantics of an internal function $f:X\to\tRRat{[d,u]}$ is that of a function $\church{X}_{[d,u]}\to\RR$ from the stalk of $X$ at $[d,u]$ to $\RR$. This seems to be what Tobias wanted.
+
+\begin{definition}
+Let $X$ be a type. For $t:\Time$ and $d,u\in\tRR$, a \emph{measure on $X$ at $[d,u]$} is defined to be a function $\mu:(X\to\tRRat{[d,u]})\to\tRRat{[d,u]}$ satisfying the following properties:
+\begin{enumerate}
+	\item Linearity: $\mu(f+g)=\mu(f)+\mu(g)$ for $f,g:X\to\tRRat{[d,u]}$.
+	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.%
+	\footnote{The notation $a\leq b$ here is shorthand for $(b<a)\imp\At{[d,u]}\bot$. The correct notation is $a\leq_{\AtInline{[d,u]}}b$, but this is a bit heavy.
+	}
+\end{enumerate}
+\end{definition}
+
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
@@ -402,5 +455,7 @@ Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
 	\item What are the semantics of valuations in the topos of sheaves on a topological space? What about in the (presheaf) topos of graphs?
 	\item At every point in a topos $\cat{B}$, logic becomes classical. What is a valuation at a point?
 \end{enumerate}
+
+\printbibliography
 
 \end{document}
