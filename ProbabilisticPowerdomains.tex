@@ -194,7 +194,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 % Macros %
 \DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
-\DeclarePairedDelimiter{\subtype}{\ulcorner}{\urcorner}
+\DeclarePairedDelimiter{\subtype}{[}{]}
 
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
@@ -302,7 +302,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \chapter{Type theory stuff}
 
 \begin{notation}
-We write $\QQp\coloneqq\{q:\QQ\mid q\geq0\}$. Given a function $f:X\to\Prop$, we write $\subtype{f}\ss X$ to denote the associated subtype, $\subtype{f}\coloneqq\{x:X\mid fx\}$.
+We write $\QQp\coloneqq\{q:\QQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
 \end{notation}
 
 \begin{definition}
