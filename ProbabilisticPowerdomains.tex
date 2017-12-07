@@ -440,9 +440,13 @@ For any $d\leq d'\leq u'\leq u$ and any $P:\Prop$, we have $\See{[d',u']}P\imp\S
 \[\See{[d,u]}:\tRRat{[d',u']}\to\tRRat{[d,u]}.\]
 
 \begin{definition}
-Let $X$ be a type. For $t:\Time$ and $d,u\in\tRR$, a \emph{measure on $X$ at $[d,u]$} is defined to be a function $\mu:(X\to\tRRat{[d,u]})\to\tRRat{[d,u]}$ satisfying the following properties:
+Let $X$ be a type. For $t:\Time$ and $d,u\in\tRR$, a \emph{measure on $X$ at $[d,u]$} is defined to be a function $\mu:(X\to\tRRat{[d,u]})\to\tRRat{[d,u]}$%
+\footnote{
+I guess we want to consider continuous maps from a locale $X$ to the locale of opens in $\tRRat{[d,u]}$?
+}
+satisfying the following properties:
 \begin{enumerate}
-	\item Linearity: $\mu(f+g)=\mu(f)+\mu(g)$ for $f,g:X\to\tRRat{[d,u]}$.
+	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
 	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.%
 	\footnote{The notation $a\leq b$ here is shorthand for $(b<a)\imp\At{[d,u]}\bot$. The correct notation is $a\leq_{\AtInline{[d,u]}}b$, but this is a bit heavy.
 	}
