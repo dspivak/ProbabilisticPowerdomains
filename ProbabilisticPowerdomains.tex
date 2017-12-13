@@ -235,6 +235,8 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\hs}{\hspace{1.1pt}}
 
 
+\newcommand{\EE}{\mathbb{E}} % expectation value
+\newcommand{\II}{\mathbb{I}} % interval domain
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\QQ}{\mathbb{Q}}
@@ -361,7 +363,7 @@ The type $\tLR$ has the structure of an ordered semi-ring. That is, it has the s
 	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
 	\item a commutative monoid $(0,+)$:
 	\begin{itemize}
-		\item identity $0$ given by $\lambda q\ldotp \bot$,
+		\item identity $0$ given by $\lambda q\ldotp q < 0$,
 		\item  addition given by $(\delta_1+\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1+q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
 	\end{itemize}
 	\item a commutative monoid $(1,*)$:
@@ -406,15 +408,15 @@ In fact, it also has arbitrary meets, though I don't think we'll need that. The 
 \end{example}
 
 \begin{definition}
-We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Feel free to suggest better terminology; I just don't want to repeat "binary meets, finite joins, directed joins".}if it has binary meets, finite joins, and directed joins.
+We say that a poset $(X,\leq)$ is a \emph{frame} \todo{Check that this is equivalent to the definition of internal frame}if it has binary meets, binary joins, and directed joins.
 
-Suppose $(X,\leq)$ has valuations. A \emph{valuation} on $X$ is a function $\mu:X\to\tLR$ satisfying the following:
+Suppose $(X,\leq)$ is a frame. A \emph{valuation} on $X$ is a function $\mu:X\to\tLR$ satisfying the following:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$.
 	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
 	\item $\forall(x,x':X)\ldotp\mu(x)+\mu(x')=\mu(x\vee x')+\mu(x\wedge x')$.
 	\item $\forall(D:X\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
-\end{enumerate}
+\end{enumerate} \todo{is $\sup : \subtype{\const{Drct}}\to X$ well-defined? We've only defined what a sup is for each particular directed subtype, without talking about uniqueness}
 Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$.%
 \footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(x:\subtype{D})\ldotp r=\mu(x)\}$.}
 
@@ -458,6 +460,11 @@ such that
 holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
 \end{definition}
 
+Tobias: I'm not sure if this is going in the right direction. My idea was that we'd have a sheaf $\tRR_{\EE}$ in which expectation values land, such that a section over $(a,b)$ is either an arbitrary function $\II(a,b)\to\II\RR$, or more specifically such a function which in addition takes maximal elements to maximal elements.
+
+The things that we want to take expectation values of should be \emph{observables} on $X$. In the sheaf of observables, a section over $(a,b)$ should be a function $:\prod_{(c,d)\subseteq(a,b)} X(c,d)\to\II\RR$ which is suitably monotone, i.e.~such that \ldots
+
+Then taking expectation values should be an internal function $X\to $
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
