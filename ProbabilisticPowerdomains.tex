@@ -471,11 +471,7 @@ Thus a measure at $[d,u]$ assigns to every observable on $[d,u]$ a real number, 
 
 \section{A simpler model}
 
-How about considering only two instances of time first, so that we work in the presheaf topos over the discrete two-point space $\{a,b\}$? Here, we will only need three modalities, where $\pi$ corresponds to sheafification, and $\At{}{a}$ and $\At{}{b}$ correspond to behavior at $a$ and $b$, respectively. In this case, measures on types (or suitable locales) which satisfy $\pi$ should semantically correspond to pairs of random variables equipped with a joint distribution. This is a good test case where the essential structures already come up, but without the technical complexity of TTT.
-
-Let's consider the even simpler case where $\Church{X}(\{a\}) = A$ and $\Church{X}(\{b\}) = B$ for \emph{finite} sets $A$ and $B$. Then a measure consists of a measure at $\{a\}$, one at $\{b\}$, and one at $\{a,b\}$. Then the above compatibility condition seems to be saying that the measure at $\{a,b\}$, which is $\mu_{\{a,b\}} : (X \to \tRRat{\{a,b\}})\to\tRRat{\{a,b\}}$, already determines the other two via marginalization; this is exactly what we would hope to obtain. Thus $\Church{X\to\tRRat{\{a,b\}}}\{a,b\}$ is precisely the set of functions $A\times B\to\RR$, while there is only one section locally at $\{a\}$ and $\{b\}$, respectively. Similarly, $\Church{(X\to\tRRat{\{a,b\}})\to\tRRat{\{a,b\}}}\{a,b\}$ is the set of functions $(A\times B\to\RR)\to\RR$, while there is again only one section at each point. The linearity and positivity requirements are indeed the ones that one would expect, saying that $\Church{\mu}\{a,b\}:(A\times B\to\RR)\to\RR$ needs to be linear and positive.
-
-In this way, the type of measures will form a presheaf over $\{a,b\}$ whose global sections are precisely the finite measures on $A\times B$ in the standard sense, while the sections over $\{a\}$ are the measures on $A$, and the restriction map is given by marginalization. This is exactly what we would hope for.
+How about considering only two instances of time first, so that we work in the presheaf topos over the discrete two-point space $\{a,b\}$? Here, we will only need three modalities, where $\pi$ corresponds to sheafification, and $\At{a}{}$ and $\At{b}{}$ correspond to behavior at $a$ and $b$, respectively. In this case, measures on types (or suitable locales) which satisfy $\pi$ should semantically correspond to pairs of random variables equipped with a joint distribution. This is a good test case where the essential structures already come up, but without the technical complexity of TTT.
 
 This is the topos $\Span\set$, where $\Span$ is the category \fbox{$a\from ab\to b$}. subobject classifier for $\Span\set$ has five global sections, which we can represent as follows:
 \[\church{\Prop}(ab)=\{\bot,a,b,a\vee b,\top\}.\]
@@ -497,6 +493,10 @@ Here is a type theory for $\Span\set$: no atomic types, no atomic terms, two ato
 \begin{remark}
 Semantically we see that $\In{a}=\At{a}$, but in fact, our axioms may not be strong enough to prove that. It is easy to show $\forall(P:\Prop)\ldotp(a\imp P)\imp(P\imp b)\imp b$, but not $\forall(P:\Prop)\ldotp[(P\imp b)\imp b]\imp a\imp P$. Without another axiom implying the second, we have to decide whether to work with $\At{a}$ or $\In{a}$.
 \end{remark}
+
+Concerning measures on a $\pi$-type $X$, let's consider the even simpler case where $\Church{X}(\{a\}) = A$ and $\Church{X}(\{b\}) = B$ for \emph{finite} sets $A$ and $B$. Then a measure consists of a measure at $\{a\}$, one at $\{b\}$, and one at $\{a,b\}$. Then the above compatibility condition seems to be saying that the measure at $\{a,b\}$, which is $\mu_{\{a,b\}} : (X \to \tRRat{\{a,b\}})\to\tRRat{\{a,b\}}$, already determines the other two via marginalization; this is exactly what we would hope to obtain. Thus $\Church{X\to\tRRat{\{a,b\}}}\{a,b\}$ is precisely the set of functions $A\times B\to\RR$, while there is only one section locally at $\{a\}$ and $\{b\}$, respectively. Similarly, $\Church{(X\to\tRRat{\{a,b\}})\to\tRRat{\{a,b\}}}\{a,b\}$ is the set of functions $(A\times B\to\RR)\to\RR$, while there is again only one section at each point. The linearity and positivity requirements are indeed the ones that one would expect, saying that $\Church{\mu}\{a,b\}:(A\times B\to\RR)\to\RR$ needs to be linear and positive.
+
+In this way, the type of measures will form a presheaf over $\{a,b\}$ whose global sections are precisely the finite measures on $A\times B$ in the standard sense, while the sections over $\{a\}$ are the measures on $A$, and the restriction map is given by marginalization. This is exactly what we would hope for.
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
