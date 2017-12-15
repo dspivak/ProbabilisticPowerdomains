@@ -309,6 +309,9 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\imp}{\Rightarrow}
 \renewcommand{\iff}{\Leftrightarrow}
 
+\newcommand{\Span}{\Cat{Span}}
+\newcommand{\set}{\text{--}\Cat{Set}}
+
 
 \newcommand{\erase}[1]{}
 
@@ -470,6 +473,26 @@ Thus a measure at $[d,u]$ assigns to every observable on $[d,u]$ a real number, 
 
 How about considering only two instances of time first, so that we work in the presheaf topos over the discrete two-point space $\{a,b\}$? Here, we will only need three modalities, where $\pi$ corresponds to sheafification, and $\At{a}{}$ and $\At{b}{}$ correspond to behavior at $a$ and $b$, respectively. In this case, measures on types (or suitable locales) which satisfy $\pi$ should semantically correspond to pairs of random variables equipped with a joint distribution. This should be a good test case where the essential structures already come up, but without the technical complexity of TTT.
 
+This is the topos $\Span\set$, where $\Span$ is the category \fbox{$a\from ab\to b$}. subobject classifier for $\Span\set$ has five global sections, which we can represent as follows:
+\[\church{\Prop}(ab)=\{\bot,a,b,a\vee b,\top\}.\]
+We have $a=(\neg b)=(b\imp a)$ and similarly $b=(\neg a)=(a\imp b)$.
+
+Here is a type theory for $\Span\set$: no atomic types, no atomic terms, two atomic propositions $a,b:\Prop$, and one axiom: $a\wedge b=\bot$. The analogous modalities to those used in TTT are:
+\[
+\begin{array}{c|c|rccc}
+	\textbf{modality}&\textbf{definition on } P:\Prop&\textbf{values: }\bot&a&b&a\vee b \\\hline
+	\In{a}&a\imp P&b&\top&b&\top\\
+	\In{b}&b\imp P&a&a&\top&\top\\
+	\See{a}&b\vee P&b&a\vee b&b&a\vee b\\
+	\See{b}&a\vee P&b&a\vee b&b&a\vee b\\
+	\At{a}&(P\imp b)\imp b&b&\top&b&\top\\
+	\At{b}&(P\imp a)\imp a&a&a&\top&\top\\
+	\pi&\At{a}P\wedge\At{b}P&\bot&a&b&\top
+\end{array}
+\]
+\begin{remark}
+Semantically we see that $\In{a}=\At{a}$, but in fact, our axioms may not be strong enough to prove that. It is easy to show $\forall(P:\Prop)\ldotp(a\imp P)\imp(P\imp b)\imp b$, but not $\forall(P:\Prop)\ldotp[(P\imp b)\imp b]\imp a\imp P$. Without another axiom implying the second, we have to decide whether to work with $\At{a}$ or $\In{a}$.
+\end{remark}
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
