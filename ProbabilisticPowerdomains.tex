@@ -277,6 +277,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\unit}{\const{1}}
 \newcommand{\Poset}{\Cat{Poset}}
 \renewcommand{\Top}{\Cat{Top}}
+\newcommand{\Op}{\Set{Op}}
 \renewcommand{\C}{\Cat{C}}
 
 \newcommand{\op}{^\tn{op}}
@@ -496,7 +497,7 @@ The analogous modalities to those used in TTT are:
 Semantically we see that $\church{\In{a}}=\church{\At{a}}$, but in fact, our axioms may not be strong enough to prove that internally. It is easy to show $\forall(P:\Prop)\ldotp(a\imp P)\imp(P\imp b)\imp b$, but I do not see how to show $\forall(P:\Prop)\ldotp[(P\imp b)\imp b]\imp^? (a\imp P)$. Without additional axioms, we have to decide whether to work with $\At{a}$ or $\In{a}$ in our notion of measure; we use $\At{}$ so as to remain faithful to the TTT case. 
 \end{remark}
 
-Note that $\Span\set$ is the topos of sheaves on a topological space $W$ with three points $a,b,ab$ and four open sets: $\emptyset$, $W$, $\{a\}$ and $\{b\}$. The type $\tRR$ corresponds to the constant sheaf, by general theory of real number objects in toposes corresponding to topological spaces.
+Note that $\Span\set$ is the topos of sheaves on a topological space $W$ with three points $a,b,ab$ and four open sets: $\emptyset$, $W$, $\{a\}$ and $\{b\}$. The type $\tRR$ corresponds to the constant sheaf, by general theory of real number objects in localic toposes.
 
 \subsection{Good in the case of finite sets}
 
@@ -504,11 +505,41 @@ Concerning measures on a $\pi$-type $X$, let's consider the even simpler case wh
 
 In this way, the type of measures will form a presheaf over $\{a,b\}$ whose global sections are precisely the finite measures on $A\times B$ in the standard sense, while the sections over $\{a\}$ are the measures on $A$, and the restriction map is given by marginalization. This is exactly what we would hope for.
 
+\chapter{Internal topological spaces}
 
+Here is a potential definition of topology:
+\begin{definition}
+Let $X$ be a type. A \emph{topology} on $X$ is a function $\Op:(X\to\Prop)\to\Prop$ satisfying the following conditions:
+\begin{enumerate}
+	\item $\Op(\lambda(x:X)\ldotp\top)$.
+	\item $\forall(\phi_1,\phi_2:X\to\Prop)\ldotp(\Op(\phi_1)\wedge\Op(\phi_2))\imp\Op(\lambda(x:X)\ldotp\phi_1 x\wedge\phi_2 x)$.
+	\item Suppose given $I:(X\to\Prop)\to\Prop$ satisfying $\forall(\phi:X\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. Then $\Op(\lambda(x:X)\ldotp\exists(\phi:X\to\Prop)\ldotp I(\phi)\wedge\phi (x))$.
+\end{enumerate}
+In other words, the whole space $X$ is open, the intersection of two opens is open, and the union of any $I$-indexed set of opens is open, for any $I$.
+\end{definition}
+
+\begin{example}[Topology on $\tRR_j$]
+Let $j$ be a modality and define $\Op:(\tRR_j\to\Prop)\to\Prop$ by
+\[\Op(\phi)\coloneqq\forall(r:\tRR_j)\ldotp\phi r\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\phi(r').\]
+It is easy to check condition 1. For condition 2, we obtain $\epsilon_1$ and $\epsilon_2$ from $\phi_1$ and $\phi_2$, respectively; we can satisfy the requisite condition using their infimum, $\min(\epsilon_1,\epsilon_2)>0$.
+
+It remains to check condition 3. Let $I:(\tRR_j\to\Prop)\to\Prop$ satisfy $\forall(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. We need to show $\Op(\lambda(r:\tRR_j)\ldotp\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi (r))$. In other words, we need to show
+\begin{multline*}
+  \forall(r:\tRR_j)\ldotp[\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi(r)]\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\\
+  \forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\exists(\phi':\tRR_j\to\Prop)\ldotp I(\phi')\wedge\phi'(r).
+\end{multline*}
+So take $r:\tRR_j$ and suppose given $\phi$ such that $I(\phi)$ and $\phi(r)$ hold. It follow by hypothesis that $\Op(\phi)$ holds, so by definition we obtain $\epsilon>0$ satisfying the requisite condition with $\phi'\coloneqq\phi$.
+
+All we used about $\tRR_j$ was that it has a definition of comparison ($a<b$), subtraction ($a-b$), that binary min's exist, and that the additive inverse of a binary min is a binary max.
+\end{example}
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
 
+\section{Current}
+(None)
+
+\section{Defunct}
 \begin{enumerate}
 	\item Does every internal frame embed into a discrete frame?
 	\item What are the semantics of valuations in the topos of sheaves on a topological space? What about in the (presheaf) topos of graphs?
