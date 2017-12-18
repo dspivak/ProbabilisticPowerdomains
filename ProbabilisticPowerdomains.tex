@@ -270,7 +270,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
 \newcommand{\Psh}[1]{\Fun{Psh}(#1)}
 \newcommand{\Shv}[1]{\Fun{Shv}(#1)}
-\newcommand{\Cont}[1]{\Fun{Cont}(#1)}
+\newcommand{\Cont}{\Fun{Cont}}
 
 \newcommand{\Prop}{\const{Prop}}
 \newcommand{\Time}{\const{Time}}
@@ -515,15 +515,21 @@ Let $X$ be a type. A \emph{topology} on $X$ is a function $\Op:(X\to\Prop)\to\Pr
 	\item $\forall(\phi_1,\phi_2:X\to\Prop)\ldotp(\Op(\phi_1)\wedge\Op(\phi_2))\imp\Op(\lambda(x:X)\ldotp\phi_1 x\wedge\phi_2 x)$.
 	\item Suppose given $I:(X\to\Prop)\to\Prop$ satisfying $\forall(\phi:X\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. Then $\Op(\lambda(x:X)\ldotp\exists(\phi:X\to\Prop)\ldotp I(\phi)\wedge\phi (x))$.
 \end{enumerate}
-In other words, the whole space $X$ is open, the intersection of two opens is open, and the union of any $I$-indexed set of opens is open, for any $I$.
+In other words, the whole space $X$ is open, the intersection of two opens is open, and the union of any $I$-indexed set of opens is open, for any open system $I$. It will be useful to define open systems: $\mathrm{OpSys}\coloneqq\{I:(X\to\Prop)\to\Prop\mid\forall \phi\ldotp I(\phi)\imp\Op(\phi)\}.$
+
+We refer to a pair $(X,\Op)$, where $X$ is a type and $\Op$ is a topology on $X$, as an \emph{internal topological space}.
 \end{definition}
 
-\begin{example}[Topology on $\tRR_j$]
+\begin{example}[Discrete topology]
+For any type $X$, the \emph{discrete topology} on $X$ is given by $\Op(\phi)=\top$.
+\end{example}
+
+\begin{example}[Topology on $\tRR_j$]\label{ex.usual_topology_R}
 Let $j$ be a modality and define $\Op:(\tRR_j\to\Prop)\to\Prop$ by
 \[\Op(\phi)\coloneqq\forall(r:\tRR_j)\ldotp\phi r\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\phi(r').\]
 It is easy to check condition 1. For condition 2, we obtain $\epsilon_1$ and $\epsilon_2$ from $\phi_1$ and $\phi_2$, respectively; we can satisfy the requisite condition using their infimum, $\min(\epsilon_1,\epsilon_2)>0$.
 
-It remains to check condition 3. Let $I:(\tRR_j\to\Prop)\to\Prop$ satisfy $\forall(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. We need to show $\Op(\lambda(r:\tRR_j)\ldotp\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi (r))$. In other words, we need to show
+It remains to check condition 3. Let $I:(\tRR_j\to\Prop)\to\Prop$ satisfy $\forall(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$, i.e.\ $I$ is an open system. We need to show $\Op(\lambda(r:\tRR_j)\ldotp\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi (r))$. In other words, we need to show
 \begin{multline*}
   \forall(r:\tRR_j)\ldotp[\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi(r)]\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\\
   \forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\exists(\phi':\tRR_j\to\Prop)\ldotp I(\phi')\wedge\phi'(r).
@@ -532,6 +538,41 @@ So take $r:\tRR_j$ and suppose given $\phi$ such that $I(\phi)$ and $\phi(r)$ ho
 
 All we used about $\tRR_j$ was that it has a definition of comparison ($a<b$), subtraction ($a-b$), that binary min's exist, and that the additive inverse of a binary min is a binary max.
 \end{example}
+
+\begin{definition}\label{def.continuous}
+Suppose that $(X,\Op_X)$ and $(Y,\Op_Y)$ are internal topological space. A function $f:X\to Y$ is called \emph{continuous} if it satisfies
+\[\forall(\phi:Y\to\Prop)\ldotp\Op_Y(\phi)\imp\Op_X(\phi f).\]
+We denote by $\Cont(X,Y)$ the type of all $f:X\to Y$ satisfying this condition.
+\end{definition}
+
+\begin{proposition}
+The internal topological spaces in a topos $\cat{E}$ and continuous maps form an external category with products, and the forgetful functor to $\cat{E}$ preserves products.
+\end{proposition}
+\begin{proof}
+It is easy to check directly from \cref{def.continuous} that if $f:X\to Y$ and $g:Y\to Z$ are continuous then so is $g\circ f$, and the identity is clearly continuous. To check the existence of products, we need to define a product topology $\Op_{X\times Y}$ on $X\times Y$, given topologies $\Op_X$ and $\Op_Y$. Given $\phi:X\times Y\to\Prop$, define $\Op_{X\times Y}(\psi)$ to be
+\begin{multline*}
+	\exists(I:\mathrm{OpSys}(X))\ldotp\\
+	[\forall(\phi:I)\ldotp\exists(\phi_X:\Op(X))(\phi_Y:\Op(Y))\ldotp\phi(x,y)\iff(\phi_X(x)\wedge\phi_Y(y))]\\\wedge[\forall(x:X)(y:Y)\ldotp\psi(x,y)\iff\exists(\phi:I)\ldotp\phi(x,y)]
+\end{multline*}
+Check that this is a topology and that it is universal. (Unfinished)
+\end{proof}
+
+\begin{example}
+The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j$ are continuous. (Unfinished)
+\end{example}
+
+\begin{definition}[Measure on an internal topological space]
+Let $(X,\Op_X)$ be an internal topological space, and let $\tRR_{\SeeInline{[d,u]}}$ be the $[d,u]$-reals with the usual topology (see \cref{ex.usual_topology_R}). Then a $[d,u]$-measure on $X$ is a function $\mu:\Cont(X,\tRRat{[d,u]})\to\tRRat{[d,u]}$
+satisfying the following properties:
+\begin{enumerate}
+	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
+	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.
+\end{enumerate}
+Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$ such that
+\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
+holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
+
+\end{definition}
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
