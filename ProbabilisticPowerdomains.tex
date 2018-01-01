@@ -584,6 +584,10 @@ holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type o
 
 \end{definition}
 
+\todo{Locally compact spaces as continuous posets}
+
+\todo{Does at modality take locally compact spaces to locally compact spaces?}
+
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Questions}
 
@@ -603,6 +607,60 @@ Tobias: I'm not sure if this is going in the right direction. My idea was that w
 The things that we want to take expectation values of should be \emph{observables} on $X$. In the sheaf of observables, a section over $(a,b)$ should be a function $f:\prod_{(c,d)\subseteq(a,b)} X(c,d)\to\II\RR$ which is suitably monotone, i.e.~such that $(c,d)\sqsupseteq(c',d')$ implies $f(c,d)\sqsupseteq f(c',d')$.
 
 Then taking expectation values should be an internal function $X\to $
+
+
+\chapter{Some notes on locales}
+
+Tobias: these are notes to aid my own understanding.
+
+\section{Domain-theoretic aspects}
+
+This stuff is taking place in $\Cat{Set}$.
+
+Let $X$ be a topological space with poset of opens $\Op(X)$. Then for $U\subseteq V$ in $\Op(X)$, what does it mean for $U$ to be way below $V$? There is a nice way to relate it to the finite subcover definition of compactness:
+
+\begin{lemma}
+$U\ll V$ if and only if every open covering of $V$ has a finite subfamily which covers $U$.
+\end{lemma}
+
+\begin{proof}
+If the condition holds, then every directed set of opens that goes below $V$ also covers $V$, and therefore contains an element that already contains $U$.
+
+Conversely, given a covering family, consider the directed set of finite unions of members of the cover.
+\end{proof}
+
+Without additional separation assumptions on $X$, it seems tricky to translate this into a condition involving only the usual concepts of point-set topology. In order to do so, we need one more auxiliary statement.
+
+\newcommand{\cl}[1]{\overline{#1}} % topological closure
+\newcommand{\intr}[1]{\mathrm{int}(#1)} % interior
+
+\begin{lemma}
+Let $X$ be regular and $D\subseteq X$ dense. Suppose that every open cover of $X$ has a finite subfamily which covers $D$. Then $X$ is compact.
+\end{lemma}
+
+This may be somewhat surprising, since in many cases a finite subfamily which covers $D$ does not yet cover $X$.
+
+\begin{proof}(Due to Ramiro de las Vegas, MO.)
+Let $\mathcal{A}$ be an open cover of $X$. For every $x\in X$, choose $U_x\ni x$ such that $\cl{U_x}\subseteq V_x$ for suitable $V_x\in\mathcal{A}$. Then $\{U_x\}$ is another open covering which has a finite subcover $\{U_{x_1},\ldots,U_{x_n}\}$ by assumption. Since $X = \cl{U_{x_1}\cup\ldots\cup U_{x_n}} = \cl{U_{x_1}}\cup\ldots\cup\cl{U_{x_n}} \subseteq V_{x_1}\cup\ldots\cup V_{x_n}$, we are done.
+\end{proof}
+
+Now we can characterize the way below relation in a nice way:
+
+\begin{lemma}
+Let $X$ be regular. Then $U\ll V$ if and only if $U$ is relatively compact in $V$, i.e.~if $\cl{U}\cap V$ is compact.
+\end{lemma}
+
+\begin{proof}
+If $\cl{U}\cap V$ is compact, then clearly the condition of the first lemma holds as well, and we do not need regularity.
+
+Conversely, suppose that the condition of the first lemma holds. Then by the previous lemma, it is enough to show that every open cover of $\cl{U}\cap V$ has a finite subfamily which covers $U$. But this is clear by assumption: throwing in $V\setminus\cl{U}$ to an open cover of $\cl{U}\cap V$ gives an open cover of $V$.
+\end{proof}
+
+\section{Locales and geometric morphisms}
+
+My question is: given a geometric morphism $f : \mathcal{T}\to\mathcal{T}'$, do internal frames in $\mathcal{T}'$ pull back to internal frames in $\mathcal{T}$?
+
+Using the fact that the inverse image functor $f^*$ preserves finite limits, it's straightforward to see that if $\mathcal{O}$ is a frame in $\mathcal{T}'$, then $f^*\mathcal{O}$ is a meet-semilattice in $\mathcal{T}$. However, the existence of arbitrary joins for $I : f^*\mathcal{O}\to\Prop$ is not clear. How does $f^*\mathcal{O}\to\Prop$ relate to $\Prop'\in\mathcal{T}'$? Presumably there is some comparison map between $\Prop'$ and $f_*\Prop$?
 
 \printbibliography
 
