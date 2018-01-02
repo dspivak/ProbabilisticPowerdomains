@@ -195,6 +195,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\subtype}{[}{]}
+\DeclarePairedDelimiter{\classify}{\ulcorner}{\urcorner}
 
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
@@ -660,7 +661,13 @@ Conversely, suppose that the condition of the first lemma holds. Then by the pre
 
 My question is: given a geometric morphism $f : \mathcal{T}\to\mathcal{T}'$, do internal frames in $\mathcal{T}'$ pull back to internal frames in $\mathcal{T}$?
 
-Using the fact that the inverse image functor $f^*$ preserves finite limits, it's straightforward to see that if $\mathcal{O}$ is a frame in $\mathcal{T}'$, then $f^*\mathcal{O}$ is a meet-semilattice in $\mathcal{T}$. However, the existence of arbitrary joins for $I : f^*\mathcal{O}\to\Prop$ is not clear. How does $f^*\mathcal{O}\to\Prop$ relate to $\Prop'\in\mathcal{T}'$? Presumably there is some comparison map between $\Prop'$ and $f_*\Prop$?
+Using the fact that the inverse image functor $f^*$ preserves finite limits, it's straightforward to see that if $\mathcal{O}$ is a frame in $\mathcal{T}'$, then $f^*\mathcal{O}$ is a meet-semilattice in $\mathcal{T}$. However, the existence of arbitrary joins for $I : f^*\mathcal{O}\to\Prop$ is not clear. How does $f^*\mathcal{O}\to\Prop$ relate to $\Prop'\in\mathcal{T}'$?
+
+Note that there is a natural comparison map between $f_*\Prop$ and $\Prop'$. Indeed, since $f_*$ preserves monos, there is a map $\classify{f_*\const{true}}\colon f_*\Prop\to\Prop'$ classifying the image under $f_*$ of $\const{true}\colon 1\to \Prop$. Thus we obtain a comparison map $\mathcal{O}\to f_*\Prop\to\Prop'$.
+
+The image $f_*\Prop$ is an internal frame in $\cat{T}'$; see \cite[Intro to C.1.6]{Johnstone:2002a}. It doesn't seem that $f^*\Prop'$ will be an internal frame in general. For example, why should $P,Q\colon 1\to f^*\Prop'$ have a meet? There is a map $f^*(\wedge)\colon f^*\Prop'\times f^*\Prop'\to f^*\Prop'$, but I don't see why it should define a meet operation in $\cat{T}$. According to \cite[C.1.6 and Corollary B.3.7]{Johnstone:2002a}, if $f^*$ has a left adjoint that preserves pullbacks then $f^*\Prop'$ will be an internal frame. See also \href{https://mathoverflow.net/questions/34433/an-elementary-question-about-adjunctions-between-presheaf-categories-preserving}{this mathoverflow question}.
+
+
 
 \printbibliography
 
