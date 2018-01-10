@@ -661,13 +661,60 @@ Conversely, suppose that the condition of the first lemma holds. Then by the pre
 
 My question is: given a geometric morphism $f : \mathcal{T}\to\mathcal{T}'$, do internal frames in $\mathcal{T}'$ pull back to internal frames in $\mathcal{T}$?
 
-Using the fact that the inverse image functor $f^*$ preserves finite limits, it's straightforward to see that if $\mathcal{O}$ is a frame in $\mathcal{T}'$, then $f^*\mathcal{O}$ is a meet-semilattice in $\mathcal{T}$. However, the existence of arbitrary joins for $I : f^*\mathcal{O}\to\Prop$ is not clear. How does $f^*\mathcal{O}\to\Prop$ relate to $\Prop'\in\mathcal{T}'$?
+Note that there is a natural comparison map between $f^*\Prop'$ and $\Prop$. Indeed, since $f^*$ preserves monos by virtue of being left exact, there is a map $\classify{f^*\const{true}'}\colon f^*\Prop'\to\Prop$ classifying the image under $f^*$ of $\const{true}'\colon 1'\to \Prop'$.
 
-Note that there is a natural comparison map between $f_*\Prop$ and $\Prop'$. Indeed, since $f_*$ preserves monos, there is a map $\classify{f_*\const{true}}\colon f_*\Prop\to\Prop'$ classifying the image under $f_*$ of $\const{true}\colon 1\to \Prop$. Thus we obtain a comparison map $\mathcal{O}\to f_*\Prop\to\Prop'$.
+\begin{lemma}
+If $s:A\to B$ is an arbitrary subobject in $\mathcal{T}'$, then $f^*s : f^*A\to f^*B$ is again a subobject, and $\classify{f^*s}$ is given by $f^*\classify{s}$ post-composed with the comparison map $f^*\Prop'\to\Prop$.
+\end{lemma}
 
-The image $f_*\Prop$ is an internal frame in $\cat{T}'$; see \cite[Intro to C.1.6]{Johnstone:2002a}. It doesn't seem that $f^*\Prop'$ will be an internal frame in general. For example, why should $P,Q\colon 1\to f^*\Prop'$ have a meet? There is a map $f^*(\wedge)\colon f^*\Prop'\times f^*\Prop'\to f^*\Prop'$, but I don't see why it should define a meet operation in $\cat{T}$. According to \cite[C.1.6 and Corollary B.3.7]{Johnstone:2002a}, if $f^*$ has a left adjoint that preserves pullbacks then $f^*\Prop'$ will be an internal frame. See also \href{https://mathoverflow.net/questions/34433/an-elementary-question-about-adjunctions-between-presheaf-categories-preserving}{this mathoverflow question}.
+\begin{proof}
+ This is because
+\[\begin{tikzcd}
+	f^*A \ar{r} \ar{d} & f^*B \ar{d} \\
+	f^*1 \ar{r} & f^*\Prop'
+\end{tikzcd}\]
+is again a pullback diagram, and likewise is
+\[\begin{tikzcd}
+	f^*1 \ar{r} \ar{d} & f^*\Prop' \ar{d} \\
+	1 \ar{r} & \Prop
+\end{tikzcd}\]
+so that the two pullbacks compose.
+\end{proof}
 
+In this reasoning, we have only needed to use that $f^*$ is left exact. Thus everything applies likewise to $f_*$, and we e.g.~have a comparison map $\classify{f_*\const{true}}\colon f_*\Prop\to\Prop'$. But this is of less interest to us here.
 
+So given an internal poset $P$ in $\mathcal{T}'$, we get a poset structure on $f^*P$ given by the subobject $f^*(\leq) \to f^*P\times f^*P$. Again using the fact that $f^*$ preserves finite limits, it's straightforward to see that if $P$ is a meet-semilattice in $\mathcal{T}'$, then $f^*P$ is a meet-semilattice in $\mathcal{T}$. However, it's less clear if the existence of arbitrary joins is preserved in the same way.
+
+The existence of arbitrary joins for $P = \mathcal{O}(X)$ means that the down-closure map
+\[
+	\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)},\qquad U\mapsto \classify{ \{ V \leq U \} }
+\]
+has an internal left adjoint. Here, $\Prop'^{\mathcal{O}(X)}$ carries the usual pointwise ordering, i.e.~the one corresponding to inclusion of subobjects. What we would like to have is that the down-closure map of $f^*\mathcal{O}(X)$ similarly has a left adjoint. According to the Elephant (p.~580), this is not the case in general! However for an \emph{atomic} geometric morphism---or in other words if $f^*$ is a logical functor---we can apply Corollary B2.3.10 to conclude that $f^*\mathcal{O}(X)$ is indeed an internal frame. Concretely, in this case the sup map is the composite $\Prop^{f^*(\mathcal{O}(X))}\cong f^*\left(\Prop'^{\mathcal{O}(X)}\right)\to f^*(\mathcal{O}(X))$, where the first morphism comes from $f^*$ being logical and the second one is $f^*(\sup)$.
+
+In conclusion, internal frames can be pulled back along atomic geometric morphisms\footnote{And also along general geometric morphisms, but this requires a different construction, as in Elephant p.~580.}. Again by Elephant p.~580, pushing frames forward along $f_*$ is even simpler, and it seems plausible that this results in an adjunction $f^* \dashv f_*$ between frames in $\mathcal{T}$ and frames in $\mathcal{T}'$. I will be a bit sloppy for now and just assume that this is true.
+
+The next question is whether $f^*$ preserves properties of locales such as regularity or local compactness. Both are concerned with relaxed notions of ordering:
+
+\begin{definition}
+For $U,V\in\mathcal{O}(X)$, one says that
+\begin{enumerate}
+\item $V$ is \emph{well inside} $U$, written $V\subset\subset U$, if there is $G\in\mathcal{O}(X)$ such that $V\cap G = \emptyset$ and $U\cup G = X$.
+\item $V$ is \emph{way below} $U$, written $U\ll V$, if for every directed $D:\mathcal{O}(X)\to\Prop$, $U\leq\sup D$ implies that there is $W\in D$ with $V\leq W$.
+\end{enumerate}
+Then $X$ is regular (locally compact) if every $U$ is the sup of the $V$ that are well inside (way below) it.
+\end{definition}
+
+Since these definitions make sense constructively, we can apply them to internal locales.
+
+So the well-inside relation corresponds to the subobject of $\mathcal{O}(X)\times\mathcal{O}(X)$ that is the projection of the subobject
+\[
+	\{ \: (V,G,U) \:|\: V\wedge G = \emptyset, \; U\vee G = X \: \} \quad \subseteq \quad \mathcal{O}(X)\times\mathcal{O}(X)\times\mathcal{O}(X)
+\]
+to the first and third factor, and this subobject itself is an equalizer. Since $f^*$ preserves monos and epis, it also preserves image factorizations and therefore pushforwards of subobjects, such as this pushforward along the product projection. Hence the well-inside relation on $f^*(\mathcal{O}(X))$ coincides with $f^*(\subset\subset)$.
+
+Regularity means that upon exponentiating the first factor in $\classify{\subset\subset} : \mathcal{O}(X)\times\mathcal{O}(X)\to\Prop'$ to $\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)}$ and composing with $\sup$, one obtains $1_{\mathcal{O}(X)}$. Again since $f^*$ is logical and $f^*(\sup)$ is the sup map of $f^*(\mathcal{O}(X))$, we can conclude that $f^*(\mathcal{O}(X))$ is regular is well.
+
+In order to make the same argument for local compactness, we show similarly that $f^*(\ll)$ is the way-below relation on $f^*(\mathcal{O}(X))$. By similar reasoning as for well-inside, we obtain that $\const{Drct}(f^*(\mathcal{O}(X))) = f^*(\const{Drct}(\mathcal{O}(X)))$.
 
 \printbibliography
 
