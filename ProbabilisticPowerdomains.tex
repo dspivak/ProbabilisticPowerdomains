@@ -336,7 +336,12 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 
 
 %%%%%%%%% Chapter %%%%%%%%%
-\chapter{Type theory stuff}
+
+\chapter{Introduction}
+
+\todo[inline]{T: I think that we should work in the topos of sheaves over an \emph{arbitrary} interval domain}
+
+\chapter{Internal posets}
 
 \begin{notation}
 We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
@@ -414,109 +419,14 @@ In fact, it also has arbitrary meets, though I don't think we'll need that. The 
 
 \begin{definition}
 We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Find a better term if we really need this (perhaps we want internal frames instead?)}if it has binary meets, binary joins, and directed joins.
-
-Suppose $(X,\leq)$ is a frame. A \emph{valuation} on $X$ is a function $\mu:X\to\tLR$ satisfying the following:
-\begin{enumerate}
-	\item $\mu(\varnothing)=0$.
-	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
-	\item $\forall(x,x':X)\ldotp\mu(x)+\mu(x')=\mu(x\vee x')+\mu(x\wedge x')$.
-	\item $\forall(D:X\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
-\end{enumerate}
-Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$.%
-\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(x:\subtype{D})\ldotp r=\mu(x)\}$.}
-
-Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(x:X)\ldotp(\mu x\leq \mu'x)$.
 \end{definition}
+
 
 Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
 
-%%%%%%%%% Chapter %%%%%%%%%
-\chapter{Riesz approach}
+\chapter{Internal topological spaces and locales}
 
-One idea is to follow the spirit of the Riesz representation theorem (reference?). We could try to define a measure on a type $X$ to be a positive linear functional on the type $(X\to\tRR)$. However, there is a semantic problem with this idea, namely the Dedekind reals $\tRR$ are constant, so the value of a sheaf homomorphism $X\to\tRR$ on a section $x$ must remain constant as we restrict $x$. This is too strong.
-
-One possibility is to replace $\tRR$ with $\tRRat{[d,u]}$ in the above formulation, where $d\leq u$ are elements of $\tRR$.%
-\footnote{
-It is shown in \cite[Prop 7.9]{Schultz.Spivak:2017a} that there is an isomorphism $\tRRat{[d,u]}\cong\tRR_{\AtInline{[d,u]}}$.
-}
-The semantics of the sheaf $\tRRat{[d,u]}$ are as follows. For any interval $(a,b)\ss\RR$, if $a<d\leq u<b$ then $\RR\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ sections on intervals containing $[d,u]$ are constant reals. If $d\leq a$ or $b\leq u$, then $1\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ on intervals missing either endpoint of $[d,u]$ there is exactly one section.
-
-The semantics of an internal function $f:X\to\tRRat{[d,u]}$ is that of a function $\church{X}_{[d,u]}\to\RR$ from the stalk of $X$ at $[d,u]$ to $\RR$. This seems to be what Tobias wanted.
-
-For any $d\leq d'\leq u'\leq u$ and any $P:\Prop$, we have $\See{[d',u']}P\imp\See{[d,u]}P$. This induces a morphism
-\begin{equation}
-\label{Rlocalize}
-	\See{[d,u]}:\tRRat{[d',u']}\to\tRRat{[d,u]}.
-\end{equation}
-
-\begin{definition}
-Let $X$ be a type. For $d,u\in\tRR$, a \emph{measure on $X$ at $[d,u]$} is defined to be a function $\mu:(X\to\tRRat{[d,u]})\to\tRRat{[d,u]}$%
-\footnote{
-I guess we want to consider continuous maps from a locale $X$ to the locale of opens in $\tRRat{[d,u]}$?
-}
-satisfying the following properties:
-\begin{enumerate}
-	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
-	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.%
-	\footnote{The notation $a\leq b$ here is shorthand for $(b<a)\imp\At{[d,u]}\bot$. The correct notation is $a\leq_{\AtInline{[d,u]}}b$, but this is a bit heavy.
-	}
-\end{enumerate}
-Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$\todo{This quantifies over $u$ and $d$. So the modal operators $\See{[d,u]}$ are a family of functions $\Prop\to\Prop$ indexed internally by pairs $d\leq u$ from the (extended) Dedekind reals? Seems to be in line with TTT Sec 5.3},%
-\footnote{Thus $\mu$ is a dependent product type.}
-such that
-\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
-holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
-\end{definition}
-
-Here, $\See{[d,u]}f$ denotes the function obtained by composition of $f$ with~\eqref{Rlocalize}.
-
-$X\to\tRRat{[d,u]}$ can be interpreted as the type of \emph{observables} supported on the interval $[d,u]$. Concretely, a section of $\Church{X\to\tRRat{[d,u]}}$ over an interval $(a,b)$ which contains $[d,u]$ assigns to every section between $(a,b)$ and $[d,u]$ a real number, in such a way that it is compatible with restriction, which means that the number assigned to a section must be a function of its germ at $[d,u]$. Over an interval $(a,b)$ not containing $[d,u]$, this function type has exactly one section, and the compatibility conditions are trivial. In total, $\Church{X\to\tRRat{[d,u]}}$ is the constant sheaf given by the set of functions\footnote{where $\Church{X}[d,u]$ denotes the stalk.} $\Church{X}[d,u]\to\RR$ on $\downarrow [d,u]$, but looks like the terminal sheaf outside of that. For $f:X\to\tRRat{[d',u']}$, the new function $\See{[d,u]}f$ corresponds to the trivial extension of $f$ to $[d,u]$.
-
-Classically and in the case when $X$ is a sheaf on $\RR$, I'd expect these observables to be (up to continuity conditions) precisely all the random variables that are measurable with respect to the $\sigma$-algebra generated by the $X_t$ for $t\in [d,u]$.
-
-Thus a measure at $[d,u]$ assigns to every observable on $[d,u]$ a real number, which is exactly what we'd expect.
-
-
-\subsection{Semantics for finite $\pi$-types}
-
-Let's say that a $\pi$-type $X$ is \emph{finite} if every $\Church{X}(a,b)$ is finite. What is the semantics of measures on finite $\pi$-types?
-
-\section{A simpler model}
-
-How about considering only two instances of time first, so that we work in the presheaf topos over the discrete two-point space $\{a,b\}$? Here, we will only need three modalities, where $\pi$ corresponds to sheafification, and $\At{a}{}$ and $\At{b}{}$ correspond to behavior at $a$ and $b$, respectively. In this case, measures on types (or suitable locales) which satisfy $\pi$ should semantically correspond to pairs of random variables equipped with a joint distribution. This is a good test case where the essential structures already come up, but without the technical complexity of TTT.
-
-This is the topos $\Span\set$, where $\Span$ is the category \fbox{$a\from ab\to b$}. The subobject classifier for $\Span\set$ has five global sections, which we can represent as follows:
-\[\church{\Prop}(ab)=\{\bot,a,b,a\vee b,\top\}.\]
-We have $a=(\neg b)=(b\imp a)$ and similarly $b=(\neg a)=(a\imp b)$.
-
-Here is a type theory for $\Span\set$: no atomic types, no atomic terms, two atomic propositions $a,b:\Prop$, and two axioms: $a=\neg b$ and $b=\neg a$. Note that $a=\neg\neg a$ and similarly $b=\neg\neg b$, but not so for $a\vee b$; the logic is not boolean.
-
-The analogous modalities to those used in TTT are:
-\[
-\begin{array}{c|c|rccc}
-	\textbf{modality}&\textbf{definition on } P:\Prop&\textbf{values: }\bot&a&b&a\vee b \\\hline
-	\In{a}&a\imp P&b&\top&b&\top\\
-	\See{a}&b\vee P&b&a\vee b&b&a\vee b\\
-	\At{a}&(P\imp b)\imp b&b&\top&b&\top\\\hline
-	\In{b}&b\imp P&a&a&\top&\top\\
-	\See{b}&a\vee P&a&a&a\vee b&a\vee b\\
-	\At{b}&(P\imp a)\imp a&a&a&\top&\top\\\hline
-	\pi&\At{a}P\wedge\At{b}P&\bot&a&b&\top
-\end{array}
-\]
-\begin{remark}
-Semantically we see that $\church{\In{a}}=\church{\At{a}}$, but in fact, our axioms may not be strong enough to prove that internally. It is easy to show $\forall(P:\Prop)\ldotp(a\imp P)\imp(P\imp b)\imp b$, but I do not see how to show $\forall(P:\Prop)\ldotp[(P\imp b)\imp b]\imp^? (a\imp P)$. Without additional axioms, we have to decide whether to work with $\At{a}$ or $\In{a}$ in our notion of measure; we use $\At{}$ so as to remain faithful to the TTT case. 
-\end{remark}
-
-Although defined as the topos on presheaves on the discrete two-point space $\{a,b\}$, our topos $\Span\set$ can also be viewed as the topos of \emph{sheaves} on a topological space $W$, with three points $a,b,ab$ and four open sets: $\emptyset$, $W$, $\{a\}$ and $\{b\}$. The type $\tRR$ corresponds to the constant sheaf, by general theory of real number objects in localic toposes.
-
-\subsection{Good in the case of finite sets}
-
-Now let's work what a measure on a finite $\pi$-type $X$ is. By finite, we mean that $\Church{X}(\{a\}) = A$ and $\Church{X}(\{b\}) = B$ for \emph{finite} sets $A$ and $B$. Then a measure consists of a measure at $\{a\}$, one at $\{b\}$, and one at $\{a,b\}$. Then the above compatibility condition says that the measure at $\{a,b\}$, which is $\mu_{\{a,b\}} : (X \to \tRRat{\{a,b\}})\to\tRRat{\{a,b\}}$, already determines the other two via marginalization\todo{can we prove that internally?}; this is exactly what we would hope to obtain. Thus $\Church{X\to\tRRat{\{a,b\}}}\{a,b\}$ is precisely the set of functions $A\times B\to\RR$, while there is only one section locally at $\{a\}$ and $\{b\}$, respectively. Similarly, $\Church{(X\to\tRRat{\{a,b\}})\to\tRRat{\{a,b\}}}\{a,b\}$ is the set of functions $(A\times B\to\RR)\to\RR$, while there is again only one section at each point. The linearity and positivity requirements are indeed the ones that one would expect, saying that $\Church{\mu}\{a,b\}:(A\times B\to\RR)\to\RR$ needs to be linear and positive.
-
-In this way, the type of measures will form a presheaf over $\{a,b\}$ whose global sections are precisely the finite measures on $A\times B$ in the standard sense, while the sections over $\{a\}$ are the measures on $A$, and the restriction map is given by marginalization. This is exactly what we would hope for.
-
-\chapter{Internal topological spaces}
+\todo[inline]{T: possibly except for the interactions with modalities, this stuff is all standard}
 
 Here is a potential definition of topology:
 \begin{definition}
@@ -572,51 +482,26 @@ Check that this is a topology and that it has the universal property of a produc
 The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j$ are continuous; see \cite[Theorems 4.44, 4.48]{Schultz.Spivak:2017a}. For any $j\to j'$ the map $\tRR_j\to\tRR_{j'}$ is also continuous; see \cite[Proposition 4.52]{Schultz.Spivak:2017a}.
 \end{example}
 
-\begin{definition}[Measure on an internal topological space]
-Let $(X,\Op_X)$ be an internal topological space, and let $\tRR_{\SeeInline{[d,u]}}$ be the $[d,u]$-reals with the usual topology (see \cref{ex.usual_topology_R}). Then a $[d,u]$-measure on $X$ is a function $\mu:\Cont(X,\tRRat{[d,u]})\to\tRRat{[d,u]}$
-satisfying the following properties:
-\begin{enumerate}
-	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
-	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.
-\end{enumerate}
-Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$ such that
-\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
-holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
-
-\end{definition}
+%%% The following is the Riesz approach
+% \begin{definition}[Measure on an internal topological space]
+%Let $(X,\Op_X)$ be an internal topological space, and let $\tRR_{\SeeInline{[d,u]}}$ be the $[d,u]$-reals with the usual topology (see \cref{ex.usual_topology_R}). Then a $[d,u]$-measure on $X$ is a function $\mu:\Cont(X,\tRRat{[d,u]})\to\tRRat{[d,u]}$
+%satisfying the following properties:
+%\begin{enumerate}
+%	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
+%	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.
+%\end{enumerate}
+%Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$ such that
+%\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
+%holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
+%\end{definition}
 
 \todo{Locally compact spaces as continuous posets}
 
 \todo{Does at modality take locally compact spaces to locally compact spaces?}
 
-%%%%%%%%% Chapter %%%%%%%%%
-\chapter{Questions}
+\section{Domain-theoretic aspects of internal locales}
 
-\section{Current}
-(None)
-
-\section{Defunct}
-\begin{enumerate}
-	\item Does every internal frame embed into a discrete frame?
-	\item What are the semantics of valuations in the topos of sheaves on a topological space? What about in the (presheaf) topos of graphs?
-\end{enumerate}
-
-\chapter{Another (less satisfactory) attempt}
-
-Tobias: I'm not sure if this is going in the right direction. My idea was that we'd have a sheaf $\tRR_{\EE}$ in which expectation values land, such that a section over $(a,b)$ is either an arbitrary function $\II(a,b)\to\II\RR$, or more specifically such a function which in addition takes maximal elements to maximal elements.
-
-The things that we want to take expectation values of should be \emph{observables} on $X$. In the sheaf of observables, a section over $(a,b)$ should be a function $f:\prod_{(c,d)\subseteq(a,b)} X(c,d)\to\II\RR$ which is suitably monotone, i.e.~such that $(c,d)\sqsupseteq(c',d')$ implies $f(c,d)\sqsupseteq f(c',d')$.
-
-Then taking expectation values should be an internal function $X\to $
-
-
-\chapter{Some notes on locales}
-
-Tobias: these are notes to aid my own understanding.
-
-\section{Domain-theoretic aspects}
-
-This stuff is taking place in $\Cat{Set}$.
+For now, this stuff is taking place in $\Cat{Set}$.
 
 Let $X$ be a topological space with poset of opens $\Op(X)$. Then for $U\subseteq V$ in $\Op(X)$, what does it mean for $U$ to be way below $V$? There is a nice way to relate it to the finite subcover definition of compactness:
 
@@ -715,6 +600,122 @@ to the first and third factor, and this subobject itself is an equalizer. Since 
 Regularity means that upon exponentiating the first factor in $\classify{\subset\subset} : \mathcal{O}(X)\times\mathcal{O}(X)\to\Prop'$ to $\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)}$ and composing with $\sup$, one obtains $1_{\mathcal{O}(X)}$. Again since $f^*$ is logical and $f^*(\sup)$ is the sup map of $f^*(\mathcal{O}(X))$, we can conclude that $f^*(\mathcal{O}(X))$ is regular is well.
 
 In order to make the same argument for local compactness, we show similarly that $f^*(\ll)$ is the way-below relation on $f^*(\mathcal{O}(X))$. By similar reasoning as for well-inside, we obtain that $\const{Drct}(f^*(\mathcal{O}(X))) = f^*(\const{Drct}(\mathcal{O}(X)))$.
+
+\chapter{Valuations and measures}
+
+
+
+\begin{definition}
+Suppose $X$ is a locale. A \emph{valuation} on $X$ is a function $\mu:\mathcal{O}(X)\to\tRRat{[d,u]}$ satisfying the following:
+\begin{enumerate}
+	\item $\mu(\varnothing)=0$.
+	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
+	\item $\forall(x,x':X)\ldotp\mu(x)+\mu(x')=\mu(x\vee x')+\mu(x\wedge x')$.
+	\item $\forall(D:X\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
+\end{enumerate}
+Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$.%
+\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(x:\subtype{D})\ldotp r=\mu(x)\}$.}
+
+Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(x:X)\ldotp(\mu x\leq \mu'x)$.
+\end{definition}
+
+\begin{definition}
+A valuation is a \emph{probability valuation} if $\mu(X) = 1$.
+\end{definition}
+
+\section{A simpler model}
+
+How about considering only two instances of time first, so that we work in the presheaf topos over the discrete two-point space $\{a,b\}$? Here, we will only need three modalities, where $\pi$ corresponds to sheafification, and $\At{a}{}$ and $\At{b}{}$ correspond to behavior at $a$ and $b$, respectively. In this case, measures on types (or suitable locales) which satisfy $\pi$ should semantically correspond to pairs of random variables equipped with a joint distribution. This is a good test case where the essential structures already come up, but without the technical complexity of TTT.
+
+This is the topos $\Span\set$, where $\Span$ is the category \fbox{$a\from ab\to b$}. The subobject classifier for $\Span\set$ has five global sections, which we can represent as follows:
+\[\church{\Prop}(ab)=\{\bot,a,b,a\vee b,\top\}.\]
+We have $a=(\neg b)=(b\imp a)$ and similarly $b=(\neg a)=(a\imp b)$.
+
+Here is a type theory for $\Span\set$: no atomic types, no atomic terms, two atomic propositions $a,b:\Prop$, and two axioms: $a=\neg b$ and $b=\neg a$. Note that $a=\neg\neg a$ and similarly $b=\neg\neg b$, but not so for $a\vee b$; the logic is not boolean.
+
+The analogous modalities to those used in TTT are:
+\[
+\begin{array}{c|c|rccc}
+	\textbf{modality}&\textbf{definition on } P:\Prop&\textbf{values: }\bot&a&b&a\vee b \\\hline
+	\In{a}&a\imp P&b&\top&b&\top\\
+	\See{a}&b\vee P&b&a\vee b&b&a\vee b\\
+	\At{a}&(P\imp b)\imp b&b&\top&b&\top\\\hline
+	\In{b}&b\imp P&a&a&\top&\top\\
+	\See{b}&a\vee P&a&a&a\vee b&a\vee b\\
+	\At{b}&(P\imp a)\imp a&a&a&\top&\top\\\hline
+	\pi&\At{a}P\wedge\At{b}P&\bot&a&b&\top
+\end{array}
+\]
+
+\todo[inline]{T: do this for an arbitrary interval domain?}
+
+\begin{remark}
+Semantically we see that $\church{\In{a}}=\church{\At{a}}$, but in fact, our axioms may not be strong enough to prove that internally. It is easy to show $\forall(P:\Prop)\ldotp(a\imp P)\imp(P\imp b)\imp b$, but I do not see how to show $\forall(P:\Prop)\ldotp[(P\imp b)\imp b]\imp^? (a\imp P)$. Without additional axioms, we have to decide whether to work with $\At{a}$ or $\In{a}$ in our notion of measure; we use $\At{}$ so as to remain faithful to the TTT case. 
+\end{remark}
+
+Although defined as the topos on presheaves on the discrete two-point space $\{a,b\}$, our topos $\Span\set$ can also be viewed as the topos of \emph{sheaves} on a topological space $W$, with three points $a,b,ab$ and four open sets: $\emptyset$, $W$, $\{a\}$ and $\{b\}$. The type $\tRR$ corresponds to the constant sheaf, by general theory of real number objects in localic toposes.
+
+
+
+
+\newpage
+
+\appendix
+
+\chapter{Another (less satisfactory) attempt}
+
+Tobias: I'm not sure if this is going in the right direction. My idea was that we'd have a sheaf $\tRR_{\EE}$ in which expectation values land, such that a section over $(a,b)$ is either an arbitrary function $\II(a,b)\to\II\RR$, or more specifically such a function which in addition takes maximal elements to maximal elements.
+
+The things that we want to take expectation values of should be \emph{observables} on $X$. In the sheaf of observables, a section over $(a,b)$ should be a function $f:\prod_{(c,d)\subseteq(a,b)} X(c,d)\to\II\RR$ which is suitably monotone, i.e.~such that $(c,d)\sqsupseteq(c',d')$ implies $f(c,d)\sqsupseteq f(c',d')$.
+
+Then taking expectation values should be an internal function $X\to $
+
+\chapter{Riesz approach}
+
+\todo[inline]{T: I now think that the valuations approach is superior, so this got relegated to the appendix}
+
+One idea is to follow the spirit of the Riesz representation theorem (reference?). We could try to define a measure on a type $X$ to be a positive linear functional on the type $(X\to\tRR)$. However, there is a semantic problem with this idea, namely the Dedekind reals $\tRR$ are constant, so the value of a sheaf homomorphism $X\to\tRR$ on a section $x$ must remain constant as we restrict $x$. This is too strong.
+
+One possibility is to replace $\tRR$ with $\tRRat{[d,u]}$ in the above formulation, where $d\leq u$ are elements of $\tRR$.%
+\footnote{
+It is shown in \cite[Prop 7.9]{Schultz.Spivak:2017a} that there is an isomorphism $\tRRat{[d,u]}\cong\tRR_{\AtInline{[d,u]}}$.
+}
+The semantics of the sheaf $\tRRat{[d,u]}$ are as follows. For any interval $(a,b)\ss\RR$, if $a<d\leq u<b$ then $\RR\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ sections on intervals containing $[d,u]$ are constant reals. If $d\leq a$ or $b\leq u$, then $1\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ on intervals missing either endpoint of $[d,u]$ there is exactly one section.
+
+The semantics of an internal function $f:X\to\tRRat{[d,u]}$ is that of a function $\church{X}_{[d,u]}\to\RR$ from the stalk of $X$ at $[d,u]$ to $\RR$. This seems to be what Tobias wanted.
+
+For any $d\leq d'\leq u'\leq u$ and any $P:\Prop$, we have $\See{[d',u']}P\imp\See{[d,u]}P$. This induces a morphism
+\begin{equation}
+\label{Rlocalize}
+	\See{[d,u]}:\tRRat{[d',u']}\to\tRRat{[d,u]}.
+\end{equation}
+
+\begin{definition}
+Let $X$ be a type. For $d,u\in\tRR$, a \emph{measure on $X$ at $[d,u]$} is defined to be a function $\mu:(X\to\tRRat{[d,u]})\to\tRRat{[d,u]}$%
+\footnote{
+I guess we want to consider continuous maps from a locale $X$ to the locale of opens in $\tRRat{[d,u]}$?
+}
+satisfying the following properties:
+\begin{enumerate}
+	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
+	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.%
+	\footnote{The notation $a\leq b$ here is shorthand for $(b<a)\imp\At{[d,u]}\bot$. The correct notation is $a\leq_{\AtInline{[d,u]}}b$, but this is a bit heavy.
+	}
+\end{enumerate}
+Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$\todo{This quantifies over $u$ and $d$. So the modal operators $\See{[d,u]}$ are a family of functions $\Prop\to\Prop$ indexed internally by pairs $d\leq u$ from the (extended) Dedekind reals? Seems to be in line with TTT Sec 5.3},%
+\footnote{Thus $\mu$ is a dependent product type.}
+such that
+\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
+holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
+\end{definition}
+
+Here, $\See{[d,u]}f$ denotes the function obtained by composition of $f$ with~\eqref{Rlocalize}.
+
+$X\to\tRRat{[d,u]}$ can be interpreted as the type of \emph{observables} supported on the interval $[d,u]$. Concretely, a section of $\Church{X\to\tRRat{[d,u]}}$ over an interval $(a,b)$ which contains $[d,u]$ assigns to every section between $(a,b)$ and $[d,u]$ a real number, in such a way that it is compatible with restriction, which means that the number assigned to a section must be a function of its germ at $[d,u]$. Over an interval $(a,b)$ not containing $[d,u]$, this function type has exactly one section, and the compatibility conditions are trivial. In total, $\Church{X\to\tRRat{[d,u]}}$ is the constant sheaf given by the set of functions\footnote{where $\Church{X}[d,u]$ denotes the stalk.} $\Church{X}[d,u]\to\RR$ on $\downarrow [d,u]$, but looks like the terminal sheaf outside of that. For $f:X\to\tRRat{[d',u']}$, the new function $\See{[d,u]}f$ corresponds to the trivial extension of $f$ to $[d,u]$.
+
+Classically and in the case when $X$ is a sheaf on $\RR$, I'd expect these observables to be (up to continuity conditions) precisely all the random variables that are measurable with respect to the $\sigma$-algebra generated by the $X_t$ for $t\in [d,u]$.
+
+Thus a measure at $[d,u]$ assigns to every observable on $[d,u]$ a real number, which is exactly what we'd expect.
 
 \printbibliography
 
