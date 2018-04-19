@@ -413,9 +413,9 @@ In fact, it also has arbitrary meets, though I don't think we'll need that. The 
 \end{example}
 
 \begin{definition}
-We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Find a better term if we really need this (perhaps we want internal frames instead?)}if it has binary meets, binary joins, and directed joins.
+% We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Find a better term if we really need this (perhaps we want internal frames instead?)}if it has binary meets, binary joins, and directed joins.
 
-Suppose $(X,\leq)$ is a frame. A \emph{valuation} on $X$ is a function $\mu:X\to\tLR$ satisfying the following:
+Suppose $(X,\leq)$ is a frame. A \emph{continuous valuation} on $X$ is a function $\mu:X\to\tLR$ satisfying the following:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$.
 	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
@@ -428,7 +428,11 @@ Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$.%
 Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(x:X)\ldotp(\mu x\leq \mu'x)$.
 \end{definition}
 
-Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
+% Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
+
+\begin{example}
+A continuous valuation on $\Prop$ 
+\end{example}
 
 %%%%%%%%% Chapter %%%%%%%%%
 \chapter{Riesz approach}
@@ -590,6 +594,8 @@ holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type o
 \todo{Does at modality take locally compact spaces to locally compact spaces?}
 
 %%%%%%%%% Chapter %%%%%%%%%
+
+
 \chapter{Questions}
 
 \section{Current}
@@ -601,13 +607,6 @@ holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type o
 	\item What are the semantics of valuations in the topos of sheaves on a topological space? What about in the (presheaf) topos of graphs?
 \end{enumerate}
 
-\chapter{Another (less satisfactory) attempt}
-
-Tobias: I'm not sure if this is going in the right direction. My idea was that we'd have a sheaf $\tRR_{\EE}$ in which expectation values land, such that a section over $(a,b)$ is either an arbitrary function $\II(a,b)\to\II\RR$, or more specifically such a function which in addition takes maximal elements to maximal elements.
-
-The things that we want to take expectation values of should be \emph{observables} on $X$. In the sheaf of observables, a section over $(a,b)$ should be a function $f:\prod_{(c,d)\subseteq(a,b)} X(c,d)\to\II\RR$ which is suitably monotone, i.e.~such that $(c,d)\sqsupseteq(c',d')$ implies $f(c,d)\sqsupseteq f(c',d')$.
-
-Then taking expectation values should be an internal function $X\to $
 
 
 \chapter{Some notes on locales}
