@@ -421,7 +421,6 @@ In fact, it also has arbitrary meets, though I don't think we'll need that. The 
 We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Find a better term if we really need this (perhaps we want internal frames instead?)}if it has binary meets, binary joins, and directed joins.
 \end{definition}
 
-
 Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
 
 \chapter{Internal topological spaces and locales}
@@ -655,7 +654,48 @@ Semantically we see that $\church{\In{a}}=\church{\At{a}}$, but in fact, our axi
 
 Although defined as the topos on presheaves on the discrete two-point space $\{a,b\}$, our topos $\Span\set$ can also be viewed as the topos of \emph{sheaves} on a topological space $W$, with three points $a,b,ab$ and four open sets: $\emptyset$, $W$, $\{a\}$ and $\{b\}$. The type $\tRR$ corresponds to the constant sheaf, by general theory of real number objects in localic toposes.
 
+\begin{theorem}
+Given finite sets $A$ and $B$, valuations on the power object of the $\pi$-type given by the product projections span
+\[\begin{tikzcd}
+	& A \times B \ar{dl} \ar{dr} \\
+	A & & B
+\end{tikzcd}\]
+are semantically in bijective correspondence with probability measures on $A\times B$.
+\end{theorem}
 
+Here, our valuations take values in the lower reals.
+
+We also write $(A,B)\in\Span\set$ as shorthand for the above span. So the global elements of the object of valuations on $(A,B)$ are precisely the probability measures on $A\times B$.
+
+\begin{proof}
+The lower reals are given by the span
+\[\begin{tikzcd}
+	& \{ (x, y, z) \in\mathbb{R}^3 \:\mid\: x,y\geq z \} \ar[swap]{dl}{(x,y,z)\mapsto x} \ar{dr}{(x,y,z)\mapsto y} \\
+	\mathbb{R} & & \mathbb{R}
+\end{tikzcd}\]
+The power object $\Prop^{(A,B)}$ is given by the span
+\[\begin{tikzcd}
+	& Nat(A,B) \ar{dl} \ar{dr} \\
+	\{\bot,\top\}^A & & \{\bot,\top\}^B
+\end{tikzcd}\]
+where $Nat(A,B)\subseteq \{\bot,a,b,a\lor b,\top\}^{A\times B}$ is the subset consisting of those functions $\phi : A\times B \to \{\bot,a,b,a\lor b,\top\}$ with the property that $\At{a} \phi(x,y)$ is independent of $y$, and likewise $\At{b} \phi(x,y)$ is independent of $x$. Hence the elements of $Nat(A,B)$ can be identified with triples $(S,T,U)$ where $S\subseteq A$ and $T\subseteq B$ as well as $U\subseteq S\times T$; the truth value of $(x,y)$ is $\geq a$ iff $x\in S$; it is $\geq b$ iff $y\in T$; and finally it is $\top$ iff $(x,y)\in U$. In this picture, the maps on the two legs are simply $(S,T,U)\mapsto S$ and $(S,T,U)\mapsto T$. Thus a global element of the object of normalized valuations is a diagram
+\[\begin{tikzcd}
+	& \{(S,T,U) \:\mid\: S \subseteq A , \: T \subseteq B , \: U \subseteq S\times T \} \ar{dl} \ar{dr} \ar{dd}{\mu_{ab}} \\
+	\{ S \subseteq A \} \ar{dd}{\mu_a} & & \{ T \subseteq B \} \ar{dd}{\mu_b} \\
+	& \{ (x,y,z) \in \mathbb{R}^3 \:\mid\: x,y\geq z \} \ar{dl} \ar{dr} \\
+	\mathbb{R} & & \mathbb{R}
+\end{tikzcd}\]
+satisfying in addition the inclusion-exclusion and normalization equations. The commutativity of the diagram expresses the fact that the first two components of $\mu_{ab}(S,T,U)$ are given by $\mu_a(S)$ and $\mu_b(T)$, respectively; in particular, if we replace $\mu_{ab}$ by its third component, we have the inequalities
+\[
+	\mu_{ab}(S,T,U) \leq \mu_a(S), \qquad \mu_{ab}(S,T,U) \leq \mu_b(T),
+\]
+By monotonicity of the valuation, it is equivalent to postulate these inequalities only in the special case $T = B$ and $U = S\times T$,
+\[
+	\mu_{ab}(S,B,S\times B) \leq \mu_a(S), \qquad \mu_{ab}(A,T,A\times T) \leq \mu_b(T),
+\]
+as long as each of $\mu_a$, $\mu_b$ and $\mu_{ab}$ is monotone (which is the case). Furthermore, we have normalization, which states $\mu_a(A) = \mu_b(B) = \mu_{ab}(A,B,A\times B) = 1$.
+
+\end{proof}
 
 
 \newpage
