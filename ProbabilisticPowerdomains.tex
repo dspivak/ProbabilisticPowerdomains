@@ -678,23 +678,50 @@ The power object $\Prop^{(A,B)}$ is given by the span
 	& Nat(A,B) \ar{dl} \ar{dr} \\
 	\{\bot,\top\}^A & & \{\bot,\top\}^B
 \end{tikzcd}\]
-where $Nat(A,B)\subseteq \{\bot,a,b,a\lor b,\top\}^{A\times B}$ is the subset consisting of those functions $\phi : A\times B \to \{\bot,a,b,a\lor b,\top\}$ with the property that $\At{a} \phi(x,y)$ is independent of $y$, and likewise $\At{b} \phi(x,y)$ is independent of $x$. Hence the elements of $Nat(A,B)$ can be identified with triples $(S,T,U)$ where $S\subseteq A$ and $T\subseteq B$ as well as $U\subseteq S\times T$; the truth value of $(x,y)$ is $\geq a$ iff $x\in S$; it is $\geq b$ iff $y\in T$; and finally it is $\top$ iff $(x,y)\in U$. In this picture, the maps on the two legs are simply $(S,T,U)\mapsto S$ and $(S,T,U)\mapsto T$. Thus a global element of the object of normalized valuations is a diagram
+where $Nat(A,B)\subseteq \{\bot,a,b,a\lor b,\top\}^{A\times B}$ is the subset consisting of those functions $\phi : A\times B \to \{\bot,a,b,a\lor b,\top\}$ with the property that $\At{a} \phi(x,y)$ is independent of $y$, and likewise $\At{b} \phi(x,y)$ is independent of $x$. Hence the elements of $Nat(A,B)$ can be identified with triples $(S,T,U)$ where $S\subseteq A$ and $T\subseteq B$ as well as $U\subseteq S\times T$; the truth value of $(x,y)$ is $\geq a$ iff $x\in S$; it is $\geq b$ iff $y\in T$; and finally it is $\top$ iff $(x,y)\in U$. In this picture, the maps on the two legs are simply $(S,T,U)\mapsto S$ and $(S,T,U)\mapsto T$. The connectives are given componentwise,
+\begin{align*}
+	(S_1,T_1,U_1) \land (S_2,T_2,U_2) & = (S_1\cap S_2,T_1\cap T_2,U_1\cap U_2),\\
+	(S_1,T_1,U_1) \lor (S_2,T_2,U_2)  & = (S_1\cup S_2,T_1\cup T_2,U_1\cup U_2).
+\end{align*}
+By all this, a global element of the object of normalized valuations is a diagram
 \[\begin{tikzcd}
 	& \{(S,T,U) \:\mid\: S \subseteq A , \: T \subseteq B , \: U \subseteq S\times T \} \ar{dl} \ar{dr} \ar{dd}{\mu_{ab}} \\
 	\{ S \subseteq A \} \ar{dd}{\mu_a} & & \{ T \subseteq B \} \ar{dd}{\mu_b} \\
 	& \{ (x,y,z) \in \mathbb{R}^3 \:\mid\: x,y\geq z \} \ar{dl} \ar{dr} \\
 	\mathbb{R} & & \mathbb{R}
 \end{tikzcd}\]
-satisfying in addition the inclusion-exclusion and normalization equations. The commutativity of the diagram expresses the fact that the first two components of $\mu_{ab}(S,T,U)$ are given by $\mu_a(S)$ and $\mu_b(T)$, respectively; in particular, if we replace $\mu_{ab}$ by its third component, we have the inequalities
+satisfying in addition monotonicity and the inclusion-exclusion and normalization equations. The commutativity of the diagram expresses the requirement that the first two components of $\mu_{ab}(S,T,U)$ must be equal to $\mu_a(S)$ and $\mu_b(T)$, respectively; in particular, if we replace $\mu_{ab}$ by its third component, we have the inequalities
 \[
-	\mu_{ab}(S,T,U) \leq \mu_a(S), \qquad \mu_{ab}(S,T,U) \leq \mu_b(T),
+	\mu_{ab}(S,T,U) \leq \mu_a(S), \qquad \mu_{ab}(S,T,U) \leq \mu_b(T).
 \]
-By monotonicity of the valuation, it is equivalent to postulate these inequalities only in the special case $T = B$ and $U = S\times T$,
-\[
+So from now on, we will write $\mu_{ab}$ for only the third component, which is an external real number. By monotonicity of the valuation, it is enough to postulate these inequalities only in the special case $T = B$ and $U = S\times T$,
+\begin{equation}
+\label{marginaldomination}
 	\mu_{ab}(S,B,S\times B) \leq \mu_a(S), \qquad \mu_{ab}(A,T,A\times T) \leq \mu_b(T),
+\end{equation}
+as long as each of $\mu_a$, $\mu_b$ and $\mu_{ab}$ is monotone (which is the case). Furthermore, we have normalization, which states $\mu_a(A) = \mu_b(B) = \mu_{ab}(A,B,A\times B) = 1$, and the inclusion-exclusion relation, which states the obvious for $\mu_a$ and $\mu_b$, as well as
+\begin{equation}
+\label{abinclexcl}
+	\mu_{ab}(S_1\cap S_2,T_1\cap T_2,U_1\cap U_2) + \mu_{ab}(S_1\cup S_2,T_1\cup T_2,U_1\cup U_2) = \mu_{ab}(S_1,T_1,U_1) + \mu_{ab}(S_2,T_2,U_2).
+\end{equation}
+Moreover, we claim that together with normalization, this forces the inequalities~\eqref{marginaldomination} to be equalities. Indeed, we have as an instance of inclusion-exclusion,
+\[
+	\mu_{ab}(A\setminus S,B,(A\setminus S)\times B) + \mu_{ab}(S,B,S\times B) = \mu_{ab}(\emptyset,B,\emptyset) + \mu_{ab}(A,B,A\times B).
 \]
-as long as each of $\mu_a$, $\mu_b$ and $\mu_{ab}$ is monotone (which is the case). Furthermore, we have normalization, which states $\mu_a(A) = \mu_b(B) = \mu_{ab}(A,B,A\times B) = 1$.
+The first term on the right-hand side vanishes since $0 \leq \mu_{ab}(\emptyset,B,\emptyset) \leq \mu_a(\emptyset) = 0$, while the second term is $1$ by normalization. With $A\setminus S$ in place of $S$, the first inequality~\eqref{marginaldomination} therefore gives
+\[
+	1 - \mu_{ab}(S,B,S\times B) \leq \mu_a(A\setminus S) = 1 - \mu_a(S).
+\]
+\todo[inline]{These seem to be correspond to the point-determination axiom, which therefore follows from normalization. Is this correct?}
+Combining this with~\eqref{marginaldomination}, we conclude that the first inequality in~\eqref{marginaldomination} must hold with equality; the same reasoning applies to the second inequality. Therefore $\mu_a$ is already determined by $\mu_{ab}$, and so is $\mu_b$.
 
+So overall, a normalized valuation on $(A,B)$ is the same thing as a map $(S,T,U)\longmapsto \mu_{ab}(S,T,U)$ with values in classical $[0,1]$ that satisfies monotonicity, inclusion-exclusion in the form~\eqref{abinclexcl}, and normalization $\mu_{ab}(A,B,A\times B) = 1$.
+
+What is missing is to show that $\mu_{ab}(S,T,U) = \mu_{ab}(A,B,U)$ for all $S,T,U$, so that $\mu_{ab}$ depends only on $U\subseteq A\times B$, making it into a probability measure in the standard sense. Again by inclusion-exclusion and monotonicity, this equation is equivalent to $\mu_{ab}(A,B,\emptyset) = 0$. But this equation is also automatic thanks to inclusion-exclusion,
+\[
+	\mu_{ab}(A\cap \emptyset, \emptyset \cap B, \emptyset) + \mu_{ab}(A\cup \emptyset, \emptyset \cup B, \emptyset) = \mu_{ab}(A, \emptyset, \emptyset) + \mu_{ab}(\emptyset, B, \emptyset).
+\]
+We have already shown that both terms on the right-hand side must vanish, and the first term on the left vanishes trivially. Therefore $\mu_{ab}(A,B,\emptyset) = 0$, as was to be shown.
 \end{proof}
 
 
