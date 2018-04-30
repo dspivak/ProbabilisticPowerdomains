@@ -285,6 +285,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\el}[1]{\tn{el}#1}
 \newcommand{\asSh}{\Fun{sh}}
 
+\newcommand{\apart}{\,\#\,}
 \newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
 \newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
 
@@ -723,6 +724,22 @@ What is missing is to show that $\mu_{ab}(S,T,U) = \mu_{ab}(A,B,U)$ for all $S,T
 \]
 We have already shown that both terms on the right-hand side must vanish, and the first term on the left vanishes trivially. Therefore $\mu_{ab}(A,B,\emptyset) = 0$, as was to be shown.
 \end{proof}
+
+What David sees as the most interesting part of the above proof is the last step, that $\mu_{ab}(S,T,U) = \mu_{ab}(A,B,U)$ for all $S,T,U$. Here's how that looks logically.
+
+Recall that $\See{[0,n]}P\coloneqq(t\apart [n,0])\vee P$, where $t\apart[a,b]$ means $(b+1\leq t)\vee(t\leq a-1)$. So $\See{[0,n]}P=(1\leq t)\vee(t\leq n-1)\vee P$. Recall also that $\mu(P)$ is formally a function on rationals, $\mu(P):\tQQ\to\Prop$; if $\mu(P)(q)$ holds, we think ``$q<\mu(P)$''. So for example, down-closure says $(q'<q\wedge\mu(P)(q))\imp\mu(P)(q')$. In $\tRR_{\SeeInline{[0,n]}}$, the $\See{[d,u]}$-(nonnegative lower reals), $\See{[d,u]}\bot$ is the unit for addition.
+
+\begin{theorem}
+\[\See{[0,n]}\mu(P)=\See{[0,n]}\mu(\See{[0,n]}P).\]
+\end{theorem}
+\begin{proof}
+We have $\mu(P)+\mu(\See{[0,n]}\bot)=\mu((\See{[0,n]}\bot)\wedge P)+\mu(\See{[0,n]} P)$. Since $\See{[0,n]}$ commutes with addition, it suffices to show $\See{[0,n]}\mu(\See{[0,n]}\bot)=\See{[0,n]}\mu((\See{[0,n]}\bot)\wedge P)$. But $\See{[0,n]}\bot\leq\See{[0,n]}\mu(\See{[0,n]}\bot\wedge P)\leq\See{[0,n]}\mu(\See{[0,n]}\bot)$, so it suffices to show that $\See{[0,n]}\mu(\See{[0,n]}\bot)\leq\See{[0,n]}\bot$. We also have
+\[\mu(\See{[0,n]}\bot)+\mu(1\leq t\leq n-1)=\mu(1\leq t)+\mu(t\leq n-1),\]
+so it suffices to show that $\See{[0,n]}\mu(1\leq t)\leq\See{[0,n]}\bot$ and $\See{[0,n]}\mu(t\leq n-1)\leq\See{[0,n]}\bot$. 
+
+These are similar, so we show the first, and since $\See{[0,n]}$ is a modality, it suffices to show that $\mu(1\leq t)(q)\imp\See{[0,n]}\bot$ for any $q\in\QQ_{\geq0}$. So suppose $\mu(1\leq t)(q)$.
+
+By an axiom of discrete temporal type theory (analogous to Axiom 3a in TTT), we have $\neg(t\leq 0)\imp (1\leq t)$ [and similarly $\neg(n\leq t)\imp(t\leq n-1)$]. Since $(1\leq t)\imp\See{[0,n]}\bot$, it suffices to show $\neg(t\leq 0)$, so assume $t\leq 0$. Then $\mu(1\leq t)=\mu(\bot)$, so $\mu(1\leq t)(q)=\mu(\bot)(q)=\bot$. This completes the proof.\end{proof}
 
 
 \newpage
