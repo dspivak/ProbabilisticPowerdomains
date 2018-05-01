@@ -741,6 +741,11 @@ These are similar, so we show the first, and since $\See{[0,n]}$ is a modality, 
 
 By an axiom of discrete temporal type theory (analogous to Axiom 3a in TTT), we have $\neg(t\leq 0)\imp (1\leq t)$ [and similarly $\neg(n\leq t)\imp(t\leq n-1)$]. Since $(1\leq t)\imp\See{[0,n]}\bot$, it suffices to show $\neg(t\leq 0)$, so assume $t\leq 0$. Then $\mu(1\leq t)=\mu(\bot)$, so $\mu(1\leq t)(q)=\mu(\bot)(q)=\bot$. This completes the proof.\end{proof}
 
+\todo[inline]{Do we generally expect it to be the case that $\mu(P) = P$, or at least $\mu(P) \leq P$, for every proposition $P$? Because then we would get
+\[
+	\mu(1 \leq t) \leq \mu(\See{[0,n]} \bot) \leq \See{[0,n]} \bot,
+\]
+and therefore directly $\See{[0,n]} \mu(1 \leq t) \leq \See{[0,n]} \bot$, since applying $\See{[0,n]}$ to a lower real is the internal left adjoint to $\RR \rightarrow \RR_{\SeeInline{[0,n]}}$. (Right?) Or is this argument begging the question?}
 
 \newpage
 
