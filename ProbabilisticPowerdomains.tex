@@ -747,6 +747,36 @@ By an axiom of discrete temporal type theory (analogous to Axiom 3a in TTT), we 
 \]
 and therefore directly $\See{[0,n]} \mu(1 \leq t) \leq \See{[0,n]} \bot$, since applying $\See{[0,n]}$ to a lower real is the internal left adjoint to $\RR \rightarrow \RR_{\SeeInline{[0,n]}}$. (Right?) Or is this argument begging the question?}
 
+
+\section{What we can aim for}
+
+Tentative setup, to be adjusted: let $B$ be a topological space (say, T1), $G$ a group that acts on $B$, and $K$ a $G$-invariant collection of compact sets in $B$ that includes all singletons and is closed in the upper Vietoris topology (that we equip $K$ with), and such that every compact set in $B$ is contained in some element of $K$. Whatever setup we use, it should cover the following two cases that are of main interest:
+
+\begin{enumerate}
+\item $B = \RR$ with $K = \mathbb{IR}$, where $G$ is either trivial or the translation group; this should give a topos-theoretic formulation of (stationary) stochastic processes.
+\item $B$ a discrete finite space with $K = 2^B$, where $G$ is either trivial or the permutation group; this should give a topos-theoretic formulation of joint distributions of $|B|$ many random variables.
+\end{enumerate}
+
+If things go really well, we can also hope to cover one more case that is fundamental to statistical mechanics and quantum field theory:
+
+\begin{enumerate}[resume]
+\item $B = \RR^n$ with $K$ e.g.~all compact subsets, where $G$ is again the translation group.
+\end{enumerate}
+
+For now, let me formulate the conjecture in the case where $G$ is trivial:
+
+\begin{conjecture}
+Every space $p : X\to B$ over $B$ is an internal space in $\Shv{B}$, but also becomes an internal space in $\Shv{K}$. Global elements of the object of normalized continuous valuations on this space with values in the lower reals of $\Shv{K}$ are in bijection with external normalized continuous valuations on the space of global sections of $p$, equipped with (e.g.) the compact-open topology.
+\end{conjecture}
+
+Essentially, the problem is to find suitable hypotheses that make some version of this conjecture correct. Developing a result of this type is mostly a topos-theoretic problem and does not involve technical aspects of measure theory. However, in order to get to the traditional picture of stochastic processes, there is one more step to take:
+
+\begin{conjecture}
+Under suitable hypotheses, (external) continuous valuations on the space of global sections of $p : X\to \RR$ are in bijection with stochastic processes taking values in $X$.
+\end{conjecture}
+
+
+
 \newpage
 
 \appendix
