@@ -280,6 +280,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \renewcommand{\Top}{\Cat{Top}}
 \newcommand{\Op}{\Set{Op}}
 \renewcommand{\C}{\Cat{C}}
+\newcommand{\Sub}{\Set{Sub}}
 
 \newcommand{\op}{^\tn{op}}
 \newcommand{\el}[1]{\tn{el}#1}
@@ -775,6 +776,46 @@ Essentially, the problem is to find suitable hypotheses that make some version o
 Under suitable hypotheses, (external) continuous valuations on the space of global sections of $p : X\to \RR$ are in bijection with stochastic processes taking values in $X$.
 \end{conjecture}
 
+\newpage
+\chapter{Notes from meetings (to be organized)}
+
+Tobias wondered if there is exactly one normalized continuous valuation (NCV) on $\Prop$. We defined a function $i\colon\Prop\to\tLR$ as follows
+\[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P)\]
+and then proceeded to prove the following.
+
+\begin{proposition}
+The function $i\colon\Prop\to\tLR$ defined above is indeed an NCV on $\Prop$. For any other NCV $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq\neg\neg i$. In particular, for any $U:\Prop$ with $\neg\neg U\imp U$, we have $i(U)=\mu(U)$.
+\end{proposition}
+\begin{proof}[Sketch]
+The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq\neq\neq i$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity we have $\mu(\bot)(q)$, and by normality ($\mu(\bot)=0)$, this means $q<0$, a contradiction.
+\end{proof}
+
+We still hope that the stronger claim is true, that $\mu(q)=i(q)$ for any NCV $\mu$; it is true in several examples of interest. 
+
+To approach this, we wanted to better understand the semantics of an NCV $\mu:\Prop\to\tLR$ on a topological space $X$. Let $\LR$ be the topological space of lower reals. If we understand the semantics of $\tLR$, we have that $\tLR(U)\cong\Top(U,\LR)$ for any open $U\ss X$. Similarly, $\Prop(U)=\Sub(U)$, the frame of open subsets of $U$. By definition $\mu$ consists of a component map $\mu_U\colon\Sub(U)\to\Top(U,\LR)$ for each $U\in\Op(X)$, satisfying the naturality condition for any $V\ss U$:
+\[
+\begin{tikzcd}
+	\Sub(U)\ar[r, "\mu_U"]\ar[d, "-\cap V"']&\Top(U,\LR)\ar[d, "\restrict{-}{V}"]\\
+	\Sub(V)\ar[r, "\mu_V"']&\Top(V,\LR)
+\end{tikzcd}
+\]
+In particular, momentarily taking $U=X$ we have $\restrict{\mu_X(V')}{V}=\mu_V(V'\cap V)=\restrict{\mu_X(V'\cap V)}{V}$ for all $V,V'\ss X$. But in fact, given a function $\mu_X$ satisfying that property, we can define $\mu_U$ for an arbitrary $U$ by $\mu_U\coloneqq\restrict{\mu_X}{U}$ and this will be natural. Indeed, for any $V'\ss U$,
+\[\restrict{\mu_U(V')}{V}:=\restrict{\mu_X(V')}{V}=\restrict{\mu_X(V'\cap V)}{V}=:\mu_V(V'\cap V).\]
+Thus we have shown the following.
+\begin{proposition}
+The semantics of an internal NCV $\mu\colon\Prop\to\tLR$ on a topological space $X$ can be identified with a function $\mu_X\colon\Op(X)\to\Top(X,\LR)$ satisfying the following conditions:
+\begin{enumerate}
+	\item $\restrict{\mu_X(V')}{V}=\restrict{\mu_X(V'\cap V)}{V}$ for all $V,V'\ss X$.
+	\item $\mu_X(U)(x)=1$ and $\mu_X(\emptyset)(x)=0$ for all $x\in X$.
+	\item $V_1\ss V_2$ implies $\mu_X(V_1)\leq\mu_X(V_2)$.
+	\item For all $V_1,V_2$, $\mu_X(V_1\cup V_2)+\mu_X(V_1\cap V_2)=\mu_X(V_1)+\mu_X(V_2)$.
+	\item If $D\ss\Op(X)$ is directed then $\mu(\bigcup D)=\sup\{\mu_X(V)\mid V\in D\}$.
+\end{enumerate}
+\end{proposition}
+
+It would be nice to get a stronger condition, that we can identify $\mu$ with a continuous function $X\to\LR$ satisfying conditions 2--5, namely $\mu_X(X)$. We know $\restrict{\mu_X(X)}{V}=\restrict{\mu_X(V)}{V}$, so if the function $\mu_X(V)\colon X\to\LR$ carries any additional information, so to speak, it will only be found on points outside of $V$.
+
+It then suffices to show that $V\vee\mu_X(\bot)q=V\vee\mu_X(V)q$ for all $q$. We know this is true when $\neg\neg V\imp V$, i.e.\ when $V$ is the interior of its closure. The hope is that we can finish the job using inclusion-exclusion and continuity.
 
 
 \newpage
