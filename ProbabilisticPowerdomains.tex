@@ -237,7 +237,8 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 
 
 \newcommand{\EE}{\mathbb{E}} % expectation value
-\newcommand{\II}{\mathbb{I}} % interval domain
+\newcommand{\II}{\mathbb{II}} % interval domain
+\newcommand{\IR}{\mathbb{IR}} % interval domain
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\QQ}{\mathbb{Q}}
@@ -320,7 +321,6 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\erase}[1]{}
 
 \linespread{1.2}
-\allowdisplaybreaks
 \setsecnumdepth{subsection}
 \settocdepth{section}
 \setlength{\parindent}{15pt}
@@ -730,7 +730,7 @@ What David sees as the most interesting part of the above proof is the last step
 
 Recall that $\See{[0,n]}P\coloneqq(t\apart [n,0])\vee P$, where $t\apart[a,b]$ means $(b+1\leq t)\vee(t\leq a-1)$. So $\See{[0,n]}P=(1\leq t)\vee(t\leq n-1)\vee P$. Recall also that $\mu(P)$ is formally a function on rationals, $\mu(P):\tQQ\to\Prop$; if $\mu(P)(q)$ holds, we think ``$q<\mu(P)$''. So for example, down-closure says $(q'<q\wedge\mu(P)(q))\imp\mu(P)(q')$. In $\tRR_{\SeeInline{[0,n]}}$, the $\See{[d,u]}$-(nonnegative lower reals), $\See{[d,u]}\bot$ is the unit for addition.
 
-\begin{theorem}
+\begin{theorem}\label{thm.logical_reformulation}
 \[\See{[0,n]}\mu(P)=\See{[0,n]}\mu(\See{[0,n]}P).\]
 \end{theorem}
 \begin{proof}
@@ -779,45 +779,58 @@ Under suitable hypotheses, (external) continuous valuations on the space of glob
 \newpage
 \chapter{Notes from meetings (to be organized)}
 
-Tobias wondered if there is exactly one normalized continuous valuation (NCV) on $\Prop$. We defined a function $i\colon\Prop\to\tLR$ as follows
-\[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P)\]
-and then proceeded to prove the following.
+Consider the function $i\colon\Prop\to\tLR$ defined as follows
+\[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P).\]
+We next show that it is a normalized continuous valuation (NCV). Later we will show that, under some conditions, it is unique as such.
 
-\begin{proposition}
-The function $i\colon\Prop\to\tLR$ defined above is indeed an NCV on $\Prop$. For any other NCV $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq\neg\neg i$. In particular, for any $U:\Prop$ with $\neg\neg U\imp U$, we have $i(U)=\mu(U)$.
+\begin{proposition}\label{prop.sandwich}
+The function $i\colon\Prop\to\tLR$ defined above is indeed an NCV on $\Prop$, and for any NCV $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
 \end{proposition}
 \begin{proof}[Sketch]
-The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq\neq\neq i$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity we have $\mu(\bot)(q)$, and by normality ($\mu(\bot)=0)$, this means $q<0$, a contradiction.
+It's not hard to show that $i$ is an NCV. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity we have $\mu(\bot)(q)$, and by normality ($\mu(\bot)=0)$, this means $q<0$, a contradiction.
 \end{proof}
 
-We still hope that the stronger claim is true, that $\mu(q)=i(q)$ for any NCV $\mu$; it is true in several examples of interest. 
+Recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty space, and is closed under finite intersections.
 
-To approach this, we wanted to better understand the semantics of an NCV $\mu:\Prop\to\tLR$ on a topological space $X$. Let $\LR$ be the topological space of lower reals. If we understand the semantics of $\tLR$, we have that $\tLR(U)\cong\Top(U,\LR)$ for any open $U\ss X$. Similarly, $\Prop(U)=\Sub(U)$, the frame of open subsets of $U$. By definition $\mu$ consists of a component map $\mu_U\colon\Sub(U)\to\Top(U,\LR)$ for each $U\in\Op(X)$, satisfying the naturality condition for any $V\ss U$:
-\[
-\begin{tikzcd}
-	\Sub(U)\ar[r, "\mu_U"]\ar[d, "-\cap V"']&\Top(U,\LR)\ar[d, "\restrict{-}{V}"]\\
-	\Sub(V)\ar[r, "\mu_V"']&\Top(V,\LR)
-\end{tikzcd}
-\]
-In particular, momentarily taking $U=X$ we have $\restrict{\mu_X(V')}{V}=\mu_V(V'\cap V)=\restrict{\mu_X(V'\cap V)}{V}$ for all $V,V'\ss X$. But in fact, given a function $\mu_X$ satisfying that property, we can define $\mu_U$ for an arbitrary $U$ by $\mu_U\coloneqq\restrict{\mu_X}{U}$ and this will be natural. Indeed, for any $V'\ss U$,
-\[\restrict{\mu_U(V')}{V}:=\restrict{\mu_X(V')}{V}=\restrict{\mu_X(V'\cap V)}{V}=:\mu_V(V'\cap V).\]
-Thus we have shown the following.
+\begin{definition}
+Say that a topos $\cat{E}$ is \emph{regularly-based} if the following statement holds internally:
+\[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
+For topological spaces, this is the condition that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup_{\{Q\ss P\mid \neg\neg Q=Q\}}Q$.
+
+We say $Q$ is a \emph{regular basis element} if $Q=\neg\neg Q$.
+\end{definition}
+
 \begin{proposition}
-The semantics of an internal NCV $\mu\colon\Prop\to\tLR$ on a topological space $X$ can be identified with a function $\mu_X\colon\Op(X)\to\Top(X,\LR)$ satisfying the following conditions:
-\begin{enumerate}
-	\item $\restrict{\mu_X(V')}{V}=\restrict{\mu_X(V'\cap V)}{V}$ for all $V,V'\ss X$.
-	\item $\mu_X(U)(x)=1$ and $\mu_X(\emptyset)(x)=0$ for all $x\in X$.
-	\item $V_1\ss V_2$ implies $\mu_X(V_1)\leq\mu_X(V_2)$.
-	\item For all $V_1,V_2$, $\mu_X(V_1\cup V_2)+\mu_X(V_1\cap V_2)=\mu_X(V_1)+\mu_X(V_2)$.
-	\item If $D\ss\Op(X)$ is directed then $\mu(\bigcup D)=\sup\{\mu_X(V)\mid V\in D\}$.
-\end{enumerate}
+Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique NCV on $\Prop$. 
 \end{proposition}
+\begin{proof}
+Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q$ is a basis element then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so $Q\in T$.
 
-It would be nice to get a stronger condition, that we can identify $\mu$ with a continuous function $X\to\LR$ satisfying conditions 2--5, namely $\mu_X(X)$. We know $\restrict{\mu_X(X)}{V}=\restrict{\mu_X(V)}{V}$, so if the function $\mu_X(V)\colon X\to\LR$ carries any additional information, so to speak, it will only be found on points outside of $V$.
+Next suppose $Q$ is of the form $Q=Q_1\vee Q_2$ for $Q_1,Q_2\in T$. It is not hard to show that $i(Q_1\vee Q_2)=\max(i(Q_1),i(Q_2))$ and $i(Q_1\wedge Q_2)=\min(i(Q_1),i(Q_2))$ by definition of $i$. Thus
+\begin{align*}
+	i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)
+	&\leq\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)\\
+	&\leq \mu(Q_1\vee Q_2)+\mu(Q_1\wedge Q_2)\\
+	&=\mu(Q_1)+\mu(Q_2)\\
+	&=i(Q_1)+i(Q_2)
+\end{align*}
+Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$, so we have shown $Q\in T$. The argument that $(Q_1\wedge Q_2)\in T$ is similar: just replace $\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)$ with $i(Q_1\vee Q_2)+\mu(Q_1\wedge Q_2)$ in the argument above.
 
-It then suffices to show that $V\vee\mu_X(\bot)q=V\vee\mu_X(V)q$ for all $q$. We know this is true when $\neg\neg V\imp V$, i.e.\ when $V$ is the interior of its closure. The hope is that we can finish the job using inclusion-exclusion and continuity.
+Since every join can be decomposed into a directed join of finite joins, by assumption an arbitrary proposition $P:\Prop$ is a directed join of elements in $T$. Thus it suffices to show that $T$ is closed under directed joins, but this is clear: if $(Q_d)_{d\in D}$ is a directed system where $Q_d\in T$ for all $d$ then
+\[\mu(\sup_{d\in D}Q_d)=\sup_{d\in D}\mu(Q_d)=\sup_{d\in D} i(Q_d)=i(\sup_{d\in D}Q_d).\qedhere\]
+\end{proof}
 
+\begin{example}
+The assumption that $\cat{E}$ is regularly based is necessary. For example, consider the topological space where $\NN$ is the set of points and a subset $U\ss\NN$ is open $U\in \Op$ iff it is either empty or cofinite. This space is not regularly-based because the only regular opens are $\emptyset$ and $\NN$; for any other $U$, we have $\neg\neg U=\NN$. Consider the function $\mu\colon\Op\to\LR$ given by
+\[\mu(U)=\begin{cases}0&\tn{ if }U=\emptyset\\1&\tn{ if }U\neq\emptyset\end{cases}\]
+Then $\mu$ is monotonic, normalized, and commutes with directed joins. It satisfies inclusion exclusion because (three out of four cases are clear and) the intersection of cofinite sets is cofinite, and in particular nonempty.
+\end{example}
 
+\begin{remark}
+In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
+
+It is not hard to show however that any regular space is regularly-based in our sense.
+\end{remark}
 \newpage
 
 \appendix
