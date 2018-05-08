@@ -30,12 +30,10 @@ pdfencoding=unicode]{hyperref}
   \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
 \usepackage[backend=biber,style = alphabetic]{biblatex}
   \addbibresource{Library20171206.bib}
-\usepackage{ebproof}
 \usepackage{todonotes}
 
 
 
-\crefname{axiom}{Axiom}{Axioms}
 \usetikzlibrary{
 	cd,
 	math,
@@ -51,119 +49,21 @@ pdfencoding=unicode]{hyperref}
 \setlist{nosep}
 
 \tikzset{
-   oriented WD/.style={%everything after equals replaces "oriented WD" in key.
-      every to/.style={out=0,in=180,draw},
-      label/.style={
-         font=\everymath\expandafter{\the\everymath\scriptstyle},
-         inner sep=0pt,
-         node distance=2pt and -2pt},
-      semithick,
-      node distance=1 and 1,
-      decoration={markings, mark=at position .5 with {\arrow{stealth};}},
-      ar/.style={postaction={decorate}},
-      execute at begin picture={\tikzset{
-         x=\bbx, y=\bby,
-         every fit/.style={inner xsep=\bbx, inner ysep=\bby}}}
-      },
-   bbx/.store in=\bbx,
-   bbx = 1.5cm,
-   bby/.store in=\bby,
-   bby = 1.75ex,
-   bb port sep/.store in=\bbportsep,
-   bb port sep=2,
-   % bb wire sep/.store in=\bbwiresep,
-   % bb wire sep=1.75ex,
-   bb port length/.store in=\bbportlen,
-   bb port length=4pt,
-   bb min width/.store in=\bbminwidth,
-   bb min width=1cm,
-   bb rounded corners/.store in=\bbcorners,
-   bb rounded corners=2pt,
-   bb small/.style={bb port sep=1, bb port length=2.5pt, bbx=.4cm, bb min width=.4cm, bby=.7ex},
-   bb/.code 2 args={%When you see this key, run the code below:
-      \pgfmathsetlengthmacro{\bbheight}{\bbportsep * (max(#1,#2)+1) * \bby}
-      \pgfkeysalso{draw,minimum height=\bbheight,minimum width=\bbminwidth,outer sep=0pt,
-         rounded corners=\bbcorners,thick,
-         prefix after command={\pgfextra{\let\fixname\tikzlastnode}},
-         append after command={\pgfextra{\draw
-            \ifnum #1=0{} \else foreach \i in {1,...,#1} {
-               ($(\fixname.north west)!{\i/(#1+1)}!(\fixname.south west)$) +(-\bbportlen,0) 
-coordinate (\fixname_in\i) -- +(\bbportlen,0) coordinate (\fixname_in\i')}\fi %Define the endpoints 
-%of tickmarks
-            \ifnum #2=0{} \else foreach \i in {1,...,#2} {
-               ($(\fixname.north east)!{\i/(#2+1)}!(\fixname.south east)$) +(-\bbportlen,0) 
-coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
-         }}}
-   },
-   bb name/.style={append after command={\pgfextra{\node[anchor=north] at (\fixname.north) {#1};}}}
+  tick/.style={postaction={
+    decorate,
+    decoration={markings, mark=at position 0.5 with {\draw[-] (0,.4ex) -- (0,-.4ex);}}}
+  },
+  tickx/.style={
+    postaction={ decorate,
+      decoration={markings,
+        mark=at position 0.5 with {
+          \fill circle [radius=.28ex];
+        }
+      }
+    }
+  }
 }
 
-
-\tikzset{
-	unoriented WD/.style={
-		every to/.style={draw},
-		shorten <=-\portlen, shorten >=-\portlen,
-		label distance=-2pt,
-		thick,
-		node distance=\spacing,
-		execute at begin picture={\tikzset{
-			x=\spacing, y=\spacing}}
-		},
-	pack size/.store in=\psize,
-	pack size = 8pt,
-	spacing/.store in=\spacing,
-	spacing = \psize,
-	link size/.store in=\lsize,
-	link size = 2pt,
-	port len/.store in=\portlen,
-	port len = \lsize,
-	pack color/.store in=\pcolor,
-	pack color=blue,
-	surround sep/.store in=\ssep,
-	surround sep=\psize,
-	link/.style={
-		circle,
-		anchor=center,
-		draw=black,
-		fill=black,
-		inner sep=0pt,
-		minimum size=\lsize
-	},
-	pack/.style={
-		circle,
-		anchor=center,
-		draw = \pcolor!50!black,
-		fill = \pcolor!20,
-		inner sep = .25*\psize,
-		minimum size = \psize
-	},
-	outer pack/.style={
-		ellipse,
-		anchor=center,
-		draw,
-		inner sep=\ssep,
-		color=\pcolor!50!black,
-	},
-	intermediate pack/.style={
-		ellipse,
-		anchor=center,
-		dashed,
-		draw,
-		inner sep=\ssep,
-		color=\pcolor!50!black,
-	},
-}
-
-\newcommand{\mypic}[4]{
-	\node (lend) {};
-	\node [right=#1 of lend] (L) {#4};
-	\node [right=#2 of L] (R) {#4};
-	\node [right=#1 of R] (rend) {};
-	\node at ($(L)!.5!(R)+(0,#2/2)$) (M) {};
-	\draw[thick, black, #3] (L.center) -- (M.center) -- (R.center);
-	\fill[fill=black!15] (L.center) -- (M.center) -- (R.center) -- cycle;
-	\draw[thick, <->] (lend) -- (rend);
-}
 
 
 \theoremstyle{plain}
@@ -213,7 +113,8 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\Fun}[1]{\mathsf{#1}}
 \newcommand{\mach}[1]{\mathcal{#1}}
 
-
+\newcommand{\tickar}{\begin{tikzcd}[baseline=-0.5ex,cramped,sep=small,ampersand replacement=\&]{}\ar[r,tick]\&{}\end{tikzcd}}
+\newcommand{\xtickar}[1]{\stackrel{#1}{\tickar}}
 \newcommand{\cocolon}{:\!}
 \newcommand{\iso}{\cong}
 \newcommand{\To}[1]{\xrightarrow{#1}}
@@ -273,6 +174,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 \newcommand{\Psh}[1]{\Fun{Psh}(#1)}
 \newcommand{\Shv}[1]{\Fun{Shv}(#1)}
 \newcommand{\Cont}{\Fun{Cont}}
+\newcommand{\Idl}{\Set{Idl}}
 
 \newcommand{\Prop}{\const{Prop}}
 \newcommand{\Time}{\const{Time}}
@@ -313,6 +215,7 @@ coordinate (\fixname_out\i') -- +(\bbportlen,0) coordinate (\fixname_out\i)}\fi;
 
 \newcommand{\imp}{\Rightarrow}
 \renewcommand{\iff}{\Leftrightarrow}
+\newcommand{\true}{\const{true}}
 
 \newcommand{\Span}{\Cat{Span}}
 \newcommand{\set}{\text{--}\Cat{Set}}
@@ -842,6 +745,78 @@ All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finit
 \end{tikzcd}
 \]
 and similarly for $\epsilon$, and assert the triangle identities; all of this structure will be preserved by $F$.
+
+\section{$f_*$ preserves internal locales and frames?}\label{sec.preserve_loc_frame}
+We want to understand why $f_*$ preserves internal locales---the proof in Johnstone is opaque---and similarly for internal frames. An internal poset $A$ has all sups if it is equipped with an adjunction
+\[
+\begin{tikzcd}
+	A\ar[r, shift left, "\down"]&\Prop^A\ar[l, shift left, "\bigvee"]
+\end{tikzcd}
+\]
+So suppose $A$ is an internal locale in $\cat{E}$ and that we have a geometric morphism $f_*\colon\cat{E}\to\cat{F}$. Applying our work above, we get an adjunction
+\[
+\begin{tikzcd}
+	f_*A\ar[r, shift left, "f_*\down"]&f_*(\Prop^A)\ar[l, shift left, "f_*\bigvee"]
+\end{tikzcd}
+\]
+in $\cat{F}$. We also have a map $e\colon f_*(\Prop^A)\to\Prop^{f_*A}$ given by $f_*$ of evaluation followed by the characteristic map for $f_*\true\colon 1\to f_*\Prop$. Thus it suffices to find a left adjoint for $e$.
+
+We produced a candidate left adjoint $e'$ for $e$, but we did not prove it works. However, it seems to work when $f_*$ is a geometric inclusion, i.e.\ when $\cat{E}$ is the category of sheaves for some modality on $\cat{F}$. In that case, we think of $U\coloneqq f_*$ as the underlying presheaf map and $\asSh\coloneqq f^*$ as sheafification. The desired map $e'\colon\Sub_p(UA)\to U\Sub_s(A)$ sends a subpresheaf $X\ss UA$ to the sheaf-theoretic image of its adjunct $\asSh(X)\surj\bullet\inj A$. In other words, $e'$ takes a sub-presheaf to its sheaf-theoretic image; this construction should be left adjoint to $e$.
+
+For an arbitrary $f$, we attempt to repeat this idea. To obtain a map $\Prop^{f_*A}\to f_*(\Prop^A)$, we need a map $A\times f^*(\Prop^{f_*A})\to\Prop$, i.e.\ a subobject of the domain. Form the following diagram, and take the subobject shown on the bottom row:
+\[
+\begin{tikzcd}
+	&\bullet\ar[r]\ar[d, tail]\ar[dr, phantom, very near start, "\lrcorner"]\ar[dddl, two heads, bend right]&1\ar[d]\\
+	&f^*(f_*A\times\Prop^{f_*A})\ar[r, "f_*(ev)"]\ar[d, "\cong"']&f^*\Prop\\
+	&f^*f_*A\times f^*\Prop^{f_*A}\ar[d, "\epsilon"']\\
+	\bullet\ar[r, tail]&A\times f^*\Prop^{f_*A}
+\end{tikzcd}
+\]
+Note that in the subtopos case above, $f^*f_*A\to A$ is an iso, so there is no need for the epi-mono factorization.
+
+We believe that direct image functors $f_*$ preserve the internal structures of DCPOs, complete sup-lattices, and frames. For example, rather than consider $\Prop^P$ we consider $\Idl(P)$ and try to lift the previously (semi-)defined adjunction, as shown:
+\[
+\begin{tikzcd}
+	f_*(\Idl P)\ar[r, shift left, dotted]\ar[d, tail]&\Idl(f_*P)\ar[l, shift left, dotted]\ar[d, tail]\\
+	f_*(\Prop^P)\ar[r, shift left]&\Prop^{f_*P}\ar[l, shift left]
+\end{tikzcd}
+\]
+
+\section{The NCV profunctor}
+
+If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (NCVs) as a profunctor
+\[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
+In other words, one can precompose an NCV with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
+
+The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
+\[
+\begin{tikzcd}
+	\Fun{Frm}(\cat{E})\ar[r, tick, "V_{\cat{E}}"]\ar[d, "\Fun{Frm}(f_*)"']&\Fun{SMonDCPO}(\cat{E})\ar[d, "\Fun{SMonDCPO}(f_*)"]\\
+	\Fun{Frm}(\cat{E}')\ar[r, tick, "V_{\cat{E}'}"']&\Fun{SMonDCPO}(\cat{E}')\ar[ul, phantom, "?\Downarrow"]
+\end{tikzcd}
+\]
+where the functors on the left and right were (hopefully) established in \cref{sec.preserve_loc_frame}. Intuitively, given a valuation $\mu\colon F\to R$ upstairs, we want to define a valuation $\mu'\colon f_*F\to f_*R$ downstairs. There is an obvious candidate, namely $\mu'\coloneqq f_*\mu$. The question is whether this preserves the various structures.
+
+It should be obvious that $\mu'$ is monotonic. We believe that $\mu'$ will commute with directed joins by the work in \cref{sec.preserve_loc_frame}. Both the top and bottom element of an internal frame can be characterized by an equational theory, so they should be preserved by left-exact functors such as $f_*$. It remains to show that $\mu'$ satisfies inclusion-exclusion.
+
+To begin with, we need to know that $f_*$ commutes with binary joins; but what does this mean? We want to define binary joins equationally on a frame $F$ as $\vee\colon F\times F\to F$, and then ask that $f_*(\vee_F)=\vee_{f_*F}$, but then the question becomes ``in what sense is the binary join operation the same as the actual binary join?'' In other words, what if we're only preserving a structure, not the universal property it is supposed to satisfy?
+
+For any pair of objects $A^B$ in a topos there is a map $\im\colon A^B\to\Prop^A$, that ``sends a map to its image''. Namely, use the predicate $I\colon A\times A^B\to\Prop$ given by $I(a,f)=\exists(b:B)\ldotp f(b)=a$. Thus we get a diagram, and the above questions are whether it commutes:
+\[
+\begin{tikzcd}
+	F\times F\ar[d, equal]\ar[r, "\vee"]&F\\
+	F^{1+1}\ar[r, "I"']&\Prop^F\ar[u, "\bigvee"']\ar[ul, phantom, "?"]
+\end{tikzcd}
+\]
+The goal then is to encode the universal property itself in an equational way. Take the graph of the function $\vee\colon F\times F\to F$ and call it $G(\vee)\ss F\times F\times F$. There are two equations that characterize it as the graph of a function, so we know that $f_*$ will send it to the graph of a function, which must again be $f_*(\vee_F)$. We want to characterize its universal property. We thought it is roughly the following:
+\[
+\begin{tikzcd}
+	\{w,x,y,z:F\mid x\leq z, y\leq z, w=x\vee y\}\ar[r]\ar[d]\ar[dd, shift right=40pt, bend right=60pt, dotted]
+	&\{w,x,y,z:F\mid (x,y,w)\in G(\vee)\}\ar[d]\\
+	\{w,x,y,z:F\mid x\leq z, y\leq z\}\ar[r]&\{w,x,y,z:F\}\ar[ul, phantom, very near end, "\lrcorner"]\ar[d]\\
+	\{w,z\mid w\leq z\}\ar[r]&\{w,z:F\}
+\end{tikzcd}
+\]
 
 \newpage
 
