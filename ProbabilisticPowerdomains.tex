@@ -831,6 +831,18 @@ In the book \emph{Counterexamples in Topology} they define semi-regular spaces t
 
 It is not hard to show however that any regular space is regularly-based in our sense.
 \end{remark}
+
+\section{May 8}
+All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finite limit preservation ensures that the $F$-image of a category object is a category object, and similarly for functors. But once you have that, the idea is to construct the unit and counit and see that they're preserved. Write down the diagram
+\[
+\begin{tikzcd}
+	\Ob(C)\ar[drr, bend left, "RL"]\ar[ddr, bend right, equal]\ar[dr, "\eta"]\\
+	&\Mor(C)\ar[r, "cod"]\ar[d, "dom"]&\Ob(C)\\
+	&\Ob(C)
+\end{tikzcd}
+\]
+and similarly for $\epsilon$, and assert the triangle identities; all of this structure will be preserved by $F$.
+
 \newpage
 
 \appendix
