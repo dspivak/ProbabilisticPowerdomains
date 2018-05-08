@@ -789,12 +789,12 @@ If $\cat{C}$ is a category with finite limits and small colimits then one can de
 In other words, one can precompose an NCV with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
 
 The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
-\[
+\begin{equation}\label{eqn.direct_image_valuations}
 \begin{tikzcd}
 	\Fun{Frm}(\cat{E})\ar[r, tick, "V_{\cat{E}}"]\ar[d, "\Fun{Frm}(f_*)"']&\Fun{SMonDCPO}(\cat{E})\ar[d, "\Fun{SMonDCPO}(f_*)"]\\
 	\Fun{Frm}(\cat{E}')\ar[r, tick, "V_{\cat{E}'}"']&\Fun{SMonDCPO}(\cat{E}')\ar[ul, phantom, "?\Downarrow"]
 \end{tikzcd}
-\]
+\end{equation}
 where the functors on the left and right were (hopefully) established in \cref{sec.preserve_loc_frame}. Intuitively, given a valuation $\mu\colon F\to R$ upstairs, we want to define a valuation $\mu'\colon f_*F\to f_*R$ downstairs. There is an obvious candidate, namely $\mu'\coloneqq f_*\mu$. The question is whether this preserves the various structures.
 
 It should be obvious that $\mu'$ is monotonic. We believe that $\mu'$ will commute with directed joins by the work in \cref{sec.preserve_loc_frame}. Both the top and bottom element of an internal frame can be characterized by an equational theory, so they should be preserved by left-exact functors such as $f_*$. It remains to show that $\mu'$ satisfies inclusion-exclusion.
@@ -818,6 +818,10 @@ The goal then is to encode the universal property itself in an equational way. T
 \end{tikzcd}
 \]
 
+Now we have that the direct image map $f_*$ preserves everything that's equationally defined, so we are willing to bet on the following.
+\begin{proposition}
+A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the sense that it induces a 2-cell as shown in \cref{eqn.direct_image_valuations}.
+\end{proposition}
 \newpage
 
 \appendix
