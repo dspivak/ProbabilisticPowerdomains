@@ -111,7 +111,9 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Cat}[1]{\mathbf{#1}}
 \newcommand{\fun}[1]{\mathit{#1}}
 \newcommand{\Fun}[1]{\mathsf{#1}}
-\newcommand{\mach}[1]{\mathcal{#1}}
+
+\newcommand{\smset}{\Cat{Set}}
+
 
 \newcommand{\tickar}{\begin{tikzcd}[baseline=-0.5ex,cramped,sep=small,ampersand replacement=\&]{}\ar[r,tick]\&{}\end{tikzcd}}
 \newcommand{\xtickar}[1]{\stackrel{#1}{\tickar}}
@@ -171,8 +173,8 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
 
 \newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
-\newcommand{\Psh}[1]{\Fun{Psh}(#1)}
-\newcommand{\Shv}[1]{\Fun{Shv}(#1)}
+\newcommand{\Psh}{\Fun{Psh}}
+\newcommand{\Shv}{\Fun{Shv}}
 \newcommand{\Cont}{\Fun{Cont}}
 \newcommand{\Idl}{\Set{Idl}}
 
@@ -218,7 +220,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\true}{\const{true}}
 
 \newcommand{\Span}{\Cat{Span}}
-\newcommand{\set}{\text{--}\Cat{Set}}
+\newcommand{\set}{\text{--}\smset}
 
 
 \newcommand{\erase}[1]{}
@@ -405,7 +407,7 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 
 \section{Domain-theoretic aspects of internal locales}
 
-For now, this stuff is taking place in $\Cat{Set}$.
+For now, this stuff is taking place in $\smset$.
 
 Let $X$ be a topological space with poset of opens $\Op(X)$. Then for $U\subseteq V$ in $\Op(X)$, what does it mean for $U$ to be way below $V$? There is a nice way to relate it to the finite subcover definition of compactness:
 
@@ -670,7 +672,7 @@ If things go really well, we can also hope to cover one more case that is fundam
 For now, let me formulate the conjecture in the case where $G$ is trivial:
 
 \begin{conjecture}
-Every space $p : X\to B$ over $B$ is an internal space in $\Shv{B}$~\cite{Moerdijk:1984a}, but also becomes an internal space in $\Shv{K}$. Global elements of the object of normalized continuous valuations on this space with values in the lower reals of $\Shv{K}$ are in bijection with external normalized continuous valuations on the space of global sections of $p$, equipped with (e.g.) the compact-open topology.
+Every space $p : X\to B$ over $B$ is an internal space in $\Shv(B)$~\cite{Moerdijk:1984a}, but also becomes an internal space in $\Shv(K)$. Global elements of the object of normalized continuous valuations on this space with values in the lower reals of $\Shv(K)$ are in bijection with external normalized continuous valuations on the space of global sections of $p$, equipped with (e.g.) the compact-open topology.
 \end{conjecture}
 
 Essentially, the problem is to find suitable hypotheses that make some version of this conjecture correct. Developing a result of this type is mostly a topos-theoretic problem and does not involve technical aspects of measure theory. However, in order to get to the traditional picture of stochastic processes, there is one more step to take:
@@ -682,6 +684,8 @@ Under suitable hypotheses, (external) continuous valuations on the space of glob
 \newpage
 \chapter{Notes from meetings (to be organized)}
 
+\section{Valuations on $\Prop$}
+\paragraph{May 7}
 Consider the function $i\colon\Prop\to\tLR$ defined as follows
 \[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P).\]
 We next show that it is a normalized continuous valuation (NCV). Later we will show that, under some conditions, it is unique as such.
@@ -703,7 +707,7 @@ For topological spaces, this is the condition that the regular opens form a basi
 We say $Q$ is a \emph{regular basis element} if $Q=\neg\neg Q$.
 \end{definition}
 
-\begin{proposition}
+\begin{proposition}\label{prop.unique_NCV_on_prop}
 Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique NCV on $\Prop$. 
 \end{proposition}
 \begin{proof}
@@ -735,7 +739,7 @@ In the book \emph{Counterexamples in Topology} they define semi-regular spaces t
 It is not hard to show however that any regular space is regularly-based in our sense.
 \end{remark}
 
-\section{May 8}
+\paragraph{May 8}
 All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finite limit preservation ensures that the $F$-image of a category object is a category object, and similarly for functors. But once you have that, the idea is to construct the unit and counit and see that they're preserved. Write down the diagram
 \[
 \begin{tikzcd}
@@ -782,7 +786,7 @@ We believe that direct image functors $f_*$ preserve the internal structures of 
 \end{tikzcd}
 \]
 
-\section{The NCV profunctor}
+\section{The valuations profunctor}
 
 If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (NCVs) as a profunctor
 \[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
@@ -822,6 +826,31 @@ Now we have that the direct image map $f_*$ preserves everything that's equation
 \begin{proposition}
 A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the sense that it induces a 2-cell as shown in \cref{eqn.direct_image_valuations}.
 \end{proposition}
+
+\section{Conjecture}
+
+\begin{conjecture}\label{conj.may8}
+Let $B$ be a ``nice'' compact space, $CB$ its space of compacts. Let $p\colon X\to CB$ be ``nice'', and consider the internal topological space $(\Gamma(p),p_*\Omega_X)$ in $\Shv(CB)$. Then there is a bijection
+\begin{multline*}
+  \{\tn{internal NCVs } \mu\colon p_*\Omega_X\to\tLR\}
+	\cong\\
+	\{\tn{external NCVs } \mu'\colon(\Gamma(p),\tn{ compact-open top})\to\LR\}
+\end{multline*}
+\end{conjecture}
+
+One special case is when $p$ has no global sections, so that the external set is empty. An even more special case is when $p$ is the inclusion of an open set, and here the conjecture is true.
+
+\begin{proposition}
+If $p\colon U\ss CB$ is the inclusion of an open set, then \cref{conj.may8} holds.
+\end{proposition}
+\begin{proof}
+If $U=CB$ then there is exactly one section, so there is exactly one external valuation, and the result follows from \cref{prop.unique_NCV_on_prop}.
+
+So suppose that $U\neq CB$. Then there are no external NCVs because the set $\Gamma(p)$ is empty. We suppose for contradiction that $\mu\colon p_*\Omega_U\to\tLR$ is an internal valuation. Then composing with the unique internal frame homomorphism $!\colon\Prop\to p_*\Omega_U$, we have an internal valuation $\mu\circ !$ on $\Prop$. By \cref{prop.unique_NCV_on_prop}, we have $\mu\circ!=i$, where $i\colon\Prop\to\tLR$ is the indicator function.
+
+Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
+\end{proof}
+
 \newpage
 
 \appendix
