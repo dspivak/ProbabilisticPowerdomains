@@ -194,6 +194,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\apart}{\,\#\,}
 \newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
 \newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
+\newcommand{\BaseTopos}{\mathcal{B}}
 
 \newcommand{\Pointwise}{\pi}
 \newcommand{\AtSymbol}{{@}}
@@ -653,6 +654,74 @@ By an axiom of discrete temporal type theory (analogous to Axiom 3a in TTT), we 
 \]
 and therefore directly $\See{[0,n]} \mu(1 \leq t) \leq \See{[0,n]} \bot$, since applying $\See{[0,n]}$ to a lower real is the internal left adjoint to $\RR \rightarrow \RR_{\SeeInline{[0,n]}}$. (Right?) Or is this argument begging the question?}
 
+\paragraph{May 9}
+
+The following can surely be phrased more generally, but I'm writing it as follows for speed/assurance reasons. For any nonnegative lower real $x:\tLR$, let $\bar{x}\coloneqq\min(x,1)$.
+
+\begin{proposition}
+Let $[d,u]$ be a point in $\BaseTopos$, let $X$ be a type, and let $\mu\colon\Prop^X\to\tLR$ be a valuation. Then
+\[\mu(\At{[d,u]}P)=\ol{\At{[d,u]}\mu(\At{[d,u]}P)}.\]
+\end{proposition}
+\begin{proof}
+By TTT, we have $\top=(\At{[d,u]}P\vee(P\imp\At{[d,u]}\bot))$; this and the fact that $\At{[d,u]}$ commutes with addition, are the only assumptions we use.
+
+Clearly $\mu(\At{[d,u}P)\leq\At{[d,u]}(\mu(\At{[d,u]}P))$ and $\mu(P\imp\At{[d,u]}\bot)\leq\At{[d,u]}\mu(P\imp\At{[d,u]}\bot)$. By inclusion-exclusion we have
+\[\mu(\At{[d,u]}P)+\mu(P\imp\At{[d,u]}\bot)=\mu(\At{[d,u]}\bot)+\mu(\top).\]
+Since $\At{[d,u]}\bot$ is a constant predicate, we have $\mu(\At{[d,u]}\bot)=i(\At{[d,u]}\bot)=\ol{\At{[d,u]}0}$, by \cref{prop.unique_NCV_on_prop}. So we have 
+\begin{align*}
+	\ol{\At{[d,u]}0}+1
+	&=\mu(\At{[d,u]}P)+\mu(P\imp\At{[d,u]}\bot)\\
+	&\leq\At{[d,u]}\mu(\At{[d,u]}P)+\At{[d,u]}\mu(P\imp\At{[d,u]}\bot)\\
+	&=\ol{\At{[d,u]}0}+\ol{\At{[d,u]}1}=\ol{\At{[d,u]}0}+1
+\end{align*}
+because $\At{[d,u]}$ commutes with addition, and thus the inequality becomes an equality. We are done (believing that $\tLR$ is order-cancellative) , $x\leq x'$ and $y\leq y'$ and $x+y=x'+y'$ implies $x=x'$ and $y=y'$.
+\end{proof}
+
+The following holds for any open modality $T\imp-$.
+\begin{proposition}\label{prop.In_NCV}
+\[\In{[d,u]}\mu(\In{[d,u]}P)=\In{[d,u]}\mu(P).\]
+\end{proposition}
+\begin{proof}
+This is just naturality; recall that $\In{[d,u]}P\coloneqq T\imp P$ for some $T$. One direction is obvious, so suppose $T\imp\mu(T\imp P)$; we want to show $T\imp\mu(P)$. But assuming $T$ we have $\mu(T\imp P)$ which is the same as $\mu(P)$.
+\end{proof}
+
+\begin{proposition}
+\[\mu(P)=\inf_{d< u}\At{[d,u]}\mu(P).\]
+\end{proposition}
+\begin{proof}
+This is the axiom that our topos has enough points. The right-hand side, applied to some $q:\tQQ$, is translated to
+\[\forall(d,u:\tRR)\ldotp d<u\imp\At{[d,u]}(q<\mu(P)),\]
+which is $q<\mu(P)$ by TTT axiom 8.
+\end{proof}
+
+\begin{proposition}
+Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
+\[\mu(P\vee Q)=\ol{P\vee\mu(Q)}.\]
+\end{proposition} 
+\begin{proof}
+The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
+
+It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
+For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_NCV_on_prop}, the left-hand side is just $P$.
+\end{proof}
+
+
+\begin{proposition}
+For all $d'<d\leq u<u'$ and $P\colon X\to\Prop$ we have
+\[\At{[d,u]}\mu(P)=\At{[d,u]}\mu(\In{[d',u']}P).\]
+\end{proposition}
+\begin{proof}
+One direction is trivial. For any $q:\tQQ$ we have
+\begin{align*}
+	\At{[d,u]}\mu(\In{[d',u']}P)(q)
+	&\imp\At{[d,u]}\In{[d',u']}\mu(\In{[d',u']}P)(q)\\
+	&=\At{[d,u]}\In{[d',u']}\mu(P)(q)&\text{\cref{prop.In_NCV}}\\
+	&\imp\At{[d,u]}\At{[d,u]}\mu(P)(q)&\text{\cite[Prop 5.39]{Schultz.Spivak:2017a}}\\	
+	&=\At{[d,u]}\mu(P)(q).
+\end{align*}
+\end{proof}
+
+Semantically, the lower-reals on $\IR$ are order-cancellative in the sense that if $a+b\leq a+c$ then $b\leq c$. We haven't proved this internally.
 
 \section{What we can aim for}
 
@@ -841,7 +910,7 @@ Let $B$ be a ``nice'' compact space, $CB$ its space of compacts. Let $p\colon X\
 One special case is when $p$ has no global sections, so that the external set is empty. An even more special case is when $p$ is the inclusion of an open set, and here the conjecture is true.
 
 \begin{proposition}
-If $p\colon U\ss CB$ is the inclusion of an open set, then \cref{conj.may8} holds.
+\cref{conj.may8} holds in the case that $p\colon U\ss CB$ is the inclusion of an open set.
 \end{proposition}
 \begin{proof}
 If $U=CB$ then there is exactly one section, so there is exactly one external valuation, and the result follows from \cref{prop.unique_NCV_on_prop}.
@@ -850,6 +919,11 @@ So suppose that $U\neq CB$. Then there are no external NCVs because the set $\Ga
 
 Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
 \end{proof}
+
+
+
+
+
 
 \newpage
 
