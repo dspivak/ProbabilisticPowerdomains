@@ -701,7 +701,7 @@ Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
 \begin{proof}
 The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
 
-It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
+It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{rem.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
 For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_NCV_on_prop}, the left-hand side is just $P$.
 \end{proof}
 
@@ -721,7 +721,9 @@ One direction is trivial. For any $q:\tQQ$ we have
 \end{align*}
 \end{proof}
 
-Semantically, the lower-reals on $\IR$ are order-cancellative in the sense that if $a+b\leq a+c$ then $b\leq c$. We haven't proved this internally.
+\begin{remark}\label{rem.order_canc}
+Semantically, the lower-reals on $\IR$ are order-cancellative in the sense that if $a+b\leq a+c$ then $b\leq c$. We haven't proven this internally.
+\end{remark}
 
 \section{What we can aim for}
 
