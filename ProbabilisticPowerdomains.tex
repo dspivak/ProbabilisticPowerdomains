@@ -777,16 +777,16 @@ We have now established the following:
 
 We are ready to prove that we can recover the external CNV $|\mu|$ from various global sections of $\mu$. The one caveat is that we need to ``internalize the sup''; we will point that out below.
 
-\begin{theorem}
-Let $B$ is a compact space, $CB$ is its space of compacts, and $\cat{E}=\Shv(CB)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+\begin{theorem}\label{thm.discrete_internal_space}
+Let $B$ be a compact space, $CB$ is its space of compacts, and $\cat{E}=\Shv(CB)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
 \[
-|\mu|(\,|P|,a\,)=\sup_{a\in U}|\mu(\At{B}\In{U}P)|.
+|\mu|(\,|P|,a\,)=\sup_{U\ni a}|\mu(\At{B}\In{U}P)|.
 \]
 \end{theorem}
 \begin{proof}
-By \cref{lemma.inequality_rand9865}, we have $\sup_{a\in U}|\mu(\At{B}\In{U}P)|\leq |\mu|(\,|P|,a\,)$ for any $P$. \emph{Internalizing the sup}, 
-\[\big(\sup_{U\mid a\in U}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\mid a\in U}\mu(\In{U}P)\big)(a)\]
-Here the (internalized) sup is just shorthand: $\sup{U\mid a\in U}X(U)\coloneqq \exists U\ldotp \At{a}U\wedge X(U)$. This is a directed sup, so by continuity, we have
+By \cref{lemma.inequality_rand9865}, we have $\sup_{U\ni a}|\mu(\At{B}\In{U}P)|\leq |\mu|(\,|P|,a\,)$ for any $P$. \emph{Internalizing the sup}, 
+\[\big(\sup_{U\ni a}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\ni a}\mu(\In{U}P)\big)(a)\]
+Here the (internalized) sup is just shorthand: $\sup_{U\ni a}X(U)\coloneqq \exists U\ldotp \At{a}U\wedge X(U)$. This is a directed sup, so by continuity, we have
 \[\mu(\exists U\ldotp \At{a}U\wedge\In{U}P)(B)\leq\mu(\exists U\ldotp \At{a}U\wedge\In{U}P)(a).\]
 
 Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, then add them and use inclusion-exclusion.
@@ -804,8 +804,25 @@ We now show $Y=\top$. By cases we have $\exists U\ldotp\At{a}U\wedge(\In{U}P\vee
 By \cite{Schultz.Spivak:2017a} we have De Morgan's, $\At{a}P\vee (P\imp\At{a}\bot)$. In the first case, take $U=P$ and the existential holds. In the second case take $U$ to be any open for which $\At{a}U$ holds. This completes the proof.
 \end{proof}
 
+\begin{remark}
 The one issue above is ``internalizing the sup''. We think that works, but it's not technically proven. The argument is basically that we can check the following external fact holds about points contained in opens:
 \[\big(a\in\church{\exists(U)\ldotp\At{a}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $a\in U$ and }a\in\church{\In{U}P}\big).\]
+\end{remark}
+
+\paragraph{Other thoughts}
+
+In \cref{thm.discrete_internal_space}, we assume $B$ is compact, but this is not the general case. David wonder's if the correct modality to use, rather than $\See{B}$ might be $\exists(d,u)\ldotp\See{[d,u]}P$.
+\begin{lemma}
+The map $j:\Prop\to\Prop$, defined by $P\mapsto\exists(d,u)\ldotp\See{[d,u]}P$, is a modality.
+\end{lemma}
+\begin{proof}
+Clearly the proposed function is pointed, $P\imp jP$. To see it is idempotent, assume $jjP$, i.e.\ $\exists(d,u)\ldotp (t\apart[u,d])\vee\exists(d',u')\ldotp(t\apart[u',d'])\vee P$, and proceed by cases to show $jP$. Finally, we must show
+\begin{multline*}
+	\exists(d,u)\ldotp (t\apart[u,d])\vee(P\wedge Q)\\
+	\iff(\exists(d',u')\ldotp (t\apart[u',d'])\vee P\big)\wedge\big(\exists(d'',u'')\ldotp (t\apart[u'',d''])\vee P\big)
+\end{multline*}
+The $\imp$ direction is easy; for the $\Leftarrow$ direction, take $d\coloneqq\min(d',d'')$ and $u\coloneqq\max(u',u'')$.
+\end{proof}
 
 \section{What we can aim for}
 
