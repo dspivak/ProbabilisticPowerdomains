@@ -777,23 +777,23 @@ We have now established the following:
 
 We are ready to prove that we can recover the external CNV $|\mu|$ from various global sections of $\mu$. The one caveat is that we need to ``internalize the sup''; we will point that out below.
 
-\begin{theorem}
-Let $B$ is a compact space, $CB$ is its space of compacts, and $\cat{E}=\Shv(CB)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+\begin{theorem}\label{thm.discrete_internal_space}
+Let $B$ be a compact space, $CB$ is its space of compacts, and $\cat{E}=\Shv(CB)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
 \[
-|\mu|(\,|P|,a\,)=\sup_{a\in U}|\mu(\At{B}\In{U}P)|.
+|\mu|(\,|P|,a\,)=\sup_{U\ni a}|\mu(\At{B}\In{U}P)|.
 \]
 \end{theorem}
 \begin{proof}
-By \cref{lemma.inequality_rand9865}, we have $\sup_{a\in U}|\mu(\At{B}\In{U}P)|\leq |\mu|(\,|P|,a\,)$ for any $P$. \emph{Internalizing the sup}, 
-\[\big(\sup_{U\mid a\in U}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\mid a\in U}\mu(\In{U}P)\big)(a)\]
-Here the (internalized) sup is just shorthand: $\sup{U\mid a\in U}X(U)\coloneqq \exists U\ldotp \At{a}U\wedge X(U)$. This is a directed sup, so by continuity, we have
+By \cref{lemma.inequality_rand9865}, we have $\sup_{U\ni a}|\mu(\At{B}\In{U}P)|\leq |\mu|(\,|P|,a\,)$ for any $P$. \emph{Internalizing the sup}, 
+\[\big(\sup_{U\ni a}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\ni a}\mu(\In{U}P)\big)(a)\]
+Here the (internalized) sup is just shorthand: $\sup_{U\ni a}X(U)\coloneqq \exists U\ldotp \At{a}U\wedge X(U)$. This is a directed sup, so by continuity, we have
 \[\mu(\exists U\ldotp \At{a}U\wedge\In{U}P)(B)\leq\mu(\exists U\ldotp \At{a}U\wedge\In{U}P)(a).\]
 
 Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, then add them and use inclusion-exclusion.
 We obtain something of the form $X(B)+Y(B)\leq X(a)+Y(a)$, where
 \begin{align*}
 	X\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\wedge\In{U}(P\imp\At{a}\bot)\big)\Big)\\
-	X\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\vee\In{U}(P\imp\At{a}\bot)\big)\Big)	
+	Y\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\vee\In{U}(P\imp\At{a}\bot)\big)\Big)	
 \end{align*}
 We will show that $Y=\top$ and that $X\imp\At{a}\bot$. This will complete the proof because $\mu(\At{a}\bot)(a)=\mu(\At{a}\bot)(B)=0$.
 
@@ -804,8 +804,11 @@ We now show $Y=\top$. By cases we have $\exists U\ldotp\At{a}U\wedge(\In{U}P\vee
 By \cite{Schultz.Spivak:2017a} we have De Morgan's, $\At{a}P\vee (P\imp\At{a}\bot)$. In the first case, take $U=P$ and the existential holds. In the second case take $U$ to be any open for which $\At{a}U$ holds. This completes the proof.
 \end{proof}
 
+\begin{remark}
 The one issue above is ``internalizing the sup''. We think that works, but it's not technically proven. The argument is basically that we can check the following external fact holds about points contained in opens:
 \[\big(a\in\church{\exists(U)\ldotp\At{a}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $a\in U$ and }a\in\church{\In{U}P}\big).\]
+\end{remark}
+
 
 \section{What we can aim for}
 
