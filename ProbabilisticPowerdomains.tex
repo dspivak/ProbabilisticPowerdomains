@@ -793,7 +793,7 @@ Now we use one of our favorite tricks: we apply the above inequality to both $P$
 We obtain something of the form $X(B)+Y(B)\leq X(a)+Y(a)$, where
 \begin{align*}
 	X\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\wedge\In{U}(P\imp\At{a}\bot)\big)\Big)\\
-	X\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\vee\In{U}(P\imp\At{a}\bot)\big)\Big)	
+	Y\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\vee\In{U}(P\imp\At{a}\bot)\big)\Big)	
 \end{align*}
 We will show that $Y=\top$ and that $X\imp\At{a}\bot$. This will complete the proof because $\mu(\At{a}\bot)(a)=\mu(\At{a}\bot)(B)=0$.
 
@@ -809,20 +809,6 @@ The one issue above is ``internalizing the sup''. We think that works, but it's 
 \[\big(a\in\church{\exists(U)\ldotp\At{a}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $a\in U$ and }a\in\church{\In{U}P}\big).\]
 \end{remark}
 
-\paragraph{Other thoughts}
-
-In \cref{thm.discrete_internal_space}, we assume $B$ is compact, but this is not the general case. David wonder's if the correct modality to use, rather than $\See{B}$ might be $\exists(d,u)\ldotp\See{[d,u]}P$.
-\begin{lemma}
-The map $j:\Prop\to\Prop$, defined by $P\mapsto\exists(d,u)\ldotp\See{[d,u]}P$, is a modality.
-\end{lemma}
-\begin{proof}
-Clearly the proposed function is pointed, $P\imp jP$. To see it is idempotent, assume $jjP$, i.e.\ $\exists(d,u)\ldotp (t\apart[u,d])\vee\exists(d',u')\ldotp(t\apart[u',d'])\vee P$, and proceed by cases to show $jP$. Finally, we must show
-\begin{multline*}
-	\exists(d,u)\ldotp (t\apart[u,d])\vee(P\wedge Q)\\
-	\iff(\exists(d',u')\ldotp (t\apart[u',d'])\vee P\big)\wedge\big(\exists(d'',u'')\ldotp (t\apart[u'',d''])\vee P\big)
-\end{multline*}
-The $\imp$ direction is easy; for the $\Leftarrow$ direction, take $d\coloneqq\min(d',d'')$ and $u\coloneqq\max(u',u'')$.
-\end{proof}
 
 \section{What we can aim for}
 
