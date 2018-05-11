@@ -892,6 +892,20 @@ In the book \emph{Counterexamples in Topology} they define semi-regular spaces t
 It is not hard to show however that any regular space is regularly-based in our sense.
 \end{remark}
 
+For $B$ a space, we denote by $CB$ is set of compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$.
+
+\begin{proposition}
+If $B$ is any space, then $CB$ is regularly-based.
+\end{proposition}
+
+\begin{proof}
+The basic opens in $IB$ are given by the opens $U\subseteq B$, where the associated open in $IB$ contains all those compacts $K\subseteq B$ with $K\subseteq U$. We first show that the closure of this open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V$ is such that $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$ since points are closed.
+
+Next, we show that the interior of the above closure is $\downarrow U$ again. We need to show that it is not larger; so suppose that $K$ is a point in the interior. This means that there is an open $V$ such that every $K' \subseteq V$ is in the closure, or equivalently $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
+
+Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
+\end{proof}
+
 \paragraph{May 8}
 All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finite limit preservation ensures that the $F$-image of a category object is a category object, and similarly for functors. But once you have that, the idea is to construct the unit and counit and see that they're preserved. Write down the diagram
 \[
