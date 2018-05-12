@@ -196,6 +196,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
 \newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
 \newcommand{\BaseTopos}{\mathcal{B}}
+\newcommand{\BaseSpace}{B}
 
 \newcommand{\Pointwise}{\pi}
 \newcommand{\AtSymbol}{{@}}
@@ -236,11 +237,13 @@ pdfencoding=unicode]{hyperref}
 %%%%%%%%%%%%% Document %%%%%%%%%%%%%
 \begin{document}
 
-\title{Notes on probabilistic powerdomains in a sheaf topos}
+\title{Stochastic Processes as Internal Probability Spaces}
 
-\author{Tobias and David}
+\author{Tobias Fritz and David Spivak}
 
 \maketitle
+
+\todo[inline]{Tenative title. Internal ``probability spaces'' may be technically misleading, but has the advantage of being more recognizable}
 
 \tableofcontents*
 
@@ -251,7 +254,9 @@ pdfencoding=unicode]{hyperref}
 
 \todo[inline]{T: I think that we should work in the topos of sheaves over an \emph{arbitrary} interval domain}
 
-\chapter{Internal posets}
+\chapter{Preliminaries}
+
+\section{Internal posets}
 
 \begin{notation}
 We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
@@ -327,13 +332,7 @@ The poset $(\tLR,\leq)$ has arbitrary joins: the join of $P:\tLR\to\Prop$ is $\l
 In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\tLR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
 \end{example}
 
-\begin{definition}
-We say that a poset $(X,\leq)$ \emph{has valuations} \todo{Find a better term if we really need this (perhaps we want internal frames instead?)}if it has binary meets, binary joins, and directed joins.
-\end{definition}
-
-Note that if $(X,\leq)$, this does not guarantee that $(\VV(X),\leq)$ does.
-
-\chapter{Internal topological spaces and locales}
+\section{Internal topological spaces and locales}
 
 \todo[inline]{T: possibly except for the interactions with modalities, this stuff is all standard}
 
@@ -408,109 +407,7 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 
 \todo{Does at modality take locally compact spaces to locally compact spaces?}
 
-\section{Domain-theoretic aspects of internal locales}
-
-For now, this stuff is taking place in $\smset$.
-
-Let $X$ be a topological space with poset of opens $\Op(X)$. Then for $U\subseteq V$ in $\Op(X)$, what does it mean for $U$ to be way below $V$? There is a nice way to relate it to the finite subcover definition of compactness:
-
-\begin{lemma}
-$U\ll V$ if and only if every open covering of $V$ has a finite subfamily which covers $U$.
-\end{lemma}
-
-\begin{proof}
-If the condition holds, then every directed set of opens that goes below $V$ also covers $V$, and therefore contains an element that already contains $U$.
-
-Conversely, given a covering family, consider the directed set of finite unions of members of the cover.
-\end{proof}
-
-Without additional separation assumptions on $X$, it seems tricky to translate this into a condition involving only the usual concepts of point-set topology. In order to do so, we need one more auxiliary statement.
-
-\newcommand{\cl}[1]{\overline{#1}} % topological closure
-\newcommand{\intr}[1]{\mathrm{int}(#1)} % interior
-
-\begin{lemma}
-Let $X$ be regular and $D\subseteq X$ dense. Suppose that every open cover of $X$ has a finite subfamily which covers $D$. Then $X$ is compact.
-\end{lemma}
-
-This may be somewhat surprising, since in many cases a finite subfamily which covers $D$ does not yet cover $X$.
-
-\begin{proof}(Due to Ramiro de las Vegas, MO.)
-Let $\mathcal{A}$ be an open cover of $X$. For every $x\in X$, choose $U_x\ni x$ such that $\cl{U_x}\subseteq V_x$ for suitable $V_x\in\mathcal{A}$. Then $\{U_x\}$ is another open covering which has a finite subcover $\{U_{x_1},\ldots,U_{x_n}\}$ by assumption. Since $X = \cl{U_{x_1}\cup\ldots\cup U_{x_n}} = \cl{U_{x_1}}\cup\ldots\cup\cl{U_{x_n}} \subseteq V_{x_1}\cup\ldots\cup V_{x_n}$, we are done.
-\end{proof}
-
-Now we can characterize the way below relation in a nice way:
-
-\begin{lemma}
-Let $X$ be regular. Then $U\ll V$ if and only if $U$ is relatively compact in $V$, i.e.~if $\cl{U}\cap V$ is compact.
-\end{lemma}
-
-\begin{proof}
-If $\cl{U}\cap V$ is compact, then clearly the condition of the first lemma holds as well, and we do not need regularity.
-
-Conversely, suppose that the condition of the first lemma holds. Then by the previous lemma, it is enough to show that every open cover of $\cl{U}\cap V$ has a finite subfamily which covers $U$. But this is clear by assumption: throwing in $V\setminus\cl{U}$ to an open cover of $\cl{U}\cap V$ gives an open cover of $V$.
-\end{proof}
-
-\section{Locales and geometric morphisms}
-
-My question is: given a geometric morphism $f : \mathcal{T}\to\mathcal{T}'$, do internal frames in $\mathcal{T}'$ pull back to internal frames in $\mathcal{T}$?
-
-Note that there is a natural comparison map between $f^*\Prop'$ and $\Prop$. Indeed, since $f^*$ preserves monos by virtue of being left exact, there is a map $\classify{f^*\const{true}'}\colon f^*\Prop'\to\Prop$ classifying the image under $f^*$ of $\const{true}'\colon 1'\to \Prop'$.
-
-\begin{lemma}
-If $s:A\to B$ is an arbitrary subobject in $\mathcal{T}'$, then $f^*s : f^*A\to f^*B$ is again a subobject, and $\classify{f^*s}$ is given by $f^*\classify{s}$ post-composed with the comparison map $f^*\Prop'\to\Prop$.
-\end{lemma}
-
-\begin{proof}
- This is because
-\[\begin{tikzcd}
-	f^*A \ar{r} \ar{d} & f^*B \ar{d} \\
-	f^*1 \ar{r} & f^*\Prop'
-\end{tikzcd}\]
-is again a pullback diagram, and likewise is
-\[\begin{tikzcd}
-	f^*1 \ar{r} \ar{d} & f^*\Prop' \ar{d} \\
-	1 \ar{r} & \Prop
-\end{tikzcd}\]
-so that the two pullbacks compose.
-\end{proof}
-
-In this reasoning, we have only needed to use that $f^*$ is left exact. Thus everything applies likewise to $f_*$, and we e.g.~have a comparison map $\classify{f_*\const{true}}\colon f_*\Prop\to\Prop'$. But this is of less interest to us here.
-
-So given an internal poset $P$ in $\mathcal{T}'$, we get a poset structure on $f^*P$ given by the subobject $f^*(\leq) \to f^*P\times f^*P$. Again using the fact that $f^*$ preserves finite limits, it's straightforward to see that if $P$ is a meet-semilattice in $\mathcal{T}'$, then $f^*P$ is a meet-semilattice in $\mathcal{T}$. However, it's less clear if the existence of arbitrary joins is preserved in the same way.
-
-The existence of arbitrary joins for $P = \mathcal{O}(X)$ means that the down-closure map
-\[
-	\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)},\qquad U\mapsto \classify{ \{ V \leq U \} }
-\]
-has an internal left adjoint. Here, $\Prop'^{\mathcal{O}(X)}$ carries the usual pointwise ordering, i.e.~the one corresponding to inclusion of subobjects. What we would like to have is that the down-closure map of $f^*\mathcal{O}(X)$ similarly has a left adjoint. According to the Elephant (p.~580), this is not the case in general! However for an \emph{atomic} geometric morphism---or in other words if $f^*$ is a logical functor---we can apply Corollary B2.3.10 to conclude that $f^*\mathcal{O}(X)$ is indeed an internal frame. Concretely, in this case the sup map is the composite $\Prop^{f^*(\mathcal{O}(X))}\cong f^*\left(\Prop'^{\mathcal{O}(X)}\right)\to f^*(\mathcal{O}(X))$, where the first morphism comes from $f^*$ being logical and the second one is $f^*(\sup)$.
-
-In conclusion, internal frames can be pulled back along atomic geometric morphisms\footnote{And also along general geometric morphisms, but this requires a different construction, as in Elephant p.~580.}. Again by Elephant p.~580, pushing frames forward along $f_*$ is even simpler, and it seems plausible that this results in an adjunction $f^* \dashv f_*$ between frames in $\mathcal{T}$ and frames in $\mathcal{T}'$. I will be a bit sloppy for now and just assume that this is true.
-
-The next question is whether $f^*$ preserves properties of locales such as regularity or local compactness. Both are concerned with relaxed notions of ordering:
-
-\begin{definition}
-For $U,V\in\mathcal{O}(X)$, one says that
-\begin{enumerate}
-\item $V$ is \emph{well inside} $U$, written $V\subset\subset U$, if there is $G\in\mathcal{O}(X)$ such that $V\cap G = \emptyset$ and $U\cup G = X$.
-\item $V$ is \emph{way below} $U$, written $U\ll V$, if for every directed $D:\mathcal{O}(X)\to\Prop$, $U\leq\sup D$ implies that there is $W\in D$ with $V\leq W$.
-\end{enumerate}
-Then $X$ is regular (locally compact) if every $U$ is the sup of the $V$ that are well inside (way below) it.
-\end{definition}
-
-Since these definitions make sense constructively, we can apply them to internal locales.
-
-So the well-inside relation corresponds to the subobject of $\mathcal{O}(X)\times\mathcal{O}(X)$ that is the projection of the subobject
-\[
-	\{ \: (V,G,U) \:|\: V\wedge G = \emptyset, \; U\vee G = X \: \} \quad \subseteq \quad \mathcal{O}(X)\times\mathcal{O}(X)\times\mathcal{O}(X)
-\]
-to the first and third factor, and this subobject itself is an equalizer. Since $f^*$ preserves monos and epis, it also preserves image factorizations and therefore pushforwards of subobjects, such as this pushforward along the product projection. Hence the well-inside relation on $f^*(\mathcal{O}(X))$ coincides with $f^*(\subset\subset)$.
-
-Regularity means that upon exponentiating the first factor in $\classify{\subset\subset} : \mathcal{O}(X)\times\mathcal{O}(X)\to\Prop'$ to $\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)}$ and composing with $\sup$, one obtains $1_{\mathcal{O}(X)}$. Again since $f^*$ is logical and $f^*(\sup)$ is the sup map of $f^*(\mathcal{O}(X))$, we can conclude that $f^*(\mathcal{O}(X))$ is regular is well.
-
-In order to make the same argument for local compactness, we show similarly that $f^*(\ll)$ is the way-below relation on $f^*(\mathcal{O}(X))$. By similar reasoning as for well-inside, we obtain that $\const{Drct}(f^*(\mathcal{O}(X))) = f^*(\const{Drct}(\mathcal{O}(X)))$.
-
-\chapter{Valuations and measures}
+\chapter{Internal valuations}
 
 
 
@@ -532,7 +429,394 @@ Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\
 A valuation is a \emph{probability valuation} if $\mu(X) = 1$.
 \end{definition}
 
-\section{A simpler model}
+\section{The valuations profunctor}
+
+If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (NCVs) as a profunctor
+\[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
+In other words, one can precompose an NCV with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
+
+The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
+\begin{equation}\label{eqn.direct_image_valuations}
+\begin{tikzcd}
+	\Fun{Frm}(\cat{E})\ar[r, tick, "V_{\cat{E}}"]\ar[d, "\Fun{Frm}(f_*)"']&\Fun{SMonDCPO}(\cat{E})\ar[d, "\Fun{SMonDCPO}(f_*)"]\\
+	\Fun{Frm}(\cat{E}')\ar[r, tick, "V_{\cat{E}'}"']&\Fun{SMonDCPO}(\cat{E}')\ar[ul, phantom, "?\Downarrow"]
+\end{tikzcd}
+\end{equation}
+where the functors on the left and right were (hopefully) established in \cref{sec.preserve_loc_frame}. Intuitively, given a valuation $\mu\colon F\to R$ upstairs, we want to define a valuation $\mu'\colon f_*F\to f_*R$ downstairs. There is an obvious candidate, namely $\mu'\coloneqq f_*\mu$. The question is whether this preserves the various structures.
+
+It should be obvious that $\mu'$ is monotonic. We believe that $\mu'$ will commute with directed joins by the work in \cref{sec.preserve_loc_frame}. Both the top and bottom element of an internal frame can be characterized by an equational theory, so they should be preserved by left-exact functors such as $f_*$. It remains to show that $\mu'$ satisfies inclusion-exclusion.
+
+To begin with, we need to know that $f_*$ commutes with binary joins; but what does this mean? We want to define binary joins equationally on a frame $F$ as $\vee\colon F\times F\to F$, and then ask that $f_*(\vee_F)=\vee_{f_*F}$, but then the question becomes ``in what sense is the binary join operation the same as the actual binary join?'' In other words, what if we're only preserving a structure, not the universal property it is supposed to satisfy?
+
+For any pair of objects $A^B$ in a topos there is a map $\im\colon A^B\to\Prop^A$, that ``sends a map to its image''. Namely, use the predicate $I\colon A\times A^B\to\Prop$ given by $I(a,f)=\exists(b:B)\ldotp f(b)=a$. Thus we get a diagram, and the above questions are whether it commutes:
+\[
+\begin{tikzcd}
+	F\times F\ar[d, equal]\ar[r, "\vee"]&F\\
+	F^{1+1}\ar[r, "I"']&\Prop^F\ar[u, "\bigvee"']\ar[ul, phantom, "?"]
+\end{tikzcd}
+\]
+The goal then is to encode the universal property itself in an equational way. Take the graph of the function $\vee\colon F\times F\to F$ and call it $G(\vee)\ss F\times F\times F$. There are two equations that characterize it as the graph of a function, so we know that $f_*$ will send it to the graph of a function, which must again be $f_*(\vee_F)$. We want to characterize its universal property. We thought it is roughly the following:
+\[
+\begin{tikzcd}
+	\{w,x,y,z:F\mid x\leq z, y\leq z, w=x\vee y\}\ar[r]\ar[d]\ar[dd, shift right=40pt, bend right=60pt, dotted]
+	&\{w,x,y,z:F\mid (x,y,w)\in G(\vee)\}\ar[d]\\
+	\{w,x,y,z:F\mid x\leq z, y\leq z\}\ar[r]&\{w,x,y,z:F\}\ar[ul, phantom, very near end, "\lrcorner"]\ar[d]\\
+	\{w,z\mid w\leq z\}\ar[r]&\{w,z:F\}
+\end{tikzcd}
+\]
+
+Now we have that the direct image map $f_*$ preserves everything that's equationally defined, so we are willing to bet on the following.
+\begin{proposition}
+A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the sense that it induces a 2-cell as shown in \cref{eqn.direct_image_valuations}.
+\end{proposition}
+
+\newpage
+\chapter{Properties of internal valuations}
+
+\begin{definition}
+Say that a topos $\cat{E}$ is \emph{regularly-based} if the following statement holds internally:
+\[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
+\end{definition}
+
+Equivalently, we could have said that every $P:\Prop$ must be the supremum of all $Q:\Prop$ with $Q\imp P$ and $\neg\neg Q\imp Q$. For topological spaces, recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty set, and is closed under finite intersections. So for the topos of sheaves on a space, our condition expresses the requirement that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup {\{Q\ss P\mid \neg\neg Q=Q\}}$.
+
+\begin{remark}
+In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
+
+It is not hard to show however that any regular space is regularly-based in our sense. 
+\end{remark}
+
+\section{Valuations on $\Prop$}
+
+Consider the function $i\colon\Prop\to\tLR$ defined as follows
+\[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P).\]
+We next show that it is a normalized continuous valuation (NCV). Later we will show that, under some conditions, it is unique such.
+
+\begin{proposition}\label{prop.sandwich}
+The function $i\colon\Prop\to\tLR$ defined above is indeed an NCV on $\Prop$, and for any NCV $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
+\end{proposition}
+\begin{proof}[Sketch]
+It's not hard to show that $i$ is an NCV. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
+\end{proof}
+
+\begin{proposition}\label{prop.unique_NCV_on_prop}
+Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique NCV on $\Prop$. 
+\end{proposition}
+\begin{proof}
+Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q = \neg\neg Q$, then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so that $Q\in T$.
+
+Next suppose that we are given $Q_1,Q_2\in T$. It is not hard to show that $i(Q_1\vee Q_2)=\max(i(Q_1),i(Q_2))$ and $i(Q_1\wedge Q_2)=\min(i(Q_1),i(Q_2))$ by definition of $i$. Thus
+\begin{align*}
+	i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)
+	&\leq\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)\\
+	&\leq \mu(Q_1\vee Q_2)+\mu(Q_1\wedge Q_2)\\
+	&=\mu(Q_1)+\mu(Q_2)\\
+	&=i(Q_1)+i(Q_2)
+\end{align*}
+Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that all the above inequalities must be equalities, resulting in $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$ and $\mu(Q_1\wedge Q_2) = i(Q_1\wedge Q_2)$. Therefore $(Q_1 \vee Q_2) \in T$ and $(Q_1\wedge Q_2)\in T$.
+
+Since every join can be decomposed into a directed join of finite joins, by assumption an arbitrary proposition $P:\Prop$ is a directed join of elements in $T$. Thus it suffices to show that $T$ is closed under directed joins, but this is clear: if $(Q_d)_{d\in D}$ is a directed system where $Q_d\in T$ for all $d$, then
+\[\mu(\sup_{d\in D}Q_d)=\sup_{d\in D}\mu(Q_d)=\sup_{d\in D} i(Q_d)=i(\sup_{d\in D}Q_d).\qedhere\]
+\end{proof}
+
+\begin{example}
+The assumption that $\cat{E}$ is regularly based is necessary. For example, consider the topological space where $\NN$ is the set of points and a subset $U\ss\NN$ is open $U\in \Op$ iff it is either empty or cofinite. This space is not regularly-based because the only regular opens are $\emptyset$ and $\NN$; for any other $U$, we have $\neg\neg U=\NN$. Consider the function $\mu\colon\Op\to\LR$ given by
+\[\mu(U)=\begin{cases}0&\tn{ if }U=\emptyset\\1&\tn{ if }U\neq\emptyset\end{cases}\]
+Then $\mu$ is monotonic, normalized, and commutes with directed joins. It satisfies inclusion exclusion because (three out of four cases are clear and) the intersection of cofinite sets is cofinite, and in particular nonempty.
+\todo[inline]{We should check that this external reasoning internalizes}
+\end{example}
+
+\section{Interaction of valuations with modalities}
+
+The following holds for any open modality $\In{U}\coloneqq (U\imp -)$.
+\begin{proposition}\label{prop.In_NCV}
+\[\In{U}\mu(\In{U}P)=\In{U}\mu(P).\]
+\end{proposition}
+Semantically, this is just naturality of $\mu$ as a morphism of sheaves.
+\begin{proof}
+One direction is obvious, so suppose $U\imp\mu(U\imp P)$; we want to show $U\imp\mu(P)$. But assuming $U$ we have $\mu(U\imp P)$ which is the same as $\mu(P)$.
+\end{proof}
+
+For any nonnegative lower real $x:\tLR$, let $\bar{x}\coloneqq\min(x,1)$.
+
+\begin{proposition}\label{prop.valuations_OR}
+Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
+\begin{enumerate}
+\item \[\mu(P\vee Q)=\ol{P\vee\mu(Q)}.\]
+\item \[\mu(P\wedge q) = \ol{P \wedge \mu(Q)}.\]
+\end{enumerate}
+\end{proposition} 
+\begin{proof}
+\begin{enumerate}
+\item The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
+
+It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{lem.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
+For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_NCV_on_prop}, the left-hand side is just $P$.
+\item \todo{add this as per David's email from May 12}
+\end{enumerate}
+\end{proof}
+
+\chapter{Properties of internal valuations on spaces of compacts}
+
+\section{Spaces of compacts}
+
+For $\BaseSpace$ a space, we denote by $C\BaseSpace$ is set of nonempty compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$. This is also known as the \emph{upper space} of $B$~\cite{Edalat:1995a}.
+
+\begin{proposition}
+If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
+\end{proposition}
+
+\begin{proof}
+The basic opens in $I\BaseSpace$ are given by the opens $U\subseteq \BaseSpace$, where the associated open in $I\BaseSpace$ contains all those compacts $K\subseteq \BaseSpace$ with $K\subseteq U$. We first show that the closure of this open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V$ is such that $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$ since points are closed.
+
+Next, we show that the interior of the above closure is $\downarrow U$ again. We need to show that it is not larger; so suppose that $K$ is a point in the interior. This means that there is an open $V$ such that every $K' \subseteq V$ is in the closure, or equivalently $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
+
+Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
+\end{proof}
+
+Therefore all of the results from the previous section apply here as well.
+
+If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K$, since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
+
+\todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
+
+From now on, we assume that we have these properties:
+
+\begin{axiom}
+$\BaseSpace$ is Hausdorff.
+\end{axiom}
+
+For any $K\in CB$, we write $\At{K} := ((- \imp (\downarrow K)^c) \imp (\downarrow K)^c)$ for the associated quasi-closed modality, where $(\downarrow K)^c$ is the (open) complement of $K$. Since $\downarrow K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
+
+\begin{lemma}\label{AtBoolean}
+For every $P : \Prop$,
+\[
+	\At{K} P \lor (P \imp \At{K} \bot)
+\]
+\end{lemma}
+
+Hence the topos of $\At{K}$-sheaves is Boolean.
+
+\todo[inline]{Is it necessarily a copy of Set?}
+
+\section{Properties of the lower reals}
+
+\begin{lemma}\label{enough_points_prop}
+For any $P : \Prop$,
+\[ P = \forall K \ldotp \At{K} P. \]
+\end{lemma}
+
+From the internal perspective, it may be more reasonable to consider this as an axiom---stating that our topos has enough points---since it cannot be proven purely internally.
+
+\begin{proof}
+\todo[inline]{TBW}
+\end{proof}
+
+\begin{proposition}\label{enough_points_LR}
+For any $r:\tLR$,
+\[r = \inf_{K} \At{K} r.\]
+\end{proposition}
+\begin{proof}
+The right-hand side, applied to some $q:\tQQ$, is translated to
+\[\forall K. \At{K}(q<r),\]
+which is $q<r$ by \cref{enough_points_prop}.
+\end{proof}
+
+\begin{lemma}\label{lem.order_canc}
+The lower reals are order-cancellative: if $a+b\leq a+c$ then $b\leq c$.
+\end{lemma}
+
+\begin{proof}
+\todo[inline]{Derive this from \cref{enough_points_LR}, together with the $\At{K}$-decidability.}
+\end{proof}
+
+\section{Interaction of valuations with modalities}
+
+\begin{proposition}
+Let $K\in C\BaseSpace$ be a point, let $X\in\Shv(C\BaseSpace)$, and let $\mu\colon\Prop^X\to\tLR$ be a valuation. Then for any $P \in \Prop^X$,
+\[\mu(\At{K}P)=\ol{\At{K}\mu(\At{K}P)}.\]
+\end{proposition}
+\begin{proof}
+We have ; this and the fact that $\At{K}$ commutes with addition, are the only assumptions we use.
+
+Clearly $\mu(\At{K}P)\leq\At{K}\mu(\At{K}P)$ and $\mu(P\imp\At{K}\bot)\leq\At{K}\mu(P\imp\At{K}\bot)$. By inclusion-exclusion we have
+\[\mu(\At{K}P)+\mu(P\imp\At{K}\bot)=\mu(\At{K}\bot)+\mu(\top),\]
+where we have used $(\At{K}P\vee(P\imp\At{K}\bot)) = \top$ for the second term on the right-hand side.
+Since $\At{K}\bot$ is a constant predicate, we have $\mu(\At{K}\bot)=i(\At{K}\bot)=\ol{\At{K}0}$, by \cref{prop.unique_NCV_on_prop}. Therefore we have 
+\begin{align*}
+	\ol{\At{K}0}+1
+	&=\mu(\At{K}P)+\mu(P\imp\At{K}\bot)\\
+	&\leq\At{K}\mu(\At{K}P)+\At{K}\mu(P\imp\At{K}\bot)\\
+	&=\ol{\At{K}0}+\ol{\At{K}1}=\ol{\At{K}0}+1
+\end{align*}
+where in the third step, we have applied to same inclusion-exclusion relation again, together with the fact that,$\At{K}$ commutes with addition. Since the very first and the very last expression are the same, we conclude (by order-cancellativity) that both inequalities  $\mu(\At{K}P) \leq \At{K}\mu(\At{K}P)$ and $\At{K}\mu(P\imp\At{K}\bot) \leq \At{K}\mu(P\imp\At{K}\bot)$ are in fact equalities.
+\end{proof}
+
+
+\begin{proposition}
+For all $K\subseteq U$ and $P\colon X\to\Prop$ we have
+\[\At{K}\mu(P)=\At{K}\mu(\In{U}P).\]
+\end{proposition}
+\begin{proof}
+One direction is trivial. For any $q:\tQQ$ we have
+\begin{align*}
+	\At{K}\mu(\In{U}P)(q)
+	&\imp\At{K}\In{U}\mu(\In{U}P)(q)\\
+	&=\At{K}\In{U}\mu(P)(q)&\text{\cref{prop.In_NCV}}\\
+	&\imp\At{K}\At{K}\mu(P)(q)&\text{\cite[Prop 5.39]{Schultz.Spivak:2017a}}\\	
+	&=\At{K}\mu(P)(q).
+\end{align*}
+\end{proof}
+
+Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\downarrow K)^c = \top$.
+
+\chapter{Semantics of valuations on spaces of compacts}
+
+While the results of the previous sections were completely internal, we now use them in order to analyze the semantics of NCV's in $\Shv(C\BaseSpace)$.
+
+An internal continuous normalized valuation $\mu\colon\Prop^X\to\tLR$ on $\cat{E}$ gives rise to an external monotonic map
+\[|\mu|\colon\cat{E}(X,\Omega)\times\pt(\cat{E})\to\LR\]
+that is Scott continuous (at least in each variable) and an NCV for each point $a\in\pt(\cat{E})$.
+
+\todo[inline]{I don't see this at this level of generality. Are we trying to transport the valuation along $a^*$ here?}
+
+Consider the case where $\BaseSpace$ is a compact space, $C\BaseSpace$ is its space of compacts, and $\cat{E}=\Shv(C\BaseSpace)$. In this case, if $X\in\cat{E}$ is a sheaf, then evaluation at $\BaseSpace$ is the same thing as taking global sections, $X(\BaseSpace)\cong\Gamma(X)$; we denote it by $|X|$.
+
+\begin{lemma}\label{lemma.inequality_rand9865}
+Let $\cat{E}$ be as above. For any point $K\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+\[
+\sup_{U\ni K}|\mu(\At{B}\In{U}P)|\leq |\mu|(|P|)(K),
+\]
+where $U$ ranges over all (basic) neighborhoods of $K$.
+\end{lemma}
+\begin{proof}
+The proof uses a few facts:
+\begin{enumerate}
+	\item The fact that $B$ is Scott-minimal is internally expressed as an equivalence of modalities, $\At{B}=\See{B}$.
+	\item $\See{B}\mu(P)=\mu(\See{B}P)$ by \cref{prop.valuations_OR}
+	\item for any $K\in U$, evaluating at $K$ we get $(\In{U}P)(K)=P(K)$ and $(\See{B}P)(K)=P(K)$.
+\end{enumerate}
+We have now established the following:
+\begin{align}
+\nonumber
+	\sup_{U\ni K}|\mu(\At{B}\In{U}P)|
+	&\coloneqq\sup_{U\ni K}\mu(\At{B}\In{U}P)(B)\\
+	&=\sup_{U\ni K}\mu(\See{B}\In{U}P)(B)&\text{item 1}\\\nonumber
+	&=\sup_{U\ni K}\See{B}\mu(\In{U}P)(B)&\text{item 2}\\\nonumber
+	&=\sup_{U\ni K}\mu(\In{U}P)(B)&\text{item 3}\\\nonumber
+	&\leq\sup_{U\ni K}\mu(\In{U}P)(K)&\text{increasing}\\\nonumber
+	&=\sup_{U\ni K}\In{U}\mu(\In{U}P)(K)&\text{item 3}\\\nonumber
+	&=\sup_{U\ni K}\In{U}\mu(P)(K)&\text{\cref{prop.In_NCV}}\\\nonumber
+	&=\mu(P)(K)&\text{item 3}
+\end{align}
+\end{proof}
+
+We are ready to prove that this inequality is actually an equality. This shows that we can recover the action of $|\mu|$ on arbitrary global sections from its action on global sections of the very special $\At{B}$ form. The one caveat is that we need to ``internalize the sup''; we will point that out below.
+
+\begin{theorem}\label{thm.discrete_internal_space}
+Let $\BaseSpace$ be a compact Hausdorff space, $C\BaseSpace$ is its space of compacts, and $\cat{E}=\Shv(C\BaseSpace)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+\[
+|\mu|(|P|)(K) = \sup_{U\ni K}|\mu(\At{B}\In{U}P)|.
+\]
+\end{theorem}
+\begin{proof}
+By \cref{lemma.inequality_rand9865}, we have $\sup_{U\ni K}|\mu(\At{B}\In{U}P)|\leq |\mu|(|P|)(K)$ for any $P$. \emph{Internalizing the sup} turns this into the inequality
+\[\big(\sup_{U\ni K}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\ni K}\mu(\In{U}P)\big)(K)\]
+where the sup on the right-hand side is over the constant family, and is equal to $|\mu(|P|)(K)$ \todo{More detail here}.
+ 
+The (internalized) sup is just shorthand: $\sup_{U\ni K}X(U)\coloneqq \exists U\ldotp \At{K}U\wedge X(U)$. This is a directed sup, so by Scott continuity, we have equivalently
+\[\mu(\exists U\ldotp \At{K}U\wedge\In{U}P)(B)\leq\mu(\exists U\ldotp \At{K}U\wedge\In{U}P)(K).\]
+
+Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, then add them and use inclusion-exclusion.
+We obtain something of the form $\mu(X)(B) + \mu(Y)(B)\leq \mu(X)(K) + \mu(Y)(K)$, where
+\begin{align*}
+	X\coloneqq(\exists U\ldotp \At{K}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{K}U\wedge\In{U}(P\imp\At{K}\bot)\big)\\
+	Y\coloneqq(\exists U\ldotp \At{K}U\wedge\In{U}P)\vee\big(\exists U\ldotp \At{K}U\wedge\In{U}(P\imp\At{K}\bot)\big)	
+\end{align*}
+We will show that $Y=\top$ and that $X\imp\At{K}\bot$. This will complete the proof because $\mu(\At{K}\bot)(K)=\mu(\At{K}\bot)(B)=0$.
+
+First we show $X\imp\At{K}\bot$. We claim $X\imp\exists U\ldotp \At{K}U\wedge\In{U}(P\wedge P\imp\At{K}\bot)$; indeed, take $U$ to be the conjunction of the existentials from $X$ and use the fact that $\At{K}$ and $\In{U}$ commute with $\wedge$. From here we get $\exists U\ldotp\At{K}U\wedge\In{U}\At{K}\bot$. Since $\In{U}P$ means $U\imp P$, we obtain $\At{K}\bot$ by monotonicity of $\In{U}$ and idempotence of $\At{K}$.
+
+We now show $Y=\top$. By cases we have $\exists U\ldotp\At{K}U\wedge(\In{U}P\vee\In{U}(P\imp\At{K}\bot))\imp Y$. Thus to prove $Y$, it is enough to show that the following existential statement holds:
+\[\exists U\ldotp\At{a}U\wedge(\In{U}P\vee(P\imp\At{a}\bot)).\]
+By \cref{AtBoolean}, we have $\At{a}P\vee (P\imp\At{a}\bot)$. In the first case, take $U=P$ and the existential holds. In the second case, take $U$ to be any open for which $\At{a}U$ holds. This completes the proof.
+\end{proof}
+
+\begin{remark}
+The one issue above is ``internalizing the sup''. We think that works, but it's not technically proven. The argument is basically that we can check the following external fact holds about points contained in opens:
+\[\big(K\in\church{\exists(U)\ldotp\At{K}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $K\in U$ and }K\in\church{\In{U}P}\big).\]
+\end{remark}
+
+
+\section{Main theorem: correspondence with external valuations}
+
+
+\begin{conjecture}\label{conj.may8}
+Let $B$ be a ``nice'' compact space, $CB$ its space of compacts. Let $p\colon X\to CB$ be ``nice'', and consider the internal topological space $(\Gamma(p),p_*\Omega_X)$ in $\Shv(CB)$. Then there is a bijection
+\begin{multline*}
+  \{\tn{internal NCVs } \mu\colon p_*\Omega_X\to\tLR\}
+	\cong\\
+	\{\tn{external NCVs } \mu'\colon(\Gamma(p),\tn{ compact-open top})\to\LR\}
+\end{multline*}
+\end{conjecture}
+
+One special case is when $p$ has no global sections, so that the external set is empty. An even more special case is when $p$ is the inclusion of an open set, and here the conjecture is true.
+
+\begin{proposition}
+\cref{conj.may8} holds in the case that $p\colon U\ss CB$ is the inclusion of an open set.
+\end{proposition}
+\begin{proof}
+If $U=CB$ then there is exactly one section, so there is exactly one external valuation, and the result follows from \cref{prop.unique_NCV_on_prop}.
+
+So suppose that $U\neq CB$. Then there are no external NCVs because the set $\Gamma(p)$ is empty. We suppose for contradiction that $\mu\colon p_*\Omega_U\to\tLR$ is an internal valuation. Then composing with the unique internal frame homomorphism $!\colon\Prop\to p_*\Omega_U$, we have an internal valuation $\mu\circ !$ on $\Prop$. By \cref{prop.unique_NCV_on_prop}, we have $\mu\circ!=i$, where $i\colon\Prop\to\tLR$ is the indicator function.
+
+Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
+\end{proof}
+
+
+\chapter{Correspondence with stochastic processes}
+
+Here, we will investigate how NCV's on spaces of sections can be identified with stochastic processes in the conventional sense.
+
+
+
+
+\newpage
+
+\appendix
+
+
+\appendix
+
+\chapter{Unsorted material}
+
+\section{Modalities preserve infima}
+
+For any predicate $f:\Prop\to\Prop$, the infimum is $\forall(P:\Prop)\ldotp(fP\imp P)$.
+
+\begin{lemma}
+For any modality $j$, the type $\Prop_j$ is closed under infima. That is, for any $f:\Prop_j\to\Prop$
+\[(j\forall(P:\Prop_j)\ldotp fP\imp P)\imp\forall(P:\Prop_j)\ldotp fP\imp P.\]
+\end{lemma}
+\begin{proof}
+Assume $j\forall P\ldotp fP\imp P$, and move the $j$ inside the $\forall$ and the implication, to obtain $\forall P\ldotp fP\imp jP$. To prove $\forall(P:\Prop_j)\ldotp fP\imp P$, take any $P:\Prop_j$. Then we have $jP$ by assumption, which implies $P$ by $j$-closure.
+\end{proof}
+
+\section{Preservation of internal adjunctions}
+
+All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finite limit preservation ensures that the $F$-image of a category object is a category object, and similarly for functors. But once you have that, the idea is to construct the unit and counit and see that they're preserved. Write down the diagram
+\[
+\begin{tikzcd}
+	\Ob(C)\ar[drr, bend left, "RL"]\ar[ddr, bend right, equal]\ar[dr, "\eta"]\\
+	&\Mor(C)\ar[r, "cod"]\ar[d, "dom"]&\Ob(C)\\
+	&\Ob(C)
+\end{tikzcd}
+\]
+and similarly for $\epsilon$, and assert the triangle identities; all of this structure will be preserved by $F$.
+
+\chapter{Toy example}
+
+\todo[inline]{We can recycle some of the following to use as our running example for illustration}
 
 How about considering only two instances of time first, so that we work in the presheaf topos over the discrete two-point space $\{a,b\}$? Here, we will only need three modalities, where $\pi$ corresponds to sheafification, and $\At{a}{}$ and $\At{b}{}$ correspond to behavior at $a$ and $b$, respectively. In this case, measures on types (or suitable locales) which satisfy $\pi$ should semantically correspond to pairs of random variables equipped with a joint distribution. This is a good test case where the essential structures already come up, but without the technical complexity of TTT.
 
@@ -555,8 +839,6 @@ The analogous modalities to those used in TTT are:
 	\pi&\At{a}P\wedge\At{b}P&\bot&a&b&\top
 \end{array}
 \]
-
-\todo[inline]{T: do this for an arbitrary interval domain?}
 
 \begin{remark}
 Semantically we see that $\church{\In{a}}=\church{\At{a}}$, but in fact, our axioms may not be strong enough to prove that internally. It is easy to show $\forall(P:\Prop)\ldotp(a\imp P)\imp(P\imp b)\imp b$, but I do not see how to show $\forall(P:\Prop)\ldotp[(P\imp b)\imp b]\imp^? (a\imp P)$. Without additional axioms, we have to decide whether to work with $\At{a}$ or $\In{a}$ in our notion of measure; we use $\At{}$ so as to remain faithful to the TTT case. 
@@ -656,271 +938,112 @@ By an axiom of discrete temporal type theory (analogous to Axiom 3a in TTT), we 
 \]
 and therefore directly $\See{[0,n]} \mu(1 \leq t) \leq \See{[0,n]} \bot$, since applying $\See{[0,n]}$ to a lower real is the internal left adjoint to $\RR \rightarrow \RR_{\SeeInline{[0,n]}}$. (Right?) Or is this argument begging the question?}
 
-\paragraph{May 9}
+\chapter{Domain-theoretic aspects of internal locales}
 
-The following can surely be phrased more generally, but I'm writing it as follows for speed/assurance reasons. For any nonnegative lower real $x:\tLR$, let $\bar{x}\coloneqq\min(x,1)$.
+For now, this stuff is taking place in $\smset$.
 
-\begin{proposition}
-Let $[d,u]$ be a point in $\BaseTopos$, let $X$ be a type, and let $\mu\colon\Prop^X\to\tLR$ be a valuation. Then
-\[\mu(\At{[d,u]}P)=\ol{\At{[d,u]}\mu(\At{[d,u]}P)}.\]
-\end{proposition}
-\begin{proof}
-By TTT, we have $\top=(\At{[d,u]}P\vee(P\imp\At{[d,u]}\bot))$; this and the fact that $\At{[d,u]}$ commutes with addition, are the only assumptions we use.
-
-Clearly $\mu(\At{[d,u}P)\leq\At{[d,u]}(\mu(\At{[d,u]}P))$ and $\mu(P\imp\At{[d,u]}\bot)\leq\At{[d,u]}\mu(P\imp\At{[d,u]}\bot)$. By inclusion-exclusion we have
-\[\mu(\At{[d,u]}P)+\mu(P\imp\At{[d,u]}\bot)=\mu(\At{[d,u]}\bot)+\mu(\top).\]
-Since $\At{[d,u]}\bot$ is a constant predicate, we have $\mu(\At{[d,u]}\bot)=i(\At{[d,u]}\bot)=\ol{\At{[d,u]}0}$, by \cref{prop.unique_NCV_on_prop}. So we have 
-\begin{align*}
-	\ol{\At{[d,u]}0}+1
-	&=\mu(\At{[d,u]}P)+\mu(P\imp\At{[d,u]}\bot)\\
-	&\leq\At{[d,u]}\mu(\At{[d,u]}P)+\At{[d,u]}\mu(P\imp\At{[d,u]}\bot)\\
-	&=\ol{\At{[d,u]}0}+\ol{\At{[d,u]}1}=\ol{\At{[d,u]}0}+1
-\end{align*}
-because $\At{[d,u]}$ commutes with addition, and thus the inequality becomes an equality. We are done (believing that $\tLR$ is order-cancellative) , $x\leq x'$ and $y\leq y'$ and $x+y=x'+y'$ implies $x=x'$ and $y=y'$.
-\end{proof}
-
-The following holds for any open modality $T\imp-$.
-\begin{proposition}\label{prop.In_NCV}
-\[\In{[d,u]}\mu(\In{[d,u]}P)=\In{[d,u]}\mu(P).\]
-\end{proposition}
-\begin{proof}
-This is just naturality; recall that $\In{[d,u]}P\coloneqq T\imp P$ for some $T$. One direction is obvious, so suppose $T\imp\mu(T\imp P)$; we want to show $T\imp\mu(P)$. But assuming $T$ we have $\mu(T\imp P)$ which is the same as $\mu(P)$.
-\end{proof}
-
-\begin{proposition}
-\[\mu(P)=\inf_{d< u}\At{[d,u]}\mu(P).\]
-\end{proposition}
-\begin{proof}
-This is the axiom that our topos has enough points. The right-hand side, applied to some $q:\tQQ$, is translated to
-\[\forall(d,u:\tRR)\ldotp d<u\imp\At{[d,u]}(q<\mu(P)),\]
-which is $q<\mu(P)$ by TTT axiom 8.
-\end{proof}
-
-\begin{proposition}\label{prop.valuations_OR}
-Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
-\[\mu(P\vee Q)=\ol{P\vee\mu(Q)}.\]
-\end{proposition} 
-\begin{proof}
-The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
-
-It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{rem.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
-For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_NCV_on_prop}, the left-hand side is just $P$.
-\end{proof}
-
-
-\begin{proposition}
-For all $d'<d\leq u<u'$ and $P\colon X\to\Prop$ we have
-\[\At{[d,u]}\mu(P)=\At{[d,u]}\mu(\In{[d',u']}P).\]
-\end{proposition}
-\begin{proof}
-One direction is trivial. For any $q:\tQQ$ we have
-\begin{align*}
-	\At{[d,u]}\mu(\In{[d',u']}P)(q)
-	&\imp\At{[d,u]}\In{[d',u']}\mu(\In{[d',u']}P)(q)\\
-	&=\At{[d,u]}\In{[d',u']}\mu(P)(q)&\text{\cref{prop.In_NCV}}\\
-	&\imp\At{[d,u]}\At{[d,u]}\mu(P)(q)&\text{\cite[Prop 5.39]{Schultz.Spivak:2017a}}\\	
-	&=\At{[d,u]}\mu(P)(q).
-\end{align*}
-\end{proof}
-
-\begin{remark}\label{rem.order_canc}
-Semantically, the lower-reals on $\IR$ are order-cancellative in the sense that if $a+b\leq a+c$ then $b\leq c$. We haven't proven this internally.
-\end{remark}
-
-\paragraph{May 10}
-
-For any predicate $f:\Prop\to\Prop$, the infimum is $\forall(P:\Prop)\ldotp(fP\imp P)$.
+Let $X$ be a topological space with poset of opens $\Op(X)$. Then for $U\subseteq V$ in $\Op(X)$, what does it mean for $U$ to be way below $V$? There is a nice way to relate it to the finite subcover definition of compactness:
 
 \begin{lemma}
-For any modality $j$, the type $\Prop_j$ is closed under infima. That is, for any $f:\Prop_j\to\Prop$
-\[(j\forall(P:\Prop_j)\ldotp fP\imp P)\imp\forall(P:\Prop_j)\ldotp fP\imp P.\]
+$U\ll V$ if and only if every open covering of $V$ has a finite subfamily which covers $U$.
 \end{lemma}
+
 \begin{proof}
-Assume $j\forall P\ldotp fP\imp P$, and move the $j$ inside the $\forall$ and the implication, to obtain $\forall P\ldotp fP\imp jP$. To prove $\forall(P:\Prop_j)\ldotp fP\imp P$, take any $P:\Prop_j$. Then we have $jP$ by assumption, which implies $P$ by $j$-closure.
+If the condition holds, then every directed set of opens that goes below $V$ also covers $V$, and therefore contains an element that already contains $U$.
+
+Conversely, given a covering family, consider the directed set of finite unions of members of the cover.
 \end{proof}
 
-\subsection{Restating the conjecture}
+Without additional separation assumptions on $X$, it seems tricky to translate this into a condition involving only the usual concepts of point-set topology. In order to do so, we need one more auxiliary statement.
 
-An internal continuous normalized valuation $\mu\colon\Prop^X\to\tLR$ on $\cat{E}$ gives rise to an external monotonic map
-\[|\mu|\colon\cat{E}(X,\Omega)\times\pt(\cat{E})\to\LR\]
-that is Scott continuous (at least in each variable) and a CNV for each point $a\in\pt(\cat{E})$.
+\newcommand{\cl}[1]{\overline{#1}} % topological closure
+\newcommand{\intr}[1]{\mathrm{int}(#1)} % interior
 
-Consider the case where $B$ is a compact space, $CB$ is its space of compacts, and $\cat{E}=\Shv(CB)$. In this case, if $X\in\cat{E}$ is a sheaf, then evaluation at $B$ is the same thing as taking global sections, $X(B)\cong\Gamma(X)$; we denote it by $|X|$.
-
-\begin{lemma}\label{lemma.inequality_rand9865}
-Let $\cat{E}$ be above. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
-\[
-\sup_{a\in U}|\mu(\At{B}\In{U}P)|\leq |\mu|(\,|P|,a\,).
-\]
+\begin{lemma}
+Let $X$ be regular and $D\subseteq X$ dense. Suppose that every open cover of $X$ has a finite subfamily which covers $D$. Then $X$ is compact.
 \end{lemma}
-\begin{proof}
-The proof uses a few facts:
-\begin{enumerate}
-	\item The fact that $B$ is Scott-minimal is internally expressed as an equivalence of modalities, $\At{B}=\See{B}$.
-	\item $\See{B}\mu(P)=\mu(\See{B}P)$ by \cref{prop.valuations_OR}
-	\item for any point $a\in U$, evaluating at that point we get $(\In{U}P)(a)=P(a)$ and $(\See{a}P)(a)=P(a)$.
-\end{enumerate}
-We have now established the following:
-\begin{align}
-\nonumber
-	\sup_{a\in U}|\mu(\At{B}\In{U}P)|
-	&\coloneqq\sup_{a\in U}\mu(\At{B}\In{U}P)(B)\\
-	&=\sup_{a\in U}\mu(\See{B}\In{U}P)(B)&\text{item 1}\\\nonumber
-	&=\sup_{a\in U}\See{B}\mu(\In{U}P)(B)&\text{item 2}\\\nonumber
-	&=\sup_{a\in U}\mu(\In{U}P)(B)&\text{item 3}\\\nonumber
-	&\leq\sup_{a\in U}\mu(\In{U}P)(a)&\text{increasing}\\\nonumber
-	&=\sup_{a\in U}\In{U}\mu(\In{U}P)(a)&\text{item 3}\\\nonumber
-	&=\sup_{a\in U}\In{U}\mu(P)(a)&\text{\cref{prop.In_NCV}}\\\nonumber
-	&=\mu(P)(a)&\text{item 3}
-\end{align}
+
+This may be somewhat surprising, since in many cases a finite subfamily which covers $D$ does not yet cover $X$.
+
+\begin{proof}(Due to Ramiro de las Vegas, MO.)
+Let $\mathcal{A}$ be an open cover of $X$. For every $x\in X$, choose $U_x\ni x$ such that $\cl{U_x}\subseteq V_x$ for suitable $V_x\in\mathcal{A}$. Then $\{U_x\}$ is another open covering which has a finite subcover $\{U_{x_1},\ldots,U_{x_n}\}$ by assumption. Since $X = \cl{U_{x_1}\cup\ldots\cup U_{x_n}} = \cl{U_{x_1}}\cup\ldots\cup\cl{U_{x_n}} \subseteq V_{x_1}\cup\ldots\cup V_{x_n}$, we are done.
 \end{proof}
 
-We are ready to prove that we can recover the external CNV $|\mu|$ from various global sections of $\mu$. The one caveat is that we need to ``internalize the sup''; we will point that out below.
+Now we can characterize the way below relation in a nice way:
 
-\begin{theorem}\label{thm.discrete_internal_space}
-Let $B$ be a compact space, $CB$ is its space of compacts, and $\cat{E}=\Shv(CB)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+\begin{lemma}
+Let $X$ be regular. Then $U\ll V$ if and only if $U$ is relatively compact in $V$, i.e.~if $\cl{U}\cap V$ is compact.
+\end{lemma}
+
+\begin{proof}
+If $\cl{U}\cap V$ is compact, then clearly the condition of the first lemma holds as well, and we do not need regularity.
+
+Conversely, suppose that the condition of the first lemma holds. Then by the previous lemma, it is enough to show that every open cover of $\cl{U}\cap V$ has a finite subfamily which covers $U$. But this is clear by assumption: throwing in $V\setminus\cl{U}$ to an open cover of $\cl{U}\cap V$ gives an open cover of $V$.
+\end{proof}
+
+\chapter{Locales and geometric morphisms}
+
+My question is: given a geometric morphism $f : \mathcal{T}\to\mathcal{T}'$, do internal frames in $\mathcal{T}'$ pull back to internal frames in $\mathcal{T}$?
+
+Note that there is a natural comparison map between $f^*\Prop'$ and $\Prop$. Indeed, since $f^*$ preserves monos by virtue of being left exact, there is a map $\classify{f^*\const{true}'}\colon f^*\Prop'\to\Prop$ classifying the image under $f^*$ of $\const{true}'\colon 1'\to \Prop'$.
+
+\begin{lemma}
+If $s:A\to B$ is an arbitrary subobject in $\mathcal{T}'$, then $f^*s : f^*A\to f^*B$ is again a subobject, and $\classify{f^*s}$ is given by $f^*\classify{s}$ post-composed with the comparison map $f^*\Prop'\to\Prop$.
+\end{lemma}
+
+\begin{proof}
+ This is because
+\[\begin{tikzcd}
+	f^*A \ar{r} \ar{d} & f^*B \ar{d} \\
+	f^*1 \ar{r} & f^*\Prop'
+\end{tikzcd}\]
+is again a pullback diagram, and likewise is
+\[\begin{tikzcd}
+	f^*1 \ar{r} \ar{d} & f^*\Prop' \ar{d} \\
+	1 \ar{r} & \Prop
+\end{tikzcd}\]
+so that the two pullbacks compose.
+\end{proof}
+
+In this reasoning, we have only needed to use that $f^*$ is left exact. Thus everything applies likewise to $f_*$, and we e.g.~have a comparison map $\classify{f_*\const{true}}\colon f_*\Prop\to\Prop'$. But this is of less interest to us here.
+
+So given an internal poset $P$ in $\mathcal{T}'$, we get a poset structure on $f^*P$ given by the subobject $f^*(\leq) \to f^*P\times f^*P$. Again using the fact that $f^*$ preserves finite limits, it's straightforward to see that if $P$ is a meet-semilattice in $\mathcal{T}'$, then $f^*P$ is a meet-semilattice in $\mathcal{T}$. However, it's less clear if the existence of arbitrary joins is preserved in the same way.
+
+The existence of arbitrary joins for $P = \mathcal{O}(X)$ means that the down-closure map
 \[
-|\mu|(\,|P|,a\,)=\sup_{U\ni a}|\mu(\At{B}\In{U}P)|.
+	\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)},\qquad U\mapsto \classify{ \{ V \leq U \} }
 \]
-\end{theorem}
-\begin{proof}
-By \cref{lemma.inequality_rand9865}, we have $\sup_{U\ni a}|\mu(\At{B}\In{U}P)|\leq |\mu|(\,|P|,a\,)$ for any $P$. \emph{Internalizing the sup}, 
-\[\big(\sup_{U\ni a}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\ni a}\mu(\In{U}P)\big)(a)\]
-Here the (internalized) sup is just shorthand: $\sup_{U\ni a}X(U)\coloneqq \exists U\ldotp \At{a}U\wedge X(U)$. This is a directed sup, so by continuity, we have
-\[\mu(\exists U\ldotp \At{a}U\wedge\In{U}P)(B)\leq\mu(\exists U\ldotp \At{a}U\wedge\In{U}P)(a).\]
+has an internal left adjoint. Here, $\Prop'^{\mathcal{O}(X)}$ carries the usual pointwise ordering, i.e.~the one corresponding to inclusion of subobjects. What we would like to have is that the down-closure map of $f^*\mathcal{O}(X)$ similarly has a left adjoint. According to the Elephant (p.~580), this is not the case in general! However for an \emph{atomic} geometric morphism---or in other words if $f^*$ is a logical functor---we can apply Corollary B2.3.10 to conclude that $f^*\mathcal{O}(X)$ is indeed an internal frame. Concretely, in this case the sup map is the composite $\Prop^{f^*(\mathcal{O}(X))}\cong f^*\left(\Prop'^{\mathcal{O}(X)}\right)\to f^*(\mathcal{O}(X))$, where the first morphism comes from $f^*$ being logical and the second one is $f^*(\sup)$.
 
-Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, then add them and use inclusion-exclusion.
-We obtain something of the form $X(B)+Y(B)\leq X(a)+Y(a)$, where
-\begin{align*}
-	X\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\wedge\In{U}(P\imp\At{a}\bot)\big)\Big)\\
-	Y\coloneqq\mu\Big((\exists U\ldotp \At{a}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{a}U\vee\In{U}(P\imp\At{a}\bot)\big)\Big)	
-\end{align*}
-We will show that $Y=\top$ and that $X\imp\At{a}\bot$. This will complete the proof because $\mu(\At{a}\bot)(a)=\mu(\At{a}\bot)(B)=0$.
+In conclusion, internal frames can be pulled back along atomic geometric morphisms\footnote{And also along general geometric morphisms, but this requires a different construction, as in Elephant p.~580.}. Again by Elephant p.~580, pushing frames forward along $f_*$ is even simpler, and it seems plausible that this results in an adjunction $f^* \dashv f_*$ between frames in $\mathcal{T}$ and frames in $\mathcal{T}'$. I will be a bit sloppy for now and just assume that this is true.
 
-First we show $X\imp\At{a}\bot$. We claim $X\imp\exists U\ldotp \At{a}U\wedge\In{U}(P\wedge P\imp\At{a}\bot)$; indeed, take $U$ to be the conjunction of the existentials from $X$ and use the fact that $\At{a}$ and $\In{U}$ commute with $\wedge$. From here we get $\exists U\ldotp\At{a}U\wedge\In{U}\At{a}\bot$. Since $\In{U}P$ means $U\imp P$, we obtain $\At{a}\bot$ by monotonicity of $\In{U}$ and idempotence of $\At{a}$.
-
-We now show $Y=\top$. By cases we have $\exists U\ldotp\At{a}U\wedge(\In{U}P\vee\In{U}(P\imp\At{a}\bot))\imp Y$. Thus to prove $Y$, it is enough to show that the following existential statement holds:
-\[\exists U\ldotp\At{a}U\wedge(\In{U}P\vee(P\imp\At{a}\bot)).\]
-By \cite{Schultz.Spivak:2017a} we have De Morgan's, $\At{a}P\vee (P\imp\At{a}\bot)$. In the first case, take $U=P$ and the existential holds. In the second case take $U$ to be any open for which $\At{a}U$ holds. This completes the proof.
-\end{proof}
-
-\begin{remark}
-The one issue above is ``internalizing the sup''. We think that works, but it's not technically proven. The argument is basically that we can check the following external fact holds about points contained in opens:
-\[\big(a\in\church{\exists(U)\ldotp\At{a}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $a\in U$ and }a\in\church{\In{U}P}\big).\]
-\end{remark}
-
-
-\section{What we can aim for}
-
-Tentative setup, to be adjusted: let $B$ be a topological space (say, T1), $G$ a group that acts on $B$, and $K$ a $G$-invariant collection of compact sets in $B$ that includes all singletons and is closed in the upper Vietoris topology (that we equip $K$ with), and such that every compact set in $B$ is contained in some element of $K$. Whatever setup we use, it should cover the following two cases that are of main interest:
-
-\begin{enumerate}
-\item $B = \RR$ with $K = \mathbb{IR}$, where $G$ is either trivial or the translation group; this should give a topos-theoretic formulation of (stationary) stochastic processes.
-\item $B$ a discrete finite space with $K = 2^B$, where $G$ is either trivial or the permutation group; this should give a topos-theoretic formulation of joint distributions of $|B|$ many random variables.
-\end{enumerate}
-
-If things go really well, we can also hope to cover one more case that is fundamental to statistical mechanics and quantum field theory:
-
-\begin{enumerate}[resume]
-\item $B = \RR^n$ with $K$ e.g.~all compact subsets, where $G$ is again the translation group.
-\end{enumerate}
-
-For now, let me formulate the conjecture in the case where $G$ is trivial:
-
-\begin{conjecture}
-Every space $p : X\to B$ over $B$ is an internal space in $\Shv(B)$~\cite{Moerdijk:1984a}, but also becomes an internal space in $\Shv(K)$. Global elements of the object of normalized continuous valuations on this space with values in the lower reals of $\Shv(K)$ are in bijection with external normalized continuous valuations on the space of global sections of $p$, equipped with (e.g.) the compact-open topology.
-\end{conjecture}
-
-Essentially, the problem is to find suitable hypotheses that make some version of this conjecture correct. Developing a result of this type is mostly a topos-theoretic problem and does not involve technical aspects of measure theory. However, in order to get to the traditional picture of stochastic processes, there is one more step to take:
-
-\begin{conjecture}
-Under suitable hypotheses, (external) continuous valuations on the space of global sections of $p : X\to \RR$ are in bijection with stochastic processes taking values in $X$.
-\end{conjecture}
-
-\newpage
-\chapter{Notes from meetings (to be organized)}
-
-\section{Valuations on $\Prop$}
-\paragraph{May 7}
-Consider the function $i\colon\Prop\to\tLR$ defined as follows
-\[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P).\]
-We next show that it is a normalized continuous valuation (NCV). Later we will show that, under some conditions, it is unique as such.
-
-\begin{proposition}\label{prop.sandwich}
-The function $i\colon\Prop\to\tLR$ defined above is indeed an NCV on $\Prop$, and for any NCV $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
-\end{proposition}
-\begin{proof}[Sketch]
-It's not hard to show that $i$ is an NCV. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity we have $\mu(\bot)(q)$, and by normality ($\mu(\bot)=0)$, this means $q<0$, a contradiction.
-\end{proof}
-
-Recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty space, and is closed under finite intersections.
+The next question is whether $f^*$ preserves properties of locales such as regularity or local compactness. Both are concerned with relaxed notions of ordering:
 
 \begin{definition}
-Say that a topos $\cat{E}$ is \emph{regularly-based} if the following statement holds internally:
-\[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
-For topological spaces, this is the condition that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup_{\{Q\ss P\mid \neg\neg Q=Q\}}Q$.
-
-We say $Q$ is a \emph{regular basis element} if $Q=\neg\neg Q$.
+For $U,V\in\mathcal{O}(X)$, one says that
+\begin{enumerate}
+\item $V$ is \emph{well inside} $U$, written $V\subset\subset U$, if there is $G\in\mathcal{O}(X)$ such that $V\cap G = \emptyset$ and $U\cup G = X$.
+\item $V$ is \emph{way below} $U$, written $U\ll V$, if for every directed $D:\mathcal{O}(X)\to\Prop$, $U\leq\sup D$ implies that there is $W\in D$ with $V\leq W$.
+\end{enumerate}
+Then $X$ is regular (locally compact) if every $U$ is the sup of the $V$ that are well inside (way below) it.
 \end{definition}
 
-\begin{proposition}\label{prop.unique_NCV_on_prop}
-Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique NCV on $\Prop$. 
-\end{proposition}
-\begin{proof}
-Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q$ is a basis element then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so $Q\in T$.
+Since these definitions make sense constructively, we can apply them to internal locales.
 
-Next suppose $Q$ is of the form $Q=Q_1\vee Q_2$ for $Q_1,Q_2\in T$. It is not hard to show that $i(Q_1\vee Q_2)=\max(i(Q_1),i(Q_2))$ and $i(Q_1\wedge Q_2)=\min(i(Q_1),i(Q_2))$ by definition of $i$. Thus
-\begin{align*}
-	i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)
-	&\leq\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)\\
-	&\leq \mu(Q_1\vee Q_2)+\mu(Q_1\wedge Q_2)\\
-	&=\mu(Q_1)+\mu(Q_2)\\
-	&=i(Q_1)+i(Q_2)
-\end{align*}
-Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$, so we have shown $Q\in T$. The argument that $(Q_1\wedge Q_2)\in T$ is similar: just replace $\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)$ with $i(Q_1\vee Q_2)+\mu(Q_1\wedge Q_2)$ in the argument above.
-
-Since every join can be decomposed into a directed join of finite joins, by assumption an arbitrary proposition $P:\Prop$ is a directed join of elements in $T$. Thus it suffices to show that $T$ is closed under directed joins, but this is clear: if $(Q_d)_{d\in D}$ is a directed system where $Q_d\in T$ for all $d$ then
-\[\mu(\sup_{d\in D}Q_d)=\sup_{d\in D}\mu(Q_d)=\sup_{d\in D} i(Q_d)=i(\sup_{d\in D}Q_d).\qedhere\]
-\end{proof}
-
-\begin{example}
-The assumption that $\cat{E}$ is regularly based is necessary. For example, consider the topological space where $\NN$ is the set of points and a subset $U\ss\NN$ is open $U\in \Op$ iff it is either empty or cofinite. This space is not regularly-based because the only regular opens are $\emptyset$ and $\NN$; for any other $U$, we have $\neg\neg U=\NN$. Consider the function $\mu\colon\Op\to\LR$ given by
-\[\mu(U)=\begin{cases}0&\tn{ if }U=\emptyset\\1&\tn{ if }U\neq\emptyset\end{cases}\]
-Then $\mu$ is monotonic, normalized, and commutes with directed joins. It satisfies inclusion exclusion because (three out of four cases are clear and) the intersection of cofinite sets is cofinite, and in particular nonempty.
-\end{example}
-
-\begin{remark}
-In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
-
-It is not hard to show however that any regular space is regularly-based in our sense.
-\end{remark}
-
-For $B$ a space, we denote by $CB$ is set of compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$.
-
-\begin{proposition}
-If $B$ is any space, then $CB$ is regularly-based.
-\end{proposition}
-
-\begin{proof}
-The basic opens in $IB$ are given by the opens $U\subseteq B$, where the associated open in $IB$ contains all those compacts $K\subseteq B$ with $K\subseteq U$. We first show that the closure of this open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V$ is such that $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$ since points are closed.
-
-Next, we show that the interior of the above closure is $\downarrow U$ again. We need to show that it is not larger; so suppose that $K$ is a point in the interior. This means that there is an open $V$ such that every $K' \subseteq V$ is in the closure, or equivalently $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
-
-Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
-\end{proof}
-
-\paragraph{May 8}
-All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finite limit preservation ensures that the $F$-image of a category object is a category object, and similarly for functors. But once you have that, the idea is to construct the unit and counit and see that they're preserved. Write down the diagram
+So the well-inside relation corresponds to the subobject of $\mathcal{O}(X)\times\mathcal{O}(X)$ that is the projection of the subobject
 \[
-\begin{tikzcd}
-	\Ob(C)\ar[drr, bend left, "RL"]\ar[ddr, bend right, equal]\ar[dr, "\eta"]\\
-	&\Mor(C)\ar[r, "cod"]\ar[d, "dom"]&\Ob(C)\\
-	&\Ob(C)
-\end{tikzcd}
+	\{ \: (V,G,U) \:|\: V\wedge G = \emptyset, \; U\vee G = X \: \} \quad \subseteq \quad \mathcal{O}(X)\times\mathcal{O}(X)\times\mathcal{O}(X)
 \]
-and similarly for $\epsilon$, and assert the triangle identities; all of this structure will be preserved by $F$.
+to the first and third factor, and this subobject itself is an equalizer. Since $f^*$ preserves monos and epis, it also preserves image factorizations and therefore pushforwards of subobjects, such as this pushforward along the product projection. Hence the well-inside relation on $f^*(\mathcal{O}(X))$ coincides with $f^*(\subset\subset)$.
+
+Regularity means that upon exponentiating the first factor in $\classify{\subset\subset} : \mathcal{O}(X)\times\mathcal{O}(X)\to\Prop'$ to $\mathcal{O}(X)\to\Prop'^{\mathcal{O}(X)}$ and composing with $\sup$, one obtains $1_{\mathcal{O}(X)}$. Again since $f^*$ is logical and $f^*(\sup)$ is the sup map of $f^*(\mathcal{O}(X))$, we can conclude that $f^*(\mathcal{O}(X))$ is regular is well.
+
+In order to make the same argument for local compactness, we show similarly that $f^*(\ll)$ is the way-below relation on $f^*(\mathcal{O}(X))$. By similar reasoning as for well-inside, we obtain that $\const{Drct}(f^*(\mathcal{O}(X))) = f^*(\const{Drct}(\mathcal{O}(X)))$.
 
 \section{$f_*$ preserves internal locales and frames?}\label{sec.preserve_loc_frame}
+
+\todo[inline]{Probably more correct discussion from the meeting:}
+
 We want to understand why $f_*$ preserves internal locales---the proof in Johnstone is opaque---and similarly for internal frames. An internal poset $A$ has all sups if it is equipped with an adjunction
 \[
 \begin{tikzcd}
@@ -956,134 +1079,6 @@ We believe that direct image functors $f_*$ preserve the internal structures of 
 \end{tikzcd}
 \]
 
-\section{The valuations profunctor}
-
-If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (NCVs) as a profunctor
-\[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
-In other words, one can precompose an NCV with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
-
-The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
-\begin{equation}\label{eqn.direct_image_valuations}
-\begin{tikzcd}
-	\Fun{Frm}(\cat{E})\ar[r, tick, "V_{\cat{E}}"]\ar[d, "\Fun{Frm}(f_*)"']&\Fun{SMonDCPO}(\cat{E})\ar[d, "\Fun{SMonDCPO}(f_*)"]\\
-	\Fun{Frm}(\cat{E}')\ar[r, tick, "V_{\cat{E}'}"']&\Fun{SMonDCPO}(\cat{E}')\ar[ul, phantom, "?\Downarrow"]
-\end{tikzcd}
-\end{equation}
-where the functors on the left and right were (hopefully) established in \cref{sec.preserve_loc_frame}. Intuitively, given a valuation $\mu\colon F\to R$ upstairs, we want to define a valuation $\mu'\colon f_*F\to f_*R$ downstairs. There is an obvious candidate, namely $\mu'\coloneqq f_*\mu$. The question is whether this preserves the various structures.
-
-It should be obvious that $\mu'$ is monotonic. We believe that $\mu'$ will commute with directed joins by the work in \cref{sec.preserve_loc_frame}. Both the top and bottom element of an internal frame can be characterized by an equational theory, so they should be preserved by left-exact functors such as $f_*$. It remains to show that $\mu'$ satisfies inclusion-exclusion.
-
-To begin with, we need to know that $f_*$ commutes with binary joins; but what does this mean? We want to define binary joins equationally on a frame $F$ as $\vee\colon F\times F\to F$, and then ask that $f_*(\vee_F)=\vee_{f_*F}$, but then the question becomes ``in what sense is the binary join operation the same as the actual binary join?'' In other words, what if we're only preserving a structure, not the universal property it is supposed to satisfy?
-
-For any pair of objects $A^B$ in a topos there is a map $\im\colon A^B\to\Prop^A$, that ``sends a map to its image''. Namely, use the predicate $I\colon A\times A^B\to\Prop$ given by $I(a,f)=\exists(b:B)\ldotp f(b)=a$. Thus we get a diagram, and the above questions are whether it commutes:
-\[
-\begin{tikzcd}
-	F\times F\ar[d, equal]\ar[r, "\vee"]&F\\
-	F^{1+1}\ar[r, "I"']&\Prop^F\ar[u, "\bigvee"']\ar[ul, phantom, "?"]
-\end{tikzcd}
-\]
-The goal then is to encode the universal property itself in an equational way. Take the graph of the function $\vee\colon F\times F\to F$ and call it $G(\vee)\ss F\times F\times F$. There are two equations that characterize it as the graph of a function, so we know that $f_*$ will send it to the graph of a function, which must again be $f_*(\vee_F)$. We want to characterize its universal property. We thought it is roughly the following:
-\[
-\begin{tikzcd}
-	\{w,x,y,z:F\mid x\leq z, y\leq z, w=x\vee y\}\ar[r]\ar[d]\ar[dd, shift right=40pt, bend right=60pt, dotted]
-	&\{w,x,y,z:F\mid (x,y,w)\in G(\vee)\}\ar[d]\\
-	\{w,x,y,z:F\mid x\leq z, y\leq z\}\ar[r]&\{w,x,y,z:F\}\ar[ul, phantom, very near end, "\lrcorner"]\ar[d]\\
-	\{w,z\mid w\leq z\}\ar[r]&\{w,z:F\}
-\end{tikzcd}
-\]
-
-Now we have that the direct image map $f_*$ preserves everything that's equationally defined, so we are willing to bet on the following.
-\begin{proposition}
-A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the sense that it induces a 2-cell as shown in \cref{eqn.direct_image_valuations}.
-\end{proposition}
-
-\section{Conjecture}
-
-\begin{conjecture}\label{conj.may8}
-Let $B$ be a ``nice'' compact space, $CB$ its space of compacts. Let $p\colon X\to CB$ be ``nice'', and consider the internal topological space $(\Gamma(p),p_*\Omega_X)$ in $\Shv(CB)$. Then there is a bijection
-\begin{multline*}
-  \{\tn{internal NCVs } \mu\colon p_*\Omega_X\to\tLR\}
-	\cong\\
-	\{\tn{external NCVs } \mu'\colon(\Gamma(p),\tn{ compact-open top})\to\LR\}
-\end{multline*}
-\end{conjecture}
-
-One special case is when $p$ has no global sections, so that the external set is empty. An even more special case is when $p$ is the inclusion of an open set, and here the conjecture is true.
-
-\begin{proposition}
-\cref{conj.may8} holds in the case that $p\colon U\ss CB$ is the inclusion of an open set.
-\end{proposition}
-\begin{proof}
-If $U=CB$ then there is exactly one section, so there is exactly one external valuation, and the result follows from \cref{prop.unique_NCV_on_prop}.
-
-So suppose that $U\neq CB$. Then there are no external NCVs because the set $\Gamma(p)$ is empty. We suppose for contradiction that $\mu\colon p_*\Omega_U\to\tLR$ is an internal valuation. Then composing with the unique internal frame homomorphism $!\colon\Prop\to p_*\Omega_U$, we have an internal valuation $\mu\circ !$ on $\Prop$. By \cref{prop.unique_NCV_on_prop}, we have $\mu\circ!=i$, where $i\colon\Prop\to\tLR$ is the indicator function.
-
-Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
-\end{proof}
-
-
-
-
-
-
-\newpage
-
-\appendix
-
-\chapter{Another (less satisfactory) attempt}
-
-Tobias: I'm not sure if this is going in the right direction. My idea was that we'd have a sheaf $\tRR_{\EE}$ in which expectation values land, such that a section over $(a,b)$ is either an arbitrary function $\II(a,b)\to\II\RR$, or more specifically such a function which in addition takes maximal elements to maximal elements.
-
-The things that we want to take expectation values of should be \emph{observables} on $X$. In the sheaf of observables, a section over $(a,b)$ should be a function $f:\prod_{(c,d)\subseteq(a,b)} X(c,d)\to\II\RR$ which is suitably monotone, i.e.~such that $(c,d)\sqsupseteq(c',d')$ implies $f(c,d)\sqsupseteq f(c',d')$.
-
-Then taking expectation values should be an internal function $X\to $
-
-\chapter{Riesz approach}
-
-\todo[inline]{T: I now think that the valuations approach is superior, so this got relegated to the appendix}
-
-One idea is to follow the spirit of the Riesz representation theorem (reference?). We could try to define a measure on a type $X$ to be a positive linear functional on the type $(X\to\tRR)$. However, there is a semantic problem with this idea, namely the Dedekind reals $\tRR$ are constant, so the value of a sheaf homomorphism $X\to\tRR$ on a section $x$ must remain constant as we restrict $x$. This is too strong.
-
-One possibility is to replace $\tRR$ with $\tRRat{[d,u]}$ in the above formulation, where $d\leq u$ are elements of $\tRR$.%
-\footnote{
-It is shown in \cite[Prop 7.9]{Schultz.Spivak:2017a} that there is an isomorphism $\tRRat{[d,u]}\cong\tRR_{\AtInline{[d,u]}}$.
-}
-The semantics of the sheaf $\tRRat{[d,u]}$ are as follows. For any interval $(a,b)\ss\RR$, if $a<d\leq u<b$ then $\RR\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ sections on intervals containing $[d,u]$ are constant reals. If $d\leq a$ or $b\leq u$, then $1\cong\church{\tRRat{[d,u]}}(a,b)$, i.e.\ on intervals missing either endpoint of $[d,u]$ there is exactly one section.
-
-The semantics of an internal function $f:X\to\tRRat{[d,u]}$ is that of a function $\church{X}_{[d,u]}\to\RR$ from the stalk of $X$ at $[d,u]$ to $\RR$. This seems to be what Tobias wanted.
-
-For any $d\leq d'\leq u'\leq u$ and any $P:\Prop$, we have $\See{[d',u']}P\imp\See{[d,u]}P$. This induces a morphism
-\begin{equation}
-\label{Rlocalize}
-	\See{[d,u]}:\tRRat{[d',u']}\to\tRRat{[d,u]}.
-\end{equation}
-
-\begin{definition}
-Let $X$ be a type. For $d,u\in\tRR$, a \emph{measure on $X$ at $[d,u]$} is defined to be a function $\mu:(X\to\tRRat{[d,u]})\to\tRRat{[d,u]}$%
-\footnote{
-I guess we want to consider continuous maps from a locale $X$ to the locale of opens in $\tRRat{[d,u]}$?
-}
-satisfying the following properties:
-\begin{enumerate}
-	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
-	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.%
-	\footnote{The notation $a\leq b$ here is shorthand for $(b<a)\imp\At{[d,u]}\bot$. The correct notation is $a\leq_{\AtInline{[d,u]}}b$, but this is a bit heavy.
-	}
-\end{enumerate}
-Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$\todo{This quantifies over $u$ and $d$. So the modal operators $\See{[d,u]}$ are a family of functions $\Prop\to\Prop$ indexed internally by pairs $d\leq u$ from the (extended) Dedekind reals? Seems to be in line with TTT Sec 5.3},%
-\footnote{Thus $\mu$ is a dependent product type.}
-such that
-\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
-holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
-\end{definition}
-
-Here, $\See{[d,u]}f$ denotes the function obtained by composition of $f$ with~\eqref{Rlocalize}.
-
-$X\to\tRRat{[d,u]}$ can be interpreted as the type of \emph{observables} supported on the interval $[d,u]$. Concretely, a section of $\Church{X\to\tRRat{[d,u]}}$ over an interval $(a,b)$ which contains $[d,u]$ assigns to every section between $(a,b)$ and $[d,u]$ a real number, in such a way that it is compatible with restriction, which means that the number assigned to a section must be a function of its germ at $[d,u]$. Over an interval $(a,b)$ not containing $[d,u]$, this function type has exactly one section, and the compatibility conditions are trivial. In total, $\Church{X\to\tRRat{[d,u]}}$ is the constant sheaf given by the set of functions\footnote{where $\Church{X}[d,u]$ denotes the stalk.} $\Church{X}[d,u]\to\RR$ on $\downarrow [d,u]$, but looks like the terminal sheaf outside of that. For $f:X\to\tRRat{[d',u']}$, the new function $\See{[d,u]}f$ corresponds to the trivial extension of $f$ to $[d,u]$.
-
-Classically and in the case when $X$ is a sheaf on $\RR$, I'd expect these observables to be (up to continuity conditions) precisely all the random variables that are measurable with respect to the $\sigma$-algebra generated by the $X_t$ for $t\in [d,u]$.
-
-Thus a measure at $[d,u]$ assigns to every observable on $[d,u]$ a real number, which is exactly what we'd expect.
 
 \printbibliography
 
