@@ -567,7 +567,7 @@ If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
 \end{proposition}
 
 \begin{proof}
-The basic opens in $I\BaseSpace$ are given by the opens $U\subseteq \BaseSpace$, where the associated open in $I\BaseSpace$ contains all those compacts $K\subseteq \BaseSpace$ with $K\subseteq U$. We first show that the closure of this open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V$ is such that $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$ since points are closed.
+The basic opens in $C\BaseSpace$ are given by the opens $U\subseteq \BaseSpace$, where the associated open in $C\BaseSpace$ contains all those compacts $K\subseteq \BaseSpace$ with $K\subseteq U$. We first show that the closure of this open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V$ is such that $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$ since points are compact.
 
 Next, we show that the interior of the above closure is $\downarrow U$ again. We need to show that it is not larger; so suppose that $K$ is a point in the interior. This means that there is an open $V$ such that every $K' \subseteq V$ is in the closure, or equivalently $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
 
@@ -778,6 +778,9 @@ Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on po
 
 Here, we will investigate how NCV's on spaces of sections can be identified with stochastic processes in the conventional sense.
 
+\chapter{Open questions}
+
+Do NCV's internal to some topos $\cat{E}$ give rise to a probability monad?
 
 
 
