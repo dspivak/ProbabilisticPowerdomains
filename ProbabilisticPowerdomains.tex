@@ -543,7 +543,7 @@ For any nonnegative lower real $x:\tLR$, let $\bar{x}\coloneqq\min(x,1)$.
 Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
 \begin{enumerate}
 \item \[\mu(P\vee Q)=\ol{P\vee\mu(Q)}.\]
-\item \[\mu(P\wedge q) = \ol{P \wedge \mu(Q)}.\]
+\item \[\mu(P\wedge Q) = P \wedge \mu(Q).\]
 \end{enumerate}
 \end{proposition} 
 \begin{proof}
@@ -552,7 +552,13 @@ Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
 
 It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{lem.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
 For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_NCV_on_prop}, the left-hand side is just $P$.
-\item \todo{add this as per David's email from May 12}
+\item Using inclusion-exclusion, \cref{prop.unique_NCV_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals, $a,b:\tLR$, we have
+\begin{align*}
+	\mu(P\wedge Q)+\mu(P\vee Q)=\mu(P)+\mu(Q)
+	&=(P\vee\mu(Q))+(P\wedge\mu(Q))\\
+	&=\mu(P\vee Q)+(P\wedge\mu(Q)).
+\end{align*}
+Thus we are done by order-cancellativity \cref{lem.order_canc}.
 \end{enumerate}
 \end{proof}
 
@@ -653,6 +659,13 @@ where in the third step, we have applied to same inclusion-exclusion relation ag
 \end{proof}
 
 
+\begin{lemma}\label{lem.In_At_logic}
+If $K\ss U$ then $\In{U}P\imp\At{K}P$, for all $P$.
+\end{lemma}
+\begin{proof}
+If $K\ss U$ then $\At{K}U$, i.e.\ $(U\imp(\down K)^c)\imp(\down K)^c$. Thus if $U\imp P$ and $P\imp(\down K)^c$ then $(\down K)^c$.
+\end{proof}
+
 \begin{proposition}
 For all $K\subseteq U$ and $P\colon X\to\Prop$ we have
 \[\At{K}\mu(P)=\At{K}\mu(\In{U}P).\]
@@ -663,12 +676,46 @@ One direction is trivial. For any $q:\tQQ$ we have
 	\At{K}\mu(\In{U}P)(q)
 	&\imp\At{K}\In{U}\mu(\In{U}P)(q)\\
 	&=\At{K}\In{U}\mu(P)(q)&\text{\cref{prop.In_NCV}}\\
-	&\imp\At{K}\At{K}\mu(P)(q)&\text{\cite[Prop 5.39]{Schultz.Spivak:2017a}}\\	
+	&\imp\At{K}\At{K}\mu(P)(q)&\text{\cref{lem.In_At_logic}}\\	
 	&=\At{K}\mu(P)(q).
 \end{align*}
 \end{proof}
 
 Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\downarrow K)^c = \top$.
+
+We say that $U$ is coprime if it satisfies the following for all $P,Q$:
+\[(U\imp (P\vee Q))\iff((U\imp P)\vee(U\imp Q)).\]
+The interval domain $\IR$ has a basis $\upclose[d',u']$ of coprime opens. 
+
+In the interval domain, the following proposition applies for $U=\upclose[d',u']$ and $K=[d,u]$ in case $d'\leq u$ and $d\leq u'$, i.e.\ in case the intervals $[d,u]$ and $[d',u']$ have nontrivial intersection. In that case $\In{U}\bot\imp\See{K}\bot$.
+
+\begin{proposition}
+Let $P$ be a decidable proposition, and suppose $U$ is coprime. If $U^c\ss\down K$, then
+\[\See{K}\mu(P)=\See{K}\mu(\In{U}P)\]
+and similarly, $\At{K}\mu(P)=\At{K}\mu(\In{U}P)$.
+\end{proposition}
+\begin{proof}
+We begin with the $\See{K}$ case. By assumption, we have $\In{U}\bot\imp\See{K}\bot$.
+
+For any $P$ we have $\See{K}\mu(P)\leq \See{K}\mu(\In{U}P)$, and a similar inequality for $\neg P$. The following shows that the sum of these inequalities is an equality, completing the proof in the $\See{}$ case:
+\begin{align*}
+	\See{K}(1)
+	&=\See{K}\mu(P\vee\neg P)&P\text{ decidable}\\
+	&=\See{K}\mu(P)+\See{K}\mu(\neg P)&\text{incl-excl}\\
+	&\leq\See{K}\mu(\In{U}P)+\See{K}\mu(\In{U}\neg P)&\text{modality}\\
+	&=\See{K}\mu(\In{U}\bot)+\See{K}\mu(\In{U}P\vee\In{U}\neg P)&\text{incl-excl}\\
+	&=\See{K}\mu(\In{U}\bot)+\See{K}(1)&\text{$U$ is coprime}\\
+	&\leq\See{K}\mu(\See{K}\bot)+\See{K}(1)&\text{assumption}\\
+	&=\See{K}\mu(\bot)+\See{K}(1)=\See{K}(1)&\text{\cref{thm.logical_reformulation}}
+\end{align*}
+Since $\See{K}\bot=\At{K}\bot$, we again have $\In{U}\bot\imp\At{K}\bot$. We repeat the above reasoning---mutatis mutandis---for the $\At{K}$-case, i.e.\ simply replacing $\See{}$ with $\At{}$ everywhere.
+\end{proof}
+
+
+
+
+
+
 
 \chapter{Semantics of valuations on spaces of compacts}
 
