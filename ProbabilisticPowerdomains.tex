@@ -431,9 +431,9 @@ A valuation is a \emph{probability valuation} if $\mu(X) = 1$.
 
 \section{The valuations profunctor}
 
-If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (NCVs) as a profunctor
+If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (probability valuations) as a profunctor
 \[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
-In other words, one can precompose an NCV with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
+In other words, one can precompose a probability valuation with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
 
 The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
 \begin{equation}\label{eqn.direct_image_valuations}
@@ -489,18 +489,18 @@ It is not hard to show however that any regular space is regularly-based in our 
 \section{Valuations on $\Prop$}
 
 Consider the function $i\colon\Prop\to\tLR$ defined as follows
-\[i(P)(q)\coloneqq(q<0)\vee((q<1)\vee P).\]
-We next show that it is a normalized continuous valuation (NCV). Later we will show that, under some conditions, it is unique such.
+\[i(P)(q)\coloneqq(q<0)\vee((q<1)\wedge P).\]
+We next show that it is a probability valuation (probability valuation). Later we will show that, under some conditions, it is unique such.
 
 \begin{proposition}\label{prop.sandwich}
-The function $i\colon\Prop\to\tLR$ defined above is indeed an NCV on $\Prop$, and for any NCV $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
+The function $i\colon\Prop\to\tLR$ defined above is indeed a probability valuation on $\Prop$, and for any probability valuation $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
 \end{proposition}
 \begin{proof}[Sketch]
-It's not hard to show that $i$ is an NCV. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
+It's not hard to show that $i$ is a probability valuation. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
 \end{proof}
 
-\begin{proposition}\label{prop.unique_NCV_on_prop}
-Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique NCV on $\Prop$. 
+\begin{proposition}\label{prop.unique_probability_valuation_on_prop}
+Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$. 
 \end{proposition}
 \begin{proof}
 Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q = \neg\neg Q$, then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so that $Q\in T$.
@@ -529,7 +529,7 @@ Then $\mu$ is monotonic, normalized, and commutes with directed joins. It satisf
 \section{Interaction of valuations with modalities}
 
 The following holds for any open modality $\In{U}\coloneqq (U\imp -)$.
-\begin{proposition}\label{prop.In_NCV}
+\begin{proposition}\label{prop.In_probability_valuation}
 \[\In{U}\mu(\In{U}P)=\In{U}\mu(P).\]
 \end{proposition}
 Semantically, this is just naturality of $\mu$ as a morphism of sheaves.
@@ -551,8 +551,8 @@ Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
 \item The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
 
 It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{lem.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
-For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_NCV_on_prop}, the left-hand side is just $P$.
-\item Using inclusion-exclusion, \cref{prop.unique_NCV_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals, $a,b:\tLR$, we have
+For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_probability_valuation_on_prop}, the left-hand side is just $P$.
+\item Using inclusion-exclusion, \cref{prop.unique_probability_valuation_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals, $a,b:\tLR$, we have
 \begin{align*}
 	\mu(P\wedge Q)+\mu(P\vee Q)=\mu(P)+\mu(Q)
 	&=(P\vee\mu(Q))+(P\wedge\mu(Q))\\
@@ -582,7 +582,7 @@ Since forming the interior of the closure is an idempotent operation (correspond
 
 Therefore all of the results from the previous section apply here as well.
 
-If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K$, since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
+If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
 
 \todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
 
@@ -648,7 +648,7 @@ We have ; this and the fact that $\At{K}$ commutes with addition, are the only a
 Clearly $\mu(\At{K}P)\leq\At{K}\mu(\At{K}P)$ and $\mu(P\imp\At{K}\bot)\leq\At{K}\mu(P\imp\At{K}\bot)$. By inclusion-exclusion we have
 \[\mu(\At{K}P)+\mu(P\imp\At{K}\bot)=\mu(\At{K}\bot)+\mu(\top),\]
 where we have used $(\At{K}P\vee(P\imp\At{K}\bot)) = \top$ for the second term on the right-hand side.
-Since $\At{K}\bot$ is a constant predicate, we have $\mu(\At{K}\bot)=i(\At{K}\bot)=\ol{\At{K}0}$, by \cref{prop.unique_NCV_on_prop}. Therefore we have 
+Since $\At{K}\bot$ is a constant predicate, we have $\mu(\At{K}\bot)=i(\At{K}\bot)=\ol{\At{K}0}$, by \cref{prop.unique_probability_valuation_on_prop}. Therefore we have 
 \begin{align*}
 	\ol{\At{K}0}+1
 	&=\mu(\At{K}P)+\mu(P\imp\At{K}\bot)\\
@@ -675,7 +675,7 @@ One direction is trivial. For any $q:\tQQ$ we have
 \begin{align*}
 	\At{K}\mu(\In{U}P)(q)
 	&\imp\At{K}\In{U}\mu(\In{U}P)(q)\\
-	&=\At{K}\In{U}\mu(P)(q)&\text{\cref{prop.In_NCV}}\\
+	&=\At{K}\In{U}\mu(P)(q)&\text{\cref{prop.In_probability_valuation}}\\
 	&\imp\At{K}\At{K}\mu(P)(q)&\text{\cref{lem.In_At_logic}}\\	
 	&=\At{K}\mu(P)(q).
 \end{align*}
@@ -687,30 +687,6 @@ We say that $U$ is coprime if it satisfies the following for all $P,Q$:
 \[(U\imp (P\vee Q))\iff((U\imp P)\vee(U\imp Q)).\]
 The interval domain $\IR$ has a basis $\upclose[d',u']$ of coprime opens. 
 
-In the interval domain, the following proposition applies for $U=\upclose[d',u']$ and $K=[d,u]$ in case $d'\leq u$ and $d\leq u'$, i.e.\ in case the intervals $[d,u]$ and $[d',u']$ have nontrivial intersection. In that case $\In{U}\bot\imp\See{K}\bot$.
-
-\begin{proposition}
-Let $P$ be a decidable predicate, and suppose $U$ is coprime. If $U^c\ss\down K$, then
-\[\See{K}\mu(P)=\See{K}\mu(\In{U}P)\]
-and similarly, $\At{K}\mu(P)=\At{K}\mu(\In{U}P)$.
-\end{proposition}
-\begin{proof}
-We begin with the $\See{K}$ case. By assumption, we have $\In{U}\bot\imp\See{K}\bot$.
-
-For any $P$ we have $\See{K}\mu(P)\leq \See{K}\mu(\In{U}P)$, and a similar inequality for $\neg P$. The following shows that the sum of these inequalities is an equality, completing the proof in the $\See{}$ case:
-\begin{align*}
-	\See{K}(1)
-	&=\See{K}\mu(P\vee\neg P)&P\text{ decidable}\\
-	&=\See{K}\mu(P)+\See{K}\mu(\neg P)&\text{incl-excl}\\
-	&\leq\See{K}\mu(\In{U}P)+\See{K}\mu(\In{U}\neg P)&\text{modality}\\
-	&=\See{K}\mu(\In{U}\bot)+\See{K}\mu(\In{U}P\vee\In{U}\neg P)&\text{incl-excl}\\
-	&=\See{K}\mu(\In{U}\bot)+\See{K}(1)&\text{$U$ is coprime}\\
-	&\leq\See{K}\mu(\See{K}\bot)+\See{K}(1)&\In{U}\bot\imp\See{K}\bot\\
-	&=\See{K}\mu(\bot)+\See{K}(1)=\See{K}(1)&\text{\cref{thm.logical_reformulation}}
-\end{align*}
-Since $\See{K}\bot=\At{K}\bot$, we again have $\In{U}\bot\imp\At{K}\bot$. We repeat the above reasoning---mutatis mutandis---for the $\At{K}$-case, i.e.\ simply replacing $\See{}$ with $\At{}$ everywhere.
-\end{proof}
-
 
 
 
@@ -719,11 +695,11 @@ Since $\See{K}\bot=\At{K}\bot$, we again have $\In{U}\bot\imp\At{K}\bot$. We rep
 
 \chapter{Semantics of valuations on spaces of compacts}
 
-While the results of the previous sections were completely internal, we now use them in order to analyze the semantics of NCV's in $\Shv(C\BaseSpace)$.
+While the results of the previous sections were completely internal, we now use them in order to analyze the semantics of probability valuation's in $\Shv(C\BaseSpace)$.
 
-An internal continuous normalized valuation $\mu\colon\Prop^X\to\tLR$ on $\cat{E}$ gives rise to an external monotonic map
+An internal probability valuation $\mu\colon\Prop^X\to\tLR$ on $\cat{E}$ gives rise to an external monotonic map
 \[|\mu|\colon\cat{E}(X,\Omega)\times\pt(\cat{E})\to\LR\]
-that is Scott continuous (at least in each variable) and an NCV for each point $a\in\pt(\cat{E})$.
+that is Scott continuous (at least in each variable) and a probability valuation for each point $a\in\pt(\cat{E})$.
 
 \todo[inline]{I don't see this at this level of generality. Are we trying to transport the valuation along $a^*$ here?}
 
@@ -753,7 +729,7 @@ We have now established the following:
 	&=\sup_{U\ni K}\mu(\In{U}P)(B)&\text{item 3}\\\nonumber
 	&\leq\sup_{U\ni K}\mu(\In{U}P)(K)&\text{increasing}\\\nonumber
 	&=\sup_{U\ni K}\In{U}\mu(\In{U}P)(K)&\text{item 3}\\\nonumber
-	&=\sup_{U\ni K}\In{U}\mu(P)(K)&\text{\cref{prop.In_NCV}}\\\nonumber
+	&=\sup_{U\ni K}\In{U}\mu(P)(K)&\text{\cref{prop.In_probability_valuation}}\\\nonumber
 	&=\mu(P)(K)&\text{item 3}
 \end{align}
 \end{proof}
@@ -801,9 +777,9 @@ The one issue above is ``internalizing the sup''. We think that works, but it's 
 \begin{conjecture}\label{conj.may8}
 Let $B$ be a ``nice'' compact space, $CB$ its space of compacts. Let $p\colon X\to CB$ be ``nice'', and consider the internal topological space $(\Gamma(p),p_*\Omega_X)$ in $\Shv(CB)$. Then there is a bijection
 \begin{multline*}
-  \{\tn{internal NCVs } \mu\colon p_*\Omega_X\to\tLR\}
+  \{\tn{internal probability valuations } \mu\colon p_*\Omega_X\to\tLR\}
 	\cong\\
-	\{\tn{external NCVs } \mu'\colon(\Gamma(p),\tn{ compact-open top})\to\LR\}
+	\{\tn{external probability valuations } \mu'\colon(\Gamma(p),\tn{ compact-open top})\to\LR\}
 \end{multline*}
 \end{conjecture}
 
@@ -813,9 +789,9 @@ One special case is when $p$ has no global sections, so that the external set is
 \cref{conj.may8} holds in the case that $p\colon U\ss CB$ is the inclusion of an open set.
 \end{proposition}
 \begin{proof}
-If $U=CB$ then there is exactly one section, so there is exactly one external valuation, and the result follows from \cref{prop.unique_NCV_on_prop}.
+If $U=CB$ then there is exactly one section, so there is exactly one external valuation, and the result follows from \cref{prop.unique_probability_valuation_on_prop}.
 
-So suppose that $U\neq CB$. Then there are no external NCVs because the set $\Gamma(p)$ is empty. We suppose for contradiction that $\mu\colon p_*\Omega_U\to\tLR$ is an internal valuation. Then composing with the unique internal frame homomorphism $!\colon\Prop\to p_*\Omega_U$, we have an internal valuation $\mu\circ !$ on $\Prop$. By \cref{prop.unique_NCV_on_prop}, we have $\mu\circ!=i$, where $i\colon\Prop\to\tLR$ is the indicator function.
+So suppose that $U\neq CB$. Then there are no external probability valuations because the set $\Gamma(p)$ is empty. We suppose for contradiction that $\mu\colon p_*\Omega_U\to\tLR$ is an internal valuation. Then composing with the unique internal frame homomorphism $!\colon\Prop\to p_*\Omega_U$, we have an internal valuation $\mu\circ !$ on $\Prop$. By \cref{prop.unique_probability_valuation_on_prop}, we have $\mu\circ!=i$, where $i\colon\Prop\to\tLR$ is the indicator function.
 
 Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
 \end{proof}
@@ -823,11 +799,11 @@ Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on po
 
 \chapter{Correspondence with stochastic processes}
 
-Here, we will investigate how NCV's on spaces of sections can be identified with stochastic processes in the conventional sense.
+Here, we will investigate how probability valuation's on spaces of sections can be identified with stochastic processes in the conventional sense.
 
 \chapter{Open questions}
 
-Do NCV's internal to some topos $\cat{E}$ give rise to a probability monad?
+Do probability valuations internal to some topos $\cat{E}$ give rise to a probability monad?
 
 
 
