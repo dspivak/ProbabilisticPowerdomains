@@ -690,7 +690,7 @@ The interval domain $\IR$ has a basis $\upclose[d',u']$ of coprime opens.
 In the interval domain, the following proposition applies for $U=\upclose[d',u']$ and $K=[d,u]$ in case $d'\leq u$ and $d\leq u'$, i.e.\ in case the intervals $[d,u]$ and $[d',u']$ have nontrivial intersection. In that case $\In{U}\bot\imp\See{K}\bot$.
 
 \begin{proposition}
-Let $P$ be a decidable proposition, and suppose $U$ is coprime. If $U^c\ss\down K$, then
+Let $P$ be a decidable predicate, and suppose $U$ is coprime. If $U^c\ss\down K$, then
 \[\See{K}\mu(P)=\See{K}\mu(\In{U}P)\]
 and similarly, $\At{K}\mu(P)=\At{K}\mu(\In{U}P)$.
 \end{proposition}
@@ -705,7 +705,7 @@ For any $P$ we have $\See{K}\mu(P)\leq \See{K}\mu(\In{U}P)$, and a similar inequ
 	&\leq\See{K}\mu(\In{U}P)+\See{K}\mu(\In{U}\neg P)&\text{modality}\\
 	&=\See{K}\mu(\In{U}\bot)+\See{K}\mu(\In{U}P\vee\In{U}\neg P)&\text{incl-excl}\\
 	&=\See{K}\mu(\In{U}\bot)+\See{K}(1)&\text{$U$ is coprime}\\
-	&\leq\See{K}\mu(\See{K}\bot)+\See{K}(1)&\text{assumption}\\
+	&\leq\See{K}\mu(\See{K}\bot)+\See{K}(1)&\In{U}\bot\imp\See{K}\bot\\
 	&=\See{K}\mu(\bot)+\See{K}(1)=\See{K}(1)&\text{\cref{thm.logical_reformulation}}
 \end{align*}
 Since $\See{K}\bot=\At{K}\bot$, we again have $\In{U}\bot\imp\At{K}\bot$. We repeat the above reasoning---mutatis mutandis---for the $\At{K}$-case, i.e.\ simply replacing $\See{}$ with $\At{}$ everywhere.
