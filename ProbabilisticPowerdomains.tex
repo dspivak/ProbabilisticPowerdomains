@@ -253,8 +253,6 @@ pdfencoding=unicode]{hyperref}
 
 \chapter{Introduction}
 
-\todo[inline]{T: I think that we should work in the topos of sheaves over an \emph{arbitrary} interval domain}
-
 \chapter{Preliminaries}
 
 \section{Internal posets}
@@ -407,6 +405,117 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 \todo{Locally compact spaces as continuous posets}
 
 \todo{Does at modality take locally compact spaces to locally compact spaces?}
+
+\chapter{The topos of sheaves on spaces of compacts}
+
+\section{Topological and domain-theoretic properties of $C\BaseSpace$}
+
+For $\BaseSpace$ a space, we denote by $C\BaseSpace$ is set of nonempty compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$. This is also known as the \emph{upper space} of $B$~\cite{Edalat:1995a}.
+
+\begin{proposition}
+If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
+\end{proposition}
+
+\begin{proof}
+The basic opens in $C\BaseSpace$ are given by the opens $U\subseteq \BaseSpace$, where the associated open in $C\BaseSpace$ contains all those compacts $K\subseteq \BaseSpace$ with $K\subseteq U$. We first show that the closure of this basic open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$, since any single point in $V\cap U$ is itself a nonempty compact set. This proves the first claim.
+
+Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
+
+Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
+\end{proof}
+
+Therefore all of the results from the previous section apply here as well.
+
+If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
+
+\todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
+
+From now on, we assume that we have these properties:
+
+\begin{axiom}
+$\BaseSpace$ is Hausdorff.
+\end{axiom}
+
+For any $K\in CB$, we write $\At{K} := ((- \imp (\downarrow K)^c) \imp (\downarrow K)^c)$ for the associated quasi-closed modality, where $(\downarrow K)^c$ is the (open) complement of $K$. Since $\downarrow K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
+
+\begin{lemma}\label{AtBoolean}
+For every $P : \Prop$,
+\[
+	\At{K} P \lor (P \imp \At{K} \bot)
+\]
+\end{lemma}
+
+Hence the topos of $\At{K}$-sheaves is Boolean.
+
+\todo[inline]{T: Is it necessarily a copy of Set? D: I'm not sure, but I think so. One proof strategy might be to show that any inclusion of locales factors uniquely as a dense map followed by a closed map, that the same is true for inclusions of toposes, and that the sheaves-functor from locales to toposes preserves that factorization system.}
+
+\begin{lemma}
+For $K\in C\BaseSpace$, the complement $(\downarrow K)^c$ of $\downarrow K$ is a prime open.
+\label{lem:prime}
+\end{lemma}
+
+\begin{proof}
+Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \downarrow K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \downarrow K = \emptyset$, as was to be shown.
+\end{proof}
+
+\begin{proposition}
+If $(S,\sqss)$ is a domain, then it has posite structure whose covering families are the way-up-closures.
+
+Suppose that these families are directed, i.e.\ that if $s\ll s'_1$ and $s\ll s'_2$ then there exists $s\ll s'$ with $s'\sqss s'_1$ and $s'\sqss s'_2$. Then the Kripke-Joyal semantics for $\vee$ degenerates: $s\Vdash\phi\vee\psi$ iff $s\Vdash\phi$ or $s\Vdash\psi$.
+\end{proposition}
+\begin{proof}
+The fact that $(S,\sqss)$ has the structure of a posite whose covering families are way-up closures is \cite[Remark 2.21]{Schultz.Spivak:2017a}.
+
+The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there exists a covering family $\{s_i\to s\}_{i\in I}$ such that $s_i\Vdash\phi$ or $s_i\Vdash\psi$ for each $i\in I$. Here we have only one covering family, namely $\{s'\mid s\ll s'\}$ for each $s$. Suppose that $\upclose s$ is filtered and that $s\Vdash\phi\vee\psi$. Arguing classically, if $s\not\Vdash\phi$ and $s\not\Vdash\psi$ then there is some $s'_1,s'_2\in\upclose s$ such that $s'_1\not\Vdash\phi$ and $s'_2\not\Vdash\psi$. Let $s\ll s'\sqss \{s_1,s_2\}$. Then by monotonicity $s'\not\Vdash\phi$ and $s'\not\Vdash\psi$, a contradiction.
+\end{proof}
+
+\begin{question}
+In a posite generated by a 
+\end{question}
+
+
+\section{Properties of modalities on $C\BaseSpace$}
+
+\begin{lemma}\label{lem:at_disjunction}
+For every $K\in C\BaseSpace$ and $P,Q : \Prop$, 
+\[
+	\At{K} ( P \vee Q ) \: \Leftrightarrow \: \At{K} P \vee \At{K} Q.
+\]
+\end{lemma}
+
+\begin{proof}
+The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\downarrow K)^c ) \imp (\downarrow K)^c$, or equivalently $((P \imp (\downarrow K)^c) \wedge (Q \imp (\downarrow K)^c)) \imp (\downarrow K)^c$. By \cref{lem:prime}, this means that one of $P \imp (\downarrow K)^c$ or $Q \imp (\downarrow K)^c$ implies $(\downarrow K)^c$, as was to be shown.
+\end{proof}
+
+\begin{definition}
+An object $X$ is \emph{flabby} if
+\[
+	\forall P : X\to\Prop \ldotp \forall U \ldotp (\In{U} \exists x. P(x) ) \imp \exists x. \In{U} P(x).
+\]
+\end{definition}
+
+Since the other implication is trivial, flabbiness thus means that the modalities $\In{U}$ commute with existential quantifiers.
+
+\begin{lemma}
+$\Prop$ is flabby.
+\end{lemma}
+
+\begin{proof}
+\todo[inline]{???}
+\end{proof}
+
+\begin{lemma}
+Let $X$ be flabby and $P : X \to \Prop$ a predicate. Then for all $K \in C\BaseSpace$,
+\[
+	\exists x\ldotp \At{K} P(x) \: \Leftrightarrow \: \At{K} \exists x\ldotp P(x).
+\]
+\end{lemma}
+
+\begin{proof}
+The nontrivial direction is from right to left.
+\todo[inline]{???}
+\end{proof}
+
 
 \chapter{Internal valuations}
 
@@ -565,62 +674,6 @@ Thus we are done by order-cancellativity \cref{lem.order_canc}.
 
 \chapter{Properties of internal valuations on spaces of compacts}
 
-\section{Spaces of compacts}
-
-For $\BaseSpace$ a space, we denote by $C\BaseSpace$ is set of nonempty compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$. This is also known as the \emph{upper space} of $B$~\cite{Edalat:1995a}.
-
-\begin{proposition}
-If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
-\end{proposition}
-
-\begin{proof}
-The basic opens in $C\BaseSpace$ are given by the opens $U\subseteq \BaseSpace$, where the associated open in $C\BaseSpace$ contains all those compacts $K\subseteq \BaseSpace$ with $K\subseteq U$. We first show that the closure of this basic open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$, since any single point in $V\cap U$ is itself a nonempty compact set. This proves the first claim.
-
-Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
-
-Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
-\end{proof}
-
-Therefore all of the results from the previous section apply here as well.
-
-If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
-
-\todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
-
-From now on, we assume that we have these properties:
-
-\begin{axiom}
-$\BaseSpace$ is Hausdorff.
-\end{axiom}
-
-For any $K\in CB$, we write $\At{K} := ((- \imp (\downarrow K)^c) \imp (\downarrow K)^c)$ for the associated quasi-closed modality, where $(\downarrow K)^c$ is the (open) complement of $K$. Since $\downarrow K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
-
-\begin{lemma}\label{AtBoolean}
-For every $P : \Prop$,
-\[
-	\At{K} P \lor (P \imp \At{K} \bot)
-\]
-\end{lemma}
-
-Hence the topos of $\At{K}$-sheaves is Boolean.
-
-\todo[inline]{T: Is it necessarily a copy of Set? D: I'm not sure, but I think so. One proof strategy might be to show that any inclusion of locales factors uniquely as a dense map followed by a closed map, that the same is true for inclusions of toposes, and that the sheaves-functor from locales to toposes preserves that factorization system.}
-
-\begin{proposition}
-If $(S,\sqss)$ is a domain, then it has posite structure whose covering families are the way-up-closures.
-
-Suppose that these families are directed, i.e.\ that if $s\ll s'_1$ and $s\ll s'_2$ then there exists $s\ll s'$ with $s'\sqss s'_1$ and $s'\sqss s'_2$. Then the Kripke-Joyal semantics for $\vee$ degenerates: $s\Vdash\phi\vee\psi$ iff $s\Vdash\phi$ or $s\Vdash\psi$.
-\end{proposition}
-\begin{proof}
-The fact that $(S,\sqss)$ has the structure of a posite whose covering families are way-up closures is \cite[Remark 2.21]{Schultz.Spivak:2017a}.
-
-The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there exists a covering family $\{s_i\to s\}_{i\in I}$ such that $s_i\Vdash\phi$ or $s_i\Vdash\psi$ for each $i\in I$. Here we have only one covering family, namely $\{s'\mid s\ll s'\}$ for each $s$. Suppose that $\upclose s$ is filtered and that $s\Vdash\phi\vee\psi$. Arguing classically, if $s\not\Vdash\phi$ and $s\not\Vdash\psi$ then there is some $s'_1,s'_2\in\upclose s$ such that $s'_1\not\Vdash\phi$ and $s'_2\not\Vdash\psi$. Let $s\ll s'\sqss \{s_1,s_2\}$. Then by monotonicity $s'\not\Vdash\phi$ and $s'\not\Vdash\psi$, a contradiction.
-\end{proof}
-
-\begin{question}
-In a posite generated by a 
-\end{question}
-
 \section{Properties of the lower reals}
 
 \begin{lemma}\label{enough_points_prop}
@@ -654,7 +707,7 @@ The lower reals are order-cancellative: if $a+b\leq a+c$ then $b\leq c$.
 
 \section{Interaction of valuations with modalities}
 
-\begin{proposition}
+\begin{proposition}\label{prop:double_at}
 Let $K\in C\BaseSpace$ be a point, let $X\in\Shv(C\BaseSpace)$, and let $\mu\colon\Prop^X\to\tLR$ be a valuation. Then for any $P \in \Prop^X$,
 \[\mu(\At{K}P)=\ol{\At{K}\mu(\At{K}P)}.\]
 \end{proposition}
@@ -719,87 +772,90 @@ that is Scott continuous (at least in each variable) and a probability valuation
 
 \todo[inline]{I don't see this at this level of generality. Are we trying to transport the valuation along $a^*$ here?}
 
-Consider the case where $\BaseSpace$ is a compact space, $C\BaseSpace$ is its space of compacts, and $\cat{E}=\Shv(C\BaseSpace)$. In this case, if $X\in\cat{E}$ is a sheaf, then evaluation at $\BaseSpace$ is the same thing as taking global sections, $X(\BaseSpace)\cong\Gamma(X)$; we denote it by $|X|$.
+Consider the case where $\BaseSpace$ is a compact space, $C\BaseSpace$ is its space of compacts, and $\cat{E}=\Shv(C\BaseSpace)$. In this case, if $X\in\cat{E}$ is a sheaf, then evaluation at $\BaseSpace$ is the same thing as taking global sections, $X(\BaseSpace)\cong\Gamma(X)$; we denote it by $|X|$. If $r\in\tLR$ is a lower real, then we also write $|r|$ for the associated lower semi-continuous function on $C\BaseSpace$. For example, we have $|\mu(\top)|(K) = 1$ by normalization for every $K\in C\BaseSpace$.
 
 \begin{lemma}\label{lemma.inequality_rand9865}
-Let $\cat{E}$ be as above. For any point $K\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+Let $\cat{E}$ be as above. For any point $K\in\pt(\cat{E})$ and predicate $P\colon X\to \Prop$, we have
 \[
-\sup_{U\ni K}|\mu(\At{B}\In{U}P)|\leq |\mu|(|P|)(K),
+\sup_{U\ni K} \At{\BaseSpace} \mu(\At{\BaseSpace}\In{U}P) \leq \At{\BaseSpace} \At{K} \mu(P),
 \]
 where $U$ ranges over all (basic) neighborhoods of $K$.
 \end{lemma}
 \begin{proof}
 The proof uses a few facts:
 \begin{enumerate}
-	\item The fact that $B$ is Scott-minimal is internally expressed as an equivalence of modalities, $\At{B}=\See{B}$.
-	\item $\See{B}\mu(P)=\mu(\See{B}P)$ by \cref{prop.valuations_OR}
-	\item for any $K\in U$, evaluating at $K$ we get $(\In{U}P)(K)=P(K)$ and $(\See{B}P)(K)=P(K)$.
+	\item The fact that $\BaseSpace$ is Scott-minimal is internally expressed as an equivalence of modalities, $\At{\BaseSpace}=\See{\BaseSpace}$.
+	\item $\See{\BaseSpace}\mu(P)=\mu(\See{\BaseSpace}P)$ by \cref{prop.valuations_OR}
+	\item If $K\in U$, then $\At{K}\In{U} = \At{K}$.
 \end{enumerate}
 We have now established the following:
 \begin{align}
 \nonumber
-	\sup_{U\ni K}|\mu(\At{B}\In{U}P)|
-	&\coloneqq\sup_{U\ni K}\mu(\At{B}\In{U}P)(B)\\
-	&=\sup_{U\ni K}\mu(\See{B}\In{U}P)(B)&\text{item 1}\\\nonumber
-	&=\sup_{U\ni K}\See{B}\mu(\In{U}P)(B)&\text{item 2}\\\nonumber
-	&=\sup_{U\ni K}\mu(\In{U}P)(B)&\text{item 3}\\\nonumber
-	&\leq\sup_{U\ni K}\mu(\In{U}P)(K)&\text{increasing}\\\nonumber
-	&=\sup_{U\ni K}\In{U}\mu(\In{U}P)(K)&\text{item 3}\\\nonumber
-	&=\sup_{U\ni K}\In{U}\mu(P)(K)&\text{\cref{prop.In_probability_valuation}}\\\nonumber
-	&=\mu(P)(K)&\text{item 3}
+	\sup_{U\ni K}\mu(\At{\BaseSpace}\In{U}P)
+	&=\sup_{U\ni K}\mu(\At{\BaseSpace}\In{U}P)&\text{\cref{prop:double_at}} \\\nonumber
+	&=\sup_{U\ni K}\mu(\See{\BaseSpace}\In{U}P)&\text{item 1}\\\nonumber
+	&=\sup_{U\ni K}\See{\BaseSpace}\mu(\In{U}P)&\text{item 2}\\\nonumber
+	&=\sup_{U\ni K}\At{\BaseSpace}\mu(\In{U}P)&\text{trivial}\\\nonumber
+	&\leq\sup_{U\ni K}\At{\BaseSpace}\At{K}\mu(\In{U}P)&\text{increasing}\\\nonumber
+	&=\sup_{U\ni K}\At{\BaseSpace}\At{K}\In{U}\mu(\In{U}P)&\text{item 3}\\\nonumber
+	&=\sup_{U\ni K}\At{\BaseSpace}\At{K}\In{U}\mu(P)&\text{\cref{prop.In_probability_valuation}}\\\nonumber
+	&=\At{\BaseSpace}\At{K}\mu(P)&\text{item 3}
 \end{align}
 \end{proof}
 
-We are ready to prove that this inequality is actually an equality. This shows that we can recover the action of $|\mu|$ on arbitrary global sections from its action on global sections of the very special $\At{B}$ form. The one caveat is that we need to ``internalize the sup''; we will point that out below.
+
+We are ready to prove that this inequality is actually an equality. This shows that we can recover the action of $\mu$ on arbitrary (global) predicates from its action on global sections of the very special $\At{B}$ form.
 
 \begin{theorem}\label{thm.discrete_internal_space}
-Let $\BaseSpace$ be a compact Hausdorff space, $C\BaseSpace$ is its space of compacts, and $\cat{E}=\Shv(C\BaseSpace)$. For any point $a\in\pt(\cat{E})$ and predicate $P:X\to\Prop$, we have
+Let $\BaseSpace$ be a compact Hausdorff space, $C\BaseSpace$ is its space of compacts, $X\in \Shv(C\BaseSpace)$ and $\mu : \Prop^X \to \tLR$ a probability valuation. For any predicate $P:X\to\Prop$ and $K\in C\BaseSpace$, we have
 \[
-|\mu|(|P|)(K) = \sup_{U\ni K}|\mu(\At{B}\In{U}P)|.
+\At{B} \At{K} \mu(P) = \sup_{U\ni K} \At{B} \mu(\At{B}\In{U}P).
 \]
 \end{theorem}
 \begin{proof}
-By \cref{lemma.inequality_rand9865}, we have $\sup_{U\ni K}|\mu(\At{B}\In{U}P)|\leq |\mu|(|P|)(K)$ for any $P$. \emph{Internalizing the sup} turns this into the inequality
-\[\big(\sup_{U\ni K}\mu(\In{U}P)\big)(B)\leq\big(\sup_{U\ni K}\mu(\In{U}P)\big)(K)\]
-where the sup on the right-hand side is over the constant family, and is equal to $|\mu(|P|)(K)$ \todo{More detail here}.
- 
-The (internalized) sup is just shorthand: $\sup_{U\ni K}X(U)\coloneqq \exists U\ldotp \At{K}U\wedge X(U)$. This is a directed sup, so by Scott continuity, we have equivalently
-\[\mu(\exists U\ldotp \At{K}U\wedge\In{U}P)(B)\leq\mu(\exists U\ldotp \At{K}U\wedge\In{U}P)(K).\]
-
-Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, then add them and use inclusion-exclusion.
-We obtain something of the form $\mu(X)(B) + \mu(Y)(B)\leq \mu(X)(K) + \mu(Y)(K)$, where
+Using \cref{lemma.inequality_rand9865} and replacing the right-hand side by a constant sup, we have the inequality
+\[
+	\sup_{U\ni K} \At{\BaseSpace} \mu(\At{\BaseSpace}\In{U}P) \leq \sup_{U\ni K} \At{\BaseSpace}\At{K} \mu(P).
+\]
+These are directed sups, so by Scott continuity, we have equivalently \todo{$\At{K}$ commutes with existential quantifiers?}
+\[
+	\At{\BaseSpace} \mu(\exists U\ldotp \At{K}U\wedge\In{U}P) \leq \At{\BaseSpace} \At{K} \mu(\exists U\ldotp \At{K}U\wedge\In{U}P).
+\]
+Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, and then add them and use inclusion-exclusion.
+We obtain something of the form $\At{\BaseSpace}\mu(X) + \At{\BaseSpace}\mu(Y) \leq \At{\BaseSpace}\At{K} \mu(X) + \At{\BaseSpace}\At{K} \mu(Y)$, where
 \begin{align*}
-	X\coloneqq(\exists U\ldotp \At{K}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{K}U\wedge\In{U}(P\imp\At{K}\bot)\big)\\
-	Y\coloneqq(\exists U\ldotp \At{K}U\wedge\In{U}P)\vee\big(\exists U\ldotp \At{K}U\wedge\In{U}(P\imp\At{K}\bot)\big)	
+	X\coloneqq(\exists U\ldotp \At{K}U\wedge\In{U}P)\wedge\big(\exists U\ldotp \At{K}U\wedge\In{U}(P\imp\At{K}\bot)\big), \\
+	Y\coloneqq(\exists U\ldotp \At{K}U\wedge\In{U}P)\vee\big(\exists U\ldotp \At{K}U\wedge\In{U}(P\imp\At{K}\bot)\big).	
 \end{align*}
-We will show that $Y=\top$ and that $X\imp\At{K}\bot$. This will complete the proof because $\mu(\At{K}\bot)(K)=\mu(\At{K}\bot)(B)=0$.
+We will show that $Y=\top$ and that $X\imp\At{K}\bot$. This will complete the proof because $\At{K}\mu(\At{K}\bot) = \At{B}\mu(\At{K}\bot) = 0$.
 
 First we show $X\imp\At{K}\bot$. We claim $X\imp\exists U\ldotp \At{K}U\wedge\In{U}(P\wedge P\imp\At{K}\bot)$; indeed, take $U$ to be the conjunction of the existentials from $X$ and use the fact that $\At{K}$ and $\In{U}$ commute with $\wedge$. From here we get $\exists U\ldotp\At{K}U\wedge\In{U}\At{K}\bot$. Since $\In{U}P$ means $U\imp P$, we obtain $\At{K}\bot$ by monotonicity of $\In{U}$ and idempotence of $\At{K}$.
 
 We now show $Y=\top$. By cases we have $\exists U\ldotp\At{K}U\wedge(\In{U}P\vee\In{U}(P\imp\At{K}\bot))\imp Y$. Thus to prove $Y$, it is enough to show that the following existential statement holds:
-\[\exists U\ldotp\At{a}U\wedge(\In{U}P\vee(P\imp\At{a}\bot)).\]
-By \cref{AtBoolean}, we have $\At{a}P\vee (P\imp\At{a}\bot)$. In the first case, take $U=P$ and the existential holds. In the second case, take $U$ to be any open for which $\At{a}U$ holds. This completes the proof.
+\[\exists U\ldotp\At{K}U\wedge(\In{U}P\vee(P\imp\At{K}\bot)).\]
+By \cref{AtBoolean}, we have $\At{K}P\vee (P\imp\At{K}\bot)$. In the first case, take $U=P$ and the existential holds. In the second case, take $U$ to be any open for which $\At{K}U$ holds. This completes the proof.
 \end{proof}
-
-\begin{remark}
-The one issue above is ``internalizing the sup''. We think that works, but it's not technically proven. The argument is basically that we can check the following external fact holds about points contained in opens:
-\[\big(K\in\church{\exists(U)\ldotp\At{K}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $K\in U$ and }K\in\church{\In{U}P}\big).\]
-\end{remark}
 
 
 \section{Main theorem: correspondence with external valuations}
 
 
-\begin{conjecture}\label{conj.may8}
-Let $B$ be a ``nice'' compact space, $CB$ its space of compacts. Let $p\colon X\to CB$ be ``nice'', and consider the internal topological space $(\Gamma(p),p_*\Omega_X)$ in $\Shv(CB)$. Then there is a bijection
+\begin{theorem}\label{conj.may8}
+Let $\BaseSpace$ be a compact Hausdorff space and $X\in\Shv(C\BaseSpace)$. Then there is a bijection
 \begin{multline*}
-  \{\tn{internal probability valuations } \mu\colon p_*\Omega_X\to\tLR\}
-	\cong\\
-	\{\tn{external probability valuations } \mu'\colon(\Gamma(p),\tn{ compact-open top})\to\LR\}
+  \{\tn{internal probability valuations } \mu\colon \Prop^X \to\tLR\}
+	\cong\\[4pt]
+	\{\tn{external probability valuations } \mu'\colon 2^{X(B)} \to\LR\}
 \end{multline*}
-\end{conjecture}
+\end{theorem}
 
-One special case is when $p$ has no global sections, so that the external set is empty. An even more special case is when $p$ is the inclusion of an open set, and here the conjecture is true.
+One special case is when $X$ has no global sections, so that the external set is empty. Another special case is \cref{prop.unique_probability_valuation_on_prop}, namely for $X = 1$ the terminal sheaf.
+
+The proof crucially relies on \cref{thm.discrete_internal_space}.
+
+\begin{proof}
+Starting with $\mu$ and given $S \subseteq X(B)$, the subsheaf of $S$ generated by $X$ is a global section of $\Prop^X$.
+\end{proof}
 
 \begin{proposition}
 \cref{conj.may8} holds in the case that $p\colon U\ss CB$ is the inclusion of an open set.
@@ -843,6 +899,13 @@ For any modality $j$, the type $\Prop_j$ is closed under infima. That is, for an
 \begin{proof}
 Assume $j\forall P\ldotp fP\imp P$, and move the $j$ inside the $\forall$ and the implication, to obtain $\forall P\ldotp fP\imp jP$. To prove $\forall(P:\Prop_j)\ldotp fP\imp P$, take any $P:\Prop_j$. Then we have $jP$ by assumption, which implies $P$ by $j$-closure.
 \end{proof}
+
+\section{Internalizing sups}
+ 
+The (internalized) sup is just shorthand: $\sup_{U\ni K}X(U)\coloneqq \exists U\ldotp \At{K}U\wedge X(U)$.
+
+One issue is ``internalizing the sup''. We think that works, but it's not technically proven. The argument is basically that we can check the following external fact holds about points contained in opens:
+\[\big(K\in\church{\exists(U)\ldotp\At{K}U\wedge\In{U}P}\big)\iff\big(\text{there exists $U$ such that $K\in U$ and }K\in\church{\In{U}P}\big).\]
 
 \section{Preservation of internal adjunctions}
 
