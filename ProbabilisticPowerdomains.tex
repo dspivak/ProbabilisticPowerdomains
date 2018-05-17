@@ -86,7 +86,10 @@ pdfencoding=unicode]{hyperref}
 \newtheorem{warning}[theorem]{Warning}
 \newtheorem{question}[theorem]{Question}
 
-\setcounter{axiom}{-1}
+% environment for soundness proofs
+\newenvironment{soundproof}{\begin{proof}[Soundness proof]}{\end{proof}}
+
+\setcounter{axiom}{0}
 
 % Renewed commands
 
@@ -406,7 +409,9 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 
 \todo{Does at modality take locally compact spaces to locally compact spaces?}
 
-\chapter{The topos of sheaves on spaces of compacts}
+\chapter{Axiomatics and soundness}
+
+\todo[inline]{Rewrite everything in here in the form of axioms together with soundness proofs?}
 
 \section{Topological and domain-theoretic properties of $C\BaseSpace$}
 
@@ -472,44 +477,66 @@ The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there ex
 
 \section{Properties of modalities on $C\BaseSpace$}
 
-\begin{lemma}\label{lem:at_disjunction}
+\begin{axiom}\label{lem:at_disjunction}
 For every $K\in C\BaseSpace$ and $P,Q : \Prop$, 
 \[
 	\At{K} ( P \vee Q ) \: \Leftrightarrow \: \At{K} P \vee \At{K} Q.
 \]
-\end{lemma}
+\end{axiom}
 
-\begin{proof}
+\begin{soundproof}
 The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\downarrow K)^c ) \imp (\downarrow K)^c$, or equivalently $((P \imp (\downarrow K)^c) \wedge (Q \imp (\downarrow K)^c)) \imp (\downarrow K)^c$. By \cref{lem:prime}, this means that one of $P \imp (\downarrow K)^c$ or $Q \imp (\downarrow K)^c$ implies $(\downarrow K)^c$, as was to be shown.
-\end{proof}
+\end{soundproof}
 
-\begin{definition}
-An object $X$ is \emph{flabby} if
+\begin{definition}\label{def:flabby}
+An object $X$ is \emph{flabby} if for every $P : X \to \Prop$,
 \[
-	\forall P : X\to\Prop \ldotp \forall U \ldotp (\In{U} \exists x. P(x) ) \imp \exists x. \In{U} P(x).
+	( \forall x,x' : X \ldotp P(x) \wedge P(x') \imp x = x') \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp P(x) .
 \]
 \end{definition}
-
-Since the other implication is trivial, flabbiness thus means that the modalities $\In{U}$ commute with existential quantifiers.
 
 \begin{lemma}
 $\Prop$ is flabby.
 \end{lemma}
 
 \begin{proof}
-\todo[inline]{???}
+Suppose that we have $P : \Prop \to \Prop$ that satisfies the subsingleton condition of \cref{def:flabby}. Then we claim that $P$ holds for $U := \forall V \ldotp P(V) \imp V$. Hence we need to show that if we have $W : \Prop$ with $P(W)$, then also $P(U)$.
+
+So it is enough to prove $U = W$. Assuming $U$, we get $P(W) \imp W$ as an instance of $U$, and therefore $W$. Assuming $W$, we derive $U$ by proving $P(V) \imp V$ for a given $V$. But since $P(V)$ and $P(W)$, we get $V = W$ by the assumed subsingleton condition, and therefore $V$, as was to be shown.
 \end{proof}
 
-\begin{lemma}
+Recall the semantics of $\At{K}$: we have $U \models \At{K} P$ if and only if there is $V\subseteq U$ with $K\in V$ and $W \models P$. The semantics of $\In{U}$ is that $V \models \In{U} P$ if and only if $U \cap V \models P$.
+
+\begin{axiom}\label{axiom:completely_prime}
+For every $P : \Prop \to \Prop$,
+\[
+	\At{K} \exists U\ldotp P(U) \wedge U \quad \imp \quad \exists U\ldotp (\In{U} P(U)) \wedge \At{K} U.
+\]
+\end{axiom}
+
+Roughly speaking, this expresses the fact that a point $K$ is a completely prime filter of opens in $C\BaseSpace$: if $K\in \bigvee_{U : P(U)} U$, then there is $U$ with $P(U)$ and $K\in U$.
+
+\begin{soundproof}
+    Suppose $W \models @_K \exists U. P(U) \wedge U$. Then either $K$ is not in $W$ or $K$ is in $W$.
+
+    If $K$ is not in $W$, then the claim follows by covering $W$ by itself, and $W \models (\In{\bot} P(\bot)) \wedge \At{K} \bot$, where both $W \models \In{\bot} P(\bot)$ and $W \models \At{K} \bot$ hold trivially.
+
+    Now assume $K$ is in $W$. Then the assumption says that there is some $W'\subseteq W$ with $K\in W'$ and $W' \models \exists U\ldotp P(U) \wedge U$. This means that there is a cover $(V_i\to W')$ together with $U_i\in\Prop(V_i)$ such that $V_i \models P(U_i) \wedge U_i$. But now we have $U_i \subseteq V_i$ as well as $V_i \subseteq U_i$, so that $U_i = V_i$, and therefore $V_i \models P(V_i)$. Since $V_i$ is a cover of $W'$, there exists some $k$ such that $K \in V_k$. We now show the claim $W \models \exists U. (\In{U} P(U)) \wedge \At{K} U$ by proving $W \models (\In{V_k} P(V_k)) \wedge \At{K} V_k$, corresponding to the trivial cover of $W$ by itself. But now $W \models \In{V_k} P(V_k)$ follows from $V_k \models P(V_k)$, and $W \models \At{K} V_k$ from $K\in V_k$.
+\end{soundproof}
+
+\begin{proposition}
 Let $X$ be flabby and $P : X \to \Prop$ a predicate. Then for all $K \in C\BaseSpace$,
 \[
 	\exists x\ldotp \At{K} P(x) \: \Leftrightarrow \: \At{K} \exists x\ldotp P(x).
 \]
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
-The nontrivial direction is from right to left.
-\todo[inline]{???}
+The nontrivial direction is from right to left, so assume $\At{K} \exists x\ldotp P(x)$. Then consider $Q : \Prop \to \Prop$ given by
+\[
+	Q(U) := \In{U} \exists S\subseteq P \ldotp (\forall s,s' : S\ldotp s = s') \wedge \At{K} \exists s : S.
+\]
+So in order to prove $\At{K} \exists U. Q(U) \wedge U$, we can assume $\exists x\ldotp P(x)$, and therefore take $S := (x = -)$, which witnesses $Q(\top) \wedge \top$. We therefore obtain $\exists U. Q(U) \wedge \At{K} U$ from \cref{axiom:completely_prime}.
 \end{proof}
 
 
