@@ -527,16 +527,13 @@ Roughly speaking, this expresses the fact that a point $K$ is a completely prime
 \begin{proposition}
 Let $X$ be flabby and $P : X \to \Prop$ a predicate. Then for all $K \in C\BaseSpace$,
 \[
-	\exists x\ldotp \At{K} P(x) \: \Leftrightarrow \: \At{K} \exists x\ldotp P(x).
+	\At{K} \exists x\ldotp P(x) \: \Leftrightarrow \: \exists x\ldotp \At{K} P(x).
 \]
 \end{proposition}
 
 \begin{proof}
-The nontrivial direction is from right to left, so assume $\At{K} \exists x\ldotp P(x)$. Then consider $Q : \Prop \to \Prop$ given by
-\[
-	Q(U) := \In{U} \exists S\subseteq P \ldotp (\forall s,s' : S\ldotp s = s') \wedge \At{K} \exists s : S.
-\]
-So in order to prove $\At{K} \exists U. Q(U) \wedge U$, we can assume $\exists x\ldotp P(x)$, and therefore take $S := (x = -)$, which witnesses $Q(\top) \wedge \top$. We therefore obtain $\exists U. Q(U) \wedge \At{K} U$ from \cref{axiom:completely_prime}.
+The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Then consider $Q : \Prop \to \Prop$ given by
+\todo[inline]{???}
 \end{proof}
 
 
