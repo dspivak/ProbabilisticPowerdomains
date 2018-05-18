@@ -510,15 +510,15 @@ Suppose that $X$ is such that
 \begin{equation}\label{eq:ourchoice}
 	\forall U : \Prop, P : \Prop^X . \left( \In{U} \exists x : X\ldotp P(x) \right) \: \imp \: \exists x : X \ldotp \In{U} P(x).
 \end{equation}
-Then $X$ is flabby. Conversely, if $X$ is flabby and satisfies choice, then \cref{ourchoice} holds.
+Then $X$ is flabby. Conversely, if $X$ is flabby and satisfies choice, then \cref{eq:ourchoice} holds.
 \end{proposition}
 
-\todo[inline]{If necessary, we can probably weaken ``satisfies choice'' to ``satisfies supports split''}
+\todo[inline]{If necessary, we can probably weaken ``satisfies choice'' to ``satisfies supports split (internally)''}
 
 \begin{proof}
 For the first claim, suppose that $P : X \to \Prop$ is subsingleton. Then applying \cref{eq:ourchoice} with $U \colon \exists x : X \ldotp P(x)$ directly results in the claim $\exists x : X\ldotp (\exists y : X\ldotp P(y)) \imp P(x)$.
 
-Conversely, let $X$ be flabby and satisfy choice, and let $P$ with $\In{U} \exists x : X. P(x)$ be given. Then the subobject $\{ x \mid P(x) \}$ still satisfies choice~\cite[Lemma D.4.5.9]{Johnstone:2002a}. Hence the canonical map $! : \{ x \mid P(x) \} \to 1$ splits, and we obtain a subsingleton $S : X\to\Prop$ satisfying $(\exists y : X\ldotp P(y)) \imp \exists x : X\ldotp S(x)$. Applying the flabbiness assumption to $S$ gives $x : X$ with $(\exists y : X\ldotp S(y)) \imp S(x)$. Using this $x$ in the consequent of \cref{eq:ourchoice} works, since we now know
+Conversely, let $X$ be flabby and satisfy choice, and let $P$ with $\In{U} \exists x : X. P(x)$ be given. Then the subobject $\{ x \mid P(x) \}$ still satisfies choice~\cite[Lemma D.4.5.9]{Johnstone:2002a}. Hence the eqic part of the image factorization $\{ x \mid P(x) \} \twoheadrightarrow \im(!) \hookrightarrow 1$ splits, and we obtain a subsingleton $S : X\to\Prop$ satisfying $(\exists y : X\ldotp P(y)) \imp \exists x : X\ldotp S(x)$. Applying the flabbiness assumption to $S$ gives $x : X$ with $(\exists y : X\ldotp S(y)) \imp S(x)$. Using this $x$ in the consequent of \cref{eq:ourchoice} works, since we now know
 \[
 	(\exists y : X\ldotp P(y)) \imp P(x),
 \]
