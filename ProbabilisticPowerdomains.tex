@@ -518,23 +518,31 @@ So it is enough to prove $U = W$. Assuming $U$, we get $P(W) \imp W$ as an insta
 
 \begin{proposition}\label{prop:flabbiness_equivalence}
 Suppose that $X$ is such that
-\begin{equation}\label{eq:ourchoice}
+\begin{equation}\label{eq:ourflabby}
 	\forall U : \Prop, P : \Prop^X . \left( \In{U} \exists x : X\ldotp P(x) \right) \: \imp \: \exists x : X \ldotp \In{U} P(x).
 \end{equation}
-Then $X$ is flabby. Conversely, if $X$ is flabby and satisfies choice, then \cref{eq:ourchoice} holds.
+Then $X$ is flabby. Conversely, if $X$ is flabby and satisfies choice, then \cref{eq:ourflabby} holds.
 \end{proposition}
 
 \todo[inline]{If necessary, we can probably weaken ``satisfies choice'' to ``satisfies supports split (internally)''}
 
 \begin{proof}
-For the first claim, suppose that $P : X \to \Prop$ is subsingleton. Then applying \cref{eq:ourchoice} with $U \colon \exists x : X \ldotp P(x)$ directly results in the claim $\exists x : X\ldotp (\exists y : X\ldotp P(y)) \imp P(x)$.
+For the first claim, suppose that $P : X \to \Prop$ is subsingleton. Then applying \cref{eq:ourflabby} with $U \colon \exists x : X \ldotp P(x)$ directly results in the claim $\exists x : X\ldotp (\exists y : X\ldotp P(y)) \imp P(x)$.
 
-Conversely, let $X$ be flabby and satisfy choice, and let $P$ with $\In{U} \exists x : X. P(x)$ be given. Then the subobject $\{ x \mid P(x) \}$ still satisfies choice~\cite[Lemma D.4.5.9]{Johnstone:2002a}. Hence the eqic part of the image factorization $\{ x \mid P(x) \} \twoheadrightarrow \im(!) \hookrightarrow 1$ splits, and we obtain a subsingleton $S : X\to\Prop$ satisfying $(\exists y : X\ldotp P(y)) \imp \exists x : X\ldotp S(x)$. Applying the flabbiness assumption to $S$ gives $x : X$ with $(\exists y : X\ldotp S(y)) \imp S(x)$. Using this $x$ in the consequent of \cref{eq:ourchoice} works, since we now know
+Conversely, let $X$ be flabby and satisfy choice, and let $P$ with $\In{U} \exists x : X. P(x)$ be given. Then the subobject $\{ x \mid P(x) \}$ still satisfies choice~\cite[Lemma D.4.5.9]{Johnstone:2002a}. Hence the eqic part of the image factorization $\{ x \mid P(x) \} \twoheadrightarrow \im(!) \hookrightarrow 1$ splits, and we obtain a subsingleton $S : X\to\Prop$ satisfying $(\exists y : X\ldotp P(y)) \imp \exists x : X\ldotp S(x)$. Applying the flabbiness assumption to $S$ gives $x : X$ with $(\exists y : X\ldotp S(y)) \imp S(x)$. Using this $x$ in the consequent of \cref{eq:ourflabby} works, since we now know
 \[
 	(\exists y : X\ldotp P(y)) \imp P(x),
 \]
 which remains valid after applying $\In{U}$ on both sides.
 \end{proof}
+
+\begin{example}
+In our old example of $\Shv(C\{a,b\})$, the object $X \coloneqq \Prop$ does not satisfy \eqref{eq:ourflabby}, as one can see by taking $U \coloneqq \{a,b\}$ and
+\[
+	P(x) := ((\{a\}\imp x) \vee (\{b\}\imp x)) \wedge \neg x.
+\]
+Then $C\{a,b\} \models \In{U} \exists x. P(x)$ since $\{a\} \models \neg \{b\}$ and $\{b\} \models \neg \{a\}$, but $C\{a,b\} \not\models \exists x\ldotp \In{U} P(x)$, since none of the choices for $x$ works.
+\end{example}
 
 Recall the semantics of $\At{K}$: we have $U \models \At{K} P$ if and only if $K \not\in W$, or there is $V\subseteq U$ with $K\in V$ and $W \models P$. The semantics of $\In{U}$ is that $V \models \In{U} P$ if and only if $U \cap V \models P$.
 
