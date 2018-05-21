@@ -592,16 +592,16 @@ The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldot
 \end{proof}
 
 \begin{lemma}
-Let $P : \Prop \to \Prop$ be a predicate such that $U\imp V$ implies $P(V) \imp P(U)$. Then
+Let $j$ be any modality and $P : \Prop \to \Prop$ a predicate such that $U\imp V$ implies $P(V) \imp P(U)$. Then
 \[
-	\At{K} \exists U\ldotp P(U) \: \Leftrightarrow \: \exists U\ldotp \At{K} P(U).
+	j \exists U\ldotp P(U) \: \Leftrightarrow \: \exists U\ldotp j P(U).
 \]
 \end{lemma}
 
 \begin{proof}
-The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$.
+The nontrivial direction is from left to right, so assume $j \exists U\ldotp P(U)$.
 
-We prove $\At{K} P(V)$ for $V \coloneqq \left( \forall W \ldotp P(W) \imp W \right)$. Thus we can even assume $\exists U\ldotp P(U)$. By definition, we have $V \imp U$ for any such $U$, and therefore $P(U) \imp P(V)$ by assumption. By the decidability of \cref{AtBoolean}, we can also assume $P(V) \imp \At{K} \bot$. Now $\At{K} \bot$ follows, since we have $P(U)$ and $P(U) \imp P(V)$ as well as $P(V) \imp \At{K} \bot$. This is enough to conclude $\At{K} P(V)$.
+We prove $j P(V)$ for $V \coloneqq \left( \forall W \ldotp P(W) \imp W \right)$. Thus we can even assume $\exists U\ldotp P(U)$. By definition of $V$ and the assumption $P(U)$, we have $V \imp U$ for any such $U$, and therefore $P(U) \imp P(V)$ by assumption. Now the claim follows from $P(U)$.
 \end{proof}
 
 
