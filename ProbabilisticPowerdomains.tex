@@ -592,7 +592,7 @@ The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldot
 \end{proof}
 
 \begin{lemma}
-Let $j$ be any modality and $P : \Prop \to \Prop$ a predicate such that $U\imp V$ implies $P(V) \imp P(U)$. Then
+Let $j$ be any modality and $P : \Prop \to \Prop$ a predicate such that $V\imp U$ implies $P(U) \imp jP(V)$. Then
 \[
 	j \exists U\ldotp P(U) \: \Leftrightarrow \: \exists U\ldotp j P(U).
 \]
@@ -601,7 +601,7 @@ Let $j$ be any modality and $P : \Prop \to \Prop$ a predicate such that $U\imp V
 \begin{proof}
 The nontrivial direction is from left to right, so assume $j \exists U\ldotp P(U)$.
 
-We prove $j P(V)$ for $V \coloneqq \left( \forall W \ldotp P(W) \imp W \right)$. Thus we can even assume $\exists U\ldotp P(U)$. By definition of $V$ and the assumption $P(U)$, we have $V \imp U$ for any such $U$, and therefore $P(U) \imp P(V)$ by assumption. Now the claim follows from $P(U)$.
+We prove $j P(V)$ for $V \coloneqq \left( \forall W \ldotp P(W) \imp W \right)$. Thus we can even assume $\exists U\ldotp P(U)$. By definition of $V$ and the assumption $P(U)$, we have $V \imp U$ for any such $U$, and therefore $P(U) \imp jP(V)$ by assumption. Now the claim follows from $P(U)$.
 \end{proof}
 
 
