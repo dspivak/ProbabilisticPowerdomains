@@ -527,7 +527,7 @@ Then $X$ is flabby. Conversely, if $X$ is flabby and satisfies choice, then \cre
 \todo[inline]{If necessary, we can probably weaken ``satisfies choice'' to ``satisfies supports split (internally)''}
 
 \begin{proof}
-For the first claim, suppose that $P : X \to \Prop$ is subsingleton. Then applying \cref{eq:ourflabby} with $U \colon \exists x : X \ldotp P(x)$ directly results in the claim $\exists x : X\ldotp (\exists y : X\ldotp P(y)) \imp P(x)$.
+For the first claim, suppose that $P : X \to \Prop$ is subsingleton. Then applying \cref{eq:ourflabby} with $U \coloneqq \exists x : X \ldotp P(x)$ directly results in the claim $\exists x : X\ldotp (\exists y : X\ldotp P(y)) \imp P(x)$.
 
 Conversely, let $X$ be flabby and satisfy choice, and let $P$ with $\In{U} \exists x : X. P(x)$ be given. Then the subobject $\{ x \mid P(x) \}$ still satisfies choice~\cite[Lemma D.4.5.9]{Johnstone:2002a}. Hence the eqic part of the image factorization $\{ x \mid P(x) \} \twoheadrightarrow \im(!) \hookrightarrow 1$ splits, and we obtain a subsingleton $S : X\to\Prop$ satisfying $(\exists y : X\ldotp P(y)) \imp \exists x : X\ldotp S(x)$. Applying the flabbiness assumption to $S$ gives $x : X$ with $(\exists y : X\ldotp S(y)) \imp S(x)$. Using this $x$ in the consequent of \cref{eq:ourflabby} works, since we now know
 \[
@@ -589,6 +589,19 @@ Let $X$ be a flabby choice object and $P : X \to \Prop$ a predicate. Then for al
 
 \begin{proof}
 The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Applying \cref{ax:attonghbhd} to $\exists x\ldotp P(x)$, we can assume $\exists U\ldotp \At{K} U \wedge \In{U} \exists x\ldotp P(x)$, since in the other case $\At{K}\bot$ we are done by inhabitedness of $X$, which follows from flabbiness. Thanks to \cref{prop:flabbiness_equivalence}, we even obtain $U$ such that $\At{K} U$ and $\exists x\ldotp \In{U} P(x)$. Choosing this $x$, we obtain $\At{K} P(x)$ from \cref{ax:atvsin}.
+\end{proof}
+
+\begin{lemma}
+Let $P : \Prop \to \Prop$ be a predicate such that $U\imp V$ implies $P(V) \imp P(U)$. Then
+\[
+	\At{K} \exists U\ldotp P(U) \: \Leftrightarrow \: \exists U\ldotp \At{K} P(U).
+\]
+\end{lemma}
+
+\begin{proof}
+The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$.
+
+We prove $\At{K} P(V)$ for $V \coloneqq \left( \forall W \ldotp P(W) \imp W \right)$. Thus we can even assume $\exists U\ldotp P(U)$. By definition, we have $V \imp U$ for any such $U$, and therefore $P(U) \imp P(V)$ by assumption. By the decidability of \cref{AtBoolean}, we can also assume $P(V) \imp \At{K} \bot$. Now $\At{K} \bot$ follows, since we have $P(U)$ and $P(U) \imp P(V)$ as well as $P(V) \imp \At{K} \bot$. This is enough to conclude $\At{K} P(V)$.
 \end{proof}
 
 
