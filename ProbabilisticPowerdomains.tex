@@ -181,6 +181,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Shv}{\Fun{Shv}}
 \newcommand{\Cont}{\Fun{Cont}}
 \newcommand{\Idl}{\Set{Idl}}
+\newcommand{\yoneda}{\Fun{y}}
 
 \newcommand{\Prop}{\const{Prop}}
 \newcommand{\Time}{\const{Time}}
@@ -452,7 +453,17 @@ For every $P : \Prop$,
 
 Hence the topos of $\At{K}$-sheaves is Boolean.
 
-\todo[inline]{T: Is it necessarily a copy of Set? D: I'm not sure, but I think so. One proof strategy might be to show that any inclusion of locales factors uniquely as a dense map followed by a closed map, that the same is true for inclusions of toposes, and that the sheaves-functor from locales to toposes preserves that factorization system.}
+\todo[inline]{T: Is it necessarily a copy of Set?}
+\begin{proposition}
+If $K$ is a point then the topos of sheaves for the associated modality $\At{K}$ is a copy of $\smset$.
+\end{proposition}
+\begin{proof}
+A subsheaf $X\inj Y$ is $\At{K}$-dense if for every open $U$ in $C\BaseSpace$, either $K\not\in U$ or for every section $y\in Y(U)$, there exists $V\ss U$ with $K\in V$ and $\restrict{y}{V}\in X$. Recall that $F$ is an $\At{K}$-sheaf iff $F\to 1$ is right-orthogonal to every $\At{K}$-dense map.
+
+Suppose $F$ is an $\At{K}$-sheaf; we will show that it is a skyscraper sheaf at $K$, i.e.\ there is a set $S$ such that for any open $U$, if $K\in U$ then $F(U)=S$ and if $K\not\in U$ then $F(U)=\{*\}$. Indeed let $S\coloneqq F(C\BaseSpace)$. For any $U$, if $K\in U$ then $\yoneda U\to\yoneda X$ is $\At{K}$-dense, and right-orthogonality means that the restriction map $F(X)\to F(U)$ is an iso. If $K\not\in U$ then $\emptyset\to\yoneda U$ is dense, and right-orthogonality means that $F(U)\to 1$ is an iso. Thus $F$ is the skyscraper on $S$.
+
+The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
+\end{proof}
 
 \begin{lemma}
 For $K\in C\BaseSpace$, the complement $(\downarrow K)^c$ of $\downarrow K$ is a prime open.
