@@ -453,7 +453,6 @@ For every $P : \Prop$,
 
 Hence the topos of $\At{K}$-sheaves is Boolean.
 
-\todo[inline]{T: Is it necessarily a copy of Set?}
 \begin{proposition}
 If $K$ is a point then the topos of sheaves for the associated modality $\At{K}$ is a copy of $\smset$.
 \end{proposition}
@@ -487,6 +486,18 @@ The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there ex
 
 
 \section{Properties of modalities on $C\BaseSpace$}
+
+\begin{lemma}
+If $X$ is inhabited and $P : X \to \Prop$ a predicate, then
+\[
+	\See{K} \exists x \colon X \ldotp P(x) \: \Leftrightarrow \: \exists x \colon X \ldotp \See{K} P(x).
+\]
+\label{lem:see_vs_exists}
+\end{lemma}
+
+\begin{proof}
+Using the definition $\See{K} = \At{K} \bot \vee -$, the implication from left to right is by case distinction and inhabitedness. The implication from right to left is likewise by cases.
+\end{proof}
 
 \begin{axiom}\label{ax:atvsin}
 For every $K\in C\BaseSpace$,
@@ -602,19 +613,18 @@ Let $X$ be a flabby choice object and $P : X \to \Prop$ a predicate. Then for al
 The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Applying \cref{ax:attonghbhd} to $\exists x\ldotp P(x)$, we can assume $\exists U\ldotp \At{K} U \wedge \In{U} \exists x\ldotp P(x)$, since in the other case $\At{K}\bot$ we are done by inhabitedness of $X$, which follows from flabbiness. Thanks to \cref{prop:flabbiness_equivalence}, we even obtain $U$ such that $\At{K} U$ and $\exists x\ldotp \In{U} P(x)$. Choosing this $x$, we obtain $\At{K} P(x)$ from \cref{ax:atvsin}.
 \end{proof}
 
-\begin{lemma}
-Let $j$ be any modality and $P : \Prop \to \Prop$ a predicate such that $V\imp U$ implies $P(U) \imp jP(V)$. Then
+\begin{axiom}
+For any $X$ and any $K\in C\BaseSpace$,
 \[
-	j \exists U\ldotp P(U) \: \Leftrightarrow \: \exists U\ldotp j P(U).
+	\At{K} \exists x : X \: \Rightarrow \: \At{K} \bot \vee \exists x : X.
 \]
-\end{lemma}
+\end{axiom}
 
-\begin{proof}
-The nontrivial direction is from left to right, so assume $j \exists U\ldotp P(U)$.
+In fact, since the implication from right to left is trivial, we even have an equivalence there; but as the axiom, we only need to postulate the nontrivial direction.
 
-We prove $j P(V)$ for $V \coloneqq \left( \forall W \ldotp P(W) \imp W \right)$. Thus we can even assume $\exists U\ldotp P(U)$. By definition of $V$ and the assumption $P(U)$, we have $V \imp U$ for any such $U$, and therefore $P(U) \imp jP(V)$ by assumption. Now the claim follows from $P(U)$.
-\end{proof}
-
+\begin{soundproof}
+Given $W \models \exists x : X$, we must have $V \subseteq W$ with $K \in V$ and $V \models \exists x : X$; this means that $V$ can be covered by sub-opens over which $X$ has local sections. One of these sub-opens, let us call it $U$, must contain $K$. 
+\end{soundproof}
 
 \chapter{Internal valuations}
 
@@ -912,14 +922,20 @@ Let $\BaseSpace$ be a compact Hausdorff space, $C\BaseSpace$ is its space of com
 \]
 \end{theorem}
 \begin{proof}
-Using \cref{lemma.inequality_rand9865} and replacing the right-hand side by a constant sup, we have the inequality
+Using \cref{lemma.inequality_rand9865} and inserting a constant sup, we have the inequality
 \[
-	\sup_{U\ni K} \At{\BaseSpace} \mu(\At{\BaseSpace}\In{U}P) \leq \sup_{U\ni K} \At{\BaseSpace}\At{K} \mu(P).
+	\At{\BaseSpace}\At{K} \sup_{U\ni K} \mu(P) \geq \sup_{U\ni K} \At{\BaseSpace} \mu(\At{\BaseSpace}\In{U}P) .
 \]
-These are directed sups, so by Scott continuity, we have equivalently \todo{$\At{K}$ commutes with existential quantifiers?}
+Thanks to \cref{lem:see_vs_exists}, the modality $\At{B} = \See{B}$ on the right-hand side commutes with the supremum. Thus by Scott continuity of $\mu$, we have equivalently
 \[
-	\At{\BaseSpace} \mu(\exists U\ldotp \At{K}U\wedge\In{U}P) \leq \At{\BaseSpace} \At{K} \mu(\exists U\ldotp \At{K}U\wedge\In{U}P).
+	\At{\BaseSpace} \At{K} \mu(\exists U\ldotp \At{K}U\wedge P) \geq \At{\BaseSpace} \mu(\exists U\ldotp \At{K}U\wedge \At{B}\In{U}P) .
 \]
+We now make the left-hand side (non-strictly) larger by replacing $P$ by $\In{U}P$, and similarly the right-hand side smaller by dropping one $\At{B}$ modality, resulting in
+\[
+	\At{\BaseSpace} \At{K} \mu(\exists U\ldotp \At{K}U\wedge\In{U}P) \geq \At{\BaseSpace} \mu(\exists U\ldotp \At{K}U\wedge\In{U}P) .
+\]
+In the following, we will prove that this inequality is actually an inequality. This forces the previous inequalities to hold with equality as well, finishing off the proof.
+
 Now we use one of our favorite tricks: we apply the above inequality to both $P$ and $P\imp\At{a}\bot$, and then add them and use inclusion-exclusion.
 We obtain something of the form $\At{\BaseSpace}\mu(X) + \At{\BaseSpace}\mu(Y) \leq \At{\BaseSpace}\At{K} \mu(X) + \At{\BaseSpace}\At{K} \mu(Y)$, where
 \begin{align*}
