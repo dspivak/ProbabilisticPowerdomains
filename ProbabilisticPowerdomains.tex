@@ -415,6 +415,42 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 
 \todo[inline]{Rewrite everything in here in the form of axioms together with soundness proofs?}
 
+\begin{axiom}\label{ax:enough_points}
+For every $P : \Prop$,
+\[
+	P \: \Leftrightarrow \: \forall K \ldotp \At{K} P.
+\]
+\end{axiom}
+
+\begin{lemma}
+For every $P : \Prop$,
+\[
+	P \: \Leftrightarrow \: \forall K \, \exists U : \Prop \ldotp \At{K} U \wedge \In{U} P.
+\]
+\label{lem:prop_to_opens}
+\end{lemma}
+
+\begin{proof}
+From left to right, we know $P$ and can therefore just take $U \coloneqq \top$ for any $K$. From right to left, it is enough to prove $\At{K} P$ for any given $P$ by Axiom~\ref{ax:enough_points}. By $\in{U}P$, we can conclude $\At{K} U \imp \At{K} P$ by monotonicity of $\At{K}$. But then we also have the assumption $\At{K} U$, so that the claim $\At{K} P$ follows.
+\end{proof}
+
+The following establishes the correspondence between propositions and opens internally:
+
+\begin{proposition}\label{prop:prop_as_opens}
+Transposing the canonical map $\At{} : C\BaseSpace \times \Prop \to \Prop$ to $\Prop \to \Prop^{C\BaseSpace}$ identifies $\Prop$ with those predicates $Q : C\BaseSpace \to \Prop$ which satisfy
+\[
+	\forall K \ldotp \left[ Q(K) \imp \exists U \colon \Prop \ldotp \At{K} U \wedge \forall K' \ldotp \At{K'} U \imp Q(K') \right].
+\]
+\end{proposition}
+
+\begin{proof}
+Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At{K} P$. To see that it has the required property, we therefore assume $\At{K} P$. Applying \cref{ax:atvsin}, we get $U$ with $\At{K} U$ and $U \imp P$. Now given $K'$ with $\At{K'} U$, we can conclude $\At{K'} P$ by monotonicity of $\At{K'}$.
+
+Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, by \cref{ax:enough_points}. Thus it remains to show that every $Q$ which has the required property comes from a proposition.
+
+Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lambda K \ldotp \At{K} P$. This boils down to showing $Q(K) = \At{K} \forall K' \ldotp Q(K')$ for every $K$. Assuming $Q(K)$, we get $U : \Prop$ with $\At{K} U$ and $\At{K'} U \imp Q(K')$ for every $K'$. So in order to prove $\At{K} \forall K' \ldotp Q(K')$, we can even assume $U$, which implies $\At{K'} U$ and therefore $Q(K')$, as was to be shown.
+\end{proof}
+
 \section{Topological and domain-theoretic properties of $C\BaseSpace$}
 
 For $\BaseSpace$ a space, we denote by $C\BaseSpace$ is set of nonempty compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$. This is also known as the \emph{upper space} of $B$~\cite{Edalat:1995a}.
@@ -981,7 +1017,11 @@ So suppose that we start with a given $\mu$. Then we construct $\mu'$ as follows
 
 \todo[inline]{Check that this has the required properties}
 
-For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, we put\todo{Here, I want to identify $\Prop$ with the frame of opens of $C\BaseSpace$ considered as an internal space. Does this make sense? If so, then it will have to be proven that this ``set'', in the sense of a predicate $C\BaseSpace\to\Prop$, actually corresponds to an open subobject and therefore to a proposition}
+For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, we consider the predicate $CB \to \Prop$ given by
+\[
+	K \mapsto \sup \mu'(\At{B} \In{U} P)(q).
+\]
+and claim that it comes 
 \[
 	\mu(P)(q) \coloneqq \left\{ K \:\Big|\: \sup_{U\ni K} \mu'(\At{B} \In{U} P)(q) \right\}. 
 \]
