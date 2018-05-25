@@ -646,7 +646,7 @@ Roughly speaking, this expresses the fact that a point $K$ is a completely prime
 
 The following generalizes Axiom 9 of TTT, and can be interpreted as stating that if $P$ holds at $K$, then it also holds in a neighborhood of $K$.
 
-\begin{axiom}\label{ax:attonghbhd}
+\begin{axiom}\label{ax:at_to_nghbhd}
 For every $P : \Prop$,
 \[
 	\At{K} P \: \imp \: \See{K} \exists U\ldotp \At{K} U \wedge \In{U} P.
@@ -669,7 +669,7 @@ Let $X$ be a flabby choice object and $P : X \to \Prop$ a predicate. Then for al
 \end{proposition}
 
 \begin{proof}
-The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Applying \cref{ax:attonghbhd} to $\exists x\ldotp P(x)$, we can assume $\exists U\ldotp \At{K} U \wedge \In{U} \exists x\ldotp P(x)$, since in the other case $\At{K}\bot$ we are done by inhabitedness of $X$, which follows from flabbiness. Thanks to \cref{prop:flabbiness_equivalence}, we even obtain $U$ such that $\At{K} U$ and $\exists x\ldotp \In{U} P(x)$. Choosing this $x$, we obtain $\At{K} P(x)$ from \cref{ax:atvsin}.
+The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Applying \cref{ax:at_to_nghbhd} to $\exists x\ldotp P(x)$, we can assume $\exists U\ldotp \At{K} U \wedge \In{U} \exists x\ldotp P(x)$, since in the other case $\At{K}\bot$ we are done by inhabitedness of $X$, which follows from flabbiness. Thanks to \cref{prop:flabbiness_equivalence}, we even obtain $U$ such that $\At{K} U$ and $\exists x\ldotp \In{U} P(x)$. Choosing this $x$, we obtain $\At{K} P(x)$ from \cref{ax:atvsin}.
 \end{proof}
 
 \begin{axiom}
@@ -1041,41 +1041,39 @@ So suppose that we start with a given $\mu$. Then we construct $\mu'$ as follows
 
 For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, for any $q\in \tQQ$ and $P : X\to \Prop$, we consider the predicate $CB \to \Prop$ given by
 \[
-	K \longmapsto \exists U \ldotp \At{K} U \wedge \mu'(\At{B} \In{U} P)(q),
+	K \longmapsto \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(\At{B} \In{U} P)(q)),
 \]
-and claim that it corresponds to a proposition via \cref{prop:prop_as_opens}. We thus need to check the openness condition of \cref{prop:prop_as_opens}. This means that we assume that the predicate holds on the given $K$, so that we have $U$ with $\At{K} U$ and $\mu'(\At{B} \In{U} P)(q)$. We then use this very $U$ in the openness condition. It then needs to be proven that $\At{K'} U$ implies that there is $U'$ with $\At{K'} U'$ and $\mu'(\At{B} \In{U'} P)(q)$; but then again we can take $U' \coloneqq U$, in which case there is nothing to prove. We thus conclude that the above predicate defines a proposition, and this is our $\mu(P)(q)$.
+and claim that it corresponds to a proposition via \cref{prop:prop_as_opens}. We thus need to check the openness condition of \cref{prop:prop_as_opens}. This means that we assume that the predicate holds on the given $K$, so that we have $U$ with $\At{K} U$ and $\mu'(\At{B} \In{U} P)(q)$. We then use this very $U$ in the openness condition. It then needs to be proven that $\At{K'} U$ implies that there is $U'$ with $\At{K'} U'$ and $\mu'(\At{B} \In{U'} P)(q)$; but then again we can take $U' \coloneqq U$, in which case there is nothing to prove. We thus conclude that the above predicate defines a proposition, and this is our $\mu(P)(q)$. Looking at the proof of \cref{prop:prop_as_opens}, we have concretely
+\[
+	\mu(P)(q) := \forall K \, \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(\At{B} \In{U} P)(q)).
+\]
 \todo[inline]{Check that this $\mu$ has the required properties}
 
 \todo[inline]{I'm switching back and forth between $\At{B}$ and $\See{B}$. Settle on one of them}
 
-We now verify that these two constructions are inverse of one another. A preliminary observation is that the embedding $\Prop \to \Prop^{C\BaseSpace}$ commutes with $\See{B}$ thanks to \cref{lem:at_vs_seeb},
-\[\begin{tikzcd}
-	\Prop \ar{r} \ar{d}{\See{B}} & \Prop^{C\BaseSpace} \ar{d}{\See{B}} \\
-	\Prop \ar{r} & \Prop^{C\BaseSpace}
-\end{tikzcd}\]
-Therefore when starting with $\mu'$, we can apply \cref{ax:enough_points}, so that we only need to prove that for all $\At{B}$-closed predicates $P$ and all $K$,
+We now verify that these two constructions are inverse of one another. When starting with $\mu'$, we need to prove that for all $\At{B}$-closed predicates $P$,
 \[
-	\At{K} \mu'(P)(q) = \See{B} \exists U \ldotp \At{K} U \wedge \mu'(\At{B} \In{U} P)(q).
+	\mu'(P)(q) = \forall K \, \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(\At{B} \In{U} P)(q)).
 \]
-But since $P$ is $\At{B}$-closed, we have $\In{U} P = \In{U} \At{B} P = \At{B} P = P$, so that the right-hand side is just $\See{B} \mu'(P)(q)$. Since $\mu'(P)(q)$ is $\See{B}$-closed by assumption, it is enough to show that it is also $\At{K}$-closed, 
+But since $P$ is $\At{B}$-closed, we have $\In{U} P = \In{U} \At{B} P = \At{B} P = P$. This reduces the problem to proving that
+\[
+	\mu'(P)(q) = \forall K \, \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(P)(q)).
+\]
+This in turn is equivalent to
+\[
+	\At{K} \mu'(P)(q) = \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(P)(q)),
+\]
+which follows from \cref{ax:at_to_nghbhd} upon using that $\mu'(P)(q)$ is $\At{B}$-closed.
 
-This is easy:
-\begin{align*}
-	\At{B} \left\{ K \:\Big|\: \sup_{U\ni K} \mu'(\At{B} \In{U} P)(q) \right\} & \\
-	= & \sup_{U\ni B} \mu'(\At{B} \In{U} P)(q) \\
-	= & \mu'(\At{B} \In{CB} P)(q) \\
-	= & \mu'(\At{B} P)(q) = \mu'(P)(q).
-\end{align*}
 Conversely, suppose that we start with $\mu$. Then we need to prove that for any $P : X \to \Prop$ and $q\in \tQQ$,
 \[
-	\mu(P)(q) = \left\{ K \:\Big|\: \sup_{U\ni K} \At{B} \mu(\At{B}\In{U} P)(q) \right\}.
+	\mu(P)(q) = \forall K \, \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \At{B} \mu(\At{B} \In{U} P)(q)),
 \]
-or equivalently
+or equivalently that
 \[
-	\At{K} \mu(P)(q) = \sup_{U\ni K} \At{B} \mu(\At{B}\In{U} P)(q).
+	\At{K} \mu(P)(q) = \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \At{B} \mu(\At{B} \In{U} P)(q)),
 \]
-\todo[inline]{This is not quite right yet, there's an $\At{B}$ missing on the left. Probably because the above construction of $\mu$ in terms of $\mu'$ isn't formulated properly yet}
-which is exactly \cref{thm.discrete_internal_space}.
+\todo[inline]{Problem: now we cannot apply \cref{thm.discrete_internal_space}}
 \end{proof}
 
 \begin{proposition}
