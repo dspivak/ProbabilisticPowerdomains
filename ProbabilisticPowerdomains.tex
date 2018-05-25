@@ -481,12 +481,12 @@ $\BaseSpace$ is Hausdorff.
 
 For any $K\in CB$, we write $\At{K} := ((- \imp (\downarrow K)^c) \imp (\downarrow K)^c)$ for the associated quasi-closed modality, where $(\downarrow K)^c$ is the (open) complement of $K$. Since $\downarrow K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
 
-\begin{lemma}\label{AtBoolean}
+\begin{axiom}\label{ax:atBoolean}
 For every $P : \Prop$,
 \[
 	\At{K} P \lor (P \imp \At{K} \bot)
 \]
-\end{lemma}
+\end{axiom}
 
 Hence the topos of $\At{K}$-sheaves is Boolean.
 
@@ -522,7 +522,7 @@ The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there ex
 \end{proof}
 
 
-\section{Properties of modalities on $C\BaseSpace$}
+\section{Properties of modalities}
 
 \begin{lemma}
 If $X$ is inhabited and $P : X \to \Prop$ a predicate, then
@@ -547,7 +547,7 @@ For every $K\in C\BaseSpace$,
 Suppose that $W \models \At{K} U \wedge \In{U} P$. This means that $K\in W$ implies $K\in U$, and $W \cap U \subseteq P$. But the claim $W \models \At{K}P$ means that $K \in W$ implies $K \in P$, which is indeed a consequence.
 \end{soundproof}
 
-\begin{axiom}\label{lem:at_disjunction}
+\begin{axiom}\label{ax:at_disjunction}
 For every $K\in C\BaseSpace$ and $P,Q : \Prop$, 
 \[
 	\At{K} ( P \vee Q ) \: \Leftrightarrow \: \At{K} P \vee \At{K} Q.
@@ -557,6 +557,28 @@ For every $K\in C\BaseSpace$ and $P,Q : \Prop$,
 \begin{soundproof}
 The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\downarrow K)^c ) \imp (\downarrow K)^c$, or equivalently $((P \imp (\downarrow K)^c) \wedge (Q \imp (\downarrow K)^c)) \imp (\downarrow K)^c$. By \cref{lem:prime}, this means that one of $P \imp (\downarrow K)^c$ or $Q \imp (\downarrow K)^c$ implies $(\downarrow K)^c$, as was to be shown.
 \end{soundproof}
+
+\begin{axiom}\label{ax:codisc_vs_at}
+For every $P : \Prop$ and every $K$,
+\[
+	\See{B} \bot = \See{B} \At{K} \bot.
+\]
+\end{axiom}
+
+\begin{lemma}\label{lem:at_vs_codisc}
+For every $P : \Prop$ and every $K$,
+\[
+	\At{K} \See{B} P \: \Leftrightarrow \: \See{B} P \vee \left( \At{K} \See{B} \bot \right).
+\]
+\end{lemma}
+
+Semantically, both sides of this implication are necessarily true as soon as $K \neq B$.
+
+\begin{proof}
+The implication from right to left is a simple case distinction. 
+
+From left to right, we assume $\At{K}(P \vee \See{B} \bot)$, or equivalently $\At{K} P \vee (\At{K} \See{B} \bot)$ by \cref{ax:at_disjunction}. In the case $\At{K} \See{B} \bot$ we are done; in the other case $\At{K} P$, we can assume $P \imp \See{B} \bot$ by $\See{B} = \At{B}$ and the decidability \cref{ax:atBoolean}. But then we have $\At{K} P \imp \At{K} \See{B} \bot$ by monotonicity, from which $\At{K} P$ proves the claim $\At{K} \See{B} \bot$.
+\end{proof}
 
 \begin{definition}\label{def:flabby}
 An object $X$ is \emph{flabby} if for every $P : X \to \Prop$,
@@ -1017,20 +1039,26 @@ So suppose that we start with a given $\mu$. Then we construct $\mu'$ as follows
 
 \todo[inline]{Check that this has the required properties}
 
-For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, we consider the predicate $CB \to \Prop$ given by
+For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, for any $q\in \tQQ$ and $P : X\to \Prop$, we consider the predicate $CB \to \Prop$ given by
 \[
-	K \mapsto \sup \mu'(\At{B} \In{U} P)(q).
+	K \longmapsto \exists U \ldotp \At{K} U \wedge \mu'(\At{B} \In{U} P)(q),
 \]
-and claim that it comes 
-\[
-	\mu(P)(q) \coloneqq \left\{ K \:\Big|\: \sup_{U\ni K} \mu'(\At{B} \In{U} P)(q) \right\}. 
-\]
-\todo[inline]{Check that this has the required properties}
+and claim that it corresponds to a proposition via \cref{prop:prop_as_opens}. We thus need to check the openness condition of \cref{prop:prop_as_opens}. This means that we assume that the predicate holds on the given $K$, so that we have $U$ with $\At{K} U$ and $\mu'(\At{B} \In{U} P)(q)$. We then use this very $U$ in the openness condition. It then needs to be proven that $\At{K'} U$ implies that there is $U'$ with $\At{K'} U'$ and $\mu'(\At{B} \In{U'} P)(q)$; but then again we can take $U' \coloneqq U$, in which case there is nothing to prove. We thus conclude that the above predicate defines a proposition, and this is our $\mu(P)(q)$.
+\todo[inline]{Check that this $\mu$ has the required properties}
 
-We now verify that these two constructions are inverse of one another. Starting with $\mu'$, we need to prove that for all $\At{B}$-closed predicates $P$,
+\todo[inline]{I'm switching back and forth between $\At{B}$ and $\See{B}$. Settle on one of them}
+
+We now verify that these two constructions are inverse of one another. A preliminary observation is that the embedding $\Prop \to \Prop^{C\BaseSpace}$ commutes with $\See{B}$ thanks to \cref{lem:at_vs_seeb},
+\[\begin{tikzcd}
+	\Prop \ar{r} \ar{d}{\See{B}} & \Prop^{C\BaseSpace} \ar{d}{\See{B}} \\
+	\Prop \ar{r} & \Prop^{C\BaseSpace}
+\end{tikzcd}\]
+Therefore when starting with $\mu'$, we can apply \cref{ax:enough_points}, so that we only need to prove that for all $\At{B}$-closed predicates $P$ and all $K$,
 \[
-	\mu'(P)(q) = \At{B} \left\{ K \:\Big|\: \sup_{U\ni K} \mu'(\At{B} \In{U} P)(q) \right\}
+	\At{K} \mu'(P)(q) = \See{B} \exists U \ldotp \At{K} U \wedge \mu'(\At{B} \In{U} P)(q).
 \]
+But since $P$ is $\At{B}$-closed, we have $\In{U} P = \In{U} \At{B} P = \At{B} P = P$, so that the right-hand side is just $\See{B} \mu'(P)(q)$. Since $\mu'(P)(q)$ is $\See{B}$-closed by assumption, it is enough to show that it is also $\At{K}$-closed, 
+
 This is easy:
 \begin{align*}
 	\At{B} \left\{ K \:\Big|\: \sup_{U\ni K} \mu'(\At{B} \In{U} P)(q) \right\} & \\
