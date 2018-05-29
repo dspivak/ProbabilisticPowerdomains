@@ -450,6 +450,7 @@ Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At
 Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, by \cref{ax.enough_points}. Thus it remains to show that every $Q$ which has the required property comes from a proposition.
 
 Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lambda K \ldotp \At{K} P$. This boils down to showing $Q(K) = \At{K} \forall K' \ldotp Q(K')$ for every $K$. Assuming $Q(K)$, we get $U : \Prop$ with $\At{K} U$ and $\At{K'} U \imp Q(K')$ for every $K'$. So in order to prove $\At{K} \forall K' \ldotp Q(K')$, we can even assume $U$, which implies $\At{K'} U$ and therefore $Q(K')$, as was to be shown.
+\todo[inline]{What about the other implication?}
 \end{proof}
 
 \section{Topological and domain-theoretic properties of $C\BaseSpace$}
