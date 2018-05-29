@@ -445,6 +445,7 @@ Transposing the canonical map $\At{} : C\BaseSpace \times \Prop \to \Prop$ to $\
 
 \begin{proof}
 Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At{K} P$. To see that it has the required property, we therefore assume $\At{K} P$. Applying \cref{ax.atvsin}, we get $U$ with $\At{K} U$ and $U \imp P$. Now given $K'$ with $\At{K'} U$, we can conclude $\At{K'} P$ by monotonicity of $\At{K'}$.
+\todo[inline]{D: Do you mean for \cref{ax.atvsin} to be an iff?}
 
 Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, by \cref{ax.enough_points}. Thus it remains to show that every $Q$ which has the required property comes from a proposition.
 
