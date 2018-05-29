@@ -454,14 +454,19 @@ Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lamb
 
 \section{Topological and domain-theoretic properties of $C\BaseSpace$}
 
-For $\BaseSpace$ a space, we denote by $C\BaseSpace$ is set of nonempty compacts, equipped with the topology with basis sets $\{ K \subseteq U \}$ indexed by the opens $U \subseteq B$. This is also known as the \emph{upper space} of $B$~\cite{Edalat:1995a}.
+For a topological space $\BaseSpace$, we denote by $C\BaseSpace$ is set of nonempty compacts, where if $K\ss\BaseSpace$ is compact, we denote the associated point by $K_{C\BaseSpace}\in C\BaseSpace$. We equip $C\BaseSpace$ with what is known as the \emph{upper space} of $B$~\cite{Edalat:1995a}. Namely, to each open $U\subseteq \BaseSpace$ there is an associated basic open in $C\BaseSpace$, denoted $U_{C\BaseSpace}$, consisting of those points $K_{C\BaseSpace}$ with $K\subseteq U$:
+\[
+U_{C\BaseSpace}\coloneqq\{K_{C\BaseSpace}\mid K\ss U\}.
+\]
+
+We say that a topological space is \emph{regularly-based} if it has a basis of open sets $U$ that equal their double pseudo-complement, $\neg\neg U=U$.
 
 \begin{proposition}
 If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
 \end{proposition}
 
 \begin{proof}
-The basic opens in $C\BaseSpace$ are given by the opens $U\subseteq \BaseSpace$, where the associated open in $C\BaseSpace$ contains all those compacts $K\subseteq \BaseSpace$ with $K\subseteq U$. We first show that the closure of this basic open consists of all compacts $K$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set is open, since it is the open associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K\subseteq V$ implies $K \not\subseteq U$, then $V$ must be disjoint from $U$, since any single point in $V\cap U$ is itself a nonempty compact set. This proves the first claim.
+We first show that the closure $\ol{U_{C\BaseSpace}}$ of the basic open $U_{C\BaseSpace}$ consists of all compacts $K_{C\BaseSpace}$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set $\{K_{C\BaseSpace}\mid K\cap\ol{U}=\emptyset\}$ is open, since it is the open $(\ol{U}^c)_{C\BaseSpace}$ associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K_{C\BaseSpace}\in V_{C\BaseSpace}$ implies $K_{C\BaseSpace} \not\in U_{C\BaseSpace}$, then $V$ must be disjoint from $U$, since any single point $\{p\}\ss(V\cap U)$ is itself a nonempty compact set. This proves the first claim.
 
 Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
 
