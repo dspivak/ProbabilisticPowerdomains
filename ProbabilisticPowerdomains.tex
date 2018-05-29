@@ -1052,8 +1052,10 @@ The first three axioms follow, though I'm not sure about Scott continuity.
 
 For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, for any $q\in \tQQ$ and $P : X\to \Prop$, we consider the predicate $CB \to \Prop$ given by
 \[
-	K \longmapsto \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(\At{B} \In{U} P)(q)),
+	K \longmapsto \exists U \ldotp \At{K} U \wedge \mu'(\mathtt{Const}(\In{U} P))(q),
 \]
+where $\mu'$ takes values in constant lower reals, which are a subobject of all lower reals.
+
 and claim that it corresponds to a proposition via \cref{prop:prop_as_opens}. We thus need to check the openness condition of \cref{prop:prop_as_opens}. This means that we assume that the predicate holds on the given $K$, so that we have $U$ with $\At{K} U$ and $\mu'(\At{B} \In{U} P)(q)$. We then use this very $U$ in the openness condition. It then needs to be proven that $\At{K'} U$ implies that there is $U'$ with $\At{K'} U'$ and $\mu'(\At{B} \In{U'} P)(q)$; but then again we can take $U' \coloneqq U$, in which case there is nothing to prove. We thus conclude that the above predicate defines a proposition, and this is our $\mu(P)(q)$. Looking at the proof of \cref{prop:prop_as_opens}, we have concretely
 \[
 	\mu(P)(q) := \forall K \, \exists U \ldotp \At{K} U \wedge (\At{B} U \imp \mu'(\At{B} \In{U} P)(q)).
