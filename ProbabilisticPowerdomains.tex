@@ -203,7 +203,6 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
 \newcommand{\BaseTopos}{\mathcal{B}}
 \newcommand{\BaseSpace}{B}
-\newcommand{\CB}{{C\BaseSpace}}
 
 \newcommand{\Pointwise}{\pi}
 \newcommand{\AtSymbol}{{@}}
@@ -478,10 +477,7 @@ Therefore all of the results from the previous section apply here as well.
 
 If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
 
-\begin{proposition}[{\cite[Proposition~3.3]{Edalat:1995a}}]
-If $\BaseSpace$ is a locally compact Hausdorff space, then its upper space $C\BaseSpace$ is a domain; in particular its topology coincides with the Scott topology. The ordering on points is given by $K_\CB\sqss K'_\CB$ iff $K'\ss K$, and the way-below relation $K_\CB\ll K'_\CB$ holds iff there is an open set $U$ with $K'\ss U\ss K$.
-\end{proposition}
-
+\todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
 
 From now on, we assume that we have these properties:
 
