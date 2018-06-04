@@ -1064,14 +1064,14 @@ Given an internal $\mu\colon\Prop^X\to\tLR$, define $\mu'\colon\Bool^{\Gamma(X)}
 	\mu'(P')(q)\coloneqq 
 	\Gamma\left(\toSh_{\AtInline{B}}\left(\mu\left(\classify{\Sky_B(\top)}\circ\beta(P')\right)(q)\right)\right).
 \end{equation}
-We still need to check that the $\mu'(P)$ is a lower real, and that $\mu'$ is an external valuation; we also have to produce an inverse. Before doing that, we parse the formula \eqref{eqn.mu_to_muprime} in the following diagram:
+We still need to check that the $\mu'(P')$ is a lower real, and that $\mu'$ is an external valuation; we also have to produce an inverse. Before doing that, we parse the formula \eqref{eqn.mu_to_muprime} in the following diagram:
 \[
 \begin{tikzpicture}
 	\begin{scope}[font=\scriptsize]
 		\node (X) {$\mu\big(X$};
 		\node[right=1 of X] (SB1) {$\Sky_B(\Bool)$};
 		\node[right=1.5 of SB1] (Prop1) {$\Prop\big)$};
-		\draw[->] (X) to node[above, font=\tiny] {$\beta(P)$} (SB1);
+		\draw[->] (X) to node[above, font=\tiny] {$\beta(P')$} (SB1);
 		\draw[->] (SB1) to node[above, font=\tiny] {$\classify{\Sky_B(\top)}$} (Prop1);
 	\end{scope}
 	\begin{scope}[font=\footnotesize]
