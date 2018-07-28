@@ -185,6 +185,8 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\Prop}{\const{Prop}}
 \newcommand{\Time}{\const{Time}}
+\newcommand{\Pt}{\const{Pt}}
+\newcommand{\cc}{\const{cc}}
 \newcommand{\unit}{\const{1}}
 \newcommand{\Poset}{\Cat{Poset}}
 \renewcommand{\Top}{\Cat{Top}}
@@ -1020,7 +1022,112 @@ By \cref{AtBoolean}, we have $\At{K}P\vee (P\imp\At{K}\bot)$. In the first case,
 \end{proof}
 
 
-\section{Main theorem: correspondence with external valuations}
+\section{Main theorem: correspondence with external valuations}\label{sec.main_thm}
+
+We have a sequence of adjoints:
+\[
+\begin{tikzcd}[column sep=100pt]
+	\Shv(\CB)
+		\ar[r, shift left=40pt, "\Pi_0" description]
+		\ar[r, shift left=0pt, "\Gamma" description]
+		\ar[r, shift left=30pt, phantom, "\scriptstyle\bot"]
+		\ar[r, shift left=10pt, phantom, "\scriptstyle\bot"]
+		\ar[r, shift right=10pt, phantom, "\scriptstyle\bot"]
+	&
+	\smset.
+		\ar[l, shift right=20pt, "\Const" description]
+		\ar[l, shift left=20pt, "\Sky_B" description]
+\end{tikzcd}
+\]
+where $\Const$ and $\Sky_B$ are fully faithful; this implies that the unit map for the $\Gamma\vdash\Const$ adjunction and the counit map for the $\Gamma\dashv\Sky_B$ adjunctions are isomorphisms:
+\[
+	S\cong\Gamma\circ\Const(S)
+	\qquad\text{and}\qquad
+	\Gamma\circ\Sky_B(S)\cong S
+\]
+for any set $S$. Thus the structure isomorphisms for these adjunctions are, in one direction, given by applying $\Gamma$ and composing with the above unit and counit isomorphisms respectively. We denote their inverses by $\alpha$ and $\beta$:
+\begin{align*}
+	\alpha\colon\Hom_\smset(S,\Gamma(X))&\To{\cong}\Hom_{\Shv(\CB)}(\Const(S),X)\\
+	\beta\colon\Hom_\smset(\Gamma(X),S)&\To{\cong}\Hom_{\Shv(\CB)}(X,\Sky_B(S))
+\end{align*}
+
+We can identify $\asSh_{\AtInline{B}}\Prop$ with $\Sky_B(\Bool)$, so we have a sheafification map $\toSh_{\AtInline{B}}\colon\Prop\to\Sky_B(\Bool)$. We will also use the function $\classify{\Sky_B(\top)}\colon\Sky_B(\Bool)\to\Prop$ classifying the sheaf morphism corresponding (via the functor $\Sky_B$) to the function $\top\colon 1\to\Bool$.
+
+In \cref{eqn.mu_to_muprime}, we propose a function
+\begin{multline*}
+  \{\tn{internal probability valuations } \mu\colon \Prop^X \to\tLR\}
+  \to\\
+  \{\tn{external probability valuations } \mu'\colon \Bool^{X(B)} \to\LR\}
+\end{multline*}
+Given an internal $\mu\colon\Prop^X\to\tLR$, define $\mu'\colon\Bool^{\Gamma(X)}\to\LR$ on $P'\colon\Gamma(X)\to\Bool$ and $q\in\QQ$ to be
+\begin{equation}\label{eqn.mu_to_muprime}
+	\mu'(P')(q)\coloneqq 
+	\Gamma\left(\toSh_{\AtInline{B}}\left(\mu\left(\classify{\Sky_B(\top)}\circ\beta(P')\right)(q)\right)\right).
+\end{equation}
+We still need to check that the $\mu'(P')$ is a lower real, and that $\mu'$ is an external valuation; we also have to produce an inverse. Before doing that, we parse the formula \eqref{eqn.mu_to_muprime} in the following diagram:
+\[
+\begin{tikzpicture}
+	\begin{scope}[font=\scriptsize]
+		\node (X) {$\mu\big(X$};
+		\node[right=1 of X] (SB1) {$\Sky_B(\Bool)$};
+		\node[right=1.5 of SB1] (Prop1) {$\Prop\big)$};
+		\draw[->] (X) to node[above, font=\tiny] {$\beta(P')$} (SB1);
+		\draw[->] (SB1) to node[above, font=\tiny] {$\classify{\Sky_B(\top)}$} (Prop1);
+	\end{scope}
+	\begin{scope}[font=\footnotesize]
+		\node[below left=-.3 and 0 of X] (Q1) {$\Gamma\big(\tQQ$};
+		\node[below right=-.3 and 0 of Prop1] (Prop2) {$\Prop$};
+		\node[right=1 of Prop2] (SB2) {$\Prop_{\AtInline{B}}=\Sky_B(\Bool)\big)$};
+		\draw[->] (Q1) -- (Prop2);
+		\draw[->] (Prop2) to node[above, font=\scriptsize] {$\toSh_{\AtInline{B}}$} (SB2);
+	\end{scope}
+	\begin{scope}[font=\normalsize]
+		\node[below left=-.3 and 0 of Q1] (Q2) {$\QQ$};
+		\node[below right=-.3 and 0 of SB2] (Bool) {$\Bool$};
+		\draw[->] (Q2) -- (Bool);
+	\end{scope}
+\end{tikzpicture}
+\]
+
+We will define an inverse in \cref{eqn.muprime_to_mu}. In order to do so, we need some other definitions. Let $\Pt$ be the constant type of points in $\CB$, and let $\cc\colon\Pt\to\Prop$ be an internalization of the ``closure-complement'' map, i.e.\ the sheaf morphism $\Pt=\Const(|\CB|)\to\church{\Prop}$ whose mate is the function $|\CB|\to\Gamma(\Prop)$ sending each point $K\in|\CB|$ to the open set $(\down K)^c$ given by the complement of the closure of the point $K$. We take $\Pt$ and $\CB$ to be an atomic types and atomic term, if need be. From this point, we can define
+\[\At{}\colon\Pt\to\Prop\to\Prop,\qquad\At{K}P\coloneqq (P\imp\cc(K))\imp\cc(K)\]
+and we take $\forall(K:\Pt)(P:\Prop)\ldotp\At{K}P\vee (P\imp\At{K}\bot)$ as an axiom. If $\CB$ has enough points, we also take as an axiom
+\[\forall(P:\Prop)\ldotp P\iff\forall(K:\Pt)\ldotp\At{K}P.\]
+
+We are ready to define the inverse to \cref{eqn.mu_to_muprime}. Suppose given $\mu'$. We define $\mu\colon\Prop^X\to\tLR$ on a predicate $P\colon X\to\Prop$ and a rational $q:\tQQ$ to be
+\begin{multline}\label{eqn.muprime_to_mu}
+  \mu(P)(q)\coloneqq\forall(K:\Pt)\ldotp\exists(U:\Prop)\ldotp\At{K}U\wedge\\
+  \classify{\Sky_{K}(\top)}\left(\Sky_{K}\left(\mu'\left(\Gamma(\toSh_{\AtInline{B}}(\In{U}P))\right)(q)\right)\right)
+\end{multline}
+We parse \eqref{eqn.muprime_to_mu} in the following diagram, again using the identification $\Prop_{\AtInline{B}}=\Sky_B(\Bool)$:
+\[
+\begin{tikzpicture}[x=.8cm]
+	\begin{scope}[font=\scriptsize]
+		\node (X) {$\mu'\big(\Gamma\big(X$};
+		\node[right=.8 of X] (SB1) {$\Prop$};
+		\node[right=.8 of SB1] (Prop1) {$\Sky_B(\Bool)\big)\big)$};
+		\draw[->] (X) to node[above, font=\tiny] {$\In{U}P$} (SB1);
+		\draw[->] (SB1) to node[above, font=\tiny] {$\toSh_{\AtInline{B}}$} (Prop1);
+	\end{scope}
+	\begin{scope}[font=\footnotesize]
+		\node[below left=-.3 and 0 of X] (Q1) {$\QQ$};
+		\node[left=.4 of Q1] (One) {$\Sky_K\big(1$};
+		\node[below right=-.3 and 0 of Prop1] (Prop2) {$\Bool\big)$};
+		\draw[->] (Q1) -- (Prop2);
+		\draw[->] (One) to node[above, font=\scriptsize] {$q$} (Q1);
+	\end{scope}
+	\begin{scope}[font=\normalsize]
+		\node[below left=-.3 and 0 of One] (Q2) {$1$};
+		\node[below right=-.3 and 0 of Prop2] (Bool) {$\Sky_K(\Bool)$};
+		\node[right=2 of Bool] (Prop) {$\Prop$};
+		\draw[->] (Q2) -- (Bool);
+		\draw[->] (Bool) to node[above, font=\footnotesize] {$\classify{\Sky_{K}(\top)}$} (Prop);
+	\end{scope}
+\end{tikzpicture}
+\]
+
+
+\todo[inline, author=David]{Tobias, everything starting from the beginning of \cref{sec.main_thm} is new; what do you think?}
 
 We have a sequence of adjoints:
 \[
@@ -1094,7 +1201,7 @@ The first three axioms follow, though I'm not sure about Scott continuity.
 
 For the other direction, we start with $\mu'$ and construct a $\mu$ from it. Concretely, for any $q\in \tQQ$ and $P : X\to \Prop$, we consider the predicate $CB \to \Prop$ given by
 \[
-	K \longmapsto \exists U \ldotp \At{K} U \wedge \mu'(\mathtt{Const}(\In{U} P))(q),
+	K \longmapsto \exists U \ldotp \At{K} U \wedge \mu'(\Const(\In{U} P))(q),
 \]
 where $\mu'$ takes values in constant lower reals, which are a subobject of all lower reals.
 
