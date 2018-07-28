@@ -1129,45 +1129,6 @@ We parse \eqref{eqn.muprime_to_mu} in the following diagram, again using the ide
 
 \todo[inline, author=David]{Tobias, everything starting from the beginning of \cref{sec.main_thm} is new; what do you think?}
 
-We have a sequence of adjoints:
-\[
-\begin{tikzcd}[column sep=100pt]
-	\Shv(\CB)
-		\ar[r, shift left=40pt, "\Pi_0" description]
-		\ar[r, shift left=0pt, "\Gamma" description]
-		\ar[r, shift left=30pt, phantom, "\scriptstyle\bot"]
-		\ar[r, shift left=10pt, phantom, "\scriptstyle\bot"]
-		\ar[r, shift right=10pt, phantom, "\scriptstyle\bot"]
-	&
-	\smset.
-		\ar[l, shift right=20pt, "\Const" description]
-		\ar[l, shift left=20pt, "\Sky_B" description]
-\end{tikzcd}
-\]
-where $\Const$ and $\Sky_B$ are fully faithful; this implies that the unit map for the $\Gamma\vdash\Const$ adjunction and the counit map for the $\Gamma\dashv\Sky_B$ adjunctions are isomorphisms:
-\[
-	S\cong\Gamma\circ\Const(S)
-	\qquad\text{and}\qquad
-	\Gamma\circ\Sky_B(S)\cong S
-\]
-for any set $S$. Thus the structure isomorphisms for these adjunctions are, in one direction, given by applying $\Gamma$ and composing with the above unit and counit isomorphisms respectively. We denote their inverses by $\alpha$ and $\beta$:
-\begin{align*}
-	\alpha\colon\Hom_\smset(S,\Gamma(X))&\To{\cong}\Hom_{\Shv(\CB)}(\Const(S),X)\\
-	\beta\colon\Hom_\smset(\Gamma(X),S)&\To{\cong}\Hom_{\Shv(\CB)}(X,\Sky_B(S))
-\end{align*}
-
-We can identify $\asSh_{\AtInline{B}}\Prop$ with $\Sky_B(\Bool)$, so we have a sheafification map $\toSh_{\AtInline{B}}\colon\Prop\to\Sky_B(\Bool)$. We will also use the function $\classify{\Sky_B(\top)}\colon\Sky_B(\Bool)\to\Prop$ classifying the sheaf morphism corresponding (via the functor $\Sky_B$) to the function $\top\colon 1\to\Bool$.
-
-We propose the following function
-\begin{multline*}
-  \{\tn{internal probability valuations } \mu\colon \Prop^X \to\tLR\}
-  \to\\
-  \{\tn{external probability valuations } \mu'\colon \Bool^{X(B)} \to\LR\}
-\end{multline*}
-Given an internal $\mu\colon\Prop^X\to\tLR$, define $\mu'\colon\Bool^{\Gamma(X)}\to\LR$ on $P\colon\Gamma(X)\to\Bool$ and $q\in\QQ$ to be
-\[\mu'(P)(q)\coloneqq \Gamma\left(\toSh_{\AtInline{B}}\left(\mu\left(\classify{\Sky_B(\top)}\circ\beta(P)\right)(q)\right)\right).\]
-We still need to check that the $\mu'(P)$ is a lower real, and that $\mu'$ is an external valuation; we also have to produce an inverse.
-\todo[inline, author=David]{Tobias, does this look right?}
 
 \begin{theorem}\label{conj.may8}
 Let $\BaseSpace$ be a compact Hausdorff space and $X\in\Shv(C\BaseSpace)$. Then there is a bijection
