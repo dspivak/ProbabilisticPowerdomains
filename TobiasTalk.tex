@@ -278,7 +278,7 @@ Euclidean QFT & \fbox{\fbox{??}} & regularity structures & Gibbs measures, DLR e
 
 Let us start with the case of ``Euclidean QFT'' in spacetime dimension $d = 0$: this is just probability theory.
 
-Probability theory assigns probabilities (real numbers) to logical propositions, like: what is the probability that it will be raining tomorrow? What is the relevant structure of the collection of logical propositions?
+Probability theory assigns probabilities (real numbers) to logical propositions, like: what is the probability that it will be raining tomorrow? What is the relevant structure of the collection of logical propositions in order for this to work?
 
 \newcommand{\Frame}{\mathcal{F}}
 
@@ -289,13 +289,19 @@ A \emph{frame} is a partially ordered set $(\Frame,\leq)$ that is a complete lat
 \]
 \end{definition}
 
+So if I ask you whether you can a cookie and coffee or tea, then that's the same as asking whether you want a cookie and coffee or a cookie and tea. This still holds when there are infinitely many possible choices between flavours of coffee and tea (as in contemporary coffee shops).
+
 \newcommand{\Open}[1]{\mathcal{O}(#1)}
 
 \begin{example}
 If $(X,\Open{X})$ is a topological space, then $\Open{X}$ ordered under inclusion is a frame.
 \end{example}
 
+Open sets are those in which witnessing membership is easy.
+
 However, there are many frames other than this: an open $U\in\Open{X}$ is \emph{regular} if it is the interior of its closure. The regular opens also form a frame. (Correspoding to the smallest dense sublocale.)
+
+Assigning probabilities to logical propositions now means the following:
 
 \newcommand{\R}{\mathbb{R}}
 
@@ -305,7 +311,7 @@ A \emph{continuous probability valuation} on a frame $\Frame$ is a map $\mu : \F
 \item $\mu(\bot) = 0$ and $\mu(\top) = 1$;
 \item If $x\leq y$, then $\mu(x) \leq \mu(y)$;
 \item $\mu(x \land y) + \mu(x \lor y) = \mu(x) + \mu(y)$;
-\item For any direted family $(x_i)$, we have
+\item For any directed family $(x_i)$, we have
 \[
 	\mu\left( \bigvee_i x_i \right) = \sup_i \mu(x_i).
 \]
