@@ -318,15 +318,17 @@ The following is one of many related results establishing the correspondence wit
 If $X$ is regular, then the continuous probability valuations on $\Open{X}$ are in bijection with the regular $\tau$-smooth Borel probability measures on $X$.
 \end{theorem}
 
-For our purposes, working with continuous probability valuations is technically more convenient. It may also generally be the ``better'' approach towards measure and probability generally: based on similar definitions, one can resolve the Banach-Tarski paradox in $\R^n$ \emph{while retaining the measurability of all sets} (\href{https://www.sciencedirect.com/science/article/pii/S0168007211001874}{Simpson '12}). The trick is that disjoint sets with overlapping boundary are no longer disjoint, but intersect on some ``glue''.
+For our purposes, working with continuous probability valuations is technically more convenient, so we will use the term \emph{probability space} to refer to this. It may also generally be the ``better'' approach towards measure and probability generally: based on similar definitions, one can resolve the Banach-Tarski paradox in $\R^n$ \emph{while retaining the measurability of all sets} (\href{https://www.sciencedirect.com/science/article/pii/S0168007211001874}{Simpson '12}). The trick is that disjoint sets with overlapping boundary are no longer disjoint, but intersect on some ``glue''.
 
 \chapter{Topos theory as the logic of space}
 
 What are the possible truth values of the proposition ``It is raining''?
 
-Whether it rains or not is a function of both space and time! So arguably, the truth value should be the \emph{set of points in spacetime} at which it is raining. 
+Whether it rains or not is a function of both space and time! So arguably, the truth value should be the \emph{collection of points in spacetime} at which it is raining. 
 
-$\Rightarrow$ The set of truth values is the frame of opens $\Open{S}$, where $S$ is spacetime. Similar to modal logic: the points can be thought of as ``possible worlds'', but with some ``cohesion'' which relates them.
+$\Rightarrow$ The set of truth values is the frame of opens $\Open{S}$, where $S$ is spacetime. 
+
+Similar to modal logic: the points can be thought of as ``possible worlds'', but with some ``cohesion'' which relates them.
 
 This defines the \emph{propositional} logic of space. Implication is given by
 \[
@@ -425,10 +427,74 @@ A \emph{continuous probability valuation} on a topological space $X$ is a map $\
 \end{enumerate}
 \end{definition}
 
+\begin{conjecture}
+There is a sensible way to define expectation values $\langle A \rangle_\mu = \mathbb{E}_\mu[A]$ for (continuous) observables $A : X \to \tLR$.
+\end{conjecture}
+
+Let's see what this amounts to in a simple case, e.g.~where spacetime $S$ is a finite set. Then an internal space $X$ is externally the same thing as a space over $S$, i.e.~a map $X\to S$, or equivalently a space $X$ together with a partition indexed by $S$. A map $\mu : \Open{X} \to \tLR_+$ translates into an $S$-family of maps from each part to the real numbers; continuing like this, one arrives at:
+
+\begin{proposition}
+If $S$ is a discrete space, then the continuous probability valuations on an internal space $X$ are exactly the families of continuous probability valuations $(\mu_s)_{s\in S}$ on the corresponding family of spaces $(X_s)_{s\in S}$.
+\end{proposition}
+
+In other words, we thereby have a definition of internal probability space whose external semantics is that of \emph{$S$-indexed family of probability spaces}. Also the observables $A : X \to \tLR$ are necessarily local quantities.
+
+This is clearly very different from a Euclidean QFT over $S$, which would correspond to a family of spaces $(X_s)_{s\in S}$ together with a probability valuation \emph{on the product space} $\prod_{s\in S} X_s$, corresponding to a \emph{joint distribution} of a family of random variables indexed by $S$.
+
+So it looks like our idea has failed, because our logic completely ignores the existence of \emph{correlations} between different points of $S$. It is simply not capable of expressing anything that is not of a local character.
+
 \chapter{Euclidean QFT, conjecturally}
 
+However, all is not lost yet: instead of using our logic over spacetime $S$, we can instead use it over a different space constructed from $S$!
+
+We are looking for a space in which not only the phrase ``It is raining'' is a logical proposition, but where also statements of a nonlocal character makes sense, such as ``The temperature varies by at most $2^\circ C$''. The truth of this statement is no longer a function of a \emph{point} in spacetime, but rather more generally of a \emph{region} in spacetime.
+
+\begin{definition}
+A \emph{region} in spacetime is a compact subset $K \subseteq S$. The collection of regions forms the \emph{hyperspace} $CS$, where the basic open sets are of the form $\{ K \subseteq U \}$ for some $U\in\Open{S}$.
+\end{definition}
+
+This is closely related to the notion of \emph{interval domain} from computer science.
+
+In the topos associated to the hyperspace $CS$, the truth values vary with the region $K$, and are such that:
+\begin{itemize}
+\item if a statement is true in some region $K$, then it is also true in every smaller region; 
+\item if it is true in all slightly smaller regions, then it is also true in $K$.
+\end{itemize}
+
+\begin{example}
+The statement ``The temperature varies by at most $2^\circ C$'' has a truth value of this form. Also for any region $K$, the statement ``The temperature varies by at most $2^\circ C$ in $K$'' has a truth value of the same form: it has the obvious true or false value on any region $K'$ with $K\subseteq K'$; and we simply declare it to be true on any other $K'$: unknowable statements in a given context are declared true by default.
+
+(There is a general way to \emph{localize} any statement to a region $K$ as in this example. One does this by applying the \emph{modality} $\At{K}$ to the statement. I do not have time to explain this.)
+\end{example}
+
+Roughly, a Euclidean quantum field theory is given by a probability measure on the set of sections of a bundle over spacetime, $p : E \to S$. (This applies at least once the QFT has been constructed; how to construct it from a Hamiltonian via regularization and renormalization is a question which I cannot address at the moment.) As a family of spaces varying with $s\in S$, we can also consider $p : E \to S$ as an internal topological space, which we denote by $\mathcal{E}$. Technically, this internalization is based on equipping the sheaf of sections of $p$ with a suitable internal topology.
+
+Externally, the \emph{Hamiltonian} is a function that assigns to every local section a real number. Assuming nonnegativity, this function is such that it can only decrease as we restrict a local section to a subregion. So we can interpret it in terms of the upper reals:
+
+\begin{proposition}
+Assigning to every region $K$ the \emph{total energy} contained in $K$ is an internal map $\mathcal{E} \to \tUR$.
+\end{proposition}
+
+\begin{conjecture}
+The Euclidean QFTs on $p : E \to S$ are in bijection with the internal continuous probability valuations on the internal topological space $\mathcal{E}$.
+\end{conjecture}
+
+In one spacetime dimensions, this specializes to an alternative characterization of stochastic processes. Notably, our assumption on spacetime are very minimal, and will boil down to some mild separation condition on $S$.
+
+One can then conjecturally make sense the expectation value $\langle A \rangle_\mu$ of any continuous observable $A : \mathcal{E} \to \tLR$. This expectation value will again be an element of $\tLR$, corresponding to a lower semi-continuous function.
+
+\begin{example}
+For a real scalar field $\phi$, $p$ is simply the projection $S \times \R \to S$. Then for every $x\in S$, we have an observable $\phi(x)$ given by evaluating $\phi$ at $x$ within any region $K$ that contains $x$, and returning $\infty$ otherwise.
+\end{example}
 
 \chapter{The relation to AQFT}
+
+This section is even more speculative than the previous ones.
+
+One of the existing rigorous approaches to \emph{Lorentzian} QFT is \emph{Algebraic Quantum Field Theory}, based on the Haag--Kastler axioms. These are concerned with \emph{local nets of observables}, which are very similar to our internal spaces in $CS$. One important difference is that topological spaces are replaced by \emph{noncommutative} topological spaces, i.e.~C*-algebras. Since the latter live in the Heisenberg picture, rather than restriction maps for local sections of bundles we now have \emph{inclusion} maps between algebras of observables.
+
+However, I do not know how to formulate the causality condition (commutativity of observables in spacelike separated region) in terms of the logic of space. This may be addressed in \href{https://arxiv.org/abs/1109.1397}{Nuiten '11}.
+
 
 \chapter{The DLR equations?}
 
