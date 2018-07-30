@@ -260,7 +260,7 @@ pdfencoding=unicode]{hyperref}
 
 %%%%%%%%% Chapter %%%%%%%%%
 
-This talk will be less ambitious than what the title suggests.
+This talk will be less ambitious than what the title suggests: it's more of a sketch of a research program, so far we only have some basic definitions and preliminary basic results. We are \emph{very} far from addressing the important aspects of QFT, such as the renormalization group.
 
 \chapter{The meaning of ``synthetic''}
 
@@ -324,13 +324,13 @@ The following is one of many related results establishing the correspondence wit
 If $X$ is regular, then the continuous probability valuations on $\Open{X}$ are in bijection with the regular $\tau$-smooth Borel probability measures on $X$.
 \end{theorem}
 
-For our purposes, working with continuous probability valuations is technically more convenient, so we will use the term \emph{probability space} to refer to this. It may also generally be the ``better'' approach towards measure and probability generally: based on similar definitions, one can resolve the Banach-Tarski paradox in $\R^n$ \emph{while retaining the measurability of all sets} (\href{https://www.sciencedirect.com/science/article/pii/S0168007211001874}{Simpson '12}). The trick is that disjoint sets with overlapping boundary are no longer disjoint, but intersect on some ``glue''.
+For our purposes, working with continuous probability valuations is technically more convenient, so we will use the term \emph{probability space} to refer to a topological space $(X,\Open{X})$ equipped with a continuous probability valuation $\mu : \Open{X}\to\R_+$. It may also generally be the ``better'' approach towards measure and probability generally: based on similar definitions, one can resolve the Banach-Tarski paradox in $\R^n$ \emph{while retaining the measurability of all sets} (\href{https://www.sciencedirect.com/science/article/pii/S0168007211001874}{Simpson '12}). The trick is that disjoint sets with overlapping boundary are no longer disjoint, but intersect on some ``glue''.
 
 \chapter{Topos theory as the logic of space}
 
 What are the possible truth values of the proposition ``It is raining''?
 
-Whether it rains or not is a function of both space and time! So arguably, the truth value should be the \emph{collection of points in spacetime} at which it is raining. 
+Whether it rains or not is a function of both space and time! So arguably, the truth value should be a \emph{function} from spacetime to $\{\bot,\top\}$, or equivalently the \emph{collection of points in spacetime} at which it is raining. 
 
 $\Rightarrow$ The set of truth values is the frame of opens $\Open{S}$, where $S$ is spacetime. 
 
@@ -347,17 +347,19 @@ which is the interior of $V\cup (X\setminus U)$. For example in $S = \R$,
 
 As a special case, negation is $\lnot U := (U \Rightarrow \emptyset)$, which is the interior of the complement of $U$. (This discussion of implication and negation applies to all frames, not just frames of opens.)
 
-Generally, we have $U \cup \lnot U \neq S$: \emph{the law of excluded middle fails}. Similarly, $\lnot\lnot U \not\Rightarrow U$, i.e.~double negation elimination does not work. All other basic inference rules are still valid, such as modus ponens: 
+Generally, we have $U \cup \lnot U \neq S$: \emph{the law of excluded middle fails}. This is because the set of places where ``it is raining'' is true and the set of places where ``it is not raining'' is true do not cover the whole space: the rain has a boundary of points at which we're not sure!
+
+Similarly, $\lnot\lnot U \not\Rightarrow U$, i.e.~double negation elimination does not work. All other basic inference rules are still valid, such as modus ponens: 
 \[
 	(U \Rightarrow V) \land (V\Rightarrow W) \quad \Rightarrow \quad U \Rightarrow W.
 \]
-More precisely, the valid arguments are those which are \emph{constructive}, i.e.~those which can be interpreted as computer programs.
+More precisely, the valid arguments are those which are \emph{constructive}, i.e.~those which can be interpreted as computer programs. Otherwise, all of mathematics can still be done, \emph{just as in ordinary logic}. Our logic internally \emph{does not know that it describes things that vary in space}!
 
 \begin{example}
 One can use constructive reasoning to still prove the law of excluded middle in the weaker form $\lnot\lnot(U \cup \lnot U) = \bot$. The topological interpration is that $U \cup \lnot U$ is dense in $X$.
 \end{example}
 
-So far we have considered only propositional logic. But in order to do mathematics, we also need to be able to work with sets with structure as mathematical objects and introduce quantifiers! This is what \emph{topos theory} is about.
+So far we have considered only propositional logic. But in order to do mathematics, we also need to be able to work with sets with structure as mathematical objects and introduce quantifiers! This is what \emph{topos theory} is about. Working inside a topos is like working with ordinary mathematical objects in constructive logic, although these objects now describe objects that vary in space---but ``from the inside'' of the topos, this is not visible!
 
 I do not have time to give precise definitions here, so let me only state that also in the presence of quantifiers, the valid arguments are those which are constructive. i.e.~can be turned into computer programs: the law of excluded middle and the \emph{axiom of choice} may not be used.
 
@@ -425,13 +427,15 @@ A \emph{continuous probability valuation} on a topological space $X$ is a map $\
 \begin{enumerate}
 \item $\mu(\emptyset) = 0$ and $\mu(X) = 1$;
 \item If $U\leq V$, then $\mu(U) \leq \mu(V)$;
-\item $\mu(U \land V) + \mu(X \lor V) = \mu(U) + \mu(V)$;
+\item $\mu(U \land V) + \mu(U \lor V) = \mu(U) + \mu(V)$;
 \item For any direted family $(U_i)$, we have
 \[
 	\mu\left( \bigvee_i U_i \right) = \sup_i \mu(U_i).
 \]
 \end{enumerate}
 \end{definition}
+
+Thus we obtain a definition of probability space internal to a topos.
 
 \begin{conjecture}
 There is a sensible way to define expectation values $\langle A \rangle_\mu = \mathbb{E}_\mu[A]$ for (continuous) observables $A : X \to \tLR$.
@@ -440,7 +444,7 @@ There is a sensible way to define expectation values $\langle A \rangle_\mu = \m
 Let's see what this amounts to in a simple case, e.g.~where spacetime $S$ is a finite set. Then an internal space $X$ is externally the same thing as a space over $S$, i.e.~a map $X\to S$, or equivalently a space $X$ together with a partition indexed by $S$. A map $\mu : \Open{X} \to \tLR_+$ translates into an $S$-family of maps from each part to the real numbers; continuing like this, one arrives at:
 
 \begin{proposition}
-If $S$ is a discrete space, then the continuous probability valuations on an internal space $X$ are exactly the families of continuous probability valuations $(\mu_s)_{s\in S}$ on the corresponding family of spaces $(X_s)_{s\in S}$.
+If $S$ is a discrete space, then the internal probability spaces $(X,\Open{X},\mu)$ are in correspondence with families of probability spaces $(X_s,\Open{X_s},\mu_s)_{s\in S}$.
 \end{proposition}
 
 In other words, we thereby have a definition of internal probability space whose external semantics is that of \emph{$S$-indexed family of probability spaces}. Also the observables $A : X \to \tLR$ are necessarily local quantities.
@@ -490,7 +494,9 @@ In one spacetime dimensions, this specializes to an alternative characterization
 One can then conjecturally make sense the expectation value $\langle A \rangle_\mu$ of any continuous observable $A : \mathcal{E} \to \tLR$. This expectation value will again be an element of $\tLR$, corresponding to a lower semi-continuous function.
 
 \begin{example}
-For a real scalar field $\phi$, $p$ is simply the projection $S \times \R \to S$. Then for every $x\in S$, we have an observable $\phi(x)$ given by evaluating $\phi$ at $x$ within any region $K$ that contains $x$, and returning $\infty$ otherwise.
+For a real scalar field $\phi$, $p$ is simply the projection $S \times \R \to S$. Internally, $\phi \in \tRR_\pi$ is \emph{just a plain number}. Then for every $x\in S$, we have an observable $\phi(x)$ given by evaluating $\phi$ at $x$ within any region $K$ that contains $x$, and returning $\infty$ otherwise. It can internally be constructed as the lower cut given by defining the truth value of $a\in L$ as $\At{x}(a < \phi)$.
+
+$\Rightarrow$ We can also define correlation functions like $\langle \phi(x) \phi(y) \rangle$ in the internal language.
 \end{example}
 
 \chapter{The relation to AQFT}
@@ -505,5 +511,30 @@ However, I do not know how to formulate the causality condition (commutativity o
 \chapter{The DLR equations?}
 
 \printbibliography
+
+
+The DLR equations formalize the definition of Gibbs measure for lattice systems in the thermodynamic limit (infinite size). Compact regions and restriction to compact subregions also plays an important role there, so it seems natural to try and formulate these equations within our framework.
+
+Warning: highly speculative, I have not yet worked out the details
+
+Let $P\mathcal{E}$ be the set of continuous probability valuations on $\mathcal{E}$. A \emph{specification} of local Gibbs measures is an internal map\footnote{Here, $CS$ is the constant sheaf of points of $CS$, describing $CS$ itself as an internal space whose frame of opens should be $\Omega$.}
+\[
+	\gamma : CS \times \mathcal{E} \to P\mathcal{E},
+\]
+which assigns to every region $K$ and field configuration $\phi\in\mathcal{E}$ a measure $\gamma(K,\phi)\in P\mathcal{E}$ which describes thermal fluctuations in $K$ with fixed boundary conditions given by $\phi$ on the outside of $K$. This map should satisfy the consistency condition
+\[
+	\gamma(K,\phi)(U) = \langle \gamma(K',-) (U) \rangle_{\gamma(K,\phi)}
+\]
+for every subregion $K'\subseteq K$, field configuration $\phi\in\mathcal{E}$, and open $U\in\Open{\mathcal{E}}$. (There are additional conditions which I am not mentioning now.)
+
+\begin{definition}
+A \emph{Gibbs measure} for a given specification $\gamma$ is $\mu\in P\mathcal{E}$ such that for all $K\in CS$ and $U \in \Open{\mathcal{E}}$,
+\[
+	\mu(U) = \langle \gamma(K,-)(U) \rangle_\mu.
+\]
+This is (one version of) the \emph{DLR equation}.
+\end{definition}
+
+
 
 \end{document}
