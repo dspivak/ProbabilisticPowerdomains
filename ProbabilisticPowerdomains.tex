@@ -200,6 +200,8 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\asSh}{\Fun{Sh}} % sheafified object
 \newcommand{\toSh}{\Fun{sh}} % sheafification map from object to sheafified object
 
+\newcommand{\inv}{^{-1}}
+
 \newcommand{\apart}{\,\#\,}
 \newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
 \newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
@@ -412,7 +414,12 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 %holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
 %\end{definition}
 
-\todo{Locally compact spaces as continuous posets}
+\section{Locally compact spaces as continuous posets}
+Something like the following should be true.
+
+Suppose $X$ is a topological space and $\Op(X)$ is its frame of opens. A Scott-open in $\Op(X)$ is a subset $K\ss\Op(X)$ that is up-closed and inaccessible by directed joins: for any directed collection $I\ss\Op(X)$ of frame elements, if $(\bigvee_{i\in I} U_i)\in K$ then $U_i\in K$ for some $i\in I$. These are the filters corresponding to compact sets.
+
+Given opens $U,V\in\Op(X)$, we have $U\ll V$ (i.e.\ $U$ is way-below $V$ in the frame) iff, at the level of the topological space there exists a compact subset $K\ss X$ with $U\ss K\ss V$.
 
 \todo{Does at modality take locally compact spaces to locally compact spaces?}
 
@@ -466,6 +473,9 @@ U_{C\BaseSpace}\coloneqq\{K_{C\BaseSpace}\mid K\ss U\}.
 
 We say that a topological space is \emph{regularly-based} if it has a basis of open sets $U$ that equal their double pseudo-complement, $\neg\neg U=U$.
 
+Denoting the closure of a set $U$ as $\ol{U}$ and the interior of a set $A$ as $A^\circ$, it is useful to note that 
+\[\neg\neg U=\ol{U}^\circ.\]
+
 \begin{proposition}
 If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
 \end{proposition}
@@ -473,14 +483,14 @@ If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
 \begin{proof}
 We first show that the closure $\ol{U_{C\BaseSpace}}$ of the basic open $U_{C\BaseSpace}$ consists of all compacts $K_{C\BaseSpace}$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set $\{K_{C\BaseSpace}\mid K\cap\ol{U}=\emptyset\}$ is open, since it is the open $(\ol{U}^c)_{C\BaseSpace}$ associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K_{C\BaseSpace}\in V_{C\BaseSpace}$ implies $K_{C\BaseSpace} \not\in U_{C\BaseSpace}$, then $V$ must be disjoint from $U$, since any single point $\{p\}\ss(V\cap U)$ is itself a nonempty compact set. This proves the first claim.
 
-Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
+Next, we show that the interior of the above closure is $U_{C\BaseSpace}=\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure $\ol{U_{C\BaseSpace}}$ means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
 
 Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
 \end{proof}
 
 Therefore all of the results from the previous section apply here as well.
 
-If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
+If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\down K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
 
 \todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
 
@@ -490,7 +500,7 @@ From now on, we assume that we have these properties:
 $\BaseSpace$ is Hausdorff.
 \end{axiom}
 
-For any $K\in CB$, we write $\At{K} := ((- \imp (\downarrow K)^c) \imp (\downarrow K)^c)$ for the associated quasi-closed modality, where $(\downarrow K)^c$ is the (open) complement of $K$. Since $\downarrow K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
+For any $K\in CB$, we write $\At{K} := ((- \imp (\down K)^c) \imp (\down K)^c)$ for the associated quasi-closed modality, where $(\down K)^c$ is the (open) complement of $K$. Since $\down K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
 
 \begin{axiom}\label{ax.atBoolean}
 For every $P : \Prop$,
@@ -513,12 +523,12 @@ The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
 \end{proof}
 
 \begin{lemma}
-For $K\in C\BaseSpace$, the complement $(\downarrow K)^c$ of $\downarrow K$ is a prime open.
+For $K\in C\BaseSpace$, the complement $(\down K)^c$ of $\down K$ is a prime open.
 \label{lem.prime}
 \end{lemma}
 
 \begin{proof}
-Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \downarrow K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \downarrow K = \emptyset$, as was to be shown.
+Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \down K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \down K = \emptyset$, as was to be shown.
 \end{proof}
 
 \begin{proposition}
@@ -566,7 +576,7 @@ For every $K\in C\BaseSpace$ and $P,Q : \Prop$,
 \end{axiom}
 
 \begin{soundproof}
-The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\downarrow K)^c ) \imp (\downarrow K)^c$, or equivalently $((P \imp (\downarrow K)^c) \wedge (Q \imp (\downarrow K)^c)) \imp (\downarrow K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\downarrow K)^c$ or $Q \imp (\downarrow K)^c$ implies $(\downarrow K)^c$, as was to be shown.
+The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\down K)^c ) \imp (\down K)^c$, or equivalently $((P \imp (\down K)^c) \wedge (Q \imp (\down K)^c)) \imp (\down K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\down K)^c$ or $Q \imp (\down K)^c$ implies $(\down K)^c$, as was to be shown.
 \end{soundproof}
 
 \begin{axiom}\label{ax.codisc_vs_at}
@@ -669,7 +679,7 @@ For every $P : \Prop$,
 Here, $\See{K} \coloneqq (\At{K} \bot) \vee -$.
 
 \begin{soundproof}
-Suppose $W \models \At{K} P$. If $K\not\in W$, we have $W \cap \downarrow K = \emptyset$, and hence $W \models \See{K} \bot$.
+Suppose $W \models \At{K} P$. If $K\not\in W$, we have $W \cap \down K = \emptyset$, and hence $W \models \See{K} \bot$.
 
 We therefore assume $K\in W$. In this case, the assumption $W \models \At{K} P$ means that there is $V\subseteq W$ with $K\in V$ and $V \models P$. We now prove $W \models \exists U\ldotp \At{K} U \wedge \In{U} P$ by using the trivial cover of $W$ by itself, and taking $U \coloneqq V$. This guarantees $W \models \At{K} V$, and also $W \models \In{V} P$ by the assumption $V \models P$.
 \end{soundproof}
@@ -929,7 +939,7 @@ One direction is trivial. For any $q:\tQQ$ we have
 \end{align*}
 \end{proof}
 
-Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\downarrow K)^c = \top$.
+Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\down K)^c = \top$.
 
 We say that $U$ is coprime if it satisfies the following for all $P,Q$:
 \[(U\imp (P\vee Q))\iff((U\imp P)\vee(U\imp Q)).\]
@@ -1209,6 +1219,49 @@ So suppose that $U\neq CB$. Then there are no external probability valuations be
 
 Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
 \end{proof}
+
+
+
+
+\section{Working externally}
+
+\subsection{Compact $B$ case}
+
+\begin{proposition}
+Let $B$ be compact and $X\in\Shv(B)$ a sheaf. The set of external valuations on the set-theoretic frame $2^{X(B)}\in\smset$ is in natural bijection with the set of internal valuations on $\Omega^B$.
+\end{proposition}
+\begin{proof}
+An internal valuation is a sheaf morphism $\mu\colon\Omega^X\to\tLR$. Here is the correspondence:
+\begin{description}
+  \item[Internal to external] Suppose that $\mu$ is an internal valuation, and let $S\ss X(B)$. Define
+  \[\mu'(S)\coloneqq\mu_B(\At{B}S)(B).\]
+  Here $\mu_B$ is the $B$-component of the natural transformation $\mu$, and $\At{B}S$ is the subsheaf of $X$ defined by
+  \[
+  \At{B}S(U)\coloneqq
+  \begin{cases}
+		X(U)&\tn{ if }B\not\ss U\\
+		S&\tn{ if }B\ss U
+  \end{cases}
+  \quad=\quad
+  \begin{cases}
+		X(U)&\tn{ if }B\neq U\\
+		S&\tn{ if }B= U
+  \end{cases}
+  \]
+  \item[External to internal] Given an external valuation $\mu'$, we define the corresponding internal valuation on every open $U$ as the lower real whose stalk at $K\ss U$ is
+  \[\mu_U(T)(K)\coloneqq\sup_{V\supseteq K}\mu'\big(\rho_{B\to V}\inv(T(V))\big)
+  \]
+  for any $T\in\Sub(yU\times X)$. Note that the right-hand side does not depend on $U$.
+\end{description}
+We want to know that ``internal to internal'' is identity:
+\[\mu_U(T)(K)=^?\sup_{V\supseteq K}\mu'\big(\rho_{B\to V}\inv(T(V))\big)(B)\]
+for $K\ss U$. This is just \cref{thm.discrete_internal_space}.
+
+External to external (should be easier).
+\end{proof}
+
+
+
 
 
 \chapter{Correspondence with stochastic processes}
