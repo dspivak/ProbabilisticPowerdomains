@@ -30,7 +30,7 @@ pdfencoding=unicode]{hyperref}
   \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
 \usepackage[backend=biber,style = alphabetic]{biblatex}
   \addbibresource{Library20171206.bib}
-\usepackage{todonotes}
+\usepackage[color=white]{todonotes}
 
 
 
@@ -194,6 +194,7 @@ pdfencoding=unicode]{hyperref}
 \renewcommand{\C}{\Cat{C}}
 \newcommand{\Sub}{\Set{Sub}}
 \newcommand{\pt}{\Fun{pt}}
+\newcommand{\lsc}{\Fun{LsC}}
 
 \newcommand{\op}{^\tn{op}}
 \newcommand{\el}[1]{\tn{el}#1}
@@ -235,9 +236,24 @@ pdfencoding=unicode]{hyperref}
 \renewcommand{\iff}{\Leftrightarrow}
 \newcommand{\true}{\const{true}}
 \newcommand{\Bool}{\Set{Bool}}
+\newcommand{\ev}{\fun{ev}}
 
 \newcommand{\Span}{\Cat{Span}}
 \newcommand{\set}{\text{--}\smset}
+
+\newcommand{\adj}[5][30pt]{%[size] Cat L, Left, Right, Cat R.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Rightarrow" yshift=-.4pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
+
+\newcommand{\adjr}[5][30pt]{%[size] Cat R, Right, Left, Cat L.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Leftarrow" yshift=-.6pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
 
 
 \newcommand{\erase}[1]{}
@@ -1225,40 +1241,66 @@ Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on po
 
 \section{Working externally}
 
-\subsection{Compact $B$ case}
+Throughout this section, $B$ is locally compact, so $CB$ is a domain (and hence regularly based).
 
+Consider the discrete frame $\Omega^X$ on a sheaf $X$ on $CB$. Given a point $K\in CB$ there is an adjunction
+\[
+\adj[50pt]{\Sub(X)}{S\mapsto S^K}{T\mapsto T_K}{2^{X_K}}
+\]
+where $S^K$ is the stalk of $S\in\Sub(X)$ at $K$. The subsheaf $T_K$ is given by
+\[
+  T_K(U)\coloneqq
+  \begin{cases}
+  	X(U)& \tn{ if }K\not\in U\\
+		\{x\in X(U)\mid x_k\in T\}&\tn{ if }K\in U
+  \end{cases}
+\]
+The induced monad on $\Sub(X)$ is $\At{K}$.
+
+Now given an internal valuation $\mu$ on $\Omega^X$, we get an external valuation $\mu_K$ on the set $2^{X_K}$, where $X_K$ is the stalk of $X$ at $K$. Indeed, for any subset $T\ss 2^{X_K}$, it is given by the formula
+\[\mu_K(T)\coloneqq\mu(T_K)(K).\]
+
+We prove it is indeed a valuation in the following proposition.
 \begin{proposition}
-Let $B$ be compact and $X\in\Shv(B)$ a sheaf. The set of external valuations on the set-theoretic frame $2^{X(B)}\in\smset$ is in natural bijection with the set of internal valuations on $\Omega^B$.
+Let $\mu$ be an internal probability valuation on $X\in\Shv(CB)$. It induces a valuation $\mu_K$ on $2^{X_K}$ for every $K\in CB$, and whenever $K\ss K'$, the inverse image map $\rho_{K,K'}\inv\colon 2^{X_K}\to 2^{X_{K'}}$ is measure-preserving.
 \end{proposition}
 \begin{proof}
-An internal valuation is a sheaf morphism $\mu\colon\Omega^X\to\tLR$. Here is the correspondence:
-\begin{description}
-  \item[Internal to external] Suppose that $\mu$ is an internal valuation, and let $S\ss X(B)$. Define
-  \[\mu'(S)\coloneqq\mu_B(\At{B}S)(B).\]
-  Here $\mu_B$ is the $B$-component of the natural transformation $\mu$, and $\At{B}S$ is the subsheaf of $X$ defined by
-  \[
-  \At{B}S(U)\coloneqq
-  \begin{cases}
-		X(U)&\tn{ if }B\not\ss U\\
-		S&\tn{ if }B\ss U
-  \end{cases}
-  \quad=\quad
-  \begin{cases}
-		X(U)&\tn{ if }B\neq U\\
-		S&\tn{ if }B= U
-  \end{cases}
-  \]
-  \item[External to internal] Given an external valuation $\mu'$, we define the corresponding internal valuation on every open $U$ as the lower real whose stalk at $K\ss U$ is
-  \[\mu_U(T)(K)\coloneqq\sup_{V\supseteq K}\mu'\big(\rho_{B\to V}\inv(T(V))\big)
-  \]
-  for any $T\in\Sub(yU\times X)$. Note that the right-hand side does not depend on $U$.
-\end{description}
-We want to know that ``internal to internal'' is identity:
-\[\mu_U(T)(K)=^?\sup_{V\supseteq K}\mu'\big(\rho_{B\to V}\inv(T(V))\big)(B)\]
-for $K\ss U$. This is just \cref{thm.discrete_internal_space}.
+The maps $\mu_K$ and $\mu_{K'}$ can be written as composites, as shown in the following diagram:
+\begin{equation}\label{eqn.measure_pres}
+\begin{tikzcd}
+	2^{X_K}\ar[d, "\rho_{K,K'}\inv"']\ar[r, "T\mapsto T_K"]\ar[dr, phantom, near start, "\Downarrow"]&
+	\Sub(X)\ar[r, "\mu"]&
+	\lsc(CB)\ar[r, bend left, "\ev_K"]\ar[r, bend right, "\ev_{K'}"']\ar[r, phantom, "\Uparrow"]&
+	\RR\\
+	2^{X_{K'}}\ar[ur, "T\mapsto T_{K'}"']&{}
+\end{tikzcd}
+\end{equation}
+where $\lsc(CB)$ is the set of lower semicontinuous functions on $CB$. The lefthand 2-morphism says that for any $T\ss X_K$ we have $T_K\ss \rho_{K,K'}\inv(T)_{K'}$, which is obvious from the formula in both the case that $K'\not\in U$ and the case that $K'\in U$. The righthand 2-morphism is lower semicontinuity.
 
-External to external (should be easier).
+We first show that all four maps in \cref{eqn.measure_pres} are valuations. Each is a composite of several Scott continuous functions, each of which preserves the top element (more precisely, $\ev$ sends the top element to 1. We need to show that the composites send the bottom element to 0 and are modular. The first part follows from \cref{prop.unique_probability_valuation_on_prop} since $\mu(\varnothing_K)=\varnothing_K$. The second part follows from the fact that $T\mapsto T_K$ (and obviously $T\mapsto T_{K'}$) and $\rho_{K,K'}\inv$ preserve binary meets and joins.\todo{Check}
+
+Finally, we prove that the map $2^{X_K}\to 2^{X_{K'}}$ is measure preserving. This amounts to showing that for any $T\ss X_K$ we have $\mu_K(T)=^?\mu_{K'}(\rho_{K,K'}\inv(T))$. By \cref{eqn.measure_pres} we have
+\[\mu(T_K)(K)\leq\mu(\rho_{K,K'}\inv(T_K))(K)\leq\mu(\rho_{K,K'}\inv(T)_{K'})(K')\]
+but this also holds when $T_K$ is replaced by its complement $T_K^c$. The result then follows from inclusion-exclusion.
+
 \end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
