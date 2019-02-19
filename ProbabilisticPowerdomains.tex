@@ -1244,9 +1244,9 @@ Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on po
 Throughout this section, $B$ is locally compact, so $CB$ is a domain (and hence regularly based).
 
 Consider the discrete frame $\Omega^X$ on a sheaf $X$ on $CB$. Given a point $K\in CB$ there is an adjunction
-\[
+\begin{equation}\label{eqn.stalk}
 \adj[50pt]{\Sub(X)}{S\mapsto S^K}{T\mapsto T_K}{2^{X_K}}
-\]
+\end{equation}
 where $S^K$ is the stalk of $S\in\Sub(X)$ at $K$. The subsheaf $T_K$ is given by
 \[
   T_K(U)\coloneqq
@@ -1257,11 +1257,12 @@ where $S^K$ is the stalk of $S\in\Sub(X)$ at $K$. The subsheaf $T_K$ is given by
 \]
 The induced monad on $\Sub(X)$ is $\At{K}$.
 
-Now given an internal valuation $\mu$ on $\Omega^X$, we get an external valuation $\mu_K$ on the set $2^{X_K}$, where $X_K$ is the stalk of $X$ at $K$. Indeed, for any subset $T\ss 2^{X_K}$, it is given by the formula
+\subsection{Internal to external}
+Given an internal valuation $\mu$ on $\Omega^X$, we get an external valuation $\mu_K$ on the set $2^{X_K}$, where $X_K$ is the stalk of $X$ at $K$. Indeed, for any subset $T\ss 2^{X_K}$, it is given by the formula
 \[\mu_K(T)\coloneqq\mu(T_K)(K).\]
 
 We prove it is indeed a valuation in the following proposition.
-\begin{proposition}
+\begin{proposition}\label{prop.int_to_ext_measure_pres}
 Let $\mu$ be an internal probability valuation on $X\in\Shv(CB)$. It induces a valuation $\mu_K$ on $2^{X_K}$ for every $K\in CB$, and whenever $K\ss K'$, the inverse image map $\rho_{K,K'}\inv\colon 2^{X_K}\to 2^{X_{K'}}$ is measure-preserving.
 \end{proposition}
 \begin{proof}
@@ -1280,13 +1281,23 @@ where $\lsc(CB)$ is the set of lower semicontinuous functions on $CB$. The lefth
 We first show that all four maps in \cref{eqn.measure_pres} are valuations. Each is a composite of several Scott continuous functions, each of which preserves the top element (more precisely, $\ev$ sends the top element to 1. We need to show that the composites send the bottom element to 0 and are modular. The first part follows from \cref{prop.unique_probability_valuation_on_prop} since $\mu(\varnothing_K)=\varnothing_K$. The second part follows from the fact that $T\mapsto T_K$ (and obviously $T\mapsto T_{K'}$) and $\rho_{K,K'}\inv$ preserve binary meets and joins.\todo{Check}
 
 Finally, we prove that the map $2^{X_K}\to 2^{X_{K'}}$ is measure preserving. This amounts to showing that for any $T\ss X_K$ we have $\mu_K(T)=^?\mu_{K'}(\rho_{K,K'}\inv(T))$. By \cref{eqn.measure_pres} we have
-\[\mu(T_K)(K)\leq\mu(\rho_{K,K'}\inv(T_K))(K)\leq\mu(\rho_{K,K'}\inv(T)_{K'})(K')\]
+\[\mu(T_K)(K)\leq\mu(\rho_{K,K'}\inv(T)_{K'})(K)\leq\mu(\rho_{K,K'}\inv(T)_{K'})(K')\]
 but this also holds when $T_K$ is replaced by its complement $T_K^c$. The result then follows from inclusion-exclusion.
 
 \end{proof}
 
+\subsection{External to internal}
+Given an external valuation $\mu'\colon 2^{X(B)}\to\RR$, define an internal valuation $\mu\colon\Sub(X)\to\tLR$ whose $U$-component for open $U\ss CB$ is given by the lower-real
+\[\mu_U(S)(K)\coloneqq\mu'(\rho_{K,B}(S^K))\]
+where $S\mapsto S^K$ is the stalk functor, as given in \cref{eqn.stalk}.
 
 
+\subsection{Round trips}
+We are most concerned with the round trip from internal to internal valuations. Starting with an internal valuation $\mu$, an open set $U\ss CB$, a subsheaf $S\ss X$, and a point $K\in CB$, the desired equation between $\mu$ and the internalization of its externalization is:
+\[
+\mu_U(S)(K)=^?\mu_B((\rho_{K,B}\inv(S^K))_B)(B)
+\]
+But by \cref{prop.int_to_ext_measure_pres}, we have $\mu_B((\rho_{K,B}\inv(S^K))_B)(B)=\mu_B((S^K)_K)(K)=\mu_B(\At{K}(S))(K)$. The result follows by Nelson's principle, $\mu((S^K)_K)(K')=\mu(S)(K')$ for any $K\ss K'$.
 
 
 
