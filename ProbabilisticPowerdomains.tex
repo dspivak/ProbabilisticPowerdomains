@@ -32,7 +32,7 @@ pdfencoding=unicode]{hyperref}
   \addbibresource{Library20171206.bib}
 
 %%%% draft stuff
-\usepackage{todonotes}
+\usepackage[color=white]{todonotes}
 \usepackage{showkeys}
 \newcommand{\tob}[1]{\todo[color=blue!40,inline]{\textbf{T:} #1}}
 
@@ -198,11 +198,14 @@ pdfencoding=unicode]{hyperref}
 \renewcommand{\C}{\Cat{C}}
 \newcommand{\Sub}{\Set{Sub}}
 \newcommand{\pt}{\Fun{pt}}
+\newcommand{\lsc}{\Fun{LsC}}
 
 \newcommand{\op}{^\tn{op}}
 \newcommand{\el}[1]{\tn{el}#1}
 \newcommand{\asSh}{\Fun{Sh}} % sheafified object
 \newcommand{\toSh}{\Fun{sh}} % sheafification map from object to sheafified object
+
+\newcommand{\inv}{^{-1}}
 
 \newcommand{\apart}{\,\#\,}
 \newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
@@ -237,9 +240,24 @@ pdfencoding=unicode]{hyperref}
 \renewcommand{\iff}{\Leftrightarrow}
 \newcommand{\true}{\const{true}}
 \newcommand{\Bool}{\Set{Bool}}
+\newcommand{\ev}{\fun{ev}}
 
 \newcommand{\Span}{\Cat{Span}}
 \newcommand{\set}{\text{--}\smset}
+
+\newcommand{\adj}[5][30pt]{%[size] Cat L, Left, Right, Cat R.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Rightarrow" yshift=-.4pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
+
+\newcommand{\adjr}[5][30pt]{%[size] Cat R, Right, Left, Cat L.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Leftarrow" yshift=-.6pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
 
 
 \newcommand{\erase}[1]{}
@@ -345,6 +363,13 @@ For every $K : \CB$ and $P : \Prop$,
 	\tob{tbw}
 \end{soundproof}
 
+\section{Locally compact spaces as continuous posets}
+Something like the following should be true.
+
+Suppose $X$ is a topological space and $\Op(X)$ is its frame of opens. A Scott-open in $\Op(X)$ is a subset $K\ss\Op(X)$ that is up-closed and inaccessible by directed joins: for any directed collection $I\ss\Op(X)$ of frame elements, if $(\bigvee_{i\in I} U_i)\in K$ then $U_i\in K$ for some $i\in I$. These are the filters corresponding to compact sets.
+
+Given opens $U,V\in\Op(X)$, we have $U\ll V$ (i.e.\ $U$ is way-below $V$ in the frame) iff, at the level of the topological space there exists a compact subset $K\ss X$ with $U\ss K\ss V$.
+
 \begin{axiom}\label{ax.atBoolean}
 	For every $K : \CB$ and $P : \Prop$,
 \[
@@ -418,15 +443,13 @@ Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, b
 Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lambda K \ldotp \At{K} P$. This boils down to showing $Q(K) = \At{K} \forall K' \ldotp Q(K')$ for every $K$. The right-to-left implication is trivial, so assuming $Q(K)$. By definition we get $U : \Prop$ with $\At{K} U$ and $\At{K'} U \imp Q(K')$ for every $K'$. So in order to prove $\At{K} \forall K' \ldotp Q(K')$, we can even assume $U$, which implies $\At{K'} U$ and therefore $Q(K')$, as was to be shown.
 \end{proof}
 
-Therefore all of the results from the previous section apply here as well.
-
 \begin{lemma}
-For $K\in C\BaseSpace$, the complement $(\downarrow K)^c$ of $\downarrow K$ is a prime open.
+For $K\in C\BaseSpace$, the complement $(\down K)^c$ of $\down K$ is a prime open.
 \label{lem.prime}
 \end{lemma}
 
 \begin{proof}
-Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \downarrow K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \downarrow K = \emptyset$, as was to be shown.
+Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \down K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \down K = \emptyset$, as was to be shown.
 \end{proof}
 
 
@@ -463,7 +486,7 @@ For every $K\in C\BaseSpace$ and $P,Q : \Prop$,
 \end{axiom}
 
 \begin{soundproof}
-The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\downarrow K)^c ) \imp (\downarrow K)^c$, or equivalently $((P \imp (\downarrow K)^c) \wedge (Q \imp (\downarrow K)^c)) \imp (\downarrow K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\downarrow K)^c$ or $Q \imp (\downarrow K)^c$ implies $(\downarrow K)^c$, as was to be shown.
+The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\down K)^c ) \imp (\down K)^c$, or equivalently $((P \imp (\down K)^c) \wedge (Q \imp (\down K)^c)) \imp (\down K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\down K)^c$ or $Q \imp (\down K)^c$ implies $(\down K)^c$, as was to be shown.
 \end{soundproof}
 
 \begin{axiom}\label{ax.codisc_vs_at}
@@ -549,7 +572,7 @@ For every $P : \Prop$,
 Here, $\See{K} \coloneqq (\At{K} \bot) \vee -$.
 
 \begin{soundproof}
-Suppose $W \models \At{K} P$. If $K\not\in W$, we have $W \cap \downarrow K = \emptyset$, and hence $W \models \See{K} \bot$.
+Suppose $W \models \At{K} P$. If $K\not\in W$, we have $W \cap \down K = \emptyset$, and hence $W \models \See{K} \bot$.
 
 We therefore assume $K\in W$. In this case, the assumption $W \models \At{K} P$ means that there is $V\subseteq W$ with $K\in V$ and $V \models P$. We now prove $W \models \exists U\ldotp \At{K} U \wedge \In{U} P$ by using the trivial cover of $W$ by itself, and taking $U \coloneqq V$. This guarantees $W \models \At{K} V$, and also $W \models \In{V} P$ by the assumption $V \models P$.
 \end{soundproof}
@@ -868,7 +891,7 @@ One direction is trivial. For any $q:\tQQ$ we have
 \end{align*}
 \end{proof}
 
-Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\downarrow K)^c = \top$.
+Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\down K)^c = \top$.
 
 We say that $U$ is coprime if it satisfies the following for all $P,Q$:
 \[(U\imp (P\vee Q))\iff((U\imp P)\vee(U\imp Q)).\]
@@ -1148,6 +1171,86 @@ So suppose that $U\neq CB$. Then there are no external probability valuations be
 
 Clearly $\church{i}(U)\neq \church{i}(CB)$, because these functions differ on points in the complement of $U$. But $\church{!}(U)=U\cap U=U\cap CB=\church{!}(CB)$, so $\church{\mu\circ !}(U)=\church{\mu\circ!}(CB)$, a contradiction.
 \end{proof}
+
+
+
+
+\section{Working externally}
+
+Throughout this section, $B$ is locally compact, so $CB$ is a domain (and hence regularly based).
+
+Consider the discrete frame $\Omega^X$ on a sheaf $X$ on $CB$. Given a point $K\in CB$ there is an adjunction
+\begin{equation}\label{eqn.stalk}
+\adj[50pt]{\Sub(X)}{S\mapsto S^K}{T\mapsto T_K}{2^{X_K}}
+\end{equation}
+where $S^K$ is the stalk of $S\in\Sub(X)$ at $K$. The subsheaf $T_K$ is given by
+\[
+  T_K(U)\coloneqq
+  \begin{cases}
+  	X(U)& \tn{ if }K\not\in U\\
+		\{x\in X(U)\mid x_k\in T\}&\tn{ if }K\in U
+  \end{cases}
+\]
+The induced monad on $\Sub(X)$ is $\At{K}$.
+
+\subsection{Internal to external}
+Given an internal valuation $\mu$ on $\Omega^X$, we get an external valuation $\mu_K$ on the set $2^{X_K}$, where $X_K$ is the stalk of $X$ at $K$. Indeed, for any subset $T\ss 2^{X_K}$, it is given by the formula
+\[\mu_K(T)\coloneqq\mu(T_K)(K).\]
+
+We prove it is indeed a valuation in the following proposition.
+\begin{proposition}\label{prop.int_to_ext_measure_pres}
+Let $\mu$ be an internal probability valuation on $X\in\Shv(CB)$. It induces a valuation $\mu_K$ on $2^{X_K}$ for every $K\in CB$, and whenever $K\ss K'$, the inverse image map $\rho_{K,K'}\inv\colon 2^{X_K}\to 2^{X_{K'}}$ is measure-preserving.
+\end{proposition}
+\begin{proof}
+The maps $\mu_K$ and $\mu_{K'}$ can be written as composites, as shown in the following diagram:
+\begin{equation}\label{eqn.measure_pres}
+\begin{tikzcd}
+	2^{X_K}\ar[d, "\rho_{K,K'}\inv"']\ar[r, "T\mapsto T_K"]\ar[dr, phantom, near start, "\Downarrow"]&
+	\Sub(X)\ar[r, "\mu"]&
+	\lsc(CB)\ar[r, bend left, "\ev_K"]\ar[r, bend right, "\ev_{K'}"']\ar[r, phantom, "\Uparrow"]&
+	\RR\\
+	2^{X_{K'}}\ar[ur, "T\mapsto T_{K'}"']&{}
+\end{tikzcd}
+\end{equation}
+where $\lsc(CB)$ is the set of lower semicontinuous functions on $CB$. The lefthand 2-morphism says that for any $T\ss X_K$ we have $T_K\ss \rho_{K,K'}\inv(T)_{K'}$, which is obvious from the formula in both the case that $K'\not\in U$ and the case that $K'\in U$. The righthand 2-morphism is lower semicontinuity.
+
+We first show that all four maps in \cref{eqn.measure_pres} are valuations. Each is a composite of several Scott continuous functions, each of which preserves the top element (more precisely, $\ev$ sends the top element to 1. We need to show that the composites send the bottom element to 0 and are modular. The first part follows from \cref{prop.unique_probability_valuation_on_prop} since $\mu(\varnothing_K)=\varnothing_K$. The second part follows from the fact that $T\mapsto T_K$ (and obviously $T\mapsto T_{K'}$) and $\rho_{K,K'}\inv$ preserve binary meets and joins.\todo{Check}
+
+Finally, we prove that the map $2^{X_K}\to 2^{X_{K'}}$ is measure preserving. This amounts to showing that for any $T\ss X_K$ we have $\mu_K(T)=^?\mu_{K'}(\rho_{K,K'}\inv(T))$. By \cref{eqn.measure_pres} we have
+\[\mu(T_K)(K)\leq\mu(\rho_{K,K'}\inv(T)_{K'})(K)\leq\mu(\rho_{K,K'}\inv(T)_{K'})(K')\]
+but this also holds when $T_K$ is replaced by its complement $T_K^c$. The result then follows from inclusion-exclusion.
+
+\end{proof}
+
+\subsection{External to internal}
+Given an external valuation $\mu'\colon 2^{X(B)}\to\RR$, define an internal valuation $\mu\colon\Sub(X)\to\tLR$ whose $U$-component for open $U\ss CB$ is given by the lower-real
+\[\mu_U(S)(K)\coloneqq\mu'(\rho_{K,B}(S^K))\]
+where $S\mapsto S^K$ is the stalk functor, as given in \cref{eqn.stalk}.
+
+
+\subsection{Round trips}
+We are most concerned with the round trip from internal to internal valuations. Starting with an internal valuation $\mu$, an open set $U\ss CB$, a subsheaf $S\ss X$, and a point $K\in CB$, the desired equation between $\mu$ and the internalization of its externalization is:
+\[
+\mu_U(S)(K)=^?\mu_B((\rho_{K,B}\inv(S^K))_B)(B)
+\]
+But by \cref{prop.int_to_ext_measure_pres}, we have $\mu_B((\rho_{K,B}\inv(S^K))_B)(B)=\mu_B((S^K)_K)(K)=\mu_B(\At{K}(S))(K)$. The result follows by Nelson's principle, $\mu((S^K)_K)(K')=\mu(S)(K')$ for any $K\ss K'$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \chapter{Correspondence with stochastic processes}
