@@ -30,7 +30,11 @@ pdfencoding=unicode]{hyperref}
   \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
 \usepackage[backend=biber,style = alphabetic]{biblatex}
   \addbibresource{Library20171206.bib}
+
+%%%% draft stuff
 \usepackage{todonotes}
+\usepackage{showkeys}
+\newcommand{\tob}[1]{\todo[color=blue!40,inline]{\textbf{T:} #1}}
 
 
 
@@ -107,7 +111,7 @@ pdfencoding=unicode]{hyperref}
 \DeclareMathOperator*{\colim}{colim}
 \DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\Ob}{Ob}
-
+\DeclareMathOperator{\interior}{int}
 
 \newcommand{\const}[1]{\mathtt{#1}}
 \newcommand{\Set}[1]{\mathrm{#1}}
@@ -263,169 +267,126 @@ pdfencoding=unicode]{hyperref}
 
 \chapter{Introduction}
 
-\chapter{Preliminaries}
+\chapter{Logical axioms and their soundness}
 
-\section{Internal posets}
+\section{Intended semantics}
 
-\begin{notation}
-We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
-\end{notation}
+\tob{Let's see at the end whether our proofs go through more generally still, i.e.~for spaces that are not necessarily spaces of compacts}
 
-\begin{definition}
-Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to\Prop$ satisfying
-\begin{enumerate}
-	\item $\forall(x:X)\ldotp L(x,x)$.
-	\item $\forall(x,y,z:X)\ldotp L(x,y)\imp L(y,z)\imp L(x,z)$.
-\end{enumerate}
-We usually denote $L(x,y)$ as $x L y$. We call $(X,L)$ a \emph{poset}.
-\end{definition}
-
-In terms of sheaf semantics on some site $(\C,J)$, an internal poset is the same thing as a sheaf with values in $\Poset$; since the theory of posets is essentially algebraic, this is a consequence of Diaconescu's theorem, but it is also instructive to check it by hand.
-
-\begin{example}
-For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset structure given by $\lambda(f,g:Y\to\Prop)\ldotp\forall(y:Y)\ldotp (fy\imp gy)$.
-\end{example}
-
-\begin{example}
-The type $\tLR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\tQQp\to\Prop$ satisfying the following:
-\begin{description}
-	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\tQQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
-	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\tQQp)\ldotp\delta q\imp\exists(q':\tQQ)\ldotp(q<q')\wedge\delta q'$.
-\end{description}
-The type $\tLR$ has the structure of an ordered semi-ring. That is, it has the structure of
-\begin{itemize}
-	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
-	\item a commutative monoid $(0,+)$:
-	\begin{itemize}
-		\item identity $0$ given by $\lambda q\ldotp q < 0$,
-		\item  addition given by $(\delta_1+\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1+q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
-	\end{itemize}
-	\item a commutative monoid $(1,*)$:
-	\begin{itemize}
-		\item identity $1$ given by $\lambda q\ldotp q<1$,
-		\item multiplication given by $(\delta_1*\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1*q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
-	\end{itemize}
-\end{itemize}
-where multiplication distributes over addition, and both preserve order.
-\end{example}
-
-\begin{definition}
-Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if it satisfies the following:
-\begin{enumerate}
-	\item $\exists(x:X)\ldotp Dx$.
-	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
-\end{enumerate}
-Denote the conjunction of these two conditions as $\const{Drct}:(X\to\Prop)\to\Prop$.
-\end{definition}
-
-\begin{definition}
-Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $P$ is an element $s_P:X$ satisfying
-\begin{enumerate}
-	\item $\forall(x:\subtype{P})\ldotp x\leq s_P$.
-	\item $\forall(s':X)\ldotp[\forall(x:\subtype{P})\ldotp x\leq s']\imp s_P\leq s'$.
-\end{enumerate}
-Similarly, a \emph{meet} of $P$ is an element satisfying the dual statements (the arguments to every $\leq$ symbol are swapped).
-
-We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp (x=x_1) \vee (x=x_2)$ has a join, in which case we denote it $x_1\vee x_2$ (resp.\ meet $x_1\wedge x_2$). 
-
-We say that $X$ has a \emph{bottom element} if $\lambda(x:X)\ldotp \bot$ has a join, in which case we denote it $\varnothing:X$. We say that $X$ has \emph{finite joins} if $X$ has binary joins and a bottom element (resp.\ binary meets and a top element). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join, denoted $\sup P$.
-\end{definition}
-
-\begin{example}
-For any type $Y$, the poset $\Phi\coloneqq Y\to\Prop$ has all joins and meets. The join of $P:\Phi\to\Prop$ is $s_P\coloneqq\lambda(y:Y)\ldotp\exists(\phi:\subtype{P})\ldotp\phi y$. It is easy to check that this satisfies the conditions of being a join. The meet of $P$ is $\lambda(y:Y)\ldotp\forall(\phi:\subtype{P})\ldotp\phi y$.
-\end{example}
-
-\begin{example}
-The poset $(\tLR,\leq)$ has arbitrary joins: the join of $P:\tLR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
-
-In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\tLR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
-\end{example}
-
-\section{Internal topological spaces and locales}
-
-\todo[inline]{T: possibly except for the interactions with modalities, this stuff is all standard}
-
-Here is a potential definition of topology:
-\begin{definition}
-Let $X$ be a type. A \emph{topology} on $X$ is a function $\Op:(X\to\Prop)\to\Prop$ satisfying the following conditions:
-\begin{enumerate}
-	\item $\Op(\lambda(x:X)\ldotp\top)$.
-	\item $\forall(\phi_1,\phi_2:X\to\Prop)\ldotp(\Op(\phi_1)\wedge\Op(\phi_2))\imp\Op(\lambda(x:X)\ldotp\phi_1 x\wedge\phi_2 x)$.
-	\item Suppose given $I:(X\to\Prop)\to\Prop$ satisfying $\forall(\phi:X\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. Then $\Op(\lambda(x:X)\ldotp\exists(\phi:X\to\Prop)\ldotp I(\phi)\wedge\phi (x))$.
-\end{enumerate}
-In other words, the whole space $X$ is open, the intersection of two opens is open, and the union of any $I$-indexed set of opens is open, for any open system $I$. It will be useful to define open systems: $\mathrm{OpSys}\coloneqq\{I:(X\to\Prop)\to\Prop\mid\forall \phi\ldotp I(\phi)\imp\Op(\phi)\}.$
-
-We refer to a pair $(X,\Op)$, where $X$ is a type and $\Op$ is a topology on $X$, as an \emph{internal topological space}.
-\end{definition}
-
-\begin{example}[Discrete topology]
-For any type $X$, the \emph{discrete topology} on $X$ is given by $\Op(\phi)=\top$.
-\end{example}
-
-\begin{example}[Topology on $\tRR_j$]\label{ex.usual_topology_R}
-Let $j$ be a modality and define $\Op:(\tRR_j\to\Prop)\to\Prop$ by
-\[\Op(\phi)\coloneqq\forall(r:\tRR_j)\ldotp\phi r\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\phi(r').\]
-It is easy to check condition 1. For condition 2, we obtain $\epsilon_1$ and $\epsilon_2$ from $\phi_1$ and $\phi_2$, respectively; we can satisfy the requisite condition using their infimum, $\min(\epsilon_1,\epsilon_2)>0$.
-
-It remains to check condition 3. Let $I:(\tRR_j\to\Prop)\to\Prop$ satisfy $\forall(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$, i.e.\ $I$ is an open system. We need to show $\Op(\lambda(r:\tRR_j)\ldotp\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi (r))$. In other words, we need to show
-\begin{multline*}
-  \forall(r:\tRR_j)\ldotp[\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi(r)]\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\\
-  \forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\exists(\phi':\tRR_j\to\Prop)\ldotp I(\phi')\wedge\phi'(r).
-\end{multline*}
-So take $r:\tRR_j$ and suppose given $\phi$ such that $I(\phi)$ and $\phi(r)$ hold. It follow by hypothesis that $\Op(\phi)$ holds, so by definition we obtain $\epsilon>0$ satisfying the requisite condition with $\phi'\coloneqq\phi$.
-
-All we used about $\tRR_j$ was that it has a definition of comparison ($a<b$), subtraction ($a-b$), that binary min's exist, and that the additive inverse of a binary min is a binary max.
-\end{example}
-
-\begin{definition}\label{def.continuous}
-Suppose that $(X,\Op_X)$ and $(Y,\Op_Y)$ are internal topological space. A function $f:X\to Y$ is called \emph{continuous} if it satisfies
-\[\forall(\phi:Y\to\Prop)\ldotp\Op_Y(\phi)\imp\Op_X(\phi f).\]
-We denote by $\Cont(X,Y)$ the type of all $f:X\to Y$ satisfying this condition.
-\end{definition}
+For a topological space $\BaseSpace$, we denote by $\CB$ its set of nonempty compacts, where if $K\ss\BaseSpace$ is compact, we denote the associated point by $K_{C\BaseSpace}\in C\BaseSpace$. We equip $C\BaseSpace$ with what is known as the \emph{upper space topology} of $B$~\cite{Edalat:1995a}. Namely, to each open $U\subseteq \BaseSpace$ there is an associated basic open in $C\BaseSpace$, denoted $U_{C\BaseSpace}$, consisting of those points $K_{C\BaseSpace}$ with $K\subseteq U$:
+\[
+U_{C\BaseSpace}\coloneqq\{K_{C\BaseSpace}\mid K\ss U\}.
+\]
+We say that a topological space is \emph{regularly-based} if it has a basis of regular opens $U$, i.e.~open sets which are the interior of their closure, or equivalently which are their own double pseudo-complement, $\neg\neg U=U$.
 
 \begin{proposition}
-The internal topological spaces in a topos $\cat{E}$ and continuous maps form an external category with products, and the forgetful functor to $\cat{E}$ preserves products.
+If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
 \end{proposition}
+
 \begin{proof}
-It is easy to check directly from \cref{def.continuous} that if $f:X\to Y$ and $g:Y\to Z$ are continuous then so is $g\circ f$, and the identity is clearly continuous. To check the existence of products, we need to define a product topology $\Op_{X\times Y}$ on $X\times Y$, given topologies $\Op_X$ and $\Op_Y$. Given $\phi:X\times Y\to\Prop$, define $\Op_{X\times Y}(\psi)$ to be
-\begin{multline*}
-	\exists(I:\mathrm{OpSys}(X))\ldotp\\
-	[\forall(\phi:I)\ldotp\exists(\phi_X:\Op(X))(\phi_Y:\Op(Y))\ldotp\phi(x,y)\iff(\phi_X(x)\wedge\phi_Y(y))]\\\wedge[\forall(x:X)(y:Y)\ldotp\psi(x,y)\iff\exists(\phi:I)\ldotp\phi(x,y)]
-\end{multline*}
-Check that this is a topology and that it has the universal property of a product. (Unfinished)
+We first show that the closure $\ol{U_{C\BaseSpace}}$ of the basic open $U_{C\BaseSpace}$ consists of all compacts $K_{C\BaseSpace}$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set $\{K_{C\BaseSpace}\mid K\cap\ol{U}=\emptyset\}$ is open, since it is the open $(\ol{U}^c)_{C\BaseSpace}$ associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K_{C\BaseSpace}\in V_{C\BaseSpace}$ implies $K_{C\BaseSpace} \not\in U_{C\BaseSpace}$, then $V$ must be disjoint from $U$, since any single point $\{p\}\ss(V\cap U)$ is itself a nonempty compact set. This proves the first claim.
+
+Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
+
+Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
 \end{proof}
 
-\begin{example}
-The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j$ are continuous; see \cite[Theorems 4.44, 4.48]{Schultz.Spivak:2017a}. For any $j\to j'$ the map $\tRR_j\to\tRR_{j'}$ is also continuous; see \cite[Proposition 4.52]{Schultz.Spivak:2017a}.
-\end{example}
+For any $K\in CB$, we write $\At{K} := ((- \imp K^c) \imp K^c)$ for the associated quasi-closed modality, where $K^c$ denotes the interior of the complement of the point $\{K\}\in\CB$. 
 
-%%% The following is the Riesz approach
-% \begin{definition}[Measure on an internal topological space]
-%Let $(X,\Op_X)$ be an internal topological space, and let $\tRR_{\SeeInline{[d,u]}}$ be the $[d,u]$-reals with the usual topology (see \cref{ex.usual_topology_R}). Then a $[d,u]$-measure on $X$ is a function $\mu:\Cont(X,\tRRat{[d,u]})\to\tRRat{[d,u]}$
-%satisfying the following properties:
-%\begin{enumerate}
-%	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
-%	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.
-%\end{enumerate}
-%Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$ such that
-%\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
-%holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
-%\end{definition}
+\begin{proposition}
+If $K$ is a point then the topos of sheaves for the associated modality $\At{K}$ is a copy of $\smset$.
+\end{proposition}
+\begin{proof}
+A subsheaf $X\inj Y$ is $\At{K}$-dense if for every open $U$ in $C\BaseSpace$, either $K\not\in U$ or for every section $y\in Y(U)$, there exists $V\ss U$ with $K\in V$ and $\restrict{y}{V}\in X$. Recall that $F$ is an $\At{K}$-sheaf iff $F\to 1$ is right-orthogonal to every $\At{K}$-dense map.
 
-\todo{Locally compact spaces as continuous posets}
+Suppose $F$ is an $\At{K}$-sheaf; we will show that it is a skyscraper sheaf at $K$, i.e.\ there is a set $S$ such that for any open $U$, if $K\in U$ then $F(U)=S$ and if $K\not\in U$ then $F(U)=\{*\}$. Indeed let $S\coloneqq F(C\BaseSpace)$. For any $U$, if $K\in U$ then $\yoneda U\to\yoneda X$ is $\At{K}$-dense, and right-orthogonality means that the restriction map $F(X)\to F(U)$ is an iso. If $K\not\in U$ then $\emptyset\to\yoneda U$ is dense, and right-orthogonality means that $F(U)\to 1$ is an iso. Thus $F$ is the skyscraper on $S$.
 
-\todo{Does at modality take locally compact spaces to locally compact spaces?}
+The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
+\end{proof}
 
-\chapter{Axiomatics and soundness}
+\tob{The following is probably irrelevant:}
 
-\todo[inline]{Rewrite everything in here in the form of axioms together with soundness proofs?}
+If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
+
+\todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
+
+\section{Axioms and soundness proofs}
+
+We only work with $\At{}$ modalities explicitly, since In and See are easy to define directly in terms of the logic, so that introducing notation for them would not decrease formula complexity by much.
+
+In other words, we only equip standard first-order intuitionistic type theory with an additional system of modalities $\{ \At{K} \: : \: K\in \CB\}$ indexed by some type $\CB$.
+
+Our soundness proofs refer to the intended semantics.
+
+Our first axiom is concerned with the double negation modality, while all following axioms will involve $\At{}$.
+
+\begin{axiom}
+\[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
+\end{axiom}
+
+We say that a topos is \emph{regularly-based} if this axiom is sound.
+
+Equivalently, we could have said that every $P:\Prop$ must be the supremum of all $Q:\Prop$ with $Q\imp P$ and $\neg\neg Q\imp Q$. For topological spaces, recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty set, and is closed under finite intersections. So for the topos of sheaves on a space, our condition expresses the requirement that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup {\{Q\ss P\mid \neg\neg Q=Q\}}$.
+
+\begin{remark}
+In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
+
+It is not hard to show however that any regular space is regularly-based in our sense. 
+\end{remark}
 
 \begin{axiom}\label{ax.enough_points}
-For every $P : \Prop$,
+For every $K : \CB$ and $P : \Prop$,
 \[
 	P \: \Leftrightarrow \: \forall K \ldotp \At{K} P.
 \]
 \end{axiom}
+
+\begin{soundproof}
+	\tob{tbw}
+\end{soundproof}
+
+\begin{axiom}\label{ax.atBoolean}
+	For every $K : \CB$ and $P : \Prop$,
+\[
+	\At{K} P \lor ( P \implies \At{K} \bot).
+\]
+\end{axiom}
+
+Hence the topos of $\At{K}$-sheaves is Boolean.
+
+\begin{soundproof}
+	\tob{tbw}
+\end{soundproof}
+
+\begin{axiom}
+	\label{ax:flabby_vs_at}
+	Suppose that $X$ is flabby. Then for all points $K : \CB$ and predicates $P : X \to \Prop$,
+	\[
+		\At{K}\exists x:X. P(x) \quad \Longrightarrow \quad \exists x:X.\At{K}P(x).
+	\]
+\end{axiom}
+
+Since the implication from right is left is easy to prove for every modality, we therefore know that this is actually an equivalence.
+
+\begin{soundproof}
+	It is enough to show that if $U \models \At{K} \exists x:X.P(x)$, then $U \models \At{K}\bot \:\lor\: \exists x:X.\At{K}P(x)$. For $K\not\in U$, then the latter is trivially correct, so assume $K \in U$. Then the assumption means that there is $V\ni K$ with $V\subseteq U$ and $V\models \exists x:X.\At{K} P(x)$. Restricting further, we have $W\ni K$ with $W\subseteq V\subseteq U$ and $x\in X(W)$ with $W \models \At{K} P(x)$. Restricting $W$ again if necessary, we get $W \models P(x)$.
+
+	We now use flabbiness to get $x'\in X(U)$ with $x'|_W = x$. Then we indeed have $U\models \At{K} P(x')$ since $W\models P(x)$.
+\end{soundproof}
+
+
+\chapter{Consequences of the axiomatics}
+
+\begin{proposition}
+	Let $(X,\Op(X))$ be an internal space. Then for every $P : \Op(X)\to X$ and $K : \CB$, we have
+	\[
+		\At{K} \exists U : \Op(X)\ldotp P(U) \quad \Longleftrightarrow \quad \exists U : \Op(X)\ldotp \At{K} P(U).
+	\]
+\end{proposition}
+
+\begin{proof}
+	Combine \cref{ax:flabby_vs_at} with \cref{prop:opens_flabby}.	
+\end{proof}
 
 \begin{lemma}
 For every $P : \Prop$,
@@ -457,60 +418,7 @@ Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, b
 Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lambda K \ldotp \At{K} P$. This boils down to showing $Q(K) = \At{K} \forall K' \ldotp Q(K')$ for every $K$. The right-to-left implication is trivial, so assuming $Q(K)$. By definition we get $U : \Prop$ with $\At{K} U$ and $\At{K'} U \imp Q(K')$ for every $K'$. So in order to prove $\At{K} \forall K' \ldotp Q(K')$, we can even assume $U$, which implies $\At{K'} U$ and therefore $Q(K')$, as was to be shown.
 \end{proof}
 
-\section{Topological and domain-theoretic properties of $C\BaseSpace$}
-
-For a topological space $\BaseSpace$, we denote by $C\BaseSpace$ is set of nonempty compacts, where if $K\ss\BaseSpace$ is compact, we denote the associated point by $K_{C\BaseSpace}\in C\BaseSpace$. We equip $C\BaseSpace$ with what is known as the \emph{upper space} of $B$~\cite{Edalat:1995a}. Namely, to each open $U\subseteq \BaseSpace$ there is an associated basic open in $C\BaseSpace$, denoted $U_{C\BaseSpace}$, consisting of those points $K_{C\BaseSpace}$ with $K\subseteq U$:
-\[
-U_{C\BaseSpace}\coloneqq\{K_{C\BaseSpace}\mid K\ss U\}.
-\]
-
-We say that a topological space is \emph{regularly-based} if it has a basis of open sets $U$ that equal their double pseudo-complement, $\neg\neg U=U$.
-
-\begin{proposition}
-If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
-\end{proposition}
-
-\begin{proof}
-We first show that the closure $\ol{U_{C\BaseSpace}}$ of the basic open $U_{C\BaseSpace}$ consists of all compacts $K_{C\BaseSpace}$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set $\{K_{C\BaseSpace}\mid K\cap\ol{U}=\emptyset\}$ is open, since it is the open $(\ol{U}^c)_{C\BaseSpace}$ associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K_{C\BaseSpace}\in V_{C\BaseSpace}$ implies $K_{C\BaseSpace} \not\in U_{C\BaseSpace}$, then $V$ must be disjoint from $U$, since any single point $\{p\}\ss(V\cap U)$ is itself a nonempty compact set. This proves the first claim.
-
-Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
-
-Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
-\end{proof}
-
 Therefore all of the results from the previous section apply here as well.
-
-If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
-
-\todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
-
-From now on, we assume that we have these properties:
-
-\begin{axiom}
-$\BaseSpace$ is Hausdorff.
-\end{axiom}
-
-For any $K\in CB$, we write $\At{K} := ((- \imp (\downarrow K)^c) \imp (\downarrow K)^c)$ for the associated quasi-closed modality, where $(\downarrow K)^c$ is the (open) complement of $K$. Since $\downarrow K$ is an irreducible closed set, it can be shown (along the lines of Lemma 5.37 of TTT) that we have:
-
-\begin{axiom}\label{ax.atBoolean}
-For every $P : \Prop$,
-\[
-	\At{K} P \lor (P \imp \At{K} \bot)
-\]
-\end{axiom}
-
-Hence the topos of $\At{K}$-sheaves is Boolean.
-
-\begin{proposition}
-If $K$ is a point then the topos of sheaves for the associated modality $\At{K}$ is a copy of $\smset$.
-\end{proposition}
-\begin{proof}
-A subsheaf $X\inj Y$ is $\At{K}$-dense if for every open $U$ in $C\BaseSpace$, either $K\not\in U$ or for every section $y\in Y(U)$, there exists $V\ss U$ with $K\in V$ and $\restrict{y}{V}\in X$. Recall that $F$ is an $\At{K}$-sheaf iff $F\to 1$ is right-orthogonal to every $\At{K}$-dense map.
-
-Suppose $F$ is an $\At{K}$-sheaf; we will show that it is a skyscraper sheaf at $K$, i.e.\ there is a set $S$ such that for any open $U$, if $K\in U$ then $F(U)=S$ and if $K\not\in U$ then $F(U)=\{*\}$. Indeed let $S\coloneqq F(C\BaseSpace)$. For any $U$, if $K\in U$ then $\yoneda U\to\yoneda X$ is $\At{K}$-dense, and right-orthogonality means that the restriction map $F(X)\to F(U)$ is an iso. If $K\not\in U$ then $\emptyset\to\yoneda U$ is dense, and right-orthogonality means that $F(U)\to 1$ is an iso. Thus $F$ is the skyscraper on $S$.
-
-The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
-\end{proof}
 
 \begin{lemma}
 For $K\in C\BaseSpace$, the complement $(\downarrow K)^c$ of $\downarrow K$ is a prime open.
@@ -519,17 +427,6 @@ For $K\in C\BaseSpace$, the complement $(\downarrow K)^c$ of $\downarrow K$ is a
 
 \begin{proof}
 Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \downarrow K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \downarrow K = \emptyset$, as was to be shown.
-\end{proof}
-
-\begin{proposition}
-If $(S,\sqss)$ is a domain, then it has posite structure whose covering families are the way-up-closures.
-
-Suppose that these families are directed, i.e.\ that if $s\ll s'_1$ and $s\ll s'_2$ then there exists $s\ll s'$ with $s'\sqss s'_1$ and $s'\sqss s'_2$. Then the Kripke-Joyal semantics for $\vee$ degenerates: $s\Vdash\phi\vee\psi$ iff $s\Vdash\phi$ or $s\Vdash\psi$.
-\end{proposition}
-\begin{proof}
-The fact that $(S,\sqss)$ has the structure of a posite whose covering families are way-up closures is \cite[Remark 2.21]{Schultz.Spivak:2017a}.
-
-The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there exists a covering family $\{s_i\to s\}_{i\in I}$ such that $s_i\Vdash\phi$ or $s_i\Vdash\psi$ for each $i\in I$. Here we have only one covering family, namely $\{s'\mid s\ll s'\}$ for each $s$. Suppose that $\upclose s$ is filtered and that $s\Vdash\phi\vee\psi$. Arguing classically, if $s\not\Vdash\phi$ and $s\not\Vdash\psi$ then there is some $s'_1,s'_2\in\upclose s$ such that $s'_1\not\Vdash\phi$ and $s'_2\not\Vdash\psi$. Let $s\ll s'\sqss \{s_1,s_2\}$. Then by monotonicity $s'\not\Vdash\phi$ and $s'\not\Vdash\psi$, a contradiction.
 \end{proof}
 
 
@@ -591,23 +488,6 @@ Semantically, both sides of this implication are necessarily true as soon as $K 
 The implication from right to left is a simple case distinction. 
 
 From left to right, we assume $\At{K}(P \vee \See{B} \bot)$, or equivalently $\At{K} P \vee (\At{K} \See{B} \bot)$ by \cref{ax.at_disjunction}. In the case $\At{K} \See{B} \bot$ we are done; in the other case $\At{K} P$, we can assume $P \imp \See{B} \bot$ by $\See{B} = \At{B}$ and the decidability \cref{ax.atBoolean}. But then we have $\At{K} P \imp \At{K} \See{B} \bot$ by monotonicity, from which $\At{K} P$ proves the claim $\At{K} \See{B} \bot$.
-\end{proof}
-
-\begin{definition}\label{def:flabby}
-An object $X$ is \emph{flabby} if for every $P : X \to \Prop$,
-\[
-	( \forall x,x' : X \ldotp P(x) \wedge P(x') \imp x = x') \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp P(x) .
-\]
-\end{definition}
-
-\begin{lemma}
-$\Prop$ is flabby.
-\end{lemma}
-
-\begin{proof}
-Suppose that we have $P : \Prop \to \Prop$ that satisfies the subsingleton condition of \cref{def:flabby}. Then we claim that $P$ holds for $U := \forall V \ldotp P(V) \imp V$. Hence we need to show that if we have $W : \Prop$ with $P(W)$, then also $P(U)$.
-
-So it is enough to prove $U = W$. Assuming $U$, we get $P(W) \imp W$ as an instance of $U$, and therefore $W$. Assuming $W$, we derive $U$ by proving $P(V) \imp V$ for a given $V$. But since $P(V)$ and $P(W)$, we get $V = W$ by the assumed subsingleton condition, and therefore $V$, as was to be shown.
 \end{proof}
 
 \begin{proposition}\label{prop.flabbiness_equivalence}
@@ -692,11 +572,83 @@ For any $X$ and any $K\in C\BaseSpace$,
 \]
 \end{axiom}
 
-In fact, since the implication from right to left is trivial, we even have an equivalence there; but as the axiom, we only need to postulate the nontrivial direction.
+\chapter{Preliminaries}
 
-\begin{soundproof}
-Given $W \models \exists x : X$, we must have $V \subseteq W$ with $K \in V$ and $V \models \exists x : X$; this means that $V$ can be covered by sub-opens over which $X$ has local sections. One of these sub-opens, let us call it $U$, must contain $K$. 
-\end{soundproof}
+\section{Internal posets}
+
+\begin{notation}
+We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
+\end{notation}
+
+\begin{definition}
+Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to\Prop$ satisfying
+\begin{enumerate}
+	\item $\forall(x:X)\ldotp L(x,x)$.
+	\item $\forall(x,y,z:X)\ldotp L(x,y)\imp L(y,z)\imp L(x,z)$.
+\end{enumerate}
+We usually denote $L(x,y)$ as $x L y$. We call $(X,L)$ a \emph{poset}.
+\end{definition}
+
+In terms of sheaf semantics on some site $(\C,J)$, an internal poset is the same thing as a sheaf with values in $\Poset$; since the theory of posets is essentially algebraic, this is a consequence of Diaconescu's theorem, but it is also instructive to check it by hand.
+
+\begin{example}
+For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset structure given by $\lambda(f,g:Y\to\Prop)\ldotp\forall(y:Y)\ldotp (fy\imp gy)$.
+\end{example}
+
+\begin{example}
+The type $\tLR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\tQQp\to\Prop$ satisfying the following:
+\begin{description}
+	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\tQQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
+	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\tQQp)\ldotp\delta q\imp\exists(q':\tQQ)\ldotp(q<q')\wedge\delta q'$.
+\end{description}
+The type $\tLR$ has the structure of an ordered semi-ring. That is, it has the structure of
+\begin{itemize}
+	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
+	\item a commutative monoid $(0,+)$:
+	\begin{itemize}
+		\item identity $0$ given by $\lambda q\ldotp q < 0$,
+		\item  addition given by $(\delta_1+\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1+q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
+	\end{itemize}
+	\item a commutative monoid $(1,*)$:
+	\begin{itemize}
+		\item identity $1$ given by $\lambda q\ldotp q<1$,
+		\item multiplication given by $(\delta_1*\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1*q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
+	\end{itemize}
+\end{itemize}
+where multiplication distributes over addition, and both preserve order.
+\end{example}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if it satisfies the following:
+\begin{enumerate}
+	\item $\exists(x:X)\ldotp Dx$.
+	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
+\end{enumerate}
+Denote the conjunction of these two conditions as $\const{Drct}:(X\to\Prop)\to\Prop$.
+\end{definition}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $P$ is an element $s_P:X$ satisfying
+\begin{enumerate}
+	\item $\forall(x:\subtype{P})\ldotp x\leq s_P$.
+	\item $\forall(s':X)\ldotp[\forall(x:\subtype{P})\ldotp x\leq s']\imp s_P\leq s'$.
+\end{enumerate}
+Similarly, a \emph{meet} of $P$ is an element satisfying the dual statements (the arguments to every $\leq$ symbol are swapped).
+
+We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp (x=x_1) \vee (x=x_2)$ has a join, in which case we denote it $x_1\vee x_2$ (resp.\ meet $x_1\wedge x_2$). 
+
+We say that $X$ has a \emph{bottom element} if $\lambda(x:X)\ldotp \bot$ has a join, in which case we denote it $\varnothing:X$. We say that $X$ has \emph{finite joins} if $X$ has binary joins and a bottom element (resp.\ binary meets and a top element). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join, denoted $\sup P$.
+\end{definition}
+
+\begin{example}
+For any type $Y$, the poset $\Phi\coloneqq Y\to\Prop$ has all joins and meets. The join of $P:\Phi\to\Prop$ is $s_P\coloneqq\lambda(y:Y)\ldotp\exists(\phi:\subtype{P})\ldotp\phi y$. It is easy to check that this satisfies the conditions of being a join. The meet of $P$ is $\lambda(y:Y)\ldotp\forall(\phi:\subtype{P})\ldotp\phi y$.
+\end{example}
+
+\begin{example}
+The poset $(\tLR,\leq)$ has arbitrary joins: the join of $P:\tLR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
+
+In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\tLR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
+\end{example}
 
 \chapter{Internal valuations}
 
@@ -762,19 +714,6 @@ A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the
 
 \newpage
 \chapter{Properties of internal valuations}
-
-\begin{definition}
-Say that a topos $\cat{E}$ is \emph{regularly-based} if the following statement holds internally:
-\[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
-\end{definition}
-
-Equivalently, we could have said that every $P:\Prop$ must be the supremum of all $Q:\Prop$ with $Q\imp P$ and $\neg\neg Q\imp Q$. For topological spaces, recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty set, and is closed under finite intersections. So for the topos of sheaves on a space, our condition expresses the requirement that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup {\{Q\ss P\mid \neg\neg Q=Q\}}$.
-
-\begin{remark}
-In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
-
-It is not hard to show however that any regular space is regularly-based in our sense. 
-\end{remark}
 
 \section{Valuations on $\Prop$}
 
@@ -1261,6 +1200,20 @@ All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finit
 \]
 and similarly for $\epsilon$, and assert the triangle identities; all of this structure will be preserved by $F$.
 
+\section{Posites}
+
+\begin{proposition}
+If $(S,\sqss)$ is a domain, then it has posite structure whose covering families are the way-up-closures.
+
+Suppose that these families are directed, i.e.\ that if $s\ll s'_1$ and $s\ll s'_2$ then there exists $s\ll s'$ with $s'\sqss s'_1$ and $s'\sqss s'_2$. Then the Kripke-Joyal semantics for $\vee$ degenerates: $s\Vdash\phi\vee\psi$ iff $s\Vdash\phi$ or $s\Vdash\psi$.
+\end{proposition}
+\begin{proof}
+The fact that $(S,\sqss)$ has the structure of a posite whose covering families are way-up closures is \cite[Remark 2.21]{Schultz.Spivak:2017a}.
+
+The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there exists a covering family $\{s_i\to s\}_{i\in I}$ such that $s_i\Vdash\phi$ or $s_i\Vdash\psi$ for each $i\in I$. Here we have only one covering family, namely $\{s'\mid s\ll s'\}$ for each $s$. Suppose that $\upclose s$ is filtered and that $s\Vdash\phi\vee\psi$. Arguing classically, if $s\not\Vdash\phi$ and $s\not\Vdash\psi$ then there is some $s'_1,s'_2\in\upclose s$ such that $s'_1\not\Vdash\phi$ and $s'_2\not\Vdash\psi$. Let $s\ll s'\sqss \{s_1,s_2\}$. Then by monotonicity $s'\not\Vdash\phi$ and $s'\not\Vdash\psi$, a contradiction.
+\end{proof}
+
+
 \chapter{Toy example}
 
 \todo[inline]{We can recycle some of the following to use as our running example for illustration}
@@ -1526,7 +1479,162 @@ We believe that direct image functors $f_*$ preserve the internal structures of 
 \end{tikzcd}
 \]
 
+\chapter{Valuations and dense subtoposes}
 
-\printbibliography
+\tob{``dense'' is wrong. TODO: Figure out what this should be instead}
+
+\begin{conjecture}
+Let $j$ be a dense modality. Then for every type $X$, valuations $\Prop^X \to \tLR$ are in canonical bijection with valuations $\Prop_j^{\asSh_j{X}} \to \tLR_j$.
+\end{conjecture}
+
+\tob{Are the lower $j$-reals isomorphic to the $j$-sheafification of the lower reals? If not, I'm not sure which one of the two I want}
+
+Of course we would want this to hold internally.
+
+We write $\eta_j : X \to \asSh_j{X}$ for the unit of the sheafification adjunction.
+
+Given $\mu : \Prop^X\ \to \tLR$, we construct $\mu' : \Prop_j^{\asSh_j{X}} \to \tLR_j$ as follows. Let $P : \asSh_j{X} \to \Prop_j$ be a predicate. Then
+\[
+	\mu'(P)(q) := j \mu(P\circ \eta_j)(q).
+\]
+Conversely, given $\mu'$ we can try to construct $\mu$ as
+\[
+	\mu(P) := \sup_{jQ \implies P} \mu'(jQ),
+\]
+meaning that
+\[
+	\mu(P)(q) = \exists Q. (jQ\implies P) \land \mu'(jQ)(q).
+\]
+So in order for the two constructions to be inverses of one another, we need in particular that
+\[
+	\mu(P)(q) = \exists Q. (jQ\implies P) \land j\mu(jQ\circ \eta_j)(q)
+\]
+
+\chapter{Internal topological spaces}
+
+\begin{definition}
+Let $X$ be a type. A \emph{topology} on $X$ is a function $\Op:(X\to\Prop)\to\Prop$ satisfying the following conditions:
+\begin{enumerate}
+	\item $\Op(\lambda(x:X)\ldotp\top)$.
+	\item $\forall(\phi_1,\phi_2:X\to\Prop)\ldotp(\Op(\phi_1)\wedge\Op(\phi_2))\imp\Op(\lambda(x:X)\ldotp\phi_1 x\wedge\phi_2 x)$.
+	\item Suppose given $I:(X\to\Prop)\to\Prop$ satisfying $\forall(\phi:X\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. Then $\Op(\lambda(x:X)\ldotp\exists(\phi:X\to\Prop)\ldotp I(\phi)\wedge\phi (x))$.
+\end{enumerate}
+In other words, the whole space $X$ is open, the intersection of two opens is open, and the union of any $I$-indexed set of opens is open, for any open system $I$. % It will be useful to define open systems: $\mathrm{OpSys}\coloneqq\{I:(X\to\Prop)\to\Prop\mid\forall \phi\ldotp I(\phi)\imp\Op(\phi)\}.$
+
+We refer to a pair $(X,\Op(X))$, where $X$ is a type and $\Op(X)$ is a topology on $X$, as an \emph{internal topological space}.
+\end{definition}
+
+\begin{example}[Discrete topology]
+For any type $X$, the \emph{discrete topology} on $X$ is given by $\Op(\phi)=\top$.
+\end{example}
+
+\begin{example}[Topology on $\tRR_j$]\label{ex.usual_topology_R}
+Let $j$ be a modality and define $\Op:(\tRR_j\to\Prop)\to\Prop$ by
+\[\Op(\phi)\coloneqq\forall(r:\tRR_j)\ldotp\phi r\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\phi(r').\]
+It is easy to check condition 1. For condition 2, we obtain $\epsilon_1$ and $\epsilon_2$ from $\phi_1$ and $\phi_2$, respectively; we can satisfy the requisite condition using their infimum, $\min(\epsilon_1,\epsilon_2)>0$.
+
+It remains to check condition 3. Let $I:(\tRR_j\to\Prop)\to\Prop$ satisfy $\forall(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$, i.e.\ $I$ is an open system. We need to show $\Op(\lambda(r:\tRR_j)\ldotp\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi (r))$. In other words, we need to show
+\begin{multline*}
+  \forall(r:\tRR_j)\ldotp[\exists(\phi:\tRR_j\to\Prop)\ldotp I(\phi)\wedge\phi(r)]\imp\exists(\epsilon:\tRR_j)\ldotp\epsilon>0\wedge\\
+  \forall(r':\tRR_j)\ldotp(-\epsilon<r-r'<\epsilon)\imp\exists(\phi':\tRR_j\to\Prop)\ldotp I(\phi')\wedge\phi'(r).
+\end{multline*}
+So take $r:\tRR_j$ and suppose given $\phi$ such that $I(\phi)$ and $\phi(r)$ hold. It follow by hypothesis that $\Op(\phi)$ holds, so by definition we obtain $\epsilon>0$ satisfying the requisite condition with $\phi'\coloneqq\phi$.
+
+All we used about $\tRR_j$ was that it has a definition of comparison ($a<b$), subtraction ($a-b$), that binary min's exist, and that the additive inverse of a binary min is a binary max.
+\end{example}
+
+\begin{definition}\label{def.continuous}
+Suppose that $(X,\Op_X)$ and $(Y,\Op_Y)$ are internal topological space. A function $f:X\to Y$ is called \emph{continuous} if it satisfies
+\[\forall(\phi:Y\to\Prop)\ldotp\Op_Y(\phi)\imp\Op_X(\phi f).\]
+We denote by $\Cont(X,Y)$ the type of all $f:X\to Y$ satisfying this condition.
+\end{definition}
+
+\begin{proposition}
+The internal topological spaces in a topos $\cat{E}$ and continuous maps form an external category with products, and the forgetful functor to $\cat{E}$ preserves products.
+\end{proposition}
+\begin{proof}
+It is easy to check directly from \cref{def.continuous} that if $f:X\to Y$ and $g:Y\to Z$ are continuous then so is $g\circ f$, and the identity is clearly continuous. To check the existence of products, we need to define a product topology $\Op_{X\times Y}$ on $X\times Y$, given topologies $\Op_X$ and $\Op_Y$. Given $\phi:X\times Y\to\Prop$, define $\Op_{X\times Y}(\psi)$ to be
+\begin{multline*}
+	\exists(I:\mathrm{OpSys}(X))\ldotp\\
+	[\forall(\phi:I)\ldotp\exists(\phi_X:\Op(X))(\phi_Y:\Op(Y))\ldotp\phi(x,y)\iff(\phi_X(x)\wedge\phi_Y(y))]\\\wedge[\forall(x:X)(y:Y)\ldotp\psi(x,y)\iff\exists(\phi:I)\ldotp\phi(x,y)]
+\end{multline*}
+Check that this is a topology and that it has the universal property of a product. (Unfinished)
+\end{proof}
+
+\begin{example}
+The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j$ are continuous; see \cite[Theorems 4.44, 4.48]{Schultz.Spivak:2017a}. For any $j\to j'$ the map $\tRR_j\to\tRR_{j'}$ is also continuous; see \cite[Proposition 4.52]{Schultz.Spivak:2017a}.
+\end{example}
+
+%%% The following is the Riesz approach
+% \begin{definition}[Measure on an internal topological space]
+%Let $(X,\Op_X)$ be an internal topological space, and let $\tRR_{\SeeInline{[d,u]}}$ be the $[d,u]$-reals with the usual topology (see \cref{ex.usual_topology_R}). Then a $[d,u]$-measure on $X$ is a function $\mu:\Cont(X,\tRRat{[d,u]})\to\tRRat{[d,u]}$
+%satisfying the following properties:
+%\begin{enumerate}
+%	\item Linearity: $\mu(r*f+g)=r*\mu(f)+\mu(g)$ for $r:\tRR$ and $f,g:X\to\tRRat{[d,u]}$.
+%	\item Positivity: $\mu(f)\geq 0$ whenever $f$ satisfies $\forall x\ldotp f(x)\geq 0$.
+%\end{enumerate}
+%Let $\const{Meas}_{[d,u]}(X)$ denote the type of measures on $X$ at $[d,u]$. A \emph{measure $\mu$ on $X$} consists of a measure $\mu_{[d,u]}\in\const{Meas}_{[d,u]}(X)$ for each $d,u:\tRR$ such that
+%\[\forall(f:X\to\tRRat{[d',u']})\ldotp\See{[d,u]}\mu_{[d',u']}(f)=\mu_{[d,u]}(\See{[d,u]}f)\]
+%holds for every $d\leq d'\leq u'\leq u$. Let $\const{Meas}(X)$ denote the type of measures on $X$.
+%\end{definition}
+
+\tob{We may eventually need a discussion of locally compact spaces as continuous posets. Does at modality take locally compact spaces to locally compact spaces?}
+
+\begin{proposition}
+	If $(X,\Op(X))$ is an internal space, then $\Op(X)$ inherits implication (the Heyting exponential) from $\Prop^X$.
+\end{proposition}
+
+\begin{proof}
+	\tob{tbw}
+\end{proof}
+
+The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that it is closed under the existential quantifier by assumption. Taking the interior works as follows:
+
+\begin{definition}
+	For $P : X \to \Prop$,
+	\[
+		\interior(P) := \lambda x \ldotp \exists U : \Op(X) \ldotp U(x) \land (U \imp P).
+	\]
+\end{definition}
+
+This is the largest open predicate below $P$ by definition.
+
+\chapter{Flabbiness}
+
+\tob{We need to explain \href{https://ncatlab.org/nlab/show/flabby+sheaf\#characterization_using_the_internal_language}{https://ncatlab.org/nlab/show/flabby+sheaf\#characterization\_using\_the\_internal\_language}}
+
+We discuss flabbiness from the internal perspective of any topos $\mathcal{E}$.
+
+\begin{definition}\label{def:flabby}
+	A type $X$ is \emph{flabby} if for every subsingleton $S\subseteq X$ there is $x\in X$ such that if $S$ is inhabited, then $x\in S$. In other words, $X$ is flabby if for every $P : X \to \Prop$,
+	\begin{equation}\label{eq:flabby}
+	( \forall x,x' : X \ldotp P(x) \wedge P(x') \imp x = x') \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp P(x) .
+\end{equation}
+\end{definition}
+
+\begin{lemma}
+$\Prop$ is flabby.
+\end{lemma}
+
+\begin{proof}
+Suppose that we have $P : \Prop \to \Prop$ that satisfies the subsingleton condition of \cref{def:flabby}. Then we claim that $P$ holds for $U := \forall V \ldotp P(V) \imp V$. Hence we need to show that if we have $W : \Prop$ with $P(W)$, then also $P(U)$.
+
+So it is enough to prove $U = W$. Assuming $U$, we get $P(W) \imp W$ as an instance of $U$, and therefore $W$. Assuming $W$, we derive $U$ by proving $P(V) \imp V$ for a given $V$. But since $P(V)$ and $P(W)$, we get $V = W$ by the assumed subsingleton condition, and therefore $V$, as was to be shown.
+\end{proof}
+
+More generally, we have~\cite[Lemma~1.2]{moerdijk}:
+
+\begin{proposition}
+	\label{prop:opens_flabby}
+	For every internal space $(X,\Op(X))$, the type $\Op(X)$ is flabby.
+\end{proposition}
+
+\begin{proof}
+This is analogous to the previous proof. So suppose that we have $P : \Op(X) \to \Prop$ that satisfies the subsingleton condition of \cref{def:flabby}. Then we claim that $P$ holds for $U := \interior\left(\forall V \ldotp P(V) \imp V\right)$. Hence we need to show that if we have $W : \Op(X)$ with $P(W)$, then also $P(U)$.
+
+	So it is enough to prove $U = W$ by showing $U(x) \Leftrightarrow W(x)$ for every $x : X$. Assuming $U(x)$, we have an open $U'\ni x$ such that $U' \imp (\forall V \ldotp P(V) \imp V)$. Evaluating this at $x$ proves $\forall V. P(V) \imp V(x)$, and therefore we indeed get $W(x)$. Now assume $W(x)$. Using $W$ itself as the neighborhood, it is enough to prove that $W$ implies $\forall V\ldotp P(V) \imp V$. But now since $P(V)$ and $P(W)$, this follows from the assumed subsingleton condition.
+\end{proof}
+
+%\printbibliography
 
 \end{document}
