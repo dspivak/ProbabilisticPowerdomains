@@ -1,5 +1,4 @@
-\documentclass[11pt, oneside, article]{memoir}
-
+\documentclass[11pt, oneside, article]{memoir} 
 \settrims{0pt}{0pt} % page and stock same size
 \settypeblocksize{*}{32pc}{*} % {height}{width}{ratio}
 \setlrmargins{*}{*}{1} % {spine}{edge}{ratio}
@@ -336,7 +335,17 @@ In other words, we only equip standard first-order intuitionistic type theory wi
 
 Our soundness proofs refer to the intended semantics.
 
-Our first axiom is concerned with the double negation modality, while all following axioms will involve $\At{}$.
+Besides the usual arithmetical and order-theoretic properties of the natural numbers, we also use the following well-ordering principle (which implies induction):
+
+\begin{axiom}
+	\label{ax:N_well_ordered}
+	For every $P : \tNN\to\Prop$,
+	\[
+		\exists n\ldotp P(n) \quad \Longrightarrow \quad \exists n\ldotp \left[ P(n) \:\land\: \forall m\ldotp P(m) \imp (m \geq n) \right].
+	\]
+\end{axiom}
+
+Our next axiom is concerned with the double negation modality, while all following axioms will involve $\At{}$.
 
 \begin{axiom}
 \[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
@@ -352,23 +361,23 @@ In the book \emph{Counterexamples in Topology} they define semi-regular spaces t
 It is not hard to show however that any regular space is regularly-based in our sense. 
 \end{remark}
 
+We now axiomatize the assumption that our topos has enough points:
+
 \begin{axiom}\label{ax.enough_points}
-For every $K : \CB$ and $P : \Prop$,
+For every $P,Q : \Prop$,
 \[
-	P \: \Leftrightarrow \: \forall K \ldotp \At{K} P.
+	\left(\forall K\ldotp \At{K} P \imp \At{K} Q\right) \: \Longrightarrow \: \left(P \imp Q\right).
 \]
 \end{axiom}
 
+Since the right-hand side clearly implies the left, we conclude that this implication is actually an equality of propositions. Upon setting $P = \top$, we obtain the useful $Q = \forall K\ldotp \At{K} Q$ as a special case.
+
 \begin{soundproof}
-	\tob{tbw}
+	We need to show that if $U \models \forall K\ldotp \At{K} P \imp \At{K} Q$, then also $U \models (P \imp Q)$.
+
+	Proving the contrapositive, we assume $U \not\models (P \imp Q)$, which means that there is a point $K \in (U\cap P)\setminus Q$. Then we have $U \not\models (\At{K} P \imp \At{K} Q)$, which shows in particular that $U\not\models \forall K\ldotp \At{K} P \imp \At{K} Q$.
 \end{soundproof}
 
-\section{Locally compact spaces as continuous posets}
-Something like the following should be true.
-
-Suppose $X$ is a topological space and $\Op(X)$ is its frame of opens. A Scott-open in $\Op(X)$ is a subset $K\ss\Op(X)$ that is up-closed and inaccessible by directed joins: for any directed collection $I\ss\Op(X)$ of frame elements, if $(\bigvee_{i\in I} U_i)\in K$ then $U_i\in K$ for some $i\in I$. These are the filters corresponding to compact sets.
-
-Given opens $U,V\in\Op(X)$, we have $U\ll V$ (i.e.\ $U$ is way-below $V$ in the frame) iff, at the level of the topological space there exists a compact subset $K\ss X$ with $U\ss K\ss V$.
 
 \begin{axiom}\label{ax.atBoolean}
 	For every $K : \CB$ and $P : \Prop$,
@@ -413,6 +422,93 @@ Since the implication from right is left is easy to prove for every modality, we
 	Combine \cref{ax:flabby_vs_at} with \cref{prop:opens_flabby}.	
 \end{proof}
 
+\section{Properties of the rationals}
+
+\begin{lemma}
+	$\tNN$ is flabby.
+	\label{lem:N_flabby}
+\end{lemma}
+
+\begin{proof}
+	Let $P : \tNN \to \Prop$ be a subsingleton. By \cref{ax:N_well_ordered}, there is a least $n : \tNN$ such that $P(n)$. Using this $n$, the claim easily follows from the subsingleton assumption on $P$, since then any other $m:\tNN$ with $P(m)$ must satisfy $m = n$.
+\end{proof}
+
+\begin{lemma}
+	$\tQQ$ is flabby.
+	\label{lem:Q_flabby}
+\end{lemma}
+
+\begin{proof}
+	Use any (internal) bijection between $\tNN$ and $\tQQ$ together with \cref{lem:N_flabby}.
+\end{proof}
+
+\begin{lemma}
+	\label{lem:rational_compare_at}
+	For $q,q'\in\tQQ$ and $K\in\CB$, we have
+	\[
+		\At{K}(q < q') = \At{K}\bot \, \lor \, (q < q').
+	\]
+\end{lemma}
+
+\begin{proof}
+	We need to argue that $\At{K}(q < q')$ implies $\At{K}\bot$ or $q < q'$. Using the decidability of inequalities between rationals, we can assume that $q \geq q'$. But then the assumption $\At{K}(q < q')$ together with $\At{K}(q \geq q')$ implies $\At{K}\bot$.
+\end{proof}
+
+\section{Properties of the lower reals}
+
+\tob{Work in progress}
+
+For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
+
+\begin{lemma}
+	$\At{K}r$ is again a lower real.	
+\end{lemma}
+
+\begin{proof}
+	For down-closure, we need to prove that if $q < q'$ and $\At{K}(r(q'))$, then also $\At{K}(r(q))$, which is routine.
+
+	Roundedness is a bit more tricky. We need to show $\forall q\ldotp \At{K} r(q) \imp \exists q'\ldotp (q < q') \land \At{K} r(q')$. By \cref{ax:flabby_vs_at} and \cref{lem:Q_flabby}, roundedness of $r$ shows that $\exists q'\ldotp \At{K}((q < q') \land r(q'))$. The claim now follows from commutation of $\At{K}$ with conjunction and \cref{lem:rational_compare_at}.
+\end{proof}
+
+In the following, we also use the more intuitive notation $q < r$ in place of $r(q)$.
+
+\begin{proposition}\label{enough_points_LR}
+For any $r:\tLR$,
+\[r = \inf_{K} \At{K} r.\]
+\end{proposition}
+\begin{proof}
+The right-hand side, applied to some $q:\tQQ$, is translated to
+\[\forall K. \At{K}(q<r),\]
+which is $q<r$ by \cref{ax.enough_points}.
+\end{proof}
+
+For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. Moreover, we write $a < b$ if there is $q\in\tQQ$ such that $q < b$ and $\lnot(q < a)$. Standard arguments show that these relations are transitive, and that $(a < b) \imp (a \leq b)$.
+
+\begin{lemma}
+	For $a,b : \tLR$ and $K\in\CB$, we have
+	\[
+		\At{K}((a \leq b) \lor (a > b)).
+	\]
+\end{lemma}
+
+\begin{proof}
+	Suppose that $(a > b) \imp \At{K}\bot$, and suppose that we have $\At{K}(q < a)$.
+\end{proof}
+
+\begin{lemma}\label{lem.order_canc}
+The finite lower reals are order-cancellative: if $a+c\leq b+c$ for $c < \infty$, then $a\leq b$.
+\end{lemma}
+
+\begin{proof}
+	The assumption $c < \infty$ means that we have $r\in\tQQ$ such that $c < r$, i.e.~$q < c$ implies $q < r$.
+
+\todo[inline]{Derive this from \cref{enough_points_LR}, together with the $\At{K}$-decidability.}
+
+We need to prove that $q < a$ implies $q < b$, or equivalently $\At{K}(q < b)$ by \cref{ax.enough_points}. So suppose that $(q < b) \imp \At{K}\bot$.
+\end{proof}
+
+\tob{Much of the rest of this chapter will now be redundant}
+
 \begin{lemma}
 For every $P : \Prop$,
 \[
@@ -435,8 +531,7 @@ Transposing the canonical map $\At{} : C\BaseSpace \times \Prop \to \Prop$ to $\
 \end{proposition}
 
 \begin{proof}
-Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At{K} P$. To see that it has the required property, we therefore assume $\At{K} P$. Applying \cref{ax.atvsin}, we get $U$ with $\At{K} U$ and $U \imp P$. Now given $K'$ with $\At{K'} U$, we can conclude $\At{K'} P$ by monotonicity of $\At{K'}$.
-\todo[inline]{D: Do you mean for \cref{ax.atvsin} to be an iff?}
+Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At{K} P$. To see that it has the required property, we therefore assume $\At{K} P$. Applying \cref{lem.prop_to_opens}, we get $U$ with $\At{K} U$ and $U \imp P$. Now given $K'$ with $\At{K'} U$, we can conclude $\At{K'} P$ by monotonicity of $\At{K'}$.
 
 Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, by \cref{ax.enough_points}. Thus it remains to show that every $Q$ which has the required property comes from a proposition.
 
@@ -597,82 +692,6 @@ For any $X$ and any $K\in C\BaseSpace$,
 
 \chapter{Preliminaries}
 
-\section{Internal posets}
-
-\begin{notation}
-We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
-\end{notation}
-
-\begin{definition}
-Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to\Prop$ satisfying
-\begin{enumerate}
-	\item $\forall(x:X)\ldotp L(x,x)$.
-	\item $\forall(x,y,z:X)\ldotp L(x,y)\imp L(y,z)\imp L(x,z)$.
-\end{enumerate}
-We usually denote $L(x,y)$ as $x L y$. We call $(X,L)$ a \emph{poset}.
-\end{definition}
-
-In terms of sheaf semantics on some site $(\C,J)$, an internal poset is the same thing as a sheaf with values in $\Poset$; since the theory of posets is essentially algebraic, this is a consequence of Diaconescu's theorem, but it is also instructive to check it by hand.
-
-\begin{example}
-For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset structure given by $\lambda(f,g:Y\to\Prop)\ldotp\forall(y:Y)\ldotp (fy\imp gy)$.
-\end{example}
-
-\begin{example}
-The type $\tLR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\tQQp\to\Prop$ satisfying the following:
-\begin{description}
-	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\tQQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
-	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\tQQp)\ldotp\delta q\imp\exists(q':\tQQ)\ldotp(q<q')\wedge\delta q'$.
-\end{description}
-The type $\tLR$ has the structure of an ordered semi-ring. That is, it has the structure of
-\begin{itemize}
-	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
-	\item a commutative monoid $(0,+)$:
-	\begin{itemize}
-		\item identity $0$ given by $\lambda q\ldotp q < 0$,
-		\item  addition given by $(\delta_1+\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1+q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
-	\end{itemize}
-	\item a commutative monoid $(1,*)$:
-	\begin{itemize}
-		\item identity $1$ given by $\lambda q\ldotp q<1$,
-		\item multiplication given by $(\delta_1*\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1*q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
-	\end{itemize}
-\end{itemize}
-where multiplication distributes over addition, and both preserve order.
-\end{example}
-
-\begin{definition}
-Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if it satisfies the following:
-\begin{enumerate}
-	\item $\exists(x:X)\ldotp Dx$.
-	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
-\end{enumerate}
-Denote the conjunction of these two conditions as $\const{Drct}:(X\to\Prop)\to\Prop$.
-\end{definition}
-
-\begin{definition}
-Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $P$ is an element $s_P:X$ satisfying
-\begin{enumerate}
-	\item $\forall(x:\subtype{P})\ldotp x\leq s_P$.
-	\item $\forall(s':X)\ldotp[\forall(x:\subtype{P})\ldotp x\leq s']\imp s_P\leq s'$.
-\end{enumerate}
-Similarly, a \emph{meet} of $P$ is an element satisfying the dual statements (the arguments to every $\leq$ symbol are swapped).
-
-We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp (x=x_1) \vee (x=x_2)$ has a join, in which case we denote it $x_1\vee x_2$ (resp.\ meet $x_1\wedge x_2$). 
-
-We say that $X$ has a \emph{bottom element} if $\lambda(x:X)\ldotp \bot$ has a join, in which case we denote it $\varnothing:X$. We say that $X$ has \emph{finite joins} if $X$ has binary joins and a bottom element (resp.\ binary meets and a top element). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join, denoted $\sup P$.
-\end{definition}
-
-\begin{example}
-For any type $Y$, the poset $\Phi\coloneqq Y\to\Prop$ has all joins and meets. The join of $P:\Phi\to\Prop$ is $s_P\coloneqq\lambda(y:Y)\ldotp\exists(\phi:\subtype{P})\ldotp\phi y$. It is easy to check that this satisfies the conditions of being a join. The meet of $P$ is $\lambda(y:Y)\ldotp\forall(\phi:\subtype{P})\ldotp\phi y$.
-\end{example}
-
-\begin{example}
-The poset $(\tLR,\leq)$ has arbitrary joins: the join of $P:\tLR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
-
-In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\tLR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
-\end{example}
-
 \chapter{Internal valuations}
 
 
@@ -779,38 +798,6 @@ Then $\mu$ is monotonic, normalized, and commutes with directed joins. It satisf
 \end{example}
 
 
-\chapter{Properties of internal valuations on spaces of compacts}
-
-\section{Properties of the lower reals}
-
-\begin{lemma}\label{enough_points_prop}
-For any $P : \Prop$,
-\[ P = \forall K \ldotp \At{K} P. \]
-\end{lemma}
-
-From the internal perspective, it may be more reasonable to consider this as an axiom---stating that our topos has enough points---since it cannot be proven purely internally.
-
-\begin{proof}
-\todo[inline]{TBW}
-\end{proof}
-
-\begin{proposition}\label{enough_points_LR}
-For any $r:\tLR$,
-\[r = \inf_{K} \At{K} r.\]
-\end{proposition}
-\begin{proof}
-The right-hand side, applied to some $q:\tQQ$, is translated to
-\[\forall K. \At{K}(q<r),\]
-which is $q<r$ by \cref{enough_points_prop}.
-\end{proof}
-
-\begin{lemma}\label{lem.order_canc}
-The lower reals are order-cancellative: if $a+b\leq a+c$ then $b\leq c$.
-\end{lemma}
-
-\begin{proof}
-\todo[inline]{Derive this from \cref{enough_points_LR}, together with the $\At{K}$-decidability.}
-\end{proof}
 
 \section{Interaction of valuations with modalities}
 
@@ -1303,6 +1290,82 @@ All left exact functors $F$ preserve internal adjunctions $L\dashv R$. The finit
 \]
 and similarly for $\epsilon$, and assert the triangle identities; all of this structure will be preserved by $F$.
 
+
+\section{Internal posets}
+
+\begin{notation}
+We write $\tQQp\coloneqq\{q:\tQQ\mid q\geq0\}$. Given a function $P:X\to\Prop$, we write $\subtype{P}\ss X$ to denote the associated subtype, $\subtype{P}\coloneqq\{x:X\mid Px\}$.
+\end{notation}
+
+\begin{definition}
+Let $X$ be a type. A \emph{poset structure on $X$} is a function $L:X\times X\to\Prop$ satisfying
+\begin{enumerate}
+	\item $\forall(x:X)\ldotp L(x,x)$.
+	\item $\forall(x,y,z:X)\ldotp L(x,y)\imp L(y,z)\imp L(x,z)$.
+\end{enumerate}
+We usually denote $L(x,y)$ as $x L y$. We call $(X,L)$ a \emph{poset}.
+\end{definition}
+
+In terms of sheaf semantics on some site $(\C,J)$, an internal poset is the same thing as a sheaf with values in $\Poset$; since the theory of posets is essentially algebraic, this is a consequence of Diaconescu's theorem, but it is also instructive to check it by hand.
+
+\begin{example}
+For any type $Y$, the type $\Phi\coloneqq (Y\to\Prop)$ has a natural poset structure given by $\lambda(f,g:Y\to\Prop)\ldotp\forall(y:Y)\ldotp (fy\imp gy)$.
+\end{example}
+
+\begin{example}
+The type $\tLR$ of nonnegative lower real numbers is defined as the type of functions $\delta:\tQQp\to\Prop$ satisfying the following:
+\begin{description}
+	\item[\quad\parbox{1in}{Down-closed:}] $\forall(q,q':\tQQp)\ldotp (q<q')\imp\delta q'\imp\delta q$.
+	\item[\quad\parbox{1in}{Rounded:}] $\forall(q:\tQQp)\ldotp\delta q\imp\exists(q':\tQQ)\ldotp(q<q')\wedge\delta q'$.
+\end{description}
+The type $\tLR$ has the structure of an ordered semi-ring. That is, it has the structure of
+\begin{itemize}
+	\item a poset: $\delta\leq \delta'\iff\forall q\ldotp\delta q\imp\delta'q$,
+	\item a commutative monoid $(0,+)$:
+	\begin{itemize}
+		\item identity $0$ given by $\lambda q\ldotp q < 0$,
+		\item  addition given by $(\delta_1+\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1+q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
+	\end{itemize}
+	\item a commutative monoid $(1,*)$:
+	\begin{itemize}
+		\item identity $1$ given by $\lambda q\ldotp q<1$,
+		\item multiplication given by $(\delta_1*\delta_2)q\iff\exists(q_1,q_2)\ldotp(q<q_1*q_2)\wedge\delta_1q_1\wedge\delta_2q_2$,
+	\end{itemize}
+\end{itemize}
+where multiplication distributes over addition, and both preserve order.
+\end{example}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if it satisfies the following:
+\begin{enumerate}
+	\item $\exists(x:X)\ldotp Dx$.
+	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
+\end{enumerate}
+Denote the conjunction of these two conditions as $\const{Drct}:(X\to\Prop)\to\Prop$.
+\end{definition}
+
+\begin{definition}
+Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $P$ is an element $s_P:X$ satisfying
+\begin{enumerate}
+	\item $\forall(x:\subtype{P})\ldotp x\leq s_P$.
+	\item $\forall(s':X)\ldotp[\forall(x:\subtype{P})\ldotp x\leq s']\imp s_P\leq s'$.
+\end{enumerate}
+Similarly, a \emph{meet} of $P$ is an element satisfying the dual statements (the arguments to every $\leq$ symbol are swapped).
+
+We say that $X$ has \emph{binary joins} (resp.\ \emph{binary meets}) if, for every $x_1,x_2:X$ the subtype $\lambda(x:X)\ldotp (x=x_1) \vee (x=x_2)$ has a join, in which case we denote it $x_1\vee x_2$ (resp.\ meet $x_1\wedge x_2$). 
+
+We say that $X$ has a \emph{bottom element} if $\lambda(x:X)\ldotp \bot$ has a join, in which case we denote it $\varnothing:X$. We say that $X$ has \emph{finite joins} if $X$ has binary joins and a bottom element (resp.\ binary meets and a top element). We say that $X$ has \emph{directed joins} if, every directed $P$ has a join, denoted $\sup P$.
+\end{definition}
+
+\begin{example}
+For any type $Y$, the poset $\Phi\coloneqq Y\to\Prop$ has all joins and meets. The join of $P:\Phi\to\Prop$ is $s_P\coloneqq\lambda(y:Y)\ldotp\exists(\phi:\subtype{P})\ldotp\phi y$. It is easy to check that this satisfies the conditions of being a join. The meet of $P$ is $\lambda(y:Y)\ldotp\forall(\phi:\subtype{P})\ldotp\phi y$.
+\end{example}
+
+\begin{example}
+The poset $(\tLR,\leq)$ has arbitrary joins: the join of $P:\tLR\to\Prop$ is $\lambda q\ldotp\exists(\delta:\subtype{P})\ldotp\delta q$. Note that $0$ is the bottom element. It also has binary meets: $\min(\delta_1,\delta_2)q\iff(\delta_1 q\wedge \delta_2q)$.
+
+In fact, it also has arbitrary meets, though I don't think we'll need that. The meet of $P:\tLR\to\Prop$ is $(\bigwedge P)q\iff\exists q'\ldotp (q<q')\wedge\forall(\delta:\subtype{P})\ldotp\delta q'$.
+\end{example}
 \section{Posites}
 
 \begin{proposition}
@@ -1315,6 +1378,13 @@ The fact that $(S,\sqss)$ has the structure of a posite whose covering families 
 
 The Kripke-Joyal semantics for $\vee$ is that $s\Vdash\phi\vee\psi$ iff there exists a covering family $\{s_i\to s\}_{i\in I}$ such that $s_i\Vdash\phi$ or $s_i\Vdash\psi$ for each $i\in I$. Here we have only one covering family, namely $\{s'\mid s\ll s'\}$ for each $s$. Suppose that $\upclose s$ is filtered and that $s\Vdash\phi\vee\psi$. Arguing classically, if $s\not\Vdash\phi$ and $s\not\Vdash\psi$ then there is some $s'_1,s'_2\in\upclose s$ such that $s'_1\not\Vdash\phi$ and $s'_2\not\Vdash\psi$. Let $s\ll s'\sqss \{s_1,s_2\}$. Then by monotonicity $s'\not\Vdash\phi$ and $s'\not\Vdash\psi$, a contradiction.
 \end{proof}
+
+\section{Locally compact spaces as continuous posets}
+Something like the following should be true.
+
+Suppose $X$ is a topological space and $\Op(X)$ is its frame of opens. A Scott-open in $\Op(X)$ is a subset $K\ss\Op(X)$ that is up-closed and inaccessible by directed joins: for any directed collection $I\ss\Op(X)$ of frame elements, if $(\bigvee_{i\in I} U_i)\in K$ then $U_i\in K$ for some $i\in I$. These are the filters corresponding to compact sets.
+
+Given opens $U,V\in\Op(X)$, we have $U\ll V$ (i.e.\ $U$ is way-below $V$ in the frame) iff, at the level of the topological space there exists a compact subset $K\ss X$ with $U\ss K\ss V$.
 
 
 \chapter{Toy example}
@@ -1582,36 +1652,6 @@ We believe that direct image functors $f_*$ preserve the internal structures of 
 \end{tikzcd}
 \]
 
-\chapter{Valuations and dense subtoposes}
-
-\tob{``dense'' is wrong. TODO: Figure out what this should be instead}
-
-\begin{conjecture}
-Let $j$ be a dense modality. Then for every type $X$, valuations $\Prop^X \to \tLR$ are in canonical bijection with valuations $\Prop_j^{\asSh_j{X}} \to \tLR_j$.
-\end{conjecture}
-
-\tob{Are the lower $j$-reals isomorphic to the $j$-sheafification of the lower reals? If not, I'm not sure which one of the two I want}
-
-Of course we would want this to hold internally.
-
-We write $\eta_j : X \to \asSh_j{X}$ for the unit of the sheafification adjunction.
-
-Given $\mu : \Prop^X\ \to \tLR$, we construct $\mu' : \Prop_j^{\asSh_j{X}} \to \tLR_j$ as follows. Let $P : \asSh_j{X} \to \Prop_j$ be a predicate. Then
-\[
-	\mu'(P)(q) := j \mu(P\circ \eta_j)(q).
-\]
-Conversely, given $\mu'$ we can try to construct $\mu$ as
-\[
-	\mu(P) := \sup_{jQ \implies P} \mu'(jQ),
-\]
-meaning that
-\[
-	\mu(P)(q) = \exists Q. (jQ\implies P) \land \mu'(jQ)(q).
-\]
-So in order for the two constructions to be inverses of one another, we need in particular that
-\[
-	\mu(P)(q) = \exists Q. (jQ\implies P) \land j\mu(jQ\circ \eta_j)(q)
-\]
 
 \chapter{Internal topological spaces}
 
