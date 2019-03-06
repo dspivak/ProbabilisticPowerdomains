@@ -451,12 +451,10 @@ Since the implication from right is left is easy to prove for every modality, we
 \end{lemma}
 
 \begin{proof}
-	We need to argue that $\At{K}(q < q')$ implies $\At{K}\bot$ or $q < q'$. Using the decidability of inequalities between rationals, we can assume that $q \geq q'$. But then the assumption $\At{K}(q < q')$ together with $\At{K}(q \geq q')$ implies $\At{K}\bot$.
+	Focusing on the nontrivial direction, we need to argue that $\At{K}(q < q')$ implies $\At{K}\bot$ or $q < q'$. Using the decidability of inequalities between rationals, we can assume that $q \geq q'$. But then the assumption $\At{K}(q < q')$ together with $\At{K}(q \geq q')$ implies $\At{K}\bot$.
 \end{proof}
 
 \section{Properties of the lower reals}
-
-\tob{Work in progress}
 
 For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
 
@@ -472,15 +470,30 @@ For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
 
 In the following, we also use the more intuitive notation $q < r$ in place of $r(q)$.
 
-\begin{proposition}\label{enough_points_LR}
-For any $r:\tLR$,
-\[r = \inf_{K} \At{K} r.\]
-\end{proposition}
+\begin{lemma}
+	For every $a : \tLR$,
+	\[
+		a = \inf_K \At{K} a.
+	\]
+	\label{lem:lower_reals_local}
+\end{lemma}
+
 \begin{proof}
-The right-hand side, applied to some $q:\tQQ$, is translated to
-\[\forall K. \At{K}(q<r),\]
-which is $q<r$ by \cref{ax.enough_points}.
+	For every $q : \tQQ$, we have $q < a$ if and only if $\At{K}(q < a)$, or equivalently $q < \At{K}a$, for every $K$.
 \end{proof}
+
+\begin{proposition}\label{enough_points_LR}
+For any $a,b:\tLR$,
+\[
+	a \leq b \quad \Longleftrightarrow \quad \forall K\ldotp \At{K} a \leq \At{K} b.
+\]
+\end{proposition}
+
+\begin{proof}
+	We focus on the nontrivial direction from right to left. So let $q:\tQQ$ satisfy $q < a$. Then also $q < \At{K} a$ for every $K$, and therefore $q < \At{K}b$, or equivalently $\At{K}(q < b)$. But since $K$ was arbitrary, we conclude $q < b$ from $\forall K\ldotp \At{K}(q < b)$.
+\end{proof}
+
+\tob{Work in progress}
 
 For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. Moreover, we write $a < b$ if there is $q\in\tQQ$ such that $q < b$ and $\lnot(q < a)$. Standard arguments show that these relations are transitive, and that $(a < b) \imp (a \leq b)$.
 
