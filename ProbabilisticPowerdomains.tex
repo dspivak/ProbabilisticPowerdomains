@@ -364,13 +364,13 @@ It is not hard to show however that any regular space is regularly-based in our 
 We now axiomatize the assumption that our topos has enough points:
 
 \begin{axiom}\label{ax.enough_points}
-For every $P,Q : \Prop$,
+For every $P:\Prop$,
 \[
-	\left(\forall K\ldotp \At{K} P \imp \At{K} Q\right) \: \Longrightarrow \: \left(P \imp Q\right).
+	\forall K\ldotp \At{K} P \: \Longrightarrow \: P.
 \]
 \end{axiom}
 
-Since the right-hand side clearly implies the left, we conclude that this implication is actually an equality of propositions. Upon setting $P = \top$, we obtain the useful $Q = \forall K\ldotp \At{K} Q$ as a special case.
+Since the right-hand side clearly implies the left, we conclude that this implication is actually an equality of propositions.
 
 \begin{soundproof}
 	We need to show that if $U \models \forall K\ldotp \At{K} P \imp \At{K} Q$, then also $U \models (P \imp Q)$.
@@ -410,6 +410,17 @@ Since the implication from right is left is easy to prove for every modality, we
 
 
 \chapter{Consequences of the axiomatics}
+
+\begin{lemma}
+For every $P,Q : \Prop$,
+\[
+	\left(\forall K\ldotp \At{K} P \imp \At{K} Q\right) \: \Longleftrightarrow \: \left(P \imp Q\right).
+\]
+\end{lemma}
+
+\begin{proof}
+	The implication from right to left is trivial. From left to right, by \cref{ax.enough_points}, it is enough to prove that if $P$, then $\At{K} Q$ for every $K$. But this follows from the assumption.
+\end{proof}
 
 \begin{proposition}
 	Let $(X,\Op(X))$ be an internal space. Then for every $P : \Op(X)\to X$ and $K : \CB$, we have
