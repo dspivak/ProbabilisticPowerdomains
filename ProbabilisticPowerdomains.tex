@@ -504,6 +504,32 @@ For any $a,b:\tLR$,
 	We focus on the nontrivial direction from right to left. So let $q:\tQQ$ satisfy $q < a$. Then also $q < \At{K} a$ for every $K$, and therefore $q < \At{K}b$, or equivalently $\At{K}(q < b)$. But since $K$ was arbitrary, we conclude $q < b$ from $\forall K\ldotp \At{K}(q < b)$.
 \end{proof}
 
+\begin{lemma}
+	For all $a : \tLR$ and $q : \tQQ$,
+	\[
+		 (\At{K} a \leq \At{K}q) \: \lor \: \At{K}(q < a).
+	\]
+	\label{lem:at_totally_ordered1}
+\end{lemma}
+
+\begin{proof}
+	By the $\At{K}$-decidability, we can assume $(q < a) \imp \At{K}\bot$. Then we need to prove that for every $q' : \tQQ$, the implication $\At{K}(q' < a) \imp \At{K}(q' < q)$ holds. Using the decidability of inequalities between rationals, we can assume $\At{K}(q' \geq q)$ in addition to $\At{K}(q' < a)$. These combine to $\At{K}(q < a)$, from which $\At{K}\bot$ follows by assumption. This is enough to get $\At{K}(q' < q)$.
+\end{proof}
+
+\begin{lemma}
+	For all $a : \tLR$,
+	\[
+		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q.
+	\]
+	\label{lem:at_lower_real}
+\end{lemma}
+
+\begin{proof}
+	For the first equality, we need to show that if $q' : \tQQ$ is such that $q' < \At{K}a$, then there is some $q : \tQQ$ with $\At{K} q \leq \At{K} a$ and $q' < \At{K} q$. For this, we can take any $q$ with $q' < q < \At{K}a$.
+
+	For the second equality, we need to show that if $q' : \tQQ$ is such that $q' < \At{K} q$ for every $q$ with $\At{K} a \leq \At{K} q$, then also $q' < \At{K}a$. Now $q' < \At{K} q$ is equivalent to $\At{K}(q' < q)$ by definition, and therefore to $\At{K}\bot \:\lor\: (q < q')$ by \cref{lem:rational_compare_at}. Thus we need to show that if $q'$ satisfies $\forall q\ldotp (\At{K} a \leq \At{K} q) \imp (\At{K} \bot \lor (q' < q))$, then also $q' < \At{K} a$. Now by \cref{lem:at_totally_ordered1}, we can assume $\At{K} a \leq \At{K} q'$ without loss of generality; but then the assumption gives $\At{K}\bot \:\lor\: (q' < q')$, or equivalently $\At{K}\bot$, which implies $\At{K}(q' < a)$ as desired.
+\end{proof}
+
 \tob{Work in progress}
 
 For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. Moreover, we write $a < b$ if there is $q\in\tQQ$ such that $q < b$ and $\lnot(q < a)$. Standard arguments show that these relations are transitive, and that $(a < b) \imp (a \leq b)$.
