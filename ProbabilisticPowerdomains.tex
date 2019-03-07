@@ -457,15 +457,35 @@ For every $P,Q : \Prop$,
 	\label{lem:rational_compare_at}
 	For $q,q'\in\tQQ$ and $K\in\CB$, we have
 	\[
-		\At{K}(q < q') = \At{K}\bot \, \lor \, (q < q').
+		\At{K}(q < q') = \At{K}\bot \, \lor \, (q < q'),
+	\]
+	and
+	\[
+		\At{K}(q = q') = \At{K}\bot \, \lor \, (q = q').
 	\]
 \end{lemma}
 
 \begin{proof}
+	We only prove the first equation since the second one is analogous.
+
 	Focusing on the nontrivial direction, we need to argue that $\At{K}(q < q')$ implies $\At{K}\bot$ or $q < q'$. Using the decidability of inequalities between rationals, we can assume that $q \geq q'$. But then the assumption $\At{K}(q < q')$ together with $\At{K}(q \geq q')$ implies $\At{K}\bot$.
 \end{proof}
 
 \section{Properties of the lower reals}
+
+For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. We also use the more intuitive notation $q < a$ in place of $a(q)$ for $a\in\tLR$ and $q\in\tQQ$. This is consistent notation in the sense that the $q$ in $q < a$ can also be interpreted as a lower real, and then $q < a$ is indeed equivalent to $a(q)$.
+
+\begin{lemma}
+	For every $a,b\in\tLR$,
+	\[
+		\left(\forall q : \tQQ\ldotp (q > 0) \imp (a \leq b + q)\right) \quad \Longrightarrow \quad \left( a \leq b \right).
+	\]
+	\label{lem:eps_order}
+\end{lemma}
+
+\begin{proof}
+	We need to prove that $q < a$ implies $q < b$. We can choose $q' \in \tQQ$ such that $q < q' < a$. Applying the assumption to $q' - q > 0$, we have $a \leq b + q' - q$. Hence $q' < a$ implies $q' < b + q' - q$, or equivalently $q < b$, as was to be shown.
+\end{proof}
 
 For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
 
@@ -479,8 +499,6 @@ For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
 	Roundedness is a bit more tricky. We need to show $\forall q\ldotp \At{K} r(q) \imp \exists q'\ldotp (q < q') \land \At{K} r(q')$. By \cref{ax:flabby_vs_at} and \cref{lem:Q_flabby}, roundedness of $r$ shows that $\exists q'\ldotp \At{K}((q < q') \land r(q'))$. The claim now follows from commutation of $\At{K}$ with conjunction and \cref{lem:rational_compare_at}.
 \end{proof}
 
-In the following, we also use the more intuitive notation $q < r$ in place of $r(q)$.
-
 \begin{lemma}
 	For every $a : \tLR$,
 	\[
@@ -493,7 +511,7 @@ In the following, we also use the more intuitive notation $q < r$ in place of $r
 	For every $q : \tQQ$, we have $q < a$ if and only if $\At{K}(q < a)$, or equivalently $q < \At{K}a$, for every $K$.
 \end{proof}
 
-\begin{proposition}\label{enough_points_LR}
+\begin{proposition}\label{prop:enough_points_LR}
 For any $a,b:\tLR$,
 \[
 	a \leq b \quad \Longleftrightarrow \quad \forall K\ldotp \At{K} a \leq \At{K} b.
@@ -516,13 +534,18 @@ For any $a,b:\tLR$,
 	By the $\At{K}$-decidability, we can assume $(q < a) \imp \At{K}\bot$. Then we need to prove that for every $q' : \tQQ$, the implication $\At{K}(q' < a) \imp \At{K}(q' < q)$ holds. Using the decidability of inequalities between rationals, we can assume $\At{K}(q' \geq q)$ in addition to $\At{K}(q' < a)$. These combine to $\At{K}(q < a)$, from which $\At{K}\bot$ follows by assumption. This is enough to get $\At{K}(q' < q)$.
 \end{proof}
 
+Roughly, the following says that the lower $\At{K}$-reals coincide with the Dedekind $\At{K}$-reals:
+
 \begin{lemma}
 	For all $a : \tLR$,
 	\[
-		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q.
+		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q,
 	\]
+	where $q\in \tQQ$ ranges over all rationals satisfying the additional constraints.
 	\label{lem:at_lower_real}
 \end{lemma}
+
+\tob{In the end we don't need this for \cref{prop.order_canc}}
 
 \begin{proof}
 	For the first equality, we need to show that if $q' : \tQQ$ is such that $q' < \At{K}a$, then there is some $q : \tQQ$ with $\At{K} q \leq \At{K} a$ and $q' < \At{K} q$. For this, we can take any $q$ with $q' < q < \At{K}a$.
@@ -530,31 +553,80 @@ For any $a,b:\tLR$,
 	For the second equality, we need to show that if $q' : \tQQ$ is such that $q' < \At{K} q$ for every $q$ with $\At{K} a \leq \At{K} q$, then also $q' < \At{K}a$. Now $q' < \At{K} q$ is equivalent to $\At{K}(q' < q)$ by definition, and therefore to $\At{K}\bot \:\lor\: (q < q')$ by \cref{lem:rational_compare_at}. Thus we need to show that if $q'$ satisfies $\forall q\ldotp (\At{K} a \leq \At{K} q) \imp (\At{K} \bot \lor (q' < q))$, then also $q' < \At{K} a$. Now by \cref{lem:at_totally_ordered1}, we can assume $\At{K} a \leq \At{K} q'$ without loss of generality; but then the assumption gives $\At{K}\bot \:\lor\: (q' < q')$, or equivalently $\At{K}\bot$, which implies $\At{K}(q' < a)$ as desired.
 \end{proof}
 
-\tob{Work in progress}
+%Moreover, we write $a < b$ if there is $q\in\tQQ$ such that $q < b$ and $\lnot(q < a)$. Standard arguments show that these relations are transitive, and that $(a < b) \imp (a \leq b)$.
 
-For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. Moreover, we write $a < b$ if there is $q\in\tQQ$ such that $q < b$ and $\lnot(q < a)$. Standard arguments show that these relations are transitive, and that $(a < b) \imp (a \leq b)$.
+%\begin{lemma}
+%	For $a,b : \tLR$ and $K\in\CB$, we have
+%	\[
+%		\At{K}((a \leq b) \lor (a > b)).
+%	\]
+%\end{lemma}
+
+%\begin{proof}
+%	Suppose that $(a > b) \imp \At{K}\bot$, and suppose that we have $\At{K}(q < a)$.  UNFINISHED
+%\end{proof}
 
 \begin{lemma}
-	For $a,b : \tLR$ and $K\in\CB$, we have
+	For all $a,b\in\tLR$,
 	\[
-		\At{K}((a \leq b) \lor (a > b)).
+		\At{K}(a + b) = \At{K} a + \At{K} b.
 	\]
+	\label{lem.at_plus_commute}
 \end{lemma}
 
 \begin{proof}
-	Suppose that $(a > b) \imp \At{K}\bot$, and suppose that we have $\At{K}(q < a)$.
+	For $q\in\tQQ$, we have $q < \At{K}(a + b)$ if and only if
+	\[
+		\At{K}\left(\exists q_1, q_2\in\tQQ\ldotp (q = q_1 + q_2) \land (q_1 < a) \land (q_2 < b)\right),
+	\]
+	which by \cref{ax:flabby_vs_at}, \cref{lem:Q_flabby} and \cref{lem:rational_compare_at} is equivalent to
+	\begin{equation}
+		\label{eq:q1q2_at1}
+		\exists q_1, q_2\in\tQQ\ldotp \left((q = q_1 + q_2) \lor \At{K} \bot\right) \land \At{K}(q_1 < a) \land \At{K}(q_2 < b).
+	\end{equation}
+	Similarly, we have $q < \At{K} a + \At{K} b$ if and only if
+	\begin{equation}
+		\label{eq:q1q2_at2}
+		\exists q_1, q_2 \in \tQQ \ldotp (q = q_1 + q_2) \land \At{K}(q_1 < a) \land \At{K}(q_2 < a).
+	\end{equation}
+	This is easily seen to be equivalent to \eqref{eq:q1q2_at1}; the only nonobvious case is if we have $q_1, q_2$ and $\At{K} \bot$. In this case, we can e.g.~use the decomposition $q = q + 0$ in~\eqref{eq:q1q2_at2}.
 \end{proof}
 
-\begin{lemma}\label{lem.order_canc}
-The finite lower reals are order-cancellative: if $a+c\leq b+c$ for $c < \infty$, then $a\leq b$.
+\begin{lemma}
+	For $q,q':\tQQ$ and $a : \tLR$,
+	\begin{enumerate}
+	\item 
+		\[
+			q + q' < a + q' \quad \Longrightarrow \quad q < a.
+		\]
+	\item For every $K$,
+		\[
+			q + q' < \At{K} a + \At{K} q' \quad \Longrightarrow \quad q < \At{K} a.
+		\]
+	\label{lem:subtract_q}
+	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
-	The assumption $c < \infty$ means that we have $r\in\tQQ$ such that $c < r$, i.e.~$q < c$ implies $q < r$.
+	\begin{enumerate}
+		\item The assumption means that there are $q_1,q_2\in\tQQ$ with $q + q' = q_1 + q_2$ and $q_1 < a$ as well as $q_2 < q'$. Hence $q = q_1 + q_2 - q' < q_1 < a$, as was to be shown.
+		\item The assumption is $q + q' < \At{K}(a + q')$ by \cref{lem.at_plus_commute}, or equivalently $\At{K}(q + q' < a + q')$. Therefore $\At{K}(q < a)$ follows from the previous part.
+	\end{enumerate}
+\end{proof}
 
-\todo[inline]{Derive this from \cref{enough_points_LR}, together with the $\At{K}$-decidability.}
 
-We need to prove that $q < a$ implies $q < b$, or equivalently $\At{K}(q < b)$ by \cref{ax.enough_points}. So suppose that $(q < b) \imp \At{K}\bot$.
+\begin{proposition}\label{prop.order_canc}
+The finite lower reals are order-cancellative: if $a+c\leq b+c$ for $c < \infty$, then $a\leq b$.
+\end{proposition}
+
+Here, the finiteness assumption $c < \infty$ means that there is $u \in \tQQ$ with $c \leq u$.
+
+\begin{proof}
+	By \cref{prop:enough_points_LR} and \cref{lem:eps_order}, it is enough to show that $\At{K} a \leq \At{K} b + \At{K} \varepsilon$ for every $K$ and rational $\varepsilon > 0$. By \cref{lem.at_plus_commute}, we know $\At{K} a + \At{K} c \leq \At{K} b + \At{K} c$.
+
+	Using $c \leq u$, we now consider the natural number predicate $P(n) := \At{K} (u < c + \varepsilon n)$. By the well-ordering \cref{ax:N_well_ordered}, we have a smallest $n \in \tNN$ with $\At{K}(u < c + \varepsilon n)$, or equivalently $u - \varepsilon n < \At{K} c$. We have $n > 0$, since otherwise $c \leq u$ and $u < \At{K} c$ together give $\At{K}\bot$. Since $P(n-1)$ does not hold but is $\At{K}$-closed, we have $P(n-1) = \At{K} \bot$. Therefore putting $q := u - \varepsilon n$ gives $q < \At{K} c$ and $(q + \varepsilon < \At{K} c) \imp \At{K} \bot$. By \cref{lem:at_totally_ordered1}, we therefore obtain $\At{K} c \leq \At{K}(q + \varepsilon)$, in addition to $\At{K} q < \At{K} c$, which follows from $\At{K}(q < c)$.
+
+	Now if we have $q'\in\tQQ$ with $\At{K}(q' < a)$, then we also have $\At{K}(q' + q < a + c)$, and therefore just as well $\At{K}(q' + q < b + c)$, and hence $q + q' < \At{K} b + \At{K} c \leq \At{K} q + \At{K} b + \At{K} \varepsilon$. But then $q' < \At{K} b + \At{K} \varepsilon$, as was to be shown.
 \end{proof}
 
 \tob{Much of the rest of this chapter will now be redundant}
@@ -873,7 +945,7 @@ Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
 \begin{enumerate}
 \item The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
 
-It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{lem.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
+It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{prop.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
 For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_probability_valuation_on_prop}, the left-hand side is just $P$.
 \item Using inclusion-exclusion, \cref{prop.unique_probability_valuation_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals, $a,b:\tLR$, we have
 \begin{align*}
@@ -881,7 +953,7 @@ For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop
 	&=(P\vee\mu(Q))+(P\wedge\mu(Q))\\
 	&=\mu(P\vee Q)+(P\wedge\mu(Q)).
 \end{align*}
-Thus we are done by order-cancellativity \cref{lem.order_canc}.
+Thus we are done by order-cancellativity \cref{prop.order_canc}.
 \end{enumerate}
 \end{proof}
 
