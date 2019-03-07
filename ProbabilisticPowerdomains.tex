@@ -423,9 +423,9 @@ For every $P,Q : \Prop$,
 \end{proof}
 
 \begin{proposition}
-	Let $(X,\Op(X))$ be an internal space. Then for every $P : \Op(X)\to X$ and $K : \CB$, we have
+	Let $(X,\Op(X))$ be an internal space. Then for every $P : \Op(X)\to \Prop$ and $K : \CB$, we have
 	\[
-		\At{K} \exists U : \Op(X)\ldotp P(U) \quad \Longleftrightarrow \quad \exists U : \Op(X)\ldotp \At{K} P(U).
+		\At{K} \exists (U : \Op(X))\ldotp P(U) \quad \Longleftrightarrow \quad \exists (U : \Op(X))\ldotp \At{K} P(U).
 	\]
 \end{proposition}
 
@@ -1783,8 +1783,8 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 
 The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that it is closed under the existential quantifier by assumption. Taking the interior works as follows:
 
-\begin{definition}
-	For $P : X \to \Prop$,
+\begin{definition}\label{def.interior}
+	If $(X,\Op(X))$ is an internal space and $P : X \to \Prop$ is a predicate, define its \emph{interior} $\int(P)\colon X\to\Prop$ as follows:
 	\[
 		\interior(P) := \lambda x \ldotp \exists U : \Op(X) \ldotp U(x) \land (U \imp P).
 	\]
@@ -1799,7 +1799,11 @@ This is the largest open predicate below $P$ by definition.
 We discuss flabbiness from the internal perspective of any topos $\mathcal{E}$.
 
 \begin{definition}\label{def:flabby}
-	A type $X$ is \emph{flabby} if for every subsingleton $S\subseteq X$ there is $x\in X$ such that if $S$ is inhabited, then $x\in S$. In other words, $X$ is flabby if for every $P : X \to \Prop$,
+	Let $X$ be a type. Say that $P\colon X\to\Prop$ is \emph{subsingleton} if
+	\begin{equation}\label{eqn.subsingleton}
+	\forall (x,x' : X) \ldotp P(x) \wedge P(x') \imp x = x'
+	\end{equation}
+	holds. $X$ is \emph{flabby} if for every subsingleton $S\subseteq X$ there is $x\in X$ such that if $S$ is inhabited, then $x\in S$. In other words, $X$ is flabby if for every $P : X \to \Prop$,
 	\begin{equation}\label{eq:flabby}
 	( \forall x,x' : X \ldotp P(x) \wedge P(x') \imp x = x') \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp P(x) .
 \end{equation}
@@ -1810,12 +1814,14 @@ $\Prop$ is flabby.
 \end{lemma}
 
 \begin{proof}
-Suppose that we have $P : \Prop \to \Prop$ that satisfies the subsingleton condition of \cref{def:flabby}. Then we claim that $P$ holds for $U := \forall V \ldotp P(V) \imp V$. Hence we need to show that if we have $W : \Prop$ with $P(W)$, then also $P(U)$.
+Suppose that we have $P : \Prop \to \Prop$ that satisfies the subsingleton condition \cref{eqn.subsingleton}. Let $U := \forall V \ldotp P(V) \imp V$. We need to show that if we have $W : \Prop$ with $P(W)$, then also $P(U)$.
 
-So it is enough to prove $U = W$. Assuming $U$, we get $P(W) \imp W$ as an instance of $U$, and therefore $W$. Assuming $W$, we derive $U$ by proving $P(V) \imp V$ for a given $V$. But since $P(V)$ and $P(W)$, we get $V = W$ by the assumed subsingleton condition, and therefore $V$, as was to be shown.
+So it is enough to prove $U = W$. Assuming $U$, we get $P(W) \imp W$ as an instance of $U$, and therefore $W$. Assuming $W$, we can derive $U$ by proving $P(V) \imp V$ for a given $V$. But since $P(V)$ and $P(W)$, we get $V = W$ by the assumed subsingleton condition, and therefore $V$, as was to be shown.
 \end{proof}
 
-More generally, we have~\cite[Lemma~1.2]{moerdijk}:
+More generally, we have~\cite[Lemma~1.2]{moerdijk}. 
+Recall from \cref{def.interior} the notion of the interior of a predicate.
+
 
 \begin{proposition}
 	\label{prop:opens_flabby}
@@ -1823,7 +1829,7 @@ More generally, we have~\cite[Lemma~1.2]{moerdijk}:
 \end{proposition}
 
 \begin{proof}
-This is analogous to the previous proof. So suppose that we have $P : \Op(X) \to \Prop$ that satisfies the subsingleton condition of \cref{def:flabby}. Then we claim that $P$ holds for $U := \interior\left(\forall V \ldotp P(V) \imp V\right)$. Hence we need to show that if we have $W : \Op(X)$ with $P(W)$, then also $P(U)$.
+This is analogous to the previous proof. So suppose that we have $P : \Op(X) \to \Prop$ that satisfies the subsingleton condition \cref{eqn.subsingleton}. Then we claim that $P$ holds for $U := \interior\left(\forall V \ldotp P(V) \imp V\right)$. Hence we need to show that if we have $W : \Op(X)$ with $P(W)$, then also $P(U)$.
 
 	So it is enough to prove $U = W$ by showing $U(x) \Leftrightarrow W(x)$ for every $x : X$. Assuming $U(x)$, we have an open $U'\ni x$ such that $U' \imp (\forall V \ldotp P(V) \imp V)$. Evaluating this at $x$ proves $\forall V. P(V) \imp V(x)$, and therefore we indeed get $W(x)$. Now assume $W(x)$. Using $W$ itself as the neighborhood, it is enough to prove that $W$ implies $\forall V\ldotp P(V) \imp V$. But now since $P(V)$ and $P(W)$, this follows from the assumed subsingleton condition.
 \end{proof}
