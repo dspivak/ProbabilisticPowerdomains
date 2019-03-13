@@ -380,14 +380,14 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 	\label{ax:flabby_vs_at}
 	Let $K : \CB$ and suppose that $X$ is $\At{K}$-flabby. Then for all predicates $P : X \to \Prop$,
 	\[
-		\At{K}\exists x:X. P(x) \quad \Longrightarrow \quad \At{K} \bot \: \lor \: \exists x:X.\At{K}P(x).
+		\At{K}\exists x:X. P(x) \quad \Longrightarrow \quad \exists x:X.\At{K}P(x).
 	\]
 \end{axiom}
 
 Since the implication from right is left is easy to prove for every modality, we therefore know that this is actually an equivalence.
 
 \begin{soundproof}
-	We need to show that if $U \models \At{K} \exists x:X.P(x)$, then $U \models \At{K}\bot \:\lor\: \exists x:X.\At{K}P(x)$. For $K\not\in U$, then the latter is trivially correct, so assume $K \in U$. Then the assumption means that there is $V\ni K$ with $V\subseteq U$ and $V\models \exists x:X.\At{K} P(x)$. Restricting further, we have $W\ni K$ with $W\subseteq V\subseteq U$ and $x\in X(W)$ with $W \models \At{K} P(x)$. Restricting $W$ again if necessary, we get $W \models P(x)$.
+	We need to show that if $U \models \At{K} \exists x:X.P(x)$, then $U \models \At{K}\bot \:\lor\: \exists x:X.\At{K}P(x)$. For $K\not\in U$, then the latter is trivially correct since $\At{K}$-flabby assumes inhabited. Hence we suppose $K \in U$. Then the assumption means that there is $V\ni K$ with $V\subseteq U$ and $V\models \exists x:X.\At{K} P(x)$. Restricting further, we have $W\ni K$ with $W\subseteq V\subseteq U$ and $x\in X(W)$ with $W \models \At{K} P(x)$. Restricting $W$ again if necessary, we get $W \models P(x)$.
 
 	We now use the characterization of $\At{K}$-flabbiness of \cref{prop.at_flabby_semantics} to get $x'\in X(U)$ which represents the same germ at $K$ as $x$. Then we indeed have $U\models \At{K} P(x')$ since $W\models P(x)$.
 \end{soundproof}
@@ -426,6 +426,8 @@ The notion of flabbiness is defined in \cref{def:flabby}.
 \end{lemma}
 
 \begin{proof}
+	\tob{Needs to be adapted to the new definitions (hopefully it works out now)}
+
 	This is similar to the proof of \cref{lem.11_at_flabby}. 
 	Let $P : \tNN \to \Prop$ satisfy $\At{K} \exists n : \tNN \ldotp P(n)$. We now use induction to show that we can assume $\forall n : \tNN \ldotp P(n) \imp \At{K} \bot$. The base case is clear, since $\At{K} P(0)$ proves the $\At{K}$-flabbiness claim, and hence we can assume $P(0) \imp \At{K} \bot$. For the induction step, we are again done if $\At{K} P(n+1)$, and can therefore assume $P(n+1) \imp \At{K} \bot$ (the induction assumption is not needed). 
 	\[
@@ -1947,30 +1949,31 @@ This is analogous to the previous proof. So suppose that we have $P : \Op(X) \to
 \end{proof}
 
 \begin{definition}
-	Let $K : \CB$. A type $X$ is \emph{$\At{K}$-flabby} if for all $P : X \to \Prop$,
+	Let $K : \CB$. An inhabited type $X$ is \emph{$\At{K}$-flabby} if for all $P : X \to \Prop$,
 	%\[
 	%	\At{K}\bot \: \lor \: \left[ \subsing{P} \land \At{K} \exists x : X \ldotp P(x) \quad \Longrightarrow \quad \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)  \right].
 	%\]
-	\[
-		\left( \At{K} \exists x : X \ldotp P(x)\right) \quad \Longrightarrow \quad \At{K}\bot \: \lor \: \left[ \subsing{P} \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)  \right].
-	\]
+	\begin{equation}
+		\label{eq.at_flabby}
+		\left( \At{K} \exists x : X \ldotp P(x)\right) \: \Longrightarrow \: \subsing{P} \: \Longrightarrow \: \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x) .
+	\end{equation}
 \end{definition}
 
 Clearly if $X$ is flabby, then it is also $\At{K}$-flabby for every $K$.
 
 \begin{proposition}
 	\label{prop.at_flabby_semantics}
-	In our intended semantics of sheaves no $\CB$, a sheaf $X$ is $\At{K}$-flabby if only if every germ at $K$ can be extended to a global section.
+	In our intended semantics of sheaves no $\CB$, an inhabited sheaf $X$ is $\At{K}$-flabby if only if every germ at $K$ can be extended to a global section.
 \end{proposition}
 
 \tob{Carefully check the proof again}
 
 \begin{proof}
-	The semantics of this internal condition on some open $U$ is as follows. If $K\not\in U$, then it is trivially true, so assume $K\in U$. Then the condition is that if $P$ a predicate on $X|_U$, then there is $U' \subseteq U$ such that $U'$ contains at least all $K'\supseteq K$, and if $U'\models \subsing{P}$ and $U' \models \At{K} \exists x : X \ldotp P(x)$, then also $U' \models \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)$. The assumption $U' \models \subsing{P}$ means that for every $V\subseteq U'$, if $x,x'\in X(V)$ and $P(x) = P(x') = V$, then $x = x'$. The assumption $U \models \At{K} \exists x : X\ldotp P(x)$ means that there is an open $W\subseteq U$ with $K\in W$ and $\tilde{x} \in X(W)$ with $P(\tilde{x}) = W$. The conclusion means that there is a cover $U' = \bigcup_i U_i$ and local sections $x_i \in X(U_i)$ such that for every $V_i \subseteq U_i$ which contains $K$, if $P$ contains a germ of $X$ at every point of $V_i$, then also $K\in P(x)$.
+	The semantics of this internal condition on some open $U$ is as follows. The first assumption is that there is a smaller neighborhood $V\ni K$ and $x_0 \in X(V)$ such that $P(x_0) = V$; in other words, that $P$ contains a germ at $K$. The second assumption $U \models \subsing{P}$ means that for every $U'\subseteq U$, if $x,x'\in X(U')$ and $P(x) = P(x') = U'$, then $x = x'$. The conclusion of the condition then is $U \models \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)$, meaning that there is a cover $U = \bigcup_i U_i$ and local sections $x_i \in X(U_i)$ such that for every $V_i \subseteq U_i$ which contains $K$, if $P$ contains a germ of $X$ at every point of $V_i$, then also $K\in P(x)$.
 
-	We prove this implication from the possibility of lifting germs at $K$ to global sections. The first assumption gives us a germ at $K$, which we extend to a section $\hat{x}\in X(U)$. For the given cover $U' = \bigcup_i U_i$, we put $x_i := \hat{x}|_{U_i}$. Now we are given the $V_i \subseteq U_i$, and need to assume that $P$ contains a germ at every point of $V_i$. For $K\in V_i$, the subsingleton assumption implies that all of these germs are equal to the restriction of $x_i$. In particular, the germ at $K$, which is the restriction of $x$, satisfies $P$ in a neighborhood of $K$; hence $K\in P(x)$, as was to be shown.
+	We prove this implication from inhabitedness together with the possibility of lifting germs at $K$ to global sections. If $K\not\in U$, then the condition trivially holds upon choosing any $x$ (i.e.~covering family of local sections). So assume $K\in U$. The first assumption gives us a germ at $K$, which we extend to a section $\hat{x}\in X(U)$. For the given cover $U = \bigcup_i U_i$, we put $x_i := \hat{x}|_{U_i}$. Now we are given the $V_i \subseteq U_i$, and need to assume that $P$ contains a germ at every point of $V_i$. For $K\in V_i$, the subsingleton assumption implies that all of these germs are equal to the restriction of $x_i$. In particular, the germ at $K$, which must be equal to the restriction of $x$, satisfies $P$ in a neighborhood of $K$; hence $K\in P(x)$, as was to be shown.
 
-	Conversely, suppose that the internal sentence holds. Now it is enough to show that every germ at $K$ can be lifted to a germ at a given $K'\supseteq K$; for then, Zorn's lemma shows that the given germ can be extended to an open which contains all these $K'$; but then the only such open is the whole space $\CB$, resulting in a global section. So hence let $x \in X(U)$ be a representative of a germ defined on an open $U$ with $K \in U$. We instantiate the internal assumption on the open $\CB$. We define a subsingleton as the natural transformation $P : X \to \Prop$ with components $P_V(x') := \bigcup \{V' \subseteq V \: : \: x|_{V'} = \hat{x}|_{V'} \}$, which is clearly natural; also the subsingleton condition holds by construction. Also the other assumption $\CB \models \At{K} \exists x : X \ldotp P(x)$ holds by construction. Thus at every $K' \supseteq K$, we obtain a germ $x'$ defined on a neighborhood $U' \ni K'$ which necessarily also contains $K$. Since $U'\models (\exists y : X \ldotp P(y) ) \imp \At{K} P(x')$, we conclude $P(x') \ni K$ by restriction to the neighborhood of $K$ on which $x$ is defined. Restricting to the intersection of the two domain of definition of $x$ and $x'$, we conclude that $x = x'$ holds there. Hence $x'$ extends the germ represented by $x$, as was to be shown.
+	Conversely, suppose that the internal sentence holds. Now it is enough to show that every germ at $K$ can be lifted to a germ at a given $K'\supseteq K$; for then, Zorn's lemma shows that the given germ can be extended to an open which contains all these $K'$; but then the only such open is the whole space $\CB$, resulting in a global section \todo{this makes some assumption on $\CB$}. So hence let $x \in X(U)$ be a representative of a germ defined on an open $U$ with $K \in U$. We instantiate the internal assumption on the open $\CB$. We define a subsingleton as the natural transformation $P : X \to \Prop$ with components $P_V(x') := \bigcup \{V' \subseteq V \: : \: x'|_{V'} = x|_{V'} \}$, which is clearly natural; also the subsingleton condition holds by construction. Also the other assumption $\CB \models \At{K} \exists x : X \ldotp P(x)$ holds by construction. Thus at every $K' \supseteq K$, we obtain a germ $x'$ defined on a neighborhood $U' \ni K'$ which necessarily also contains $K$. Since $U'\models (\exists y : X \ldotp P(y) ) \imp \At{K} P(x')$, we conclude $P(x') \ni K$ by restriction to the neighborhood of $K$ on which $x$ is defined. Restricting to the intersection of the two domains of definition of $x$ and $x'$, we conclude that $x = x'$ holds there. Hence $x'$ extends the germ represented by $x$, as was to be shown.
 \end{proof}
 
 \begin{lemma}
@@ -1979,7 +1982,9 @@ Clearly if $X$ is flabby, then it is also $\At{K}$-flabby for every $K$.
 \end{lemma}
 
 \begin{proof}
-	Let us write $1 + 1 = \{\alpha,\beta\}$ in terms of elements. Let $P : 1 + 1 \to \Prop$. In case $\At{K} P(\alpha)$, we use $x := \alpha$ and there is nothing more to prove; similarly $x := \beta$ if $\At{K} P(\beta)$. Hence we can assume $P(\alpha) \imp \At{K} \bot$ and $P(\beta) \imp \At{K} \bot$. But now we also have the assumption $\At{K}(P(\alpha) \lor P(\beta))$, and therefore obtain $\At{K} \bot$, as was to be shown.
+	$1 + 1$ is trivially inhabited, so we only prove the main condition~\eqref{eq.at_flabby}.
+
+	Let us write $1 + 1 = \{\alpha,\beta\}$ in terms of elements. Let $P : 1 + 1 \to \Prop$. In case $\At{K} P(\alpha)$, we use $x := \alpha$ and there is nothing more to prove; similarly $x := \beta$ if $\At{K} P(\beta)$. Hence we can assume $P(\alpha) \imp \At{K} \bot$ and $P(\beta) \imp \At{K} \bot$. But now we also have the additional assumption $\At{K}(P(\alpha) \lor P(\beta))$, which now implies $\At{K} \bot$, which is enough.
 \end{proof}
 
 %\printbibliography
