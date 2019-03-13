@@ -418,6 +418,8 @@ For every $P,Q : \Prop$,
 
 \section{Properties of the rationals}
 
+The notion of flabbiness is defined in \cref{def:flabby}.
+
 \begin{lemma}
 	$\tNN$ is $\At{K}$-flabby for every $K : \CB$.
 	\label{lem:N_flabby}
@@ -466,13 +468,13 @@ For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $
 \begin{lemma}
 	For every $a,b\in\tLR$,
 	\[
-		\left(\forall q : \tQQ\ldotp (q > 0) \imp (a \leq b + q)\right) \quad \Longrightarrow \quad \left( a \leq b \right).
+		\left(\forall \epsilon : \tQQ\ldotp (\epsilon > 0) \imp (a \leq b + \epsilon)\right) \quad \Longrightarrow \quad \left( a \leq b \right).
 	\]
 	\label{lem:eps_order}
 \end{lemma}
 
 \begin{proof}
-	We need to prove that $q < a$ implies $q < b$. We can choose $q' \in \tQQ$ such that $q < q' < a$. Applying the assumption to $q' - q > 0$, we have $a \leq b + q' - q$. Hence $q' < a$ implies $q' < b + q' - q$, or equivalently $q < b$, as was to be shown.
+	We need to prove that $\epsilon < a$ implies $\epsilon < b$. We can choose $\epsilon' \in \tQQ$ such that $\epsilon < \epsilon' < a$. Applying the assumption to $\epsilon' - \epsilon > 0$, we have $a \le\epsilon b + \epsilon' - \epsilon$. Hence $\epsilon' < a$ implies $\epsilon' < b + \epsilon' - \epsilon$, or equivalently $\epsilon < b$, as was to be shown.
 \end{proof}
 
 For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
@@ -575,7 +577,7 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 	Similarly, we have $q < \At{K} a + \At{K} b$ if and only if
 	\begin{equation}
 		\label{eq:q1q2_at2}
-		\exists q_1, q_2 \in \tQQ \ldotp (q = q_1 + q_2) \land \At{K}(q_1 < a) \land \At{K}(q_2 < a).
+		\exists q_1, q_2 \in \tQQ \ldotp (q = q_1 + q_2) \land \At{K}(q_1 < a) \land \At{K}(q_2 < b).
 	\end{equation}
 	This is easily seen to be equivalent to \eqref{eq:q1q2_at1}; the only nonobvious case is if we have $q_1, q_2$ and $\At{K} \bot$. In this case, we can e.g.~use the decomposition $q = q + 0$ in~\eqref{eq:q1q2_at2}.
 \end{proof}
