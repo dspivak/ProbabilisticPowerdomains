@@ -81,6 +81,7 @@ pdfencoding=unicode]{hyperref}
 \newtheorem{construction}[theorem]{Construction}
 \newtheorem{notation}[theorem]{Notation}
 \newtheorem{axiom}{Axiom}
+\newtheorem{assumption}{Assumption}
 \newtheorem*{axiom*}{Axiom}
 
 \theoremstyle{remark}
@@ -140,7 +141,8 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\ul}[1]{\underline{#1}}
 \newcommand{\wt}[1]{\widetilde{#1}}
 \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
-
+\newcommand{\subsing}[1]{\mathrm{subsing}(#1)}	% subsingleton predicate
+\newcommand{\conn}[1]{\mathrm{conn}(#1)}	% connectedness predicate
 
 \newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
 \newcommand{\hs}{\hspace{1.1pt}}
@@ -292,21 +294,8 @@ pdfencoding=unicode]{hyperref}
 
 For a topological space $\BaseSpace$, we denote by $\CB$ its set of nonempty compacts, where if $K\ss\BaseSpace$ is compact, we denote the associated point by $K_{C\BaseSpace}\in C\BaseSpace$. We equip $C\BaseSpace$ with what is known as the \emph{upper space topology} of $B$~\cite{Edalat:1995a}. Namely, to each open $U\subseteq \BaseSpace$ there is an associated basic open in $C\BaseSpace$, denoted $U_{C\BaseSpace}$, consisting of those points $K_{C\BaseSpace}$ with $K\subseteq U$:
 \[
-U_{C\BaseSpace}\coloneqq\{K_{C\BaseSpace}\mid K\ss U\}.
+	U_{C\BaseSpace}\coloneqq\{K_{C\BaseSpace}\mid K\ss U\}.
 \]
-We say that a topological space is \emph{regularly-based} if it has a basis of regular opens $U$, i.e.~open sets which are the interior of their closure, or equivalently which are their own double pseudo-complement, $\neg\neg U=U$.
-
-\begin{proposition}
-If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
-\end{proposition}
-
-\begin{proof}
-We first show that the closure $\ol{U_{C\BaseSpace}}$ of the basic open $U_{C\BaseSpace}$ consists of all compacts $K_{C\BaseSpace}$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set $\{K_{C\BaseSpace}\mid K\cap\ol{U}=\emptyset\}$ is open, since it is the open $(\ol{U}^c)_{C\BaseSpace}$ associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K_{C\BaseSpace}\in V_{C\BaseSpace}$ implies $K_{C\BaseSpace} \not\in U_{C\BaseSpace}$, then $V$ must be disjoint from $U$, since any single point $\{p\}\ss(V\cap U)$ is itself a nonempty compact set. This proves the first claim.
-
-Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
-
-Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
-\end{proof}
 
 For any $K\in CB$, we write $\At{K} := ((- \imp K^c) \imp K^c)$ for the associated quasi-closed modality, where $K^c$ denotes the interior of the complement of the point $\{K\}\in\CB$. 
 
@@ -327,6 +316,15 @@ If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is 
 
 \todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
 
+\begin{lemma}
+For $K\in C\BaseSpace$, the complement $(\down K)^c$ of $\down K$ is a prime open.
+\label{lem.prime}
+\end{lemma}
+
+\begin{proof}
+Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \down K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \down K = \emptyset$, as was to be shown.
+\end{proof}
+
 \section{Axioms and soundness proofs}
 
 We only work with $\At{}$ modalities explicitly, since In and See are easy to define directly in terms of the logic, so that introducing notation for them would not decrease formula complexity by much.
@@ -337,6 +335,8 @@ Our soundness proofs refer to the intended semantics.
 
 Besides the usual arithmetical and order-theoretic properties of the natural numbers, we also use the following well-ordering principle (which implies induction):
 
+\tob{Todo: this shouldn't be an axiom, since the well-ordering principle is constructively equivalent to induction, and second-order induction is part of the definition of a natural numbers object. So instead the axiom should probably be that a natural numbers object $\tNN$ exists}
+
 \begin{axiom}
 	\label{ax:N_well_ordered}
 	For every $P : \tNN\to\Prop$,
@@ -344,22 +344,6 @@ Besides the usual arithmetical and order-theoretic properties of the natural num
 		\exists n\ldotp P(n) \quad \Longrightarrow \quad \exists n\ldotp \left[ P(n) \:\land\: \forall m\ldotp P(m) \imp (m \geq n) \right].
 	\]
 \end{axiom}
-
-Our next axiom is concerned with the double negation modality, while all following axioms will involve $\At{}$.
-
-\begin{axiom}
-\[\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.\]
-\end{axiom}
-
-We say that a topos is \emph{regularly-based} if this axiom is sound.
-
-Equivalently, we could have said that every $P:\Prop$ must be the supremum of all $Q:\Prop$ with $Q\imp P$ and $\neg\neg Q\imp Q$. For topological spaces, recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty set, and is closed under finite intersections. So for the topos of sheaves on a space, our condition expresses the requirement that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup {\{Q\ss P\mid \neg\neg Q=Q\}}$.
-
-\begin{remark}
-In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
-
-It is not hard to show however that any regular space is regularly-based in our sense. 
-\end{remark}
 
 We now axiomatize the assumption that our topos has enough points:
 
@@ -394,20 +378,19 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 
 \begin{axiom}
 	\label{ax:flabby_vs_at}
-	Suppose that $X$ is flabby. Then for all points $K : \CB$ and predicates $P : X \to \Prop$,
+	Let $K : \CB$ and suppose that $X$ is $\At{K}$-flabby. Then for all predicates $P : X \to \Prop$,
 	\[
-		\At{K}\exists x:X. P(x) \quad \Longrightarrow \quad \exists x:X.\At{K}P(x).
+		\At{K}\exists x:X. P(x) \quad \Longrightarrow \quad \At{K} \bot \: \lor \: \exists x:X.\At{K}P(x).
 	\]
 \end{axiom}
 
 Since the implication from right is left is easy to prove for every modality, we therefore know that this is actually an equivalence.
 
 \begin{soundproof}
-	It is enough to show that if $U \models \At{K} \exists x:X.P(x)$, then $U \models \At{K}\bot \:\lor\: \exists x:X.\At{K}P(x)$. For $K\not\in U$, then the latter is trivially correct, so assume $K \in U$. Then the assumption means that there is $V\ni K$ with $V\subseteq U$ and $V\models \exists x:X.\At{K} P(x)$. Restricting further, we have $W\ni K$ with $W\subseteq V\subseteq U$ and $x\in X(W)$ with $W \models \At{K} P(x)$. Restricting $W$ again if necessary, we get $W \models P(x)$.
+	We need to show that if $U \models \At{K} \exists x:X.P(x)$, then $U \models \At{K}\bot \:\lor\: \exists x:X.\At{K}P(x)$. For $K\not\in U$, then the latter is trivially correct, so assume $K \in U$. Then the assumption means that there is $V\ni K$ with $V\subseteq U$ and $V\models \exists x:X.\At{K} P(x)$. Restricting further, we have $W\ni K$ with $W\subseteq V\subseteq U$ and $x\in X(W)$ with $W \models \At{K} P(x)$. Restricting $W$ again if necessary, we get $W \models P(x)$.
 
-	We now use flabbiness to get $x'\in X(U)$ with $x'|_W = x$. Then we indeed have $U\models \At{K} P(x')$ since $W\models P(x)$.
+	We now use the characterization of $\At{K}$-flabbiness of \cref{prop.at_flabby_semantics} to get $x'\in X(U)$ which represents the same germ at $K$ as $x$. Then we indeed have $U\models \At{K} P(x')$ since $W\models P(x)$.
 \end{soundproof}
-
 
 \chapter{Consequences of the axiomatics}
 
@@ -436,12 +419,17 @@ For every $P,Q : \Prop$,
 \section{Properties of the rationals}
 
 \begin{lemma}
-	$\tNN$ is flabby.
+	$\tNN$ is $\At{K}$-flabby for every $K : \CB$.
 	\label{lem:N_flabby}
 \end{lemma}
 
 \begin{proof}
-	Let $P : \tNN \to \Prop$ be a subsingleton. By \cref{ax:N_well_ordered}, there is a least $n : \tNN$ such that $P(n)$. Using this $n$, the claim easily follows from the subsingleton assumption on $P$, since then any other $m:\tNN$ with $P(m)$ must satisfy $m = n$.
+	This is similar to the proof of \cref{lem.11_at_flabby}. 
+	Let $P : \tNN \to \Prop$ satisfy $\At{K} \exists n : \tNN \ldotp P(n)$. We now use induction to show that we can assume $\forall n : \tNN \ldotp P(n) \imp \At{K} \bot$. The base case is clear, since $\At{K} P(0)$ proves the $\At{K}$-flabbiness claim, and hence we can assume $P(0) \imp \At{K} \bot$. For the induction step, we are again done if $\At{K} P(n+1)$, and can therefore assume $P(n+1) \imp \At{K} \bot$ (the induction assumption is not needed). 
+	\[
+		\At{K} ( \exists n : \tNN \ldotp P(n) \land \forall m \ldotp P(m) \imp (m \geq n) ).
+	\]
+	Using this $n$, the claim easily follows from the subsingleton assumption on $P$, since then any other $m:\tNN$ with $P(m)$ must satisfy $m = n$.
 \end{proof}
 
 \begin{lemma}
@@ -629,18 +617,32 @@ Here, the finiteness assumption $c < \infty$ means that there is $u \in \tQQ$ wi
 	Now if we have $q'\in\tQQ$ with $\At{K}(q' < a)$, then we also have $\At{K}(q' + q < a + c)$, and therefore just as well $\At{K}(q' + q < b + c)$, and hence $q + q' < \At{K} b + \At{K} c \leq \At{K} q + \At{K} b + \At{K} \varepsilon$. But then $q' < \At{K} b + \At{K} \varepsilon$, as was to be shown.
 \end{proof}
 
-\tob{Much of the rest of this chapter will now be redundant}
+\section{Other properties of modalities}
+
+\tob{Not sure what we still need from this subsection, but I'm updating it nevertheless}
+
+\begin{lemma}
+	For any $K$ and $P : \Prop$,
+	\[
+		\At{K} P \: = \: \left( (P \imp \At{K} \bot) \imp \At{K} \bot \right) .
+	\]
+	\label{lem.at_double_neg}
+\end{lemma}
+
+\begin{proof}
+	The left-to-right implication is straightforward. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, which is enough.
+\end{proof}
 
 \begin{lemma}
 For every $P : \Prop$,
 \[
-	P \: \Leftrightarrow \: \forall K \, \exists U : \Prop \ldotp \At{K} U \wedge \In{U} P.
+	P \: \Leftrightarrow \: \forall K \, \exists U : \Prop \ldotp \At{K} U \wedge (U \imp P).
 \]
 \label{lem.prop_to_opens}
 \end{lemma}
 
 \begin{proof}
-From left to right, we know $P$ and can therefore just take $U \coloneqq \top$ for any $K$. From right to left, it is enough to prove $\At{K} P$ for any given $P$ by Axiom~\ref{ax.enough_points}. By $\in{U}P$, we can conclude $\At{K} U \imp \At{K} P$ by monotonicity of $\At{K}$. But then we also have the assumption $\At{K} U$, so that the claim $\At{K} P$ follows.
+From left to right, we know $P$ and can therefore just take $U \coloneqq \top$ for any $K$. From right to left, it is enough to prove $\At{K} P$ for any given $P$ by Axiom~\ref{ax.enough_points}. By $U \imp P$, we can conclude $\At{K} U \imp \At{K} P$ by monotonicity of $\At{K}$. But then we also have the assumption $\At{K} U$, so that the claim $\At{K} P$ follows.
 \end{proof}
 
 The following establishes the correspondence between propositions and opens internally:
@@ -648,63 +650,43 @@ The following establishes the correspondence between propositions and opens inte
 \begin{proposition}\label{prop:prop_as_opens}
 Transposing the canonical map $\At{} : C\BaseSpace \times \Prop \to \Prop$ to $\Prop \to \Prop^{C\BaseSpace}$ identifies $\Prop$ with those predicates $Q : C\BaseSpace \to \Prop$ which satisfy
 \[
-	\forall K \ldotp \left[ Q(K) \imp \exists U \colon \Prop \ldotp \At{K} U \wedge \forall K' \ldotp \At{K'} U \imp Q(K') \right].
+	\forall K \ldotp \left( \At{K}Q(K) \imp Q(K)\right) \: \land \: \left[ Q(K) \imp \exists U \colon \Prop \ldotp \At{K} U \wedge \forall K' \ldotp \At{K'} U \imp Q(K') \right].
 \]
 \end{proposition}
 
 \begin{proof}
-Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At{K} P$. To see that it has the required property, we therefore assume $\At{K} P$. Applying \cref{lem.prop_to_opens}, we get $U$ with $\At{K} U$ and $U \imp P$. Now given $K'$ with $\At{K'} U$, we can conclude $\At{K'} P$ by monotonicity of $\At{K'}$.
+	Given $P : \Prop$, the associated predicate is $Q \coloneqq \lambda K \ldotp \At{K} P$. Then $\At{K} Q(K) \imp Q(K)$ holds by definition. To see that it has the second required property, we therefore assume $\At{K} P$. Applying \cref{lem.prop_to_opens}, we get $U$ with $\At{K} U$ and $U \imp P$. Now given $K'$ with $\At{K'} U$, we can conclude $\At{K'} P$ by monotonicity of $\At{K'}$.
 
 Clearly if $P, P' : \Prop$ induce the same predicate, then they must be equal, by \cref{ax.enough_points}. Thus it remains to show that every $Q$ which has the required property comes from a proposition.
 
-Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lambda K \ldotp \At{K} P$. This boils down to showing $Q(K) = \At{K} \forall K' \ldotp Q(K')$ for every $K$. The right-to-left implication is trivial, so assuming $Q(K)$. By definition we get $U : \Prop$ with $\At{K} U$ and $\At{K'} U \imp Q(K')$ for every $K'$. So in order to prove $\At{K} \forall K' \ldotp Q(K')$, we can even assume $U$, which implies $\At{K'} U$ and therefore $Q(K')$, as was to be shown.
-\end{proof}
-
-\begin{lemma}
-For $K\in C\BaseSpace$, the complement $(\down K)^c$ of $\down K$ is a prime open.
-\label{lem.prime}
-\end{lemma}
-
-\begin{proof}
-Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \down K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \down K = \emptyset$, as was to be shown.
+Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lambda K \ldotp \At{K} P$. This boils down to showing $Q(K) = \At{K} \forall K' \ldotp Q(K')$ for every $K$. For the right-to-left implication, it is enough to prove $\At{K} Q(K)$ by assumption, but this is clear. So assume $Q(K)$, in order to prove the left-to-right implication. By definition we get $U : \Prop$ with $\At{K} U$ and $\At{K'} U \imp Q(K')$ for every $K'$. So in order to prove $\At{K} \forall K' \ldotp Q(K')$, we can even assume $U$, which implies $\At{K'} U$ and therefore $Q(K')$, as was to be shown.
 \end{proof}
 
 
-\section{Properties of modalities}
-
 \begin{lemma}
-If $X$ is inhabited and $P : X \to \Prop$ a predicate, then
+If $X$ is inhabited, $P : X \to \Prop$ a predicate, and $U : \Prop$, then
 \[
-	\See{K} \exists x \colon X \ldotp P(x) \: \Leftrightarrow \: \exists x \colon X \ldotp \See{K} P(x).
+	U \lor \exists x \colon X \ldotp P(x) \quad \Longleftrightarrow \quad \exists x \colon X \ldotp U \lor P(x).
 \]
 \label{lem.see_vs_exists}
 \end{lemma}
 
 \begin{proof}
-Using the definition $\See{K} = \At{K} \bot \vee -$, the implication from left to right is by case distinction and inhabitedness. The implication from right to left is likewise by cases.
+The implication from left to right is by case distinction and inhabitedness. The implication from right to left is likewise by cases.
 \end{proof}
 
-\begin{axiom}\label{ax.atvsin}
-For every $K\in C\BaseSpace$,
-\[
-	\forall P,U : \Prop \ldotp \At{K} U \wedge \In{U} P \: \imp \: \At{K} P.
-\]
-\end{axiom}
-
-\begin{soundproof}
-Suppose that $W \models \At{K} U \wedge \In{U} P$. This means that $K\in W$ implies $K\in U$, and $W \cap U \subseteq P$. But the claim $W \models \At{K}P$ means that $K \in W$ implies $K \in P$, which is indeed a consequence.
-\end{soundproof}
-
-\begin{axiom}\label{ax.at_disjunction}
+\begin{lemma}\label{lem.at_disjunction}
 For every $K\in C\BaseSpace$ and $P,Q : \Prop$, 
 \[
-	\At{K} ( P \vee Q ) \: \Leftrightarrow \: \At{K} P \vee \At{K} Q.
+	\At{K} ( P \vee Q ) \: \Longleftrightarrow \: \At{K} P \vee \At{K} Q.
 \]
-\end{axiom}
+\end{lemma}
 
-\begin{soundproof}
-The nontrivial implication is left to right, so assume $((P \vee Q) \imp (\down K)^c ) \imp (\down K)^c$, or equivalently $((P \imp (\down K)^c) \wedge (Q \imp (\down K)^c)) \imp (\down K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\down K)^c$ or $Q \imp (\down K)^c$ implies $(\down K)^c$, as was to be shown.
-\end{soundproof}
+\begin{proof}
+	The nontrivial implication is left to right, so assume $\At{K} ( P \lor Q )$. We first show that the type $1 + 1 = \{\alpha,\beta\}$ is flabby. So let $R \subseteq 1 + 1$ be a subsingleton. In this case, the subsingleton condition is equivalent to $\lnot (R(\alpha) \land R(\beta))$.
+
+, or equivalently $((P \imp (\down K)^c) \wedge (Q \imp (\down K)^c)) \imp (\down K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\down K)^c$ or $Q \imp (\down K)^c$ implies $(\down K)^c$, as was to be shown.
+\end{proof}
 
 \begin{axiom}\label{ax.codisc_vs_at}
 For every $P : \Prop$ and every $K$,
@@ -812,8 +794,6 @@ For any $X$ and any $K\in C\BaseSpace$,
 \]
 \end{axiom}
 
-\chapter{Preliminaries}
-
 \chapter{Internal valuations}
 
 
@@ -892,6 +872,17 @@ The function $i\colon\Prop\to\tLR$ defined above is indeed a probability valuati
 It's not hard to show that $i$ is a probability valuation. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
 \end{proof}
 
+\begin{lemma}
+\[
+	\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.
+\]
+\label{lem.regularly_based}
+\end{lemma}
+
+\begin{proof}
+	Take $Q := \top$.
+\end{proof}
+
 \begin{proposition}\label{prop.unique_probability_valuation_on_prop}
 Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$. 
 \end{proposition}
@@ -908,7 +899,7 @@ Next suppose that we are given $Q_1,Q_2\in T$. It is not hard to show that $i(Q_
 \end{align*}
 Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that all the above inequalities must be equalities, resulting in $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$ and $\mu(Q_1\wedge Q_2) = i(Q_1\wedge Q_2)$. Therefore $(Q_1 \vee Q_2) \in T$ and $(Q_1\wedge Q_2)\in T$.
 
-Since every join can be decomposed into a directed join of finite joins, by assumption an arbitrary proposition $P:\Prop$ is a directed join of elements in $T$. Thus it suffices to show that $T$ is closed under directed joins, but this is clear: if $(Q_d)_{d\in D}$ is a directed system where $Q_d\in T$ for all $d$, then
+Since every join can be decomposed into a directed join of finite joins, by \cref{lem.regularly_based} an arbitrary proposition $P:\Prop$ is a directed join of elements in $T$. Thus it suffices to show that $T$ is closed under directed joins, but this is clear: if $(Q_d)_{d\in D}$ is a directed system where $Q_d\in T$ for all $d$, then
 \[\mu(\sup_{d\in D}Q_d)=\sup_{d\in D}\mu(Q_d)=\sup_{d\in D} i(Q_d)=i(\sup_{d\in D}Q_d).\qedhere\]
 \end{proof}
 
@@ -1509,6 +1500,48 @@ Suppose $X$ is a topological space and $\Op(X)$ is its frame of opens. A Scott-o
 Given opens $U,V\in\Op(X)$, we have $U\ll V$ (i.e.\ $U$ is way-below $V$ in the frame) iff, at the level of the topological space there exists a compact subset $K\ss X$ with $U\ss K\ss V$.
 
 
+
+\section{Connectedness}
+
+\begin{definition}
+	We say that $P : \Prop$ is \emph{connected} if
+	\begin{align*}
+		\conn{P} \: := \: \forall Q_1, Q_2 : \Prop \ldotp (P \imp Q_1 \lor Q_2) \Longrightarrow & (Q_1 \land Q_2 \imp \bot) \\
+			& \Longrightarrow \left[(P \imp Q_1) \lor (P \imp Q_2) \right]
+	\end{align*}
+	holds.
+\end{definition}
+
+\tob{Not yet sure if this is ``right'', since it gives $\conn{\bot}$, in contrast to the usual wisdom which says that the empty space is not connected}
+
+By extension, we also define connectedness of predicates: for $P : X \to \Prop$,
+\[
+	\conn{P} := \forall x : X\ldotp \conn{P(x)}.
+\]
+
+\section{Regularly based}
+]
+We say that a topological space is \emph{regularly-based} if it has a basis of regular opens $U$, i.e.~open sets which are the interior of their closure, or equivalently which are their own double pseudo-complement, $\neg\neg U=U$.
+
+\begin{proposition}
+If $\BaseSpace$ is any space, then $C\BaseSpace$ is regularly-based.
+\end{proposition}
+
+\begin{proof}
+We first show that the closure $\ol{U_{C\BaseSpace}}$ of the basic open $U_{C\BaseSpace}$ consists of all compacts $K_{C\BaseSpace}$ with $K\cap\overline{U} \neq \emptyset$. Clearly the complement of this set $\{K_{C\BaseSpace}\mid K\cap\ol{U}=\emptyset\}$ is open, since it is the open $(\ol{U}^c)_{C\BaseSpace}$ associated to the complement of $\overline{U}$. Moreover, it is the largest open with this property: if $V\subseteq B$ is any open for which $K_{C\BaseSpace}\in V_{C\BaseSpace}$ implies $K_{C\BaseSpace} \not\in U_{C\BaseSpace}$, then $V$ must be disjoint from $U$, since any single point $\{p\}\ss(V\cap U)$ is itself a nonempty compact set. This proves the first claim.
+
+Next, we show that the interior of the above closure is $\{ K \mid K\subseteq U\}$ again. We need to show that it is not larger; so for a given $K$ in this interior, we need to prove $K\subseteq U$. Being in the interior of the above closure means that there is an open $V$ with $K\subseteq V$ such that every $K' \subseteq V$ is in the closure, which means $K' \cap \overline{U} \neq \emptyset$. Again since points are compact, we get $V \subseteq U$, and therefore $K \subseteq U$, as was to be shown.
+
+Since forming the interior of the closure is an idempotent operation (corresponding to double negation), the claim follows.
+\end{proof}
+Equivalently, we could have said that every $P:\Prop$ must be the supremum of all $Q:\Prop$ with $Q\imp P$ and $\neg\neg Q\imp Q$. For topological spaces, recall that an open set $U$ in a topological space is called \emph{regular} if it is the interior of its closure, or in other words $\neg\neg U=U$. Because $\neg\neg$ is a dense modality, the set of regular opens contains the whole space, the empty set, and is closed under finite intersections. So for the topos of sheaves on a space, our condition expresses the requirement that the regular opens form a basis, i.e.\ for all $P\in\Op$, we have $P=\bigcup {\{Q\ss P\mid \neg\neg Q=Q\}}$.
+
+\begin{remark}
+In the book \emph{Counterexamples in Topology} they define semi-regular spaces to be Hausdorff spaces that are regularly-based in our sense above. We are certainly interested in cases where the space is not Hausdorff, e.g.\ $\IR$.
+
+It is not hard to show however that any regular space is regularly-based in our sense. 
+\end{remark}
+
 \chapter{Toy example}
 
 \todo[inline]{We can recycle some of the following to use as our running example for illustration}
@@ -1864,6 +1897,7 @@ The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that 
 
 This is the largest open predicate below $P$ by definition.
 
+
 \chapter{Flabbiness}
 
 \tob{We need to explain \href{https://ncatlab.org/nlab/show/flabby+sheaf\#characterization_using_the_internal_language}{https://ncatlab.org/nlab/show/flabby+sheaf\#characterization\_using\_the\_internal\_language}}
@@ -1873,12 +1907,16 @@ We discuss flabbiness from the internal perspective of any topos $\mathcal{E}$.
 \begin{definition}\label{def:flabby}
 	Let $X$ be a type. Say that $P\colon X\to\Prop$ is \emph{subsingleton} if
 	\begin{equation}\label{eqn.subsingleton}
-	\forall (x,x' : X) \ldotp P(x) \wedge P(x') \imp x = x'
+		\subsing{P} \: := \: \forall (x,x' : X) \ldotp P(x) \wedge P(x') \imp x = x'
 	\end{equation}
-	holds. $X$ is \emph{flabby} if for every subsingleton $S\subseteq X$ there is $x\in X$ such that if $S$ is inhabited, then $x\in S$. In other words, $X$ is flabby if for every $P : X \to \Prop$,
+	holds.
+\end{definition}
+
+\begin{definition}
+$X$ is \emph{flabby} if for every subsingleton $S\subseteq X$ there is $x\in X$ such that if $S$ is inhabited, then $x\in S$. In other words, $X$ is flabby if for every $P : X \to \Prop$,
 	\begin{equation}\label{eq:flabby}
-	( \forall x,x' : X \ldotp P(x) \wedge P(x') \imp x = x') \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp P(x) .
-\end{equation}
+		\subsing{P} \: \Longrightarrow \: \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp P(x) .
+	\end{equation}
 \end{definition}
 
 \begin{lemma}
@@ -1904,6 +1942,42 @@ Recall from \cref{def.interior} the notion of the interior of a predicate.
 This is analogous to the previous proof. So suppose that we have $P : \Op(X) \to \Prop$ that satisfies the subsingleton condition \cref{eqn.subsingleton}. Then we claim that $P$ holds for $U := \interior\left(\forall V \ldotp P(V) \imp V\right)$. Hence we need to show that if we have $W : \Op(X)$ with $P(W)$, then also $P(U)$.
 
 	So it is enough to prove $U = W$ by showing $U(x) \Leftrightarrow W(x)$ for every $x : X$. Assuming $U(x)$, we have an open $U'\ni x$ such that $U' \imp (\forall V \ldotp P(V) \imp V)$. Evaluating this at $x$ proves $\forall V. P(V) \imp V(x)$, and therefore we indeed get $W(x)$. Now assume $W(x)$. Using $W$ itself as the neighborhood, it is enough to prove that $W$ implies $\forall V\ldotp P(V) \imp V$. But now since $P(V)$ and $P(W)$, this follows from the assumed subsingleton condition.
+\end{proof}
+
+\begin{definition}
+	Let $K : \CB$. A type $X$ is \emph{$\At{K}$-flabby} if for all $P : X \to \Prop$,
+	%\[
+	%	\At{K}\bot \: \lor \: \left[ \subsing{P} \land \At{K} \exists x : X \ldotp P(x) \quad \Longrightarrow \quad \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)  \right].
+	%\]
+	\[
+		\left( \At{K} \exists x : X \ldotp P(x)\right) \quad \Longrightarrow \quad \At{K}\bot \: \lor \: \left[ \subsing{P} \imp \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)  \right].
+	\]
+\end{definition}
+
+Clearly if $X$ is flabby, then it is also $\At{K}$-flabby for every $K$.
+
+\begin{proposition}
+	\label{prop.at_flabby_semantics}
+	In our intended semantics of sheaves no $\CB$, a sheaf $X$ is $\At{K}$-flabby if only if every germ at $K$ can be extended to a global section.
+\end{proposition}
+
+\tob{Carefully check the proof again}
+
+\begin{proof}
+	The semantics of this internal condition on some open $U$ is as follows. If $K\not\in U$, then it is trivially true, so assume $K\in U$. Then the condition is that if $P$ a predicate on $X|_U$, then there is $U' \subseteq U$ such that $U'$ contains at least all $K'\supseteq K$, and if $U'\models \subsing{P}$ and $U' \models \At{K} \exists x : X \ldotp P(x)$, then also $U' \models \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)$. The assumption $U' \models \subsing{P}$ means that for every $V\subseteq U'$, if $x,x'\in X(V)$ and $P(x) = P(x') = V$, then $x = x'$. The assumption $U \models \At{K} \exists x : X\ldotp P(x)$ means that there is an open $W\subseteq U$ with $K\in W$ and $\tilde{x} \in X(W)$ with $P(\tilde{x}) = W$. The conclusion means that there is a cover $U' = \bigcup_i U_i$ and local sections $x_i \in X(U_i)$ such that for every $V_i \subseteq U_i$ which contains $K$, if $P$ contains a germ of $X$ at every point of $V_i$, then also $K\in P(x)$.
+
+	We prove this implication from the possibility of lifting germs at $K$ to global sections. The first assumption gives us a germ at $K$, which we extend to a section $\hat{x}\in X(U)$. For the given cover $U' = \bigcup_i U_i$, we put $x_i := \hat{x}|_{U_i}$. Now we are given the $V_i \subseteq U_i$, and need to assume that $P$ contains a germ at every point of $V_i$. For $K\in V_i$, the subsingleton assumption implies that all of these germs are equal to the restriction of $x_i$. In particular, the germ at $K$, which is the restriction of $x$, satisfies $P$ in a neighborhood of $K$; hence $K\in P(x)$, as was to be shown.
+
+	Conversely, suppose that the internal sentence holds. Now it is enough to show that every germ at $K$ can be lifted to a germ at a given $K'\supseteq K$; for then, Zorn's lemma shows that the given germ can be extended to an open which contains all these $K'$; but then the only such open is the whole space $\CB$, resulting in a global section. So hence let $x \in X(U)$ be a representative of a germ defined on an open $U$ with $K \in U$. We instantiate the internal assumption on the open $\CB$. We define a subsingleton as the natural transformation $P : X \to \Prop$ with components $P_V(x') := \bigcup \{V' \subseteq V \: : \: x|_{V'} = \hat{x}|_{V'} \}$, which is clearly natural; also the subsingleton condition holds by construction. Also the other assumption $\CB \models \At{K} \exists x : X \ldotp P(x)$ holds by construction. Thus at every $K' \supseteq K$, we obtain a germ $x'$ defined on a neighborhood $U' \ni K'$ which necessarily also contains $K$. Since $U'\models (\exists y : X \ldotp P(y) ) \imp \At{K} P(x')$, we conclude $P(x') \ni K$ by restriction to the neighborhood of $K$ on which $x$ is defined. Restricting to the intersection of the two domain of definition of $x$ and $x'$, we conclude that $x = x'$ holds there. Hence $x'$ extends the germ represented by $x$, as was to be shown.
+\end{proof}
+
+\begin{lemma}
+	$1 + 1$ is $\At{K}$-flabby.
+	\label{lem.11_at_flabby}
+\end{lemma}
+
+\begin{proof}
+	Let us write $1 + 1 = \{\alpha,\beta\}$ in terms of elements. Let $P : 1 + 1 \to \Prop$. In case $\At{K} P(\alpha)$, we use $x := \alpha$ and there is nothing more to prove; similarly $x := \beta$ if $\At{K} P(\beta)$. Hence we can assume $P(\alpha) \imp \At{K} \bot$ and $P(\beta) \imp \At{K} \bot$. But now we also have the assumption $\At{K}(P(\alpha) \lor P(\beta))$, and therefore obtain $\At{K} \bot$, as was to be shown.
 \end{proof}
 
 %\printbibliography
