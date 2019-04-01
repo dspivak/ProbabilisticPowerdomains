@@ -140,6 +140,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\ol}[1]{\overline{#1}}
 \newcommand{\ul}[1]{\underline{#1}}
 \newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\wh}[1]{\widehat{#1}}
 \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
 \newcommand{\subsing}[1]{\mathrm{subsing}(#1)}	% subsingleton predicate
 \newcommand{\conn}[1]{\mathrm{conn}(#1)}	% connectedness predicate
@@ -273,7 +274,7 @@ pdfencoding=unicode]{hyperref}
 
 \title{Stochastic Processes as Internal Probability Spaces\\ Or: A Synthetic Theory of Stochastic Processes}
 
-\author{Tobias Fritz and David Spivak}
+\author{Tobias Fritz and David I.\ Spivak\thanks{}}
 
 \maketitle
 
@@ -331,7 +332,7 @@ Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \
 \end{lemma}
 
 \begin{proof}
-	For every $K$ contained in an open $U$, we need to find a connected open neighborhood of $K$ contained in $U$. Since $U$ is open, there is $\hat{U} \subseteq \BaseSpace$ such that every $K'\subseteq \hat{U}$ is in $U$. Now the set of all compacts contained in $\hat{U}$ is a basic neighborhood of $K$ contained in $U$, and it is connected since its specialization preorder is connected.
+	For every $K$ contained in an open $U$, we need to find a connected open neighborhood of $K$ contained in $U$. Since $U$ is open, there is $\wh{U} \subseteq \BaseSpace$ such that every $K'\subseteq \wh{U}$ is in $U$. Now the set of all compacts contained in $\wh{U}$ is a basic neighborhood of $K$ contained in $U$, and it is connected since its specialization preorder is connected.
 \end{proof}
 
 \begin{corollary}
@@ -409,14 +410,14 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 	\[
 		W := \uparrow (U \cap (\downarrow K)).
 	\]
-	We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\tilde{K} \supseteq K'$ with $\tilde{K} \in U$ and $K \subseteq \tilde{K}$. By openness of $U$, we have an open $\tilde{U} \subseteq B$ such that $\tilde{K} \subseteq \tilde{U}$, and also every other $\hat{K} \subseteq \tilde{U}$ is in $U$. But then also $\hat{K} \in W$, since we have $ \hat{K} \subseteq (\hat{K} \cup \tilde{K}) \supseteq K$, and $\hat{K} \cup \tilde{K} \in U$. Hence $\tilde{U}$ is the desired neighborhood of $K'$ which lies in $W$.
+	We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\wt{K} \supseteq K'$ with $\wt{K} \in U$ and $K \subseteq \wt{K}$. By openness of $U$, we have an open $\wt{U} \subseteq B$ such that $\wt{K} \subseteq \wt{U}$, and also every other $\wh{K} \subseteq \wt{U}$ is in $U$. But then also $\wh{K} \in W$, since we have $ \wh{K} \subseteq (\wh{K} \cup \wt{K}) \supseteq K$, and $\wh{K} \cup \wt{K} \in U$. Hence $\wt{U}$ is the desired neighborhood of $K'$ which lies in $W$.
 
 	It follows that $W$ is the smallest open which satisfies \todo{a figure may help}
 	\begin{equation}
 		\label{UKW}
 		U \cap \downarrow K = W \cap \downarrow K.
 	\end{equation}
-	We now show that $W$ is connected. So suppose that $W = W_1 \amalg W_2$, say with $K\in W_1$. Then every putative $K' \in W_2$ is such that there is $\tilde{K} \supseteq K$ with $\tilde{K} \supseteq K'$. Since these containments are specialization preorder relations, the first can hold only if $\tilde{K} \in W_1$, and the second one only if $\tilde{K} \in W_2$, which is a contradiction. Hence our assumption that there is $K' \in W_2$ was wrong, and we conclude $W_2 = \emptyset$, so that $W$ is connected.
+	We now show that $W$ is connected. So suppose that $W = W_1 \amalg W_2$, say with $K\in W_1$. Then every putative $K' \in W_2$ is such that there is $\wt{K} \supseteq K$ with $\wt{K} \supseteq K'$. Since these containments are specialization preorder relations, the first can hold only if $\wt{K} \in W_1$, and the second one only if $\wt{K} \in W_2$, which is a contradiction. Hence our assumption that there is $K' \in W_2$ was wrong, and we conclude $W_2 = \emptyset$, so that $W$ is connected.
 
 	We now prove the claim that for all $W' \subseteq W$ and $n \in \tNN(W')$, we have $W' = P(n)$. Suppose first that $W'$ is connected. Then the restriction map $\tNN(W) \to \tNN(W')$ is the identity of $\NN$, so that it is enough to consider the case $W' = W$. But then we can take $V := W$ in the assumption, getting $W \subseteq P(n) \cup (\downarrow K)^c$. The definition of $W$ now implies that $U \cap \downarrow K \subseteq P(n)$. And since $P(n)$ is up-closed, we conclude $W \subseteq P(n)$, as was to be shown.
 
@@ -2054,7 +2055,7 @@ Clearly if $X$ is flabby, then it is also $\At{K}$-flabby for every $K$.
 \begin{proof}
 	The semantics of this internal condition on some open $U$ is as follows. The first assumption is that there is a smaller neighborhood $V\ni K$ and $x_0 \in X(V)$ such that $P(x_0) = V$; in other words, that $P$ contains a germ at $K$. The second assumption $U \models \subsing{P}$ means that for every $U'\subseteq U$, if $x,x'\in X(U')$ and $P(x) = P(x') = U'$, then $x = x'$. The conclusion of the condition then is $U \models \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x)$, meaning that there is a cover $U = \bigcup_i U_i$ and local sections $x_i \in X(U_i)$ such that for every $V_i \subseteq U_i$ which contains $K$, if $P$ contains a germ of $X$ at every point of $V_i$, then also $K\in P(x)$.
 
-	We prove this implication from inhabitedness together with the possibility of lifting germs at $K$ to global sections. If $K\not\in U$, then the condition trivially holds upon choosing any $x$ (i.e.~covering family of local sections). So assume $K\in U$. The first assumption gives us a germ at $K$, which we extend to a section $\hat{x}\in X(U)$. For the given cover $U = \bigcup_i U_i$, we put $x_i := \hat{x}|_{U_i}$. Now we are given the $V_i \subseteq U_i$, and need to assume that $P$ contains a germ at every point of $V_i$. For $K\in V_i$, the subsingleton assumption implies that all of these germs are equal to the restriction of $x_i$. In particular, the germ at $K$, which must be equal to the restriction of $x$, satisfies $P$ in a neighborhood of $K$; hence $K\in P(x)$, as was to be shown.
+	We prove this implication from inhabitedness together with the possibility of lifting germs at $K$ to global sections. If $K\not\in U$, then the condition trivially holds upon choosing any $x$ (i.e.~covering family of local sections). So assume $K\in U$. The first assumption gives us a germ at $K$, which we extend to a section $\wh{x}\in X(U)$. For the given cover $U = \bigcup_i U_i$, we put $x_i := \wh{x}|_{U_i}$. Now we are given the $V_i \subseteq U_i$, and need to assume that $P$ contains a germ at every point of $V_i$. For $K\in V_i$, the subsingleton assumption implies that all of these germs are equal to the restriction of $x_i$. In particular, the germ at $K$, which must be equal to the restriction of $x$, satisfies $P$ in a neighborhood of $K$; hence $K\in P(x)$, as was to be shown.
 
 	Conversely, suppose that the internal sentence holds. Now it is enough to show that every germ at $K$ can be lifted to a germ at a given $K'\supseteq K$; for then, Zorn's lemma shows that the given germ can be extended to an open which contains all these $K'$; but then the only such open is the whole space $\CB$, resulting in a global section \todo{this makes some assumption on $\CB$}. So hence let $x \in X(U)$ be a representative of a germ defined on an open $U$ with $K \in U$. We instantiate the internal assumption on the open $\CB$. We define a subsingleton as the natural transformation $P : X \to \Prop$ with components $P_V(x') := \bigcup \{V' \subseteq V \: : \: x'|_{V'} = x|_{V'} \}$, which is clearly natural; also the subsingleton condition holds by construction. Also the other assumption $\CB \models \At{K} \exists x : X \ldotp P(x)$ holds by construction. Thus at every $K' \supseteq K$, we obtain a germ $x'$ defined on a neighborhood $U' \ni K'$ which necessarily also contains $K$. Since $U'\models (\exists y : X \ldotp P(y) ) \imp \At{K} P(x')$, we conclude $P(x') \ni K$ by restriction to the neighborhood of $K$ on which $x$ is defined. Restricting to the intersection of the two domains of definition of $x$ and $x'$, we conclude that $x = x'$ holds there. Hence $x'$ extends the germ represented by $x$, as was to be shown.
 \end{proof}
