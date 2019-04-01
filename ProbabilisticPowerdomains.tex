@@ -325,6 +325,24 @@ For $K\in C\BaseSpace$, the complement $(\down K)^c$ of $\down K$ is a prime ope
 Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \down K = \emptyset$. This implies $K\not\in P$ or $K\not\in Q$; suppose the former. Since an open is up-closed in the domain order, we have $P\cap \down K = \emptyset$, as was to be shown.
 \end{proof}
 
+\begin{lemma}
+	\label{lem.locally_connected}
+	$\CB$ is locally connected.
+\end{lemma}
+
+\begin{proof}
+	For every $K$ contained in an open $U$, we need to find a connected open neighborhood of $K$ contained in $U$. Since $U$ is open, there is $\hat{U} \subseteq \BaseSpace$ such that every $K'\subseteq \hat{U}$ is in $U$. Now the set of all compacts contained in $\hat{U}$ is a basic neighborhood of $K$ contained in $U$, and it is connected since its specialization preorder is connected.
+\end{proof}
+
+\begin{corollary}
+	\label{cor.open_components}
+	The connected components of every open in $\CB$ are themselves open.
+\end{corollary}
+
+\begin{proof}
+	This follows from local connectedness.
+\end{proof}
+
 \section{Axioms and soundness proofs}
 
 We only work with $\At{}$ modalities explicitly, since In and See are easy to define directly in terms of the logic, so that introducing notation for them would not decrease formula complexity by much.
@@ -385,7 +403,24 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 \end{axiom}
 
 \begin{soundproof}
-	We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\downarrow K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W)$, we have $W' = P(n)$.
+	We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\downarrow K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W')$, we have $W' = P(n)$.
+
+	So suppose $K\in U$, and consider the set
+	\[
+		W := \uparrow (U \cap (\downarrow K)).
+	\]
+	We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\tilde{K} \supseteq K'$ with $\tilde{K} \in U$ and $K \subseteq \tilde{K}$. By openness of $U$, we have an open $\tilde{U} \subseteq B$ such that $\tilde{K} \subseteq \tilde{U}$, and also every other $\hat{K} \subseteq \tilde{U}$ is in $U$. But then also $\hat{K} \in W$, since we have $ \hat{K} \subseteq (\hat{K} \cup \tilde{K}) \supseteq K$, and $\hat{K} \cup \tilde{K} \in U$. Hence $\tilde{U}$ is the desired neighborhood of $K'$ which lies in $W$.
+
+	It follows that $W$ is the smallest open which satisfies \todo{a figure may help}
+	\begin{equation}
+		\label{UKW}
+		U \cap \downarrow K = W \cap \downarrow K.
+	\end{equation}
+	We now show that $W$ is connected. So suppose that $W = W_1 \amalg W_2$, say with $K\in W_1$. Then every putative $K' \in W_2$ is such that there is $\tilde{K} \supseteq K$ with $\tilde{K} \supseteq K'$. Since these containments are specialization preorder relations, the first can hold only if $\tilde{K} \in W_1$, and the second one only if $\tilde{K} \in W_2$, which is a contradiction. Hence our assumption that there is $K' \in W_2$ was wrong, and we conclude $W_2 = \emptyset$, so that $W$ is connected.
+
+	We now prove the claim that for all $W' \subseteq W$ and $n \in \tNN(W')$, we have $W' = P(n)$. Suppose first that $W'$ is connected. Then the restriction map $\tNN(W) \to \tNN(W')$ is the identity of $\NN$, so that it is enough to consider the case $W' = W$. But then we can take $V := W$ in the assumption, getting $W \subseteq P(n) \cup (\downarrow K)^c$. The definition of $W$ now implies that $U \cap \downarrow K \subseteq P(n)$. And since $P(n)$ is up-closed, we conclude $W \subseteq P(n)$, as was to be shown.
+
+	Finally, for arbitrary $W'$, we have a decomposition $W' = \coprod_{i\in I} W_i$ with open components $W_i$ by \Cref{cor.open_components}. Every $n \in \tNN(W')$ is therefore given by a tuple $n = (n_i)_{i\in I}$ for $n_i \in \tNN(W_i) = \NN$. We prove the claim $W' \subseteq P(n)$ by showing $W_i \subseteq P(n)$ for every $i$; but then it is enough to prove $W_i \subseteq P(n_i)$, which we already know per the connected case from the previous paragraph.
 \end{soundproof}
 
 Finally, our only axiom schema is the following:
