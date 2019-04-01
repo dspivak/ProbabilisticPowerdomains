@@ -481,6 +481,7 @@ For every $P,Q : \Prop$,
 \end{proof}
 
 \begin{proposition}
+	\label{prop.N_or_vs_forall}
 	For every $P : \Prop$ and $Q : \tNN \to \Prop$,
 	\[
 		\forall n : \tNN\ldotp P \lor Q(n) \quad \Longleftrightarrow \quad P \lor \forall n : \tNN \ldotp Q(n).
@@ -509,15 +510,18 @@ The notion of flabbiness is defined in \cref{def:flabby}.
 \end{lemma}
 
 \begin{proof}
-	\tob{Needs to be adapted to the new definitions (hopefully it works out now)}
-
-	This is similar to the proof of \cref{lem.11_at_flabby}. 
-	Let $P : \tNN \to \Prop$ satisfy $\At{K} \exists n : \tNN \ldotp P(n)$. We now use induction to show that we can assume $\forall n : \tNN \ldotp P(n) \imp \At{K} \bot$. The base case is clear, since $\At{K} P(0)$ proves the $\At{K}$-flabbiness claim, and hence we can assume $P(0) \imp \At{K} \bot$. For the induction step, we are again done if $\At{K} P(n+1)$, and can therefore assume $P(n+1) \imp \At{K} \bot$ (the induction assumption is not needed). 
+	However, we start with the tautology
 	\[
-		\At{K} ( \exists n : \tNN \ldotp P(n) \land \forall m \ldotp P(m) \imp (m \geq n) ).
+		\forall n : \tNN \ldotp \left( P(n) \imp \At{K} \bot \: \lor \: \exists n' : \tNN \ldotp P(n') \bot \right),
 	\]
-	Using this $n$, the claim easily follows from the subsingleton assumption on $P$, since then any other $m:\tNN$ with $P(m)$ must satisfy $m = n$.
+	which by \Cref{prop.N_or_vs_forall} is equivalent to
+	\[
+		\left(\exists n : \tNN \ldotp \At{K} P(n) \right) \: \lor \: \left( \forall n : \tNN \ldotp P(n) \imp \At{K} \bot \right).
+	\]
+	Now in case that there is $n$ with $\At{K} P(n)$, there is nothing more to prove. Hence we assume $P(n) \imp \At{K} \bot$ for all $n$, which is similar to what we did in the proof of \cref{lem.11_at_flabby}. But now together with $\At{K} \exists n : \ldotp P(n)$, we arrive at $\At{K} \bot$, which is enough.
 \end{proof}
+
+\tob{The previous proof, as well as the one of \Cref{lem.11_at_flabby}, actually prove the claim of \Cref{ax:flabby_vs_at} directly. Turns this into the defn of $\At{K}$-flabby?}
 
 \begin{lemma}
 	$\tQQ$ is flabby.
@@ -551,11 +555,11 @@ The notion of flabbiness is defined in \cref{def:flabby}.
 For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. We also use the more intuitive notation $q < a$ in place of $a(q)$ for $a\in\tLR$ and $q\in\tQQ$. This is consistent notation in the sense that the $q$ in $q < a$ can also be interpreted as a lower real, and then $q < a$ is indeed equivalent to $a(q)$.
 
 \begin{lemma}
+	\label{lem:eps_order}
 	For every $a,b\in\tLR$,
 	\[
 		\left(\forall \epsilon : \tQQ\ldotp (\epsilon > 0) \imp (a \leq b + \epsilon)\right) \quad \Longrightarrow \quad \left( a \leq b \right).
 	\]
-	\label{lem:eps_order}
 \end{lemma}
 
 \begin{proof}
@@ -575,11 +579,11 @@ For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
 \end{proof}
 
 \begin{lemma}
+	\label{lem:lower_reals_local}
 	For every $a : \tLR$,
 	\[
 		a = \inf_K \At{K} a.
 	\]
-	\label{lem:lower_reals_local}
 \end{lemma}
 
 \begin{proof}
@@ -598,11 +602,11 @@ For any $a,b:\tLR$,
 \end{proof}
 
 \begin{lemma}
+	\label{lem:at_totally_ordered1}
 	For all $a : \tLR$ and $q : \tQQ$,
 	\[
 		 (\At{K} a \leq \At{K}q) \: \lor \: \At{K}(q < a).
 	\]
-	\label{lem:at_totally_ordered1}
 \end{lemma}
 
 \begin{proof}
@@ -612,12 +616,12 @@ For any $a,b:\tLR$,
 Roughly, the following says that the lower $\At{K}$-reals coincide with the Dedekind $\At{K}$-reals:
 
 \begin{lemma}
+	\label{lem:at_lower_real}
 	For all $a : \tLR$,
 	\[
 		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q,
 	\]
 	where $q\in \tQQ$ ranges over all rationals satisfying the additional constraints.
-	\label{lem:at_lower_real}
 \end{lemma}
 
 \tob{In the end we don't need this for \cref{prop.order_canc}}
@@ -642,11 +646,11 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 %\end{proof}
 
 \begin{lemma}
+	\label{lem.at_plus_commute}
 	For all $a,b\in\tLR$,
 	\[
 		\At{K}(a + b) = \At{K} a + \At{K} b.
 	\]
-	\label{lem.at_plus_commute}
 \end{lemma}
 
 \begin{proof}
@@ -668,6 +672,7 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 \end{proof}
 
 \begin{lemma}
+	\label{lem:subtract_q}
 	For $q,q':\tQQ$ and $a : \tLR$,
 	\begin{enumerate}
 	\item 
@@ -678,7 +683,6 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 		\[
 			q + q' < \At{K} a + \At{K} q' \quad \Longrightarrow \quad q < \At{K} a.
 		\]
-	\label{lem:subtract_q}
 	\end{enumerate}
 \end{lemma}
 
@@ -709,11 +713,11 @@ Here, the finiteness assumption $c < \infty$ means that there is $u \in \tQQ$ wi
 \tob{Not sure what we still need from this subsection, but I'm updating it nevertheless}
 
 \begin{lemma}
+	\label{lem.at_double_neg}
 	For any $K$ and $P : \Prop$,
 	\[
 		\At{K} P \: = \: \left( (P \imp \At{K} \bot) \imp \At{K} \bot \right) .
 	\]
-	\label{lem.at_double_neg}
 \end{lemma}
 
 \begin{proof}
@@ -721,11 +725,11 @@ Here, the finiteness assumption $c < \infty$ means that there is $u \in \tQQ$ wi
 \end{proof}
 
 \begin{lemma}
-For every $P : \Prop$,
-\[
-	P \: \Leftrightarrow \: \forall K \, \exists U : \Prop \ldotp \At{K} U \wedge (U \imp P).
-\]
-\label{lem.prop_to_opens}
+	\label{lem.prop_to_opens}
+	For every $P : \Prop$,
+	\[
+		P \: \Leftrightarrow \: \forall K \, \exists U : \Prop \ldotp \At{K} U \wedge (U \imp P).
+	\]
 \end{lemma}
 
 \begin{proof}
@@ -751,38 +755,16 @@ Given $Q$, we set $P \coloneqq \forall K \ldotp Q(K)$, and claim that $Q = \lamb
 
 
 \begin{lemma}
-If $X$ is inhabited, $P : X \to \Prop$ a predicate, and $U : \Prop$, then
-\[
-	U \lor \exists x \colon X \ldotp P(x) \quad \Longleftrightarrow \quad \exists x \colon X \ldotp U \lor P(x).
-\]
-\label{lem.see_vs_exists}
+	\label{lem.see_vs_exists}
+	If $X$ is inhabited, $P : X \to \Prop$ a predicate, and $U : \Prop$, then
+	\[
+		U \lor \exists x \colon X \ldotp P(x) \quad \Longleftrightarrow \quad \exists x \colon X \ldotp U \lor P(x).
+	\]
 \end{lemma}
 
 \begin{proof}
 The implication from left to right is by case distinction and inhabitedness. The implication from right to left is likewise by cases.
 \end{proof}
-
-\begin{lemma}\label{lem.at_disjunction}
-For every $K\in C\BaseSpace$ and $P,Q : \Prop$, 
-\[
-	\At{K} ( P \vee Q ) \: \Longleftrightarrow \: \At{K} P \vee \At{K} Q.
-\]
-\end{lemma}
-
-\begin{proof}
-	The nontrivial implication is left to right, so assume $\At{K} ( P \lor Q )$. We first show that the type $1 + 1 = \{\alpha,\beta\}$ is flabby. So let $R \subseteq 1 + 1$ be a subsingleton. In this case, the subsingleton condition is equivalent to $\lnot (R(\alpha) \land R(\beta))$.
-
-, or equivalently $((P \imp (\down K)^c) \wedge (Q \imp (\down K)^c)) \imp (\down K)^c$. By \cref{lem.prime}, this means that one of $P \imp (\down K)^c$ or $Q \imp (\down K)^c$ implies $(\down K)^c$, as was to be shown.
-\end{proof}
-
-\begin{axiom}\label{ax.codisc_vs_at}
-For every $P : \Prop$ and every $K$,
-\[
-	\See{B} \bot = \See{B} \At{K} \bot.
-\]
-\end{axiom}
-
-\todo[inline]{\cref{ax.at_disjunction} follows from $\At{K}P\vee P\imp\At{K}\bot$.}
 
 \begin{lemma}\label{lem.at_vs_codisc}
 For every $P : \Prop$ and every $K$,
@@ -874,23 +856,16 @@ Let $X$ be a flabby choice object and $P : X \to \Prop$ a predicate. Then for al
 The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Applying \cref{ax.at_to_nghbhd} to $\exists x\ldotp P(x)$, we can assume $\exists U\ldotp \At{K} U \wedge \In{U} \exists x\ldotp P(x)$, since in the other case $\At{K}\bot$ we are done by inhabitedness of $X$, which follows from flabbiness. Thanks to \cref{prop:flabbiness_equivalence}, we even obtain $U$ such that $\At{K} U$ and $\exists x\ldotp \In{U} P(x)$. Choosing this $x$, we obtain $\At{K} P(x)$ from \cref{ax.atvsin}.
 \end{proof}
 
-\begin{axiom}
-For any $X$ and any $K\in C\BaseSpace$,
-\[
-	\At{K} \exists x : X \: \Rightarrow \: \At{K} \bot \vee \exists x : X.
-\]
-\end{axiom}
-
 \chapter{Internal valuations}
 
 
 
 \begin{definition}\label{def.valuation}
-Suppose $X$ is a locale. A \emph{valuation} on $X$ is a function $\mu:\mathcal{O}(X)\to\tRRat{[d,u]}$ satisfying the following:
+Suppose $X$ is an internal locale. A \emph{valuation} on $X$ is a function $\mu:\Op(X)\to\tLR$ satisfying the following:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$.
-	\item $\forall(x,x':X)\ldotp(x\leq x')\imp\mu(x)\leq\mu(x')$.
-	\item $\forall(x,x':X)\ldotp\mu(x)+\mu(x')=\mu(x\vee x')+\mu(x\wedge x')$.
+	\item $\forall(U,V:\Op(X))\ldotp(U\leq V)\imp\mu(U)\leq\mu(V)$.
+	\item $\forall(U,V:\Op(X))\ldotp\mu(U)+\mu(V)=\mu(U\vee V)+\mu(U\wedge V)$.
 \end{enumerate}
 A valuation is \emph{normalized} if it satisfies (4), and \emph{continuous} if it satisfies (5):
 \begin{enumerate}[resume]
@@ -898,8 +873,8 @@ A valuation is \emph{normalized} if it satisfies (4), and \emph{continuous} if i
 	\item $\forall(D:X\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
 \end{enumerate}
 Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$.%
-\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(x:\subtype{D})\ldotp r=\mu(x)\}$.}
-Let $\VV(X)$ denote the type of probability valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(x:X)\ldotp(\mu x\leq \mu'x)$.
+\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(U:\subtype{D})\ldotp r=\mu(U)\}$.}
+Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(U:\Op(X))\ldotp(\mu U\leq \mu'U)$.
 \end{definition}
 
 \section{The valuations profunctor}
@@ -955,15 +930,16 @@ We next show that it is a probability valuation (probability valuation). Later w
 \begin{proposition}\label{prop.sandwich}
 The function $i\colon\Prop\to\tLR$ defined above is indeed a probability valuation on $\Prop$, and for any probability valuation $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
 \end{proposition}
+
 \begin{proof}[Sketch]
 It's not hard to show that $i$ is a probability valuation. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
 \end{proof}
 
 \begin{lemma}
+\label{lem.regularly_based}
 \[
 	\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.
 \]
-\label{lem.regularly_based}
 \end{lemma}
 
 \begin{proof}
@@ -971,7 +947,7 @@ It's not hard to show that $i$ is a probability valuation. The proof of the incl
 \end{proof}
 
 \begin{proposition}\label{prop.unique_probability_valuation_on_prop}
-Suppose that $\cat{E}$ is regularly-based. Then $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$. 
+$i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$. 
 \end{proposition}
 \begin{proof}
 Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q = \neg\neg Q$, then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so that $Q\in T$.
