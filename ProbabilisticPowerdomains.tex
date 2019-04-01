@@ -933,7 +933,19 @@ The function $i\colon\Prop\to\tLR$ defined above is indeed a probability valuati
 \end{proposition}
 
 \begin{proof}[Sketch]
-It's not hard to show that $i$ is a probability valuation. The proof of the inclusion-exclusion formula for $i$ involved using $\max$ and $\min$ in one direction, and using case analysis in the other direction. To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
+We first show that $i$ is a probability valuation. The conditions $i(\bot) = 0$, monotonicity, and $i(\top) = 1$ are trivial. We prove the inclusion-exclusion relation
+\[
+	i(P) + i(Q) = i(P \land Q) + i(P \lor Q)
+\]
+by proving both inequalities. For $\geq$, we need to prove that if we have rationals $q_\land < i(P \land Q)$ and $q_\lor < i(P \lor Q)$, then we can find rationals $q_P$ and $q_Q$ with $q_P + q_Q \leq q_\land + q_\lor$ and $q_P < i(P)$ and $q_Q < i(Q)$. So we have the assumptions
+\[
+	(q_\land < 0) \lor ( (q_\land < 1) \land P \land Q), \qquad (q_\lor < 0) \lor ( (q_\lor < 1) \land (P \lor Q)).
+\]
+In case that $(q_\land < 1) \land P \land Q$ holds, we can simply take $q_P := q_\land$ and $q_Q := q_\lor$ and be done. So assume $q_\land < 0$. Then if $(q_\lor < 1) \land (P \lor Q)$ holds, assume $P$ without loss of generality. Then similarly $q_P := q_\lor$ and $q_Q := q_\land$ works. Thus we assume $q_\lor < 0$ as well; but then again $q_P := q_\land$ and $q_Q := q_\lor$ works.
+
+\tob{continue here, using $\max$ and $\min$ in the other direction.}
+
+To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
 \end{proof}
 
 \begin{lemma}
