@@ -377,6 +377,20 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 \end{soundproof}
 
 \begin{axiom}
+	\label{ax.N_vs_at}
+	For all $K$ and $P : \tNN \to \Prop$,
+	\[
+		\forall n : \tNN \ldotp P(n) \lor \At{K} \bot \quad \Longrightarrow \quad \At{K} \forall n : \tNN \ldotp P(n).
+	\]
+\end{axiom}
+
+\begin{soundproof}
+	We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\downarrow K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W)$, we have $W' = P(n)$.
+\end{soundproof}
+
+Finally, our only axiom schema is the following:
+
+\begin{axiom}
 	\label{ax:flabby_vs_at}
 	Let $K : \CB$ and suppose that $X$ is $\At{K}$-flabby. Then for all predicates $P : X \to \Prop$,
 	\[
@@ -393,6 +407,8 @@ Since the implication from right is left is easy to prove for every modality, we
 \end{soundproof}
 
 \chapter{Consequences of the axiomatics}
+
+\section{General properties of the modalities}
 
 \begin{lemma}
 For every $P,Q : \Prop$,
@@ -414,6 +430,38 @@ For every $P,Q : \Prop$,
 
 \begin{proof}
 	Combine \cref{ax:flabby_vs_at} with \cref{prop:opens_flabby}.	
+\end{proof}
+
+
+\begin{lemma}
+	\label{lem.at_vs_or}
+	For every $P,Q \in \Prop$ and $K \in \CB$,
+	\[
+		\At{K}(P \lor Q) = \At{K}P \lor \At{K}Q.
+	\]
+\end{lemma}
+
+\begin{proof}
+	Use \Cref{lem.11_at_flabby} together with \Cref{ax:flabby_vs_at}.
+\end{proof}
+
+\begin{proposition}
+	For every $P : \Prop$ and $Q : \tNN \to \Prop$,
+	\[
+		\forall n : \tNN\ldotp P \lor Q(n) \quad \Longleftrightarrow \quad P \lor \forall n : \tNN \ldotp Q(n).
+	\]
+\end{proposition}
+
+\begin{proof}
+	It is enough to prove the implication from left to right. Then by \Cref{ax.enough_points} and \Cref{lem.at_vs_or}, it is furthermore enough to derive
+	\[
+		\At{K} P \, \lor \, \At{K} \forall n : \tNN \ldotp Q(n).
+	\]
+	from the assumption. Now in case $\At{K} P$, we are done, so that we can assume $P \imp \At{K} \bot$ without loss of generality. Hence we actually have the assumption
+	\[
+		\forall n : \tNN \ldotp \At{K} \bot \lor Q(n),
+	\]
+	from which we then derive the desired $\At{K} \forall n : \tNN \ldotp Q(n)$ by \Cref{ax.N_vs_at}.
 \end{proof}
 
 \section{Properties of the rationals}
