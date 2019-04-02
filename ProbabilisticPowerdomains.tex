@@ -871,12 +871,16 @@ Suppose $X$ is an internal locale. A \emph{valuation} on $X$ is a function $\mu:
 A valuation is \emph{normalized} if it satisfies (4), and \emph{continuous} if it satisfies (5):
 \begin{enumerate}[resume]
 	\item $\mu(X) = 1$.
-	\item $\forall(D:X\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
+	\item $\forall(D:\Op(X)\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
 \end{enumerate}
-Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$.%
-\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(U:\subtype{D})\ldotp r=\mu(U)\}$.}
+Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(U:\subtype{D})\ldotp r=\mu(U)\}$.}.
 Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(U:\Op(X))\ldotp(\mu U\leq \mu'U)$.
 \end{definition}
+
+If $X$ is in fact an internal space, then we have, for $D : \Op(X) \to \Prop$,
+\[
+	\sup(D) = \exists U : \Op(X) \ldotp D(U) \land U.
+\]
 
 \section{The valuations profunctor}
 
@@ -924,29 +928,61 @@ A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the
 
 \section{Valuations on $\Prop$}
 
+\tob{Perhaps better: say that we are talking about valuations on the singleton space, as per \Cref{def.valuation}}
+
 Consider the function $i\colon\Prop\to\tLR$ defined as follows
 \[i(P)(q)\coloneqq(q<0)\vee((q<1)\wedge P).\]
 We next show that it is a probability valuation (probability valuation). Later we will show that, under some conditions, it is unique such.
 
-\begin{proposition}\label{prop.sandwich}
-The function $i\colon\Prop\to\tLR$ defined above is indeed a probability valuation on $\Prop$, and for any probability valuation $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
-\end{proposition}
+\begin{lemma}
+The function $i\colon\Prop\to\tLR$ defined above is indeed a probability valuation on $\Prop$.
+\end{lemma}
 
-\begin{proof}[Sketch]
+\begin{proof}
 We first show that $i$ is a probability valuation. The conditions $i(\bot) = 0$, monotonicity, and $i(\top) = 1$ are trivial. We prove the inclusion-exclusion relation
 \[
 	i(P) + i(Q) = i(P \land Q) + i(P \lor Q)
 \]
 by proving both inequalities. For $\geq$, we need to prove that if we have rationals $q_\land < i(P \land Q)$ and $q_\lor < i(P \lor Q)$, then we can find rationals $q_P$ and $q_Q$ with $q_P + q_Q \leq q_\land + q_\lor$ and $q_P < i(P)$ and $q_Q < i(Q)$. So we have the assumptions
-\[
+\begin{equation}
+	\label{eq.q_rhs}
 	(q_\land < 0) \lor ( (q_\land < 1) \land P \land Q), \qquad (q_\lor < 0) \lor ( (q_\lor < 1) \land (P \lor Q)).
-\]
+\end{equation}
 In case that $(q_\land < 1) \land P \land Q$ holds, we can simply take $q_P := q_\land$ and $q_Q := q_\lor$ and be done. So assume $q_\land < 0$. Then if $(q_\lor < 1) \land (P \lor Q)$ holds, assume $P$ without loss of generality. Then similarly $q_P := q_\lor$ and $q_Q := q_\land$ works. Thus we assume $q_\lor < 0$ as well; but then again $q_P := q_\land$ and $q_Q := q_\lor$ works.
 
-\tob{continue here, using $\max$ and $\min$ in the other direction.}
+For the other inequality, we start with $q_P$ and $q_Q$ such that
+\[
+	(q_P < 0) \lor ( (q_P < 1) \land P), \qquad (q_Q < 0) \lor ( (q_Q < 1) \land Q),
+\]
+and put $q_\land := \min(q_P, q_Q)$ and $q_\lor := \max(q_P, q_Q)$, so that $q_\land + q_\lor = q_P + q_Q$ is guaranteed. Then~\eqref{eq.q_rhs} follows.
 
-To show that $i\leq\mu$, one uses monotonicity and normality of $\mu$. To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
+In order to show that $i$ preserves directed suprema, let $D : \Prop \to \Prop$ be directed. Then
+\[
+	\sup(D) = \exists P : \Prop \ldotp D(P) \land P,
+\]
+and what we need to show is that for all rational $q$, we have
+\[
+	(q < 0) \lor ( (q < 1) \land \exists P : \Prop \ldotp D(P) \land P) \qquad \Longleftrightarrow \qquad \exists P : \Prop \ldotp D(P) \land \left[ (q < 0) \lor ( (q < 1) \land P ) \right],
+\]
+where we have used the fact that suprema of lower reals are computed ``at every $q$''. The implication from left to right is clear in the second case, and in case $q < 0$ uses inhabitedness of $D$. The implication from right to left is by a straightforward case analysis. Hence $i$ preserves directed suprema.
 \end{proof}
+
+\begin{proposition}
+\label{prop.sandwich}
+For any probability valuation $\mu\colon\Prop\to\tLR$, we have $i\leq\mu\leq i\neg\neg$.
+\end{proposition}
+
+\begin{proof}
+To show $i\leq\mu$, we need to prove that
+\[
+	(q < 0) \lor ( (q < 1) \land P) \quad \Longrightarrow \quad \mu(P)(q)
+\]
+for every $P : \Prop$. Since $\mu(P) \geq 0$, this clearly holds in the case $q < 0$, so that we can assume $q < 1$ and $P$. But then $P = \top$, and therefore $\mu(P) = 1$, which implies the claim.
+
+To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q < 1$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
+\end{proof}
+
+\tob{continue here}
 
 \begin{lemma}
 \label{lem.regularly_based}
