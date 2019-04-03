@@ -397,20 +397,22 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 
 \begin{axiom}
 	\label{ax.N_vs_at}
-	For all $K$ and $P : \tNN \to \Prop$,
+	For all $K:\CB$ and $P : \tNN \to \Prop$,
 	\[
 		\forall n : \tNN \ldotp P(n) \lor \At{K} \bot \quad \Longrightarrow \quad \At{K} \forall n : \tNN \ldotp P(n).
 	\]
 \end{axiom}
 
 \begin{soundproof}
-	We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\downarrow K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W')$, we have $W' = P(n)$.
+	Let $U\ss\CB$ be open. We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\downarrow K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W')$, we have $W' \ss P(n)$.
 
 	So suppose $K\in U$, and consider the set
 	\[
 		W := \uparrow (U \cap (\downarrow K)).
 	\]
-	We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\wt{K} \supseteq K'$ with $\wt{K} \in U$ and $K \subseteq \wt{K}$. By openness of $U$, we have an open $\wt{U} \subseteq B$ such that $\wt{K} \subseteq \wt{U}$, and also every other $\wh{K} \subseteq \wt{U}$ is in $U$. But then also $\wh{K} \in W$, since we have $ \wh{K} \subseteq (\wh{K} \cup \wt{K}) \supseteq K$, and $\wh{K} \cup \wt{K} \in U$. Hence $\wt{U}$ is the desired neighborhood of $K'$ which lies in $W$.
+		We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\wt{K} \supseteq K'$ with $\wt{K} \in U$ and $K \subseteq \wt{K}$. By openness of $U$, we have a $B$-open $\wt{U} \subseteq B$ such that $\wt{K} \subseteq \wt{U}$, and also every other $\wh{K} \subseteq \wt{U}$ is in $U$. Considering $\wt{U}$ as a basic open of $\CB$, we have $K'\in\wt{U}$, and for any other $\wh{K}\in\wt{U}$, we have $\wh{K}\in W$ because $\wh{K}\ss(\wh{K}\cup\wt{K})\supseteq K$ and $(\wh{K}\cup\wt{K})\in\wt{U}\ss U$. Hence $\wt{U}$ is the desired neighborhood of $K'$ which lies in $W$.
+
+%	We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\wt{K} \supseteq K'$ with $\wt{K} \in U$ and $K \subseteq \wt{K}$. By openness of $U$, we have an open $\wt{U} \subseteq B$ such that $\wt{K} \subseteq \wt{U}$, and also every other $\wh{K} \subseteq \wt{U}$ is in $U$. But then also $\wh{K} \in W$, since we have $ \wh{K} \subseteq (\wh{K} \cup \wt{K}) \supseteq K$, and $\wh{K} \cup \wt{K} \in U$. Hence $\wt{U}$ is the desired neighborhood of $K'$ which lies in $W$.
 
 	It follows that $W$ is the smallest open which satisfies \todo{a figure may help}
 	\begin{equation}
