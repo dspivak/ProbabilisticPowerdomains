@@ -555,6 +555,32 @@ The notion of flabbiness is defined in \cref{def:flabby} and that of $\At{K}$-fl
 
 For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. We also use the more intuitive notation $q < a$ in place of $a(q)$ for $a\in\tLR$ and $q\in\tQQ$. This is consistent notation in the sense that the $q$ in $q < a$ can also be interpreted as a lower real, and then $q < a$ is indeed equivalent to $a(q)$.
 
+For $a\in\tLR$ and $P : \Prop$, let us write $P \lor a$ for the lower real with
+\[
+	(P \lor a)(q) := P \lor a(q).
+\]
+It is easy to see that $P \lor a$ is again down-closed and rounded, so that $P \lor a \in \tLR$.
+
+\begin{lemma}
+	\label{lem.or_add_LR}
+	For $a,b\in\tLR$ and $P : \Prop$,
+	\[
+		P \lor (a + b) = P \lor a + P \lor b.
+	\]
+\end{lemma}
+
+\begin{proof}
+	Applied to $q \in \tQQ$, the left-hand side is
+	\[
+		P \lor \exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land a(q_1) \land b(q_2),
+	\]
+	while the right-hand side is
+	\[
+		\exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land (P \lor a(q_1)) \land (P \lor b(q_2)),
+	\]
+	and it is easy to see that the two are equivalent.
+\end{proof}
+
 \begin{lemma}
 	\label{lem:eps_order}
 	For every $a,b\in\tLR$,
@@ -567,7 +593,7 @@ For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $
 	We need to prove that $\epsilon < a$ implies $\epsilon < b$. We can choose $\epsilon' \in \tQQ$ such that $\epsilon < \epsilon' < a$. Applying the assumption to $\epsilon' - \epsilon > 0$, we have $a \le\epsilon b + \epsilon' - \epsilon$. Hence $\epsilon' < a$ implies $\epsilon' < b + \epsilon' - \epsilon$, or equivalently $\epsilon < b$, as was to be shown.
 \end{proof}
 
-For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
+We now turn to the interaction of $\At{K}$-modalities with lower reals. For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
 
 \begin{lemma}
 	$\At{K}r$ is again a lower real.	
@@ -986,18 +1012,22 @@ To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q < 1$
 
 \begin{lemma}
 \label{lem.regularly_based}
+For all $P : \Prop$,
 \[
-	\forall(P:\Prop)\ldotp P\imp\exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.
+	P \quad \Longleftrightarrow \quad \exists(Q:\Prop)\ldotp (Q\imp P)\wedge(\neg\neg Q\imp Q)\wedge Q.
 \]
 \end{lemma}
 
 \begin{proof}
-	Take $Q := \top$.
+	The implication from right to left is trivial. From left to right, take $Q := \top$.
 \end{proof}
+
+\tob{I'm a bit suspicious of the following now, because I'm not sure if the proof is intuitionistically valid, in particular concerning the part ``every join can be decomposed into a directed join of finite joins''}
 
 \begin{proposition}\label{prop.unique_probability_valuation_on_prop}
 $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$. 
 \end{proposition}
+
 \begin{proof}
 Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q = \neg\neg Q$, then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so that $Q\in T$.
 
@@ -1015,22 +1045,20 @@ Since every join can be decomposed into a directed join of finite joins, by \cre
 \[\mu(\sup_{d\in D}Q_d)=\sup_{d\in D}\mu(Q_d)=\sup_{d\in D} i(Q_d)=i(\sup_{d\in D}Q_d).\qedhere\]
 \end{proof}
 
-\begin{example}
-The assumption that $\cat{E}$ is regularly based is necessary. For example, consider the topological space where $\NN$ is the set of points and a subset $U\ss\NN$ is open $U\in \Op$ iff it is either empty or cofinite. This space is not regularly-based because the only regular opens are $\emptyset$ and $\NN$; for any other $U$, we have $\neg\neg U=\NN$. Consider the function $\mu\colon\Op\to\LR$ given by
-\[\mu(U)=\begin{cases}0&\tn{ if }U=\emptyset\\1&\tn{ if }U\neq\emptyset\end{cases}\]
-Then $\mu$ is monotonic, normalized, and commutes with directed joins. It satisfies inclusion exclusion because (three out of four cases are clear and) the intersection of cofinite sets is cofinite, and in particular nonempty.
-\todo[inline]{We should check that this external reasoning internalizes}
-\end{example}
-
 
 
 \section{Interaction of valuations with modalities}
 
+From now on, we consider valuations on an internal topological space $(X,\Op(X))$.
+
 The following holds for any open modality $\In{U}\coloneqq (U\imp -)$.
+
 \begin{proposition}\label{prop.In_probability_valuation}
 \[\In{U}\mu(\In{U}P)=\In{U}\mu(P).\]
 \end{proposition}
+
 Semantically, this is just naturality of $\mu$ as a morphism of sheaves.
+
 \begin{proof}
 One direction is obvious, so suppose $U\imp\mu(U\imp P)$; we want to show $U\imp\mu(P)$. But assuming $U$ we have $\mu(U\imp P)$ which is the same as $\mu(P)$.
 \end{proof}
@@ -1038,17 +1066,24 @@ One direction is obvious, so suppose $U\imp\mu(U\imp P)$; we want to show $U\imp
 For any nonnegative lower real $x:\tLR$, let $\bar{x}\coloneqq\min(x,1)$.
 
 \begin{proposition}\label{prop.valuations_OR}
-Suppose $P:\Prop$ and $Q:X\to\Prop$ for some $X$. Then
+Suppose $P:\Prop$ and $Q:\Op(X)$. Then
 \begin{enumerate}
 \item \[\mu(P\vee Q)=\ol{P\vee\mu(Q)}.\]
 \item \[\mu(P\wedge Q) = P \wedge \mu(Q).\]
 \end{enumerate}
 \end{proposition} 
+
+Here, the left-hand sides are defined thanks to the openness of the constant predicate $P$, per \Cref{constants_open}.
+
 \begin{proof}
 \begin{enumerate}
-\item The $\geq$ direction is trivial, so we want to show the $\leq$ direction, that $\mu(P\vee Q)(q)\leq P\vee\mu(Q)(q)$ for all $q:\tQQ$.
+\item We need to show that $\mu(P \lor Q)(q) \Leftrightarrow P \lor \mu(Q)(q)$ for every $q < 1$.
+	
+	The $\Leftarrow$ direction is trivial, so that we focus on the $\Rightarrow$ direction.
 
-It is enough to show $P\vee\mu(P\vee Q)\leq P\vee\mu(Q)$. By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{prop.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
+	\tob{continue here}
+
+By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{prop.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
 For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_probability_valuation_on_prop}, the left-hand side is just $P$.
 \item Using inclusion-exclusion, \cref{prop.unique_probability_valuation_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals, $a,b:\tLR$, we have
 \begin{align*}
@@ -1923,6 +1958,7 @@ We believe that direct image functors $f_*$ preserve the internal structures of 
 \chapter{Internal topological spaces}
 
 \begin{definition}
+\label{internal_space}
 Let $X$ be a type. A \emph{topology} on $X$ is a function $\Op:(X\to\Prop)\to\Prop$ satisfying the following conditions:
 \begin{enumerate}
 	\item $\Op(\lambda(x:X)\ldotp\top)$.
@@ -1952,6 +1988,11 @@ So take $r:\tRR_j$ and suppose given $\phi$ such that $I(\phi)$ and $\phi(r)$ ho
 
 All we used about $\tRR_j$ was that it has a definition of comparison ($a<b$), subtraction ($a-b$), that binary min's exist, and that the additive inverse of a binary min is a binary max.
 \end{example}
+
+\begin{remark}
+\label{constants_open}
+Every constant predicate $\lambda x.P$ for $P : \Prop$ is open: take $I(\phi) := \phi \land P$ in \Cref{internal_space}. 
+\end{remark}
 
 \begin{definition}\label{def.continuous}
 Suppose that $(X,\Op_X)$ and $(Y,\Op_Y)$ are internal topological space. A function $f:X\to Y$ is called \emph{continuous} if it satisfies
@@ -2001,7 +2042,7 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that it is closed under the existential quantifier by assumption. Taking the interior works as follows:
 
 \begin{definition}\label{def.interior}
-	If $(X,\Op(X))$ is an internal space and $P : X \to \Prop$ is a predicate, define its \emph{interior} $\int(P)\colon X\to\Prop$ as follows:
+	If $(X,\Op(X))$ is an internal space and $P : X \to \Prop$ is a predicate, define its \emph{interior} $\interior(P)\colon X\to\Prop$ as follows:
 	\[
 		\interior(P) := \lambda x \ldotp \exists U : \Op(X) \ldotp U(x) \land (U \imp P).
 	\]
