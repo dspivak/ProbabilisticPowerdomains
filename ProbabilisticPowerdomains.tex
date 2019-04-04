@@ -1024,7 +1024,24 @@ For all $P : \Prop$,
 	The implication from right to left is trivial. From left to right, take $Q := \top$.
 \end{proof}
 
-\tob{I'm a bit suspicious of the following now, because I'm not sure if the proof is intuitionistically valid, in particular concerning the part ``every join can be decomposed into a directed join of finite joins''}
+\begin{lemma}
+	\label{lem.sup_vs_directed}
+	Let $L$ be a complete lattice and $S\subseteq L$ a subtype with $0\in S$, closed under binary joins and under directed joins. Then $S$ is closed under all joins.
+\end{lemma}
+
+For $n : \tNN$, we also write $[n] := \{1,\ldots,n\}$ for the subtype of positive natural numbers less than or equal to $n$.
+
+\begin{proof}
+	First, by induction on $n : \tNN$, we see that every (internally) finite join $\ell_1 \lor \ldots \lor \ell_n$ is again in $S$.
+
+	Second, let $P : L \to \Prop$ be a subpredicate of $S$, meaning that $P(\ell) \imp (\ell \in S)$; we will show that $\sup P \in S$. To this end, consider the new predicate
+	\[
+		Q(\ell) := \exists n : \tNN, j : [n] \to S \ldotp \left( \ell = j(1) \lor \ldots \lor j(n) \right) \land \forall k \in [n]\ldotp P(j(k)).
+	\]
+	Then it is easy to see that $Q$ is directed. Moreover, we show that $\sup P = \sup Q$. For if $\hat{\ell} \in L$ is such that $P(\ell) \imp (\ell \leq \hat{\ell})$, then it is easy to see that $Q(\ell) \imp (\ell \leq \hat{\ell})$ as well, and conversely.
+
+	Hence it is enough to show that $S$ contains $\sup Q$. But since $Q$ is directed, it is enough to show that $Q(\ell) \imp (\ell \in S)$. But the assumption $Q(\ell)$ implies $\ell = j(1) \lor \ldots \lor j(n)$ for suitable $n$ and $j$ with $P(j(k))$, and therefore also $j(k) \in S$. Hence $\ell \in S$, as was to be shown.
+\end{proof}
 
 \begin{proposition}\label{prop.unique_probability_valuation_on_prop}
 $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$. 
@@ -1033,18 +1050,15 @@ $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$.
 \begin{proof}
 Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q = \neg\neg Q$, then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so that $Q\in T$.
 
-Next suppose that we are given $Q_1,Q_2\in T$. It is not hard to show that $i(Q_1\vee Q_2)=\max(i(Q_1),i(Q_2))$ and $i(Q_1\wedge Q_2)=\min(i(Q_1),i(Q_2))$ by definition of $i$. Thus
+Hence by \Cref{lem.sup_vs_directed} and the fact that both $\mu$ and $i$ preserve directed suprema, it is enough to show that $T$ is closed under binary disjunctions. So suppose that we are given $Q_1,Q_2\in T$. Then
 \begin{align*}
 	i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)
 	&\leq\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)\\
 	&\leq \mu(Q_1\vee Q_2)+\mu(Q_1\wedge Q_2)\\
 	&=\mu(Q_1)+\mu(Q_2)\\
-	&=i(Q_1)+i(Q_2)
+	&=i(Q_1)+i(Q_2).
 \end{align*}
-Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that all the above inequalities must be equalities, resulting in $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$ and $\mu(Q_1\wedge Q_2) = i(Q_1\wedge Q_2)$. Therefore $(Q_1 \vee Q_2) \in T$ and $(Q_1\wedge Q_2)\in T$.
-
-Since every join can be decomposed into a directed join of finite joins, by \cref{lem.regularly_based} an arbitrary proposition $P:\Prop$ is a directed join of elements in $T$. Thus it suffices to show that $T$ is closed under directed joins, but this is clear: if $(Q_d)_{d\in D}$ is a directed system where $Q_d\in T$ for all $d$, then
-\[\mu(\sup_{d\in D}Q_d)=\sup_{d\in D}\mu(Q_d)=\sup_{d\in D} i(Q_d)=i(\sup_{d\in D}Q_d).\qedhere\]
+Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that all the above inequalities must be equalities. By the cancellativity of \Cref{prop.order_canc}, this results in particular in $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$.
 \end{proof}
 
 
