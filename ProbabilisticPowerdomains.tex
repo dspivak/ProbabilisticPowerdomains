@@ -1050,7 +1050,7 @@ $i\colon\Prop\to\tLR$ is the unique probability valuation on $\Prop$.
 \begin{proof}
 Let $\mu$ be an arbitrary valuation; we want to show $\mu=i$. Define a subtype $T\coloneqq\{P:\Prop\mid\mu(P)=i(P)\}$, where $T$ stands for target; we want to show that $T=\Prop$. If $Q = \neg\neg Q$, then by \cref{prop.sandwich} we have $i(Q)\leq\mu(Q)\leq i(\neg\neg Q)=i(Q)$, so that $Q\in T$.
 
-Hence by \Cref{lem.sup_vs_directed} and the fact that both $\mu$ and $i$ preserve directed suprema, it is enough to show that $T$ is closed under binary disjunctions. So suppose that we are given $Q_1,Q_2\in T$. Then
+Hence by \Cref{lem.sup_vs_directed} together with the supremum of \Cref{lem.regularly_based} and the fact that both $\mu$ and $i$ preserve directed suprema, it is enough to show that $T$ is closed under binary disjunctions. So suppose that we are given $Q_1,Q_2\in T$. Then
 \begin{align*}
 	i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)
 	&\leq\mu(Q_1\vee Q_2)+i(Q_1\wedge Q_2)\\
