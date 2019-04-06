@@ -352,15 +352,13 @@ In other words, we only equip standard first-order intuitionistic type theory wi
 
 Our soundness proofs refer to the intended semantics.
 
-Besides the usual arithmetical and order-theoretic properties of the natural numbers, we also use the following well-ordering principle (which implies induction):
-
-\tob{Todo: this shouldn't be an axiom, since the well-ordering principle is constructively equivalent to induction, and second-order induction is part of the definition of a natural numbers object. So instead the axiom should probably be that a natural numbers object $\tNN$ exists}
+\tob{Todo: this shouldn't be an axiom, since induction is part of the definition of a natural numbers object. So instead the axiom should probably be that a natural numbers object $\tNN$ exists}
 
 \begin{axiom}
 	\label{ax:N_well_ordered}
 	For every $P : \tNN\to\Prop$,
 	\[
-		\exists n\ldotp P(n) \quad \Longrightarrow \quad \exists n\ldotp \left[ P(n) \:\land\: \forall m\ldotp P(m) \imp (m \geq n) \right].
+		P(0) \quad \Longrightarrow \quad \left( \forall n : \tNN \ldotp P(n) \imp P(n+1) \right) \quad \Longrightarrow \quad \forall n : \tNN \ldotp P(n).
 	\]
 \end{axiom}
 
@@ -449,6 +447,18 @@ Since the implication from right is left is easy to prove for every modality, we
 \section{General properties of the modalities}
 
 \begin{lemma}
+	\label{lem.at_double_neg}
+	For any $K$ and $P : \Prop$,
+	\[
+		\At{K} P \: = \: \left( (P \imp \At{K} \bot) \imp \At{K} \bot \right) .
+	\]
+\end{lemma}
+
+\begin{proof}
+	The left-to-right implication is straightforward. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, which is enough.
+\end{proof}
+
+\begin{lemma}
 For every $P,Q : \Prop$,
 \[
 	\left(\forall K\ldotp \At{K} P \imp \At{K} Q\right) \: \Longleftrightarrow \: \left(P \imp Q\right).
@@ -487,11 +497,14 @@ For every $P,Q : \Prop$,
 	\label{prop.N_or_vs_forall}
 	For every $P : \Prop$ and $Q : \tNN \to \Prop$,
 	\[
-		\forall n : \tNN\ldotp P \lor Q(n) \quad \Longleftrightarrow \quad P \lor \forall n : \tNN \ldotp Q(n).
+		\forall n : \tNN\ldotp P \lor Q(n) \quad \Longleftrightarrow \quad P \lor \forall n : \tNN \ldotp Q(n),
 	\]
+	and likewise for $\tQQ$ in place of $\tNN$.
 \end{proposition}
 
 \begin{proof}
+	Since $\tQQ$ and $\tNN$ are internally bijective, it is enough to work with $\tNN$.
+
 	It is enough to prove the implication from left to right. Then by \Cref{ax.enough_points} and \Cref{lem.at_vs_or}, it is furthermore enough to derive
 	\[
 		\At{K} P \, \lor \, \At{K} \forall n : \tNN \ldotp Q(n).
@@ -513,15 +526,15 @@ The notion of flabbiness is defined in \cref{def:flabby} and that of $\At{K}$-fl
 \end{lemma}
 
 \begin{proof}
-	However, we start with the tautology
+	We start with the tautology
 	\[
-		\forall n : \tNN \ldotp \left( P(n) \imp \At{K} \bot \: \lor \: \exists n' : \tNN \ldotp P(n') \bot \right),
+		\forall n : \tNN \ldotp \left( P(n) \imp \At{K} \bot \: \lor \: \exists n' : \tNN \ldotp \At{K} P(n') \right),
 	\]
 	which by \Cref{prop.N_or_vs_forall} is equivalent to
 	\[
 		\left(\exists n : \tNN \ldotp \At{K} P(n) \right) \: \lor \: \left( \forall n : \tNN \ldotp P(n) \imp \At{K} \bot \right).
 	\]
-	Now in case that there is $n$ with $\At{K} P(n)$, there is nothing more to prove. Hence we assume $P(n) \imp \At{K} \bot$ for all $n$, which is similar to what we did in the proof of \cref{lem.11_at_flabby}. But now together with $\At{K} \exists n : \ldotp P(n)$, we arrive at $\At{K} \bot$, which is enough.
+	Now in case that there is $n$ with $\At{K} P(n)$, there is nothing more to prove. Hence we assume $P(n) \imp \At{K} \bot$ for all $n$, which is similar to what we did in the proof of \cref{lem.11_at_flabby}. But now together with $\At{K} \exists n : \tNN \ldotp P(n)$, we arrive at $\At{K} \bot$, which is enough.
 \end{proof}
 
 \tob{The previous proof, as well as the one of \Cref{lem.11_at_flabby}, actually prove the claim of \Cref{ax:flabby_vs_at} directly. Turns this into the defn of $\At{K}$-flabby?}
@@ -561,13 +574,13 @@ For $a\in\tLR$ and $P : \Prop$, let us write $P \lor a$ for the lower real with
 \[
 	(P \lor a)(q) := P \lor a(q).
 \]
-It is easy to see that $P \lor a$ is again down-closed and rounded, so that $P \lor a \in \tLR$.
+It is easy to see that $P \lor a$ is again down-closed, rounded, and inhabited, so that $P \lor a \in \tLR$. 
 
 \begin{lemma}
 	\label{lem.or_add_LR}
 	For $a,b\in\tLR$ and $P : \Prop$,
 	\[
-		P \lor (a + b) = P \lor a + P \lor b.
+		P \lor (a + b) = P \lor a + P \lor b = P \lor a + b.
 	\]
 \end{lemma}
 
@@ -576,11 +589,41 @@ It is easy to see that $P \lor a$ is again down-closed and rounded, so that $P \
 	\[
 		P \lor \exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land a(q_1) \land b(q_2),
 	\]
-	while the right-hand side is
+	while the middle-hand side is
 	\[
 		\exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land (P \lor a(q_1)) \land (P \lor b(q_2)),
 	\]
-	and it is easy to see that the two are equivalent.
+	and the right-hand side is
+	\[
+		\exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land (P \lor a(q_1)) \land b(q_2),
+	\]
+	It is easy to see that the first two are equivalent; the third trivially implies the second. The first implies the third: in case that $P$ holds, we can simply choose $q_2$ such that $b(q_2)$ holds, which is possible by inhabitedness, and then take $q_1 := q - q_2$.
+\end{proof}
+
+Moreover, for $a,b : \tLR$, we define min and max as
+\[
+	\min(a,b)(q) := a(q) \land b(q),\qquad	\max(a,b)(q) := a(q) \lor b(q).
+\]
+It is easy to see that both expressions are indeed lower reals.
+
+\begin{lemma}
+	\label{lem.max_min_LR}
+	For $a,b : \tLR$,
+	\[
+		\min(a,b) + \max(a,b) = a + b.
+	\]
+\end{lemma}
+
+\begin{proof}
+	Applied to some $q : \tQQ$, the left-hand side is 	
+	\[
+			\exists q_-, q_+  : \tQQ \ldotp (q \leq q_- + q_+) \land (a(q_-) \land b(q_-)) \land (a(q_+) \lor b(q_+)),
+	\]
+	while the right-hand side is
+	\[
+			\exists q_a, q_b  : \tQQ \ldotp (q \leq q_a + q_b) \land a(q_a) \land b(q_b).
+	\]
+	From right to left, we can take $q_- := \min(q_a,q_b)$ and $q_+ := \max(q_a,q_b)$. From left to right, assume $a(q_+)$ without loss of generality; then taking $q_a := q_+$ and $q_b := q_-$ works.
 \end{proof}
 
 \begin{lemma}
@@ -642,37 +685,6 @@ For any $a,b:\tLR$,
 	By the $\At{K}$-decidability, we can assume $(q < a) \imp \At{K}\bot$. Then we need to prove that for every $q' : \tQQ$, the implication $\At{K}(q' < a) \imp \At{K}(q' < q)$ holds. Using the decidability of inequalities between rationals, we can assume $\At{K}(q' \geq q)$ in addition to $\At{K}(q' < a)$. These combine to $\At{K}(q < a)$, from which $\At{K}\bot$ follows by assumption. This is enough to get $\At{K}(q' < q)$.
 \end{proof}
 
-Roughly, the following says that the lower $\At{K}$-reals coincide with the Dedekind $\At{K}$-reals:
-
-\begin{lemma}
-	\label{lem:at_lower_real}
-	For all $a : \tLR$,
-	\[
-		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q,
-	\]
-	where $q\in \tQQ$ ranges over all rationals satisfying the additional constraints.
-\end{lemma}
-
-\tob{In the end we don't need this for \cref{prop.order_canc}}
-
-\begin{proof}
-	For the first equality, we need to show that if $q' : \tQQ$ is such that $q' < \At{K}a$, then there is some $q : \tQQ$ with $\At{K} q \leq \At{K} a$ and $q' < \At{K} q$. For this, we can take any $q$ with $q' < q < \At{K}a$.
-
-	For the second equality, we need to show that if $q' : \tQQ$ is such that $q' < \At{K} q$ for every $q$ with $\At{K} a \leq \At{K} q$, then also $q' < \At{K}a$. Now $q' < \At{K} q$ is equivalent to $\At{K}(q' < q)$ by definition, and therefore to $\At{K}\bot \:\lor\: (q < q')$ by \cref{lem:rational_compare_at}. Thus we need to show that if $q'$ satisfies $\forall q\ldotp (\At{K} a \leq \At{K} q) \imp (\At{K} \bot \lor (q' < q))$, then also $q' < \At{K} a$. Now by \cref{lem:at_totally_ordered1}, we can assume $\At{K} a \leq \At{K} q'$ without loss of generality; but then the assumption gives $\At{K}\bot \:\lor\: (q' < q')$, or equivalently $\At{K}\bot$, which implies $\At{K}(q' < a)$ as desired.
-\end{proof}
-
-%Moreover, we write $a < b$ if there is $q\in\tQQ$ such that $q < b$ and $\lnot(q < a)$. Standard arguments show that these relations are transitive, and that $(a < b) \imp (a \leq b)$.
-
-%\begin{lemma}
-%	For $a,b : \tLR$ and $K\in\CB$, we have
-%	\[
-%		\At{K}((a \leq b) \lor (a > b)).
-%	\]
-%\end{lemma}
-
-%\begin{proof}
-%	Suppose that $(a > b) \imp \At{K}\bot$, and suppose that we have $\At{K}(q < a)$.  UNFINISHED
-%\end{proof}
 
 \begin{lemma}
 	\label{lem.at_plus_commute}
@@ -709,49 +721,132 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 			q + q' < a + q' \quad \Longrightarrow \quad q < a.
 		\]
 	\item For every $K$,
-		\[
+		\begin{equation}
+			\label{eq.cancel_at_q'}
 			q + q' < \At{K} a + \At{K} q' \quad \Longrightarrow \quad q < \At{K} a.
-		\]
+		\end{equation}
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
 	\begin{enumerate}
 		\item The assumption means that there are $q_1,q_2\in\tQQ$ with $q + q' = q_1 + q_2$ and $q_1 < a$ as well as $q_2 < q'$. Hence $q = q_1 + q_2 - q' < q_1 < a$, as was to be shown.
-		\item The assumption is $q + q' < \At{K}(a + q')$ by \cref{lem.at_plus_commute}, or equivalently $\At{K}(q + q' < a + q')$. Therefore $\At{K}(q < a)$ follows from the previous part.
+		\item The assumption is $q + q' < \At{K}(a + q')$ by \cref{lem.at_plus_commute}, or equivalently $\At{K}(q + q' < a + q')$. Therefore $\At{K}(q < a)$ follows from the previous part. \qedhere
 	\end{enumerate}
 \end{proof}
 
+Roughly, the following says that the lower $\At{K}$-reals coincide with the Dedekind $\At{K}$-reals:
 
-\begin{proposition}\label{prop.order_canc}
-The finite lower reals are order-cancellative: if $a+c\leq b+c$ for $c < \infty$, then $a\leq b$.
-\end{proposition}
-
-Here, the finiteness assumption $c < \infty$ means that there is $u \in \tQQ$ with $c \leq u$.
+\begin{lemma}
+	\label{lem:at_lower_real}
+	For all $a : \tLR$,
+	\[
+		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q,
+	\]
+	where $q\in \tQQ$ ranges over all rationals satisfying the additional constraints.
+\end{lemma}
 
 \begin{proof}
-	By \cref{prop:enough_points_LR} and \cref{lem:eps_order}, it is enough to show that $\At{K} a \leq \At{K} b + \At{K} \varepsilon$ for every $K$ and rational $\varepsilon > 0$. By \cref{lem.at_plus_commute}, we know $\At{K} a + \At{K} c \leq \At{K} b + \At{K} c$.
+	For the first equality, we show that if $q' : \tQQ$ is such that $q' < \At{K}a$, then there is some $q : \tQQ$ with $\At{K} q \leq \At{K} a$ and $q' < \At{K} q$. For this, we can take any $q$ with $q' < q < \At{K}a$.
 
-	Using $c \leq u$, we now consider the natural number predicate $P(n) := \At{K} (u < c + \varepsilon n)$. By the well-ordering \cref{ax:N_well_ordered}, we have a smallest $n \in \tNN$ with $\At{K}(u < c + \varepsilon n)$, or equivalently $u - \varepsilon n < \At{K} c$. We have $n > 0$, since otherwise $c \leq u$ and $u < \At{K} c$ together give $\At{K}\bot$. Since $P(n-1)$ does not hold but is $\At{K}$-closed, we have $P(n-1) = \At{K} \bot$. Therefore putting $q := u - \varepsilon n$ gives $q < \At{K} c$ and $(q + \varepsilon < \At{K} c) \imp \At{K} \bot$. By \cref{lem:at_totally_ordered1}, we therefore obtain $\At{K} c \leq \At{K}(q + \varepsilon)$, in addition to $\At{K} q < \At{K} c$, which follows from $\At{K}(q < c)$.
+	For the second equality, we show that if $q' : \tQQ$ is such that $q' < \At{K} q$ for every $q$ with $\At{K} a \leq \At{K} q$, then also $q' < \At{K}a$. Now $q' < \At{K} q$ is equivalent to $\At{K}(q' < q)$ by definition, and therefore to $\At{K}\bot \:\lor\: (q < q')$ by \cref{lem:rational_compare_at}. Thus we need to show that if $q'$ satisfies $\forall q\ldotp (\At{K} a \leq \At{K} q) \imp (\At{K} \bot \lor (q' < q))$, then also $q' < \At{K} a$. Now by \cref{lem:at_totally_ordered1}, we can assume $\At{K} a \leq \At{K} q'$ without loss of generality; but then the assumption gives $\At{K}\bot \:\lor\: (q' < q')$, or equivalently $\At{K}\bot$, which implies $\At{K}(q' < a)$ as desired.
+\end{proof}
 
-	Now if we have $q'\in\tQQ$ with $\At{K}(q' < a)$, then we also have $\At{K}(q' + q < a + c)$, and therefore just as well $\At{K}(q' + q < b + c)$, and hence $q + q' < \At{K} b + \At{K} c \leq \At{K} q + \At{K} b + \At{K} \varepsilon$. But then $q' < \At{K} b + \At{K} \varepsilon$, as was to be shown.
+\begin{lemma}
+	\label{lem.at_plus_rational}
+	For $a : \tLR$ and $q : \tQQ$,
+	\[
+		\At{K}(a + q) = \At{K}a + q.
+	\]
+\end{lemma}
+
+\begin{proof}
+	By \Cref{lem.at_plus_commute} and $q \leq \At{K} q$, it is enough to prove the $\leq$ inequality. Now if $q' < \At{K}(a + q) = \At{K} a + \At{K}q$, then by \eqref{eq.cancel_at_q'}, we get $q' - q < \At{K} a$, which implies the desired $q' < \At{K} a + q$.
+\end{proof}
+
+We also observe that the $\At{K}$-lower reals are totally ordered:
+
+\begin{proposition}
+	\label{prop.at_LR_total_order}
+	For $a,b : \tLR$,
+	\[
+		(\At{K}a \leq \At{K}b) \: \lor (\At{K}b \leq \At{K}a).
+	\]
+\end{proposition}
+
+\begin{proof}
+	By \Cref{prop.N_or_vs_forall}, we have 
+	\[
+		\left( \exists q : \tQQ \ldotp ((q < a) \imp \At{K} (q < b)) \imp \At{K} \bot \right) \quad \lor \quad \left( \forall q : \tQQ \ldotp \At{K} ((q < a) \imp \At{K} (q < b)) \right)
+	\]
+	In the second case, note that the implication $(q < a) \imp \At{K} (q < b)$ is already $\At{K}$-closed, and we can therefore assume it to hold. Hence the desired inequality $\At{K} a \leq \At{K} b$ is implied.
+	
+	In the first case, we have $q$ such that $((q < a) \imp \At{K} (q < b)) \imp \At{K} \bot$. In particular it follows that $\At{K}(q < b) \imp \At{K} \bot$. By \Cref{lem:at_totally_ordered1}, this implies $\At{K} b \leq \At{K} q$ or $\At{K} \bot$; the latter is enough since then either desired inequality follows trivially, so assume $\At{K} b \leq \At{K} q$. Now if $\At{K}(q < a)$, we are done since then we have in particular $\At{K} q \leq \At{K} a$, which combined with the previous inequality gives the desired $\At{K} b \leq \At{K} a$. So assume $(q < a) \imp \At{K} \bot$. But then also $(q < a) \imp \At{K} (q < b)$, and therefore again $\At{K} \bot$, which we have already shown to be enough.
+\end{proof}
+
+\begin{proposition}
+	\label{prop.at_order_canc}
+	The $\At{K}$-lower reals are finitely order-cancellative: if
+	\[
+		\At{K} a + \At{K} c \leq \At{K} a + \At{K} c
+	\]
+	and there is $u \in \tQQ$ such that $\At{K} c \leq \At{K} u$, then it follows that $\At{K} a \leq \At{K} b$.
+\end{proposition}
+
+Here, the existence of $u$ is a finiteness condition on $c$.
+
+\begin{proof}
+	By \cref{lem:eps_order}, it is enough to show that $\At{K} a \leq \At{K} b + \varepsilon$ for every rational $\varepsilon > 0$. But by \Cref{lem.at_plus_rational,lem.at_plus_commute}, this inequality is equivalent to $\At{K} a \leq \At{K}(b + \varepsilon)$. By \Cref{prop.at_LR_total_order}, we can assume $\At{K}(b+\varepsilon) \leq \At{K} a$. Combining this with the assumption and using \Cref{lem.at_plus_commute} again, we get
+	\[
+		\At{K}(b + c + \varepsilon) \leq \At{K}(b + c).
+	\]
+	Since clearly $\At{K}(b + c) \leq \At{K}(b + c + \varepsilon)$ by $\varepsilon > 0$, we get $\At{K}(b + c + \varepsilon) = \At{K}(b + c)$, and then $\At{K}(b + c + n\varepsilon) = \At{K}(b + c)$ for every $n \in \tNN$ by induction and \Cref{lem.at_plus_commute}.
+
+	Now suppose that we have $q : \tQQ$ with $q < \At{K}a$, and want to show $q < \At{K}b$. By \Cref{lem:at_totally_ordered1}, we can assume $\At{K} b \leq \At{K} q$. Since we already have $\At{K} c \leq \At{K} u$, we simplify notation by assuming $q = u$ without loss of generality, so that $\At{u}$ is an upper bound for both $\At{K}b$ and $\At{K}c$, and therefore $2\,\At{K}u$ is an upper bound for $\At{K}(b + c)$. Since every lower real has a rational lower bound, we can also find $\ell : \tQQ$ with $2 \At{K} \ell \leq b + c$.
+
+	Hence we get $\At{K}(2\ell + \varepsilon n) \leq \At{K}(2u)$. Making $n$ large enough gives rationals $q_-,q_+\in \tQQ$ with $q_- < q_+$ but $\At{K} q_+ \leq \At{K} q_-$, and therefore $\At{K}(q_- < q_-)$, or $\At{K}\bot$, which is enough.
+\end{proof}
+
+\begin{corollary}\label{cor.order_canc}
+The lower reals are order-cancellative: if $a+c\leq b+c$ and $c < \infty$, then $a\leq b$.
+\end{corollary}
+
+Here, $c < \infty$ means that there is $q : \tQQ$ with $c \leq q$. 
+
+\begin{proof}
+	We have $\At{K} a \leq \At{K} b$ for every $K$ by \Cref{prop.at_order_canc}, which is enough by \Cref{prop:enough_points_LR}.
+\end{proof}
+
+\begin{lemma}
+	\label{lem.at_vs_or_LR}
+	For $a : \tLR$ and $P : \Prop$,
+	\[
+		\At{K}(P \lor a) = \At{K}P \lor \At{K} a.
+	\]
+\end{lemma}
+
+\begin{proof}
+	Evaluate both sides at $q : \tQQ$ and use \Cref{lem.at_vs_or}.
+\end{proof}
+
+\begin{corollary}
+	\label{cor.P_order_canc}
+	Suppose that $P : \Prop$. If
+	\[
+		P \lor a + P \lor c \: \leq \: P \lor b + P \lor d
+	\]
+	and $P \lor d \leq P \lor c$, then also $P \lor a \leq P \lor b$.
+\end{corollary}
+
+\begin{proof}
+	It is enough to consider the case $d = c$.
+
+	We again prove $\At{K}(P \lor a) \leq \At{K}(P \lor b)$ for every $K$, or by \Cref{lem.at_vs_or_LR} equivalently $\At{K} P \lor \At{K} a \leq \At{K} P \lor \At{K} b$. If $\At{K} P$, then there is nothing to prove. If $P \imp \At{K}\bot$, then the disjunction with $\At{K} P$ drops out in all inequalities. Hence in this case, we can apply \Cref{prop.at_order_canc}.
 \end{proof}
 
 \section{Other properties of modalities}
 
 \tob{Not sure what we still need from this subsection, but I'm updating it nevertheless}
-
-\begin{lemma}
-	\label{lem.at_double_neg}
-	For any $K$ and $P : \Prop$,
-	\[
-		\At{K} P \: = \: \left( (P \imp \At{K} \bot) \imp \At{K} \bot \right) .
-	\]
-\end{lemma}
-
-\begin{proof}
-	The left-to-right implication is straightforward. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, which is enough.
-\end{proof}
 
 \begin{lemma}
 	\label{lem.prop_to_opens}
@@ -1010,8 +1105,6 @@ for every $P : \Prop$. Since $\mu(P) \geq 0$, this clearly holds in the case $q 
 To show that $\mu\leq i\neg\neg$, take $P:\Prop$ and $q:\tQQ$ with $0\leq q < 1$; we need to show $\mu(P)(q)\imp\neg\neg P$. Assume $\mu(P)(q)$ and $\neg P$. Then by monotonicity applied to $P \imp \bot$ we have $\mu(\bot)(q)$, and by $\mu(\bot)=0$, this means $q<0$, a contradiction.
 \end{proof}
 
-\tob{continue here}
-
 \begin{lemma}
 \label{lem.regularly_based}
 For all $P : \Prop$,
@@ -1058,7 +1151,7 @@ Hence by \Cref{lem.sup_vs_directed} together with the supremum of \Cref{lem.regu
 	&=\mu(Q_1)+\mu(Q_2)\\
 	&=i(Q_1)+i(Q_2).
 \end{align*}
-Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that all the above inequalities must be equalities. By the cancellativity of \Cref{prop.order_canc}, this results in particular in $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$.
+	Since $i(Q_1\vee Q_2)+i(Q_1\wedge Q_2)=i(Q_1)+i(Q_2)$, it follows that all the above inequalities must be equalities. By the cancellativity of \Cref{cor.order_canc}, this results in particular in $\mu(Q_1\vee Q_2)=i(Q_1\vee Q_2)$.
 \end{proof}
 
 
@@ -1069,47 +1162,71 @@ From now on, we consider valuations on an internal topological space $(X,\Op(X))
 
 The following holds for any open modality $\In{U}\coloneqq (U\imp -)$.
 
-\begin{proposition}\label{prop.In_probability_valuation}
-\[\In{U}\mu(\In{U}P)=\In{U}\mu(P).\]
-\end{proposition}
-
-Semantically, this is just naturality of $\mu$ as a morphism of sheaves.
+% T: The following was problematic, since there's no reason for why $\In{U}\mu(P)$ would even again be a lower real
+%\begin{proposition}\label{prop.In_probability_valuation}
+%	\[\In{U}\mu(\In{U}P)=\In{U}\mu(P).\]
+%\end{proposition}
+%
+%Semantically, this is just naturality of $\mu$ as a morphism of sheaves.
 
 \begin{proof}
-One direction is obvious, so suppose $U\imp\mu(U\imp P)$; we want to show $U\imp\mu(P)$. But assuming $U$ we have $\mu(U\imp P)$ which is the same as $\mu(P)$.
+	One direction is obvious, so suppose $U\imp\mu(U\imp P)$; we want to show $U\imp\mu(P)$. But assuming $U$ we have $\mu(U\imp P)$ which is the same as $\mu(P)$.
 \end{proof}
 
-For any nonnegative lower real $x:\tLR$, let $\bar{x}\coloneqq\min(x,1)$.
-
 \begin{proposition}\label{prop.valuations_OR}
-Suppose $P:\Prop$ and $Q:\Op(X)$. Then
-\begin{enumerate}
-\item \[\mu(P\vee Q)=\ol{P\vee\mu(Q)}.\]
-\item \[\mu(P\wedge Q) = P \wedge \mu(Q).\]
-\end{enumerate}
+	Suppose $P:\Prop$ and $Q:\Op(X)$. Then
+	\begin{enumerate}
+		\item \[\mu(P\vee Q)= \max(i(P),\mu(Q)). \]
+		\item \[\mu(P\wedge Q) = \min(i(P),\mu(Q)).\]
+	\end{enumerate}
 \end{proposition} 
 
 Here, the left-hand sides are defined thanks to the openness of the constant predicate $P$, per \Cref{constants_open}.
 
 \begin{proof}
-\begin{enumerate}
-\item We need to show that $\mu(P \lor Q)(q) \Leftrightarrow P \lor \mu(Q)(q)$ for every $q < 1$.
+	\begin{enumerate}
+	\item By inclusion-exclusion, we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$. By \Cref{lem.or_add_LR}, we get upon applying $P \lor -$ to both sides,
+		\[
+			P \lor \mu(P \vee Q) + P \lor \mu (P\wedge Q) = P \lor \mu(P) + P \lor \mu(Q).
+		\]
+		On the other hand, we have $P \lor \mu(P) \leq P \lor \mu(P \land Q)$, which follows from $\mu(P) = i(P)$ by \Cref{prop.unique_probability_valuation_on_prop}. Hence the cancellativity of \Cref{cor.P_order_canc} gives $P \lor \mu(P \vee Q) = P \lor \mu(Q)$. In particular, $\mu(P \vee Q) \leq P \lor \mu(Q)$, which together with $\mu(P \vee Q) \leq 1$ shows the $\leq$ inequality. The other one is trivial.
 	
-	The $\Leftarrow$ direction is trivial, so that we focus on the $\Rightarrow$ direction.
-
-	\tob{continue here}
-
-By inclusion-exclusion we have $\mu(P\vee Q)+\mu(P\wedge Q)=\mu(P)+\mu(Q)$ and any modality, including $(P\vee-)$, commutes with addition. Hence, by order-cancellativity \cref{prop.order_canc}, it is enough to show $P\vee\mu(P)\leq P\vee\mu(P\wedge Q)$.
-For this it suffices to show $\mu(P)\leq P\vee\mu(P\wedge Q)$, but by \cref{prop.unique_probability_valuation_on_prop}, the left-hand side is just $P$.
-\item Using inclusion-exclusion, \cref{prop.unique_probability_valuation_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals, $a,b:\tLR$, we have
+	\item Using inclusion-exclusion, \cref{prop.unique_probability_valuation_on_prop}, and the fact that $\min(a,b)+\max(a,b)=a+b$ for any lower reals $a,b:\tLR$ (\Cref{lem.max_min_LR}), we have
 \begin{align*}
-	\mu(P\wedge Q)+\mu(P\vee Q)=\mu(P)+\mu(Q)
-	&=(P\vee\mu(Q))+(P\wedge\mu(Q))\\
-	&=\mu(P\vee Q)+(P\wedge\mu(Q)).
+	\mu(P\wedge Q)+\mu(P\vee Q) & =\mu(P)+\mu(Q) \\
+	&=\max(i(P),\mu(Q))+\min(i(P),\mu(Q))\\
+	&=\mu(P\vee Q)+\min(i(P),\mu(Q)).
 \end{align*}
-Thus we are done by order-cancellativity \cref{prop.order_canc}.
+Thus we are done by the first part and the cancellativity of \cref{cor.order_canc}. \qedhere
 \end{enumerate}
 \end{proof}
+
+\begin{theorem}
+	For every internal space $(X,\Op(X))$ and valuation $\mu : \Op(X) \to \tLR$, we have
+	\[
+		\At{K} \mu(P) = \At{K} \mu(\At{K} P).
+	\]
+	for every $P : \Op(X)$ and $K : \CB$.
+\end{theorem}
+
+\begin{proof}
+	As instances of the inclusion-exclusion relation, we have
+	\begin{align*}
+		\mu(P) + \mu(P \imp \At{K} \bot) & = \mu(P \lor (P \imp \At{K} \bot)) + 0 & & = \mu(P \lor (P \imp \At{K} \bot)), \\
+		\mu(\At{K}P) + \mu(P \imp \At{K} \bot) & = \mu(\At{K} P \lor (P \imp \At{K} \bot)) + 0 & &  = 1.
+	\end{align*}
+	Thus upon hitting both equations with $\At{K}$, the claim follows from the cancellativity of \Cref{prop.at_order_canc} if we can prove that $\At{K} \mu(P \lor (P \imp \At{K} \bot)) = \At{K} 1$. For ease of notation, we abbreviate $Q := (P \lor (P \imp \At{K} \bot))$.
+
+	Now we have, for every $q : \tQQ$,
+	\begin{align*}
+		\At{K} \mu(Q) & = \At{K} (\overline{ \At{K} \bot \lor \mu(Q) }) \\
+			& = \At{K} \mu(\At{K} \bot \lor Q).
+	\end{align*}
+	where the second step is by \Cref{prop.valuations_OR}.
+	\tob{continue here. doesn't quite work yet}
+\end{proof}
+
+\tob{We can probably get rid of everything from here to the appendix}
 
 \begin{proposition}\label{prop.double_at}
 Let $K\in C\BaseSpace$ be a point, let $X\in\Shv(C\BaseSpace)$, and let $\mu\colon\Prop^X\to\tLR$ be a valuation. Then for any $P \in \Prop^X$,
@@ -2048,11 +2165,28 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 \tob{We may eventually need a discussion of locally compact spaces as continuous posets. Does at modality take locally compact spaces to locally compact spaces?}
 
 \begin{proposition}
+	\label{prop.internal_space_implication}
 	If $(X,\Op(X))$ is an internal space, then $\Op(X)$ inherits implication (the Heyting exponential) from $\Prop^X$.
 \end{proposition}
 
 \begin{proof}
-	\tob{tbw}
+	For $P,Q : \Op(X)$, the Heyting implication in the frame $\Op(X)$ is given by
+	\[
+		(P \imp_{\Op(X)} Q) \: = \: \exists R : \Op(X) \ldotp (R \land P \imp Q) \land R,
+	\]
+	using the desired adjointness in the form that for all $R : \Op(X)$,
+	\[
+		\left[ R \land P \imp Q \right] \quad \Longleftrightarrow \quad \left[ R \imp (P \imp_{\Op(X)} Q) \right],
+	\]
+	together with the fact that the above $P \imp_{\Op(X)} Q$ is also open thanks to the assumption that arbitrary unions of opens are open.
+
+	Now we have
+	\begin{align*}
+		\exists R : & \Op(X) \ldotp (R \land P \imp Q) \land R \\
+			& \Leftrightarrow \quad \exists R : \Op(X) \ldotp (P \imp Q) \land R \\
+			& \Leftrightarrow \quad (P \imp Q),
+	\end{align*}
+	as was to be shown.
 \end{proof}
 
 The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that it is closed under the existential quantifier by assumption. Taking the interior works as follows:
@@ -2065,6 +2199,15 @@ The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that 
 \end{definition}
 
 This is the largest open predicate below $P$ by definition.
+
+\begin{lemma}
+	\label{lem.internal_space_at}
+	If $P : X \to \Prop$ is an open predicate in an internal space $(X,\Op(X))$, then so is $\At{K} P : X \to \Prop$.
+\end{lemma}
+
+\begin{proof}
+	Use \Cref{prop.internal_space_implication} together with the formula $\At{K} P \, = \, (P \imp \At{K} \bot) \imp \At{K} \bot$ from \Cref{lem.at_double_neg}, and using that the constant predicate $\At{K} \bot$ is also open by \Cref{constants_open}.	
+\end{proof}
 
 
 \chapter{Flabbiness}
