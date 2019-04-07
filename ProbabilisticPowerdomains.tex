@@ -424,7 +424,7 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 	Finally, for arbitrary $W'$, we have a decomposition $W' = \coprod_{i\in I} W_i$ with open components $W_i$ by \Cref{cor.open_components}. Every $n \in \tNN(W')$ is therefore given by a tuple $n = (n_i)_{i\in I}$ for $n_i \in \tNN(W_i) = \NN$. We prove the claim $W' \subseteq P(n)$ by showing $W_i \subseteq P(n)$ for every $i$; but then it is enough to prove $W_i \subseteq P(n_i)$, which we already know per the connected case from the previous paragraph.
 \end{soundproof}
 
-Finally, our only axiom schema is the following:
+Finally, we have one axiom schema indexed by the types $X$.
 
 \begin{axiom}
 	\label{ax:flabby_vs_at}
@@ -469,17 +469,19 @@ For every $P,Q : \Prop$,
 	The implication from right to left is trivial. From left to right, by \cref{ax.enough_points}, it is enough to prove that if $P$, then $\At{K} Q$ for every $K$. But this follows from the assumption.
 \end{proof}
 
+The following observation is closely related to Axiom 9 of TTT. It can be interpreted as stating that if $P$ holds at $K$, then it also holds in a neighborhood of $K$.
+
 \begin{proposition}
-	Let $(X,\Op(X))$ be an internal space. Then for every $P : \Op(X)\to \Prop$ and $K : \CB$, we have
+	\label{prop.at_to_nghbhd}
+	For every predicate $P : X \to \Prop$,
 	\[
-		\At{K} \exists (U : \Op(X))\ldotp P(U) \quad \Longleftrightarrow \quad \exists (U : \Op(X))\ldotp \At{K} P(U).
+		\At{K} P \: \Longleftrightarrow \: \exists U : X \to \Prop \ldotp \At{K} U \wedge (U \imp P).
 	\]
 \end{proposition}
 
 \begin{proof}
-	Combine \cref{ax:flabby_vs_at} with \cref{prop:opens_flabby}.	
+	From left to right, take $U := P$. From right to left, combine the given assumptions.	
 \end{proof}
-
 
 \begin{lemma}
 	\label{lem.at_vs_or}
@@ -514,6 +516,17 @@ For every $P,Q : \Prop$,
 		\forall n : \tNN \ldotp \At{K} \bot \lor Q(n),
 	\]
 	from which we then derive the desired $\At{K} \forall n : \tNN \ldotp Q(n)$ by \Cref{ax.N_vs_at}.
+\end{proof}
+
+\begin{proposition}
+	Let $(X,\Op(X))$ be an internal space. Then for every $P : \Op(X)\to \Prop$ and $K : \CB$, we have
+	\[
+		\At{K} \exists (U : \Op(X))\ldotp P(U) \quad \Longleftrightarrow \quad \exists (U : \Op(X))\ldotp \At{K} P(U).
+	\]
+\end{proposition}
+
+\begin{proof}
+	Combine \cref{ax:flabby_vs_at} with \cref{prop:opens_flabby}.	
 \end{proof}
 
 \section{Properties of the rationals}
@@ -802,9 +815,9 @@ Here, the existence of $u$ is a finiteness condition on $c$.
 	\]
 	Since clearly $\At{K}(b + c) \leq \At{K}(b + c + \varepsilon)$ by $\varepsilon > 0$, we get $\At{K}(b + c + \varepsilon) = \At{K}(b + c)$, and then $\At{K}(b + c + n\varepsilon) = \At{K}(b + c)$ for every $n \in \tNN$ by induction and \Cref{lem.at_plus_commute}.
 
-	Now suppose that we have $q : \tQQ$ with $q < \At{K}a$, and want to show $q < \At{K}b$. By \Cref{lem:at_totally_ordered1}, we can assume $\At{K} b \leq \At{K} q$. Since we already have $\At{K} c \leq \At{K} u$, we simplify notation by assuming $q = u$ without loss of generality, so that $\At{u}$ is an upper bound for both $\At{K}b$ and $\At{K}c$, and therefore $2\,\At{K}u$ is an upper bound for $\At{K}(b + c)$. Since every lower real has a rational lower bound, we can also find $\ell : \tQQ$ with $2 \At{K} \ell \leq b + c$.
+	Now suppose that we have $q : \tQQ$ with $q < \At{K}a$, and want to show $q < \At{K}b$. By \Cref{lem:at_totally_ordered1}, we can assume $\At{K} b \leq \At{K} q$. Since we already have $\At{K} c \leq \At{K} u$, we get $\At{K}(b + c) \leq \At{K}(q + u)$. Since every lower real has a rational lower bound, we can also find $\ell : \tQQ$ with $\At{K} \ell \leq b + c$.
 
-	Hence we get $\At{K}(2\ell + \varepsilon n) \leq \At{K}(2u)$. Making $n$ large enough gives rationals $q_-,q_+\in \tQQ$ with $q_- < q_+$ but $\At{K} q_+ \leq \At{K} q_-$, and therefore $\At{K}(q_- < q_-)$, or $\At{K}\bot$, which is enough.
+	Hence we get $\At{K}(\ell + \varepsilon n) \leq \At{K}(q + u)$. Making $n$ large enough gives rationals $q_-,q_+\in \tQQ$ with $q_- < q_+$ but $\At{K} q_+ \leq \At{K} q_-$, and therefore $\At{K}(q_- < q_-)$, or $\At{K}\bot$, which is enough.
 \end{proof}
 
 \begin{corollary}\label{cor.order_canc}
@@ -952,23 +965,6 @@ Roughly speaking, this expresses the fact that a point $K$ is a completely prime
     Now assume $K$ is in $W$. Then the assumption says that there is some $W'\subseteq W$ with $K\in W'$ and $W' \models \exists U\ldotp P(U) \wedge U$. This means that there is a cover $(V_i\to W')$ together with $U_i\in\Prop(V_i)$ such that $V_i \models P(U_i) \wedge U_i$. But now we have $U_i \subseteq V_i$ as well as $V_i \subseteq U_i$, so that $U_i = V_i$, and therefore $V_i \models P(V_i)$. Since $V_i$ is a cover of $W'$, there exists some $k$ such that $K \in V_k$. We now show the claim $W \models \exists U. (\In{U} P(U)) \wedge \At{K} U$ by proving $W \models (\In{V_k} P(V_k)) \wedge \At{K} V_k$, corresponding to the trivial cover of $W$ by itself. But now $W \models \In{V_k} P(V_k)$ follows from $V_k \models P(V_k)$, and $W \models \At{K} V_k$ from $K\in V_k$.
 \end{soundproof}
 
-The following generalizes Axiom 9 of TTT, and can be interpreted as stating that if $P$ holds at $K$, then it also holds in a neighborhood of $K$.
-
-\begin{axiom}\label{ax.at_to_nghbhd}
-For every $P : \Prop$,
-\[
-	\At{K} P \: \imp \: \See{K} \exists U\ldotp \At{K} U \wedge \In{U} P.
-\]
-\end{axiom}
-
-Here, $\See{K} \coloneqq (\At{K} \bot) \vee -$.
-
-\begin{soundproof}
-Suppose $W \models \At{K} P$. If $K\not\in W$, we have $W \cap \down K = \emptyset$, and hence $W \models \See{K} \bot$.
-
-We therefore assume $K\in W$. In this case, the assumption $W \models \At{K} P$ means that there is $V\subseteq W$ with $K\in V$ and $V \models P$. We now prove $W \models \exists U\ldotp \At{K} U \wedge \In{U} P$ by using the trivial cover of $W$ by itself, and taking $U \coloneqq V$. This guarantees $W \models \At{K} V$, and also $W \models \In{V} P$ by the assumption $V \models P$.
-\end{soundproof}
-
 \begin{proposition}
 Let $X$ be a flabby choice object and $P : X \to \Prop$ a predicate. Then for all $K \in C\BaseSpace$,
 \[
@@ -982,72 +978,40 @@ The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldot
 
 \chapter{Internal valuations}
 
+\section{Definition}
+
+\begin{definition}
+	Let $(\mathcal{P},\leq)$ be an internal poset. A subtype $D:\mathcal{P}\to\Prop$ is called \emph{directed} if it satisfies the following:
+\begin{enumerate}
+	\item $\exists(x:\mathcal{P})\ldotp Dx$.
+	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
+\end{enumerate}
+Denote the conjunction of these two conditions as $\const{Drct}:(\mathcal{P}\to\Prop)\to\Prop$.
+\end{definition}
+
 
 
 \begin{definition}\label{def.valuation}
-Suppose $X$ is an internal locale. A \emph{valuation} on $X$ is a function $\mu:\Op(X)\to\tLR$ satisfying the following:
+Suppose $(X,\Op(X))$ is an internal space. A \emph{valuation} on $X$ is a function $\mu:\Op(X)\to\tLR$ satisfying the following:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$.
-	\item $\forall(U,V:\Op(X))\ldotp(U\leq V)\imp\mu(U)\leq\mu(V)$.
-	\item $\forall(U,V:\Op(X))\ldotp\mu(U)+\mu(V)=\mu(U\vee V)+\mu(U\wedge V)$.
+	\item \emph{Normalization}: $\mu(X) = 1$.
+	\item \emph{Monotonicity}: for all $U,V:\Op(X)$,
+		\[
+			\left( U \imp V \right) \: \Longrightarrow \: (\mu(U)\leq\mu(V)).
+		\]
+	\item \emph{Inclusion-exclusion} or \emph{modularity}: for all $U,V:\Op(X)$,
+		\[
+			\mu(U)+\mu(V)=\mu(U\vee V)+\mu(U\wedge V).
+		\]
+	\item \emph{Scott continuity}: for all directed $D:\Op(X)\to\Prop$, the supremum is preserved by $\mu$, in the sense that for all $q : \tQQ$ with $q \geq 0$,
+		\[
+			\mu(\exists U : \Op(X) \ldotp D(U) \land U)(q) \: = \: \exists U : \Op(X) \ldotp D(U) \land \mu(U)(q).
+		\]
 \end{enumerate}
-A valuation is \emph{normalized} if it satisfies (4), and \emph{continuous} if it satisfies (5):
-\begin{enumerate}[resume]
-	\item $\mu(X) = 1$.
-	\item $\forall(D:\Op(X)\to\Prop)\ldotp\const{Drct}(D)\imp \mu(\sup(D))=\sup(\mu(D))$.
-\end{enumerate}
-Here, $\mu(D)$ is shorthand for the subtype $\mu(D)=\{\mu x\mid Dx\}$\footnote{Completely formally, $\mu(D)\coloneqq\{r:\RR\mid\exists(U:\subtype{D})\ldotp r=\mu(U)\}$.}.
-Let $\VV(X)$ denote the type of valuations $\mu$, ordered by $(\mu\leq\mu')\iff\forall(U:\Op(X))\ldotp(\mu U\leq \mu'U)$.
 \end{definition}
 
-If $X$ is in fact an internal space, then we have, for $D : \Op(X) \to \Prop$,
-\[
-	\sup(D) = \exists U : \Op(X) \ldotp D(U) \land U.
-\]
-
-\section{The valuations profunctor}
-
-If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (probability valuations) as a profunctor
-\[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
-In other words, one can precompose a probability valuation with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
-
-The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
-\begin{equation}\label{eqn.direct_image_valuations}
-\begin{tikzcd}
-	\Fun{Frm}(\cat{E})\ar[r, tick, "V_{\cat{E}}"]\ar[d, "\Fun{Frm}(f_*)"']&\Fun{SMonDCPO}(\cat{E})\ar[d, "\Fun{SMonDCPO}(f_*)"]\\
-	\Fun{Frm}(\cat{E}')\ar[r, tick, "V_{\cat{E}'}"']&\Fun{SMonDCPO}(\cat{E}')\ar[ul, phantom, "?\Downarrow"]
-\end{tikzcd}
-\end{equation}
-where the functors on the left and right were (hopefully) established in \cref{sec.preserve_loc_frame}. Intuitively, given a valuation $\mu\colon F\to R$ upstairs, we want to define a valuation $\mu'\colon f_*F\to f_*R$ downstairs. There is an obvious candidate, namely $\mu'\coloneqq f_*\mu$. The question is whether this preserves the various structures.
-
-It should be obvious that $\mu'$ is monotonic. We believe that $\mu'$ will commute with directed joins by the work in \cref{sec.preserve_loc_frame}. Both the top and bottom element of an internal frame can be characterized by an equational theory, so they should be preserved by left-exact functors such as $f_*$. It remains to show that $\mu'$ satisfies inclusion-exclusion.
-
-To begin with, we need to know that $f_*$ commutes with binary joins; but what does this mean? We want to define binary joins equationally on a frame $F$ as $\vee\colon F\times F\to F$, and then ask that $f_*(\vee_F)=\vee_{f_*F}$, but then the question becomes ``in what sense is the binary join operation the same as the actual binary join?'' In other words, what if we're only preserving a structure, not the universal property it is supposed to satisfy?
-
-For any pair of objects $A^B$ in a topos there is a map $\im\colon A^B\to\Prop^A$, that ``sends a map to its image''. Namely, use the predicate $I\colon A\times A^B\to\Prop$ given by $I(a,f)=\exists(b:B)\ldotp f(b)=a$. Thus we get a diagram, and the above questions are whether it commutes:
-\[
-\begin{tikzcd}
-	F\times F\ar[d, equal]\ar[r, "\vee"]&F\\
-	F^{1+1}\ar[r, "I"']&\Prop^F\ar[u, "\bigvee"']\ar[ul, phantom, "?"]
-\end{tikzcd}
-\]
-The goal then is to encode the universal property itself in an equational way. Take the graph of the function $\vee\colon F\times F\to F$ and call it $G(\vee)\ss F\times F\times F$. There are two equations that characterize it as the graph of a function, so we know that $f_*$ will send it to the graph of a function, which must again be $f_*(\vee_F)$. We want to characterize its universal property. We thought it is roughly the following:
-\[
-\begin{tikzcd}
-	\{w,x,y,z:F\mid x\leq z, y\leq z, w=x\vee y\}\ar[r]\ar[d]\ar[dd, shift right=40pt, bend right=60pt, dotted]
-	&\{w,x,y,z:F\mid (x,y,w)\in G(\vee)\}\ar[d]\\
-	\{w,x,y,z:F\mid x\leq z, y\leq z\}\ar[r]&\{w,x,y,z:F\}\ar[ul, phantom, very near end, "\lrcorner"]\ar[d]\\
-	\{w,z\mid w\leq z\}\ar[r]&\{w,z:F\}
-\end{tikzcd}
-\]
-
-Now we have that the direct image map $f_*$ preserves everything that's equationally defined, so we are willing to bet on the following.
-\begin{proposition}
-A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the sense that it induces a 2-cell as shown in \cref{eqn.direct_image_valuations}.
-\end{proposition}
-
-\newpage
-\chapter{Properties of internal valuations}
+While such a function would more properly be called \emph{normalized continuous valuation}, we shorten this to \emph{valuation} for convenience, as this will be the only kind of valuation that we will work with.
 
 \section{Valuations on $\Prop$}
 
@@ -1201,6 +1165,40 @@ Thus we are done by the first part and the cancellativity of \cref{cor.order_can
 \end{enumerate}
 \end{proof}
 
+\begin{lemma}
+	\label{lem.mu_at_Q}
+	For every internal space $(X,\Op(X))$ and valuation $\mu : \Op(X) \to \tLR$, we have $\At{K} \mu(Q) = 1$ for every $Q : \Op(X)$ which satisfies $\At{K} Q$.
+\end{lemma}
+
+\begin{proof}
+	Since $\At{K} Q$ by assumption, we also have
+	\begin{equation}
+		\label{approx_Q}
+		\exists U : X \to \Prop \ldotp \At{K} U \land (U \imp Q)
+	\end{equation}
+	by \Cref{prop.at_to_nghbhd}. Now consider $D : \Op(X) \to \Prop$ given by
+	\[
+		D(V) \: := \: \left( V \imp \exists U : X \to \Prop \ldotp \At{K} U \land (U \imp Q) \right).
+	\]
+	Then it is easy to see that \eqref{approx_Q} is equivalent to $\exists V : \Op(X) \ldotp D(V) \land V$. Since $D$ is by definition a (the predicate associated to) a principal downset in a lattice, it follows that $D$ is directed. Hence we have
+	\[
+		\exists V : \Op(X) \ldotp D(V) \land \mu(V)(q) \: = \: (q < 1)
+	\]
+	for all $q : \tQQ$.
+
+	We now show that $D$ is directed. Since $D$ holds on \eqref{approx_Q} itself, we know that $D$ is inhabited. If $D(V_1)$ and $D(V_2)$, then 
+
+	We have, for every $q : \tQQ$ with $q \geq 0$,
+	\[
+		\At{K} \mu(Q)(q) = \At{K} \exists U : X \to \Prop \ldotp \At{K} U \land (U \imp \mu(Q)(q)),
+	\]
+	which follows trivially upon 
+	\[
+		\At{K} \mu(Q)(q) = \At{K} \mu(\At{K} \bot \lor Q).
+	\]
+	where the second step is by \Cref{prop.valuations_OR}.
+\end{proof}
+
 \begin{theorem}
 	For every internal space $(X,\Op(X))$ and valuation $\mu : \Op(X) \to \tLR$, we have
 	\[
@@ -1215,15 +1213,7 @@ Thus we are done by the first part and the cancellativity of \cref{cor.order_can
 		\mu(P) + \mu(P \imp \At{K} \bot) & = \mu(P \lor (P \imp \At{K} \bot)) + 0 & & = \mu(P \lor (P \imp \At{K} \bot)), \\
 		\mu(\At{K}P) + \mu(P \imp \At{K} \bot) & = \mu(\At{K} P \lor (P \imp \At{K} \bot)) + 0 & &  = 1.
 	\end{align*}
-	Thus upon hitting both equations with $\At{K}$, the claim follows from the cancellativity of \Cref{prop.at_order_canc} if we can prove that $\At{K} \mu(P \lor (P \imp \At{K} \bot)) = \At{K} 1$. For ease of notation, we abbreviate $Q := (P \lor (P \imp \At{K} \bot))$.
-
-	Now we have, for every $q : \tQQ$,
-	\begin{align*}
-		\At{K} \mu(Q) & = \At{K} (\overline{ \At{K} \bot \lor \mu(Q) }) \\
-			& = \At{K} \mu(\At{K} \bot \lor Q).
-	\end{align*}
-	where the second step is by \Cref{prop.valuations_OR}.
-	\tob{continue here. doesn't quite work yet}
+	Thus upon hitting both equations with $\At{K}$, the claim follows from the cancellativity of \Cref{prop.at_order_canc} if we can prove that $\At{K} \mu(P \lor (P \imp \At{K} \bot)) = \At{K} 1$. But this is now a consequence of \Cref{lem.mu_at_Q}.
 \end{proof}
 
 \tob{We can probably get rid of everything from here to the appendix}
@@ -1729,15 +1719,6 @@ where multiplication distributes over addition, and both preserve order.
 \end{example}
 
 \begin{definition}
-Let $(X,\leq)$ be a poset. A subtype $D:X\to\Prop$ is called \emph{directed} if it satisfies the following:
-\begin{enumerate}
-	\item $\exists(x:X)\ldotp Dx$.
-	\item $\forall(x,y:\subtype{D})\ldotp\exists(z:\subtype{D})\ldotp(x\leq z)\wedge (y\leq z)$.
-\end{enumerate}
-Denote the conjunction of these two conditions as $\const{Drct}:(X\to\Prop)\to\Prop$.
-\end{definition}
-
-\begin{definition}
 Let $(X,\leq)$ be a poset and let $P:X\to\Prop$ be a subtype. A \emph{join} of $P$ is an element $s_P:X$ satisfying
 \begin{enumerate}
 	\item $\forall(x:\subtype{P})\ldotp x\leq s_P$.
@@ -1822,6 +1803,47 @@ In the book \emph{Counterexamples in Topology} they define semi-regular spaces t
 It is not hard to show however that any regular space is regularly-based in our sense. 
 \end{remark}
 
+
+\section{The valuations profunctor}
+
+If $\cat{C}$ is a category with finite limits and small colimits then one can define frames and symmetric monoidal DCPOs internal to $\cat{C}$. From here, one can define normalized complete valuations (probability valuations) as a profunctor
+\[V_{\cat{E}}\colon\Fun{Frm}(\cat{E})\tickar\Fun{SMonDCPO}(\cat{E})\]
+In other words, one can precompose a probability valuation with a frame morphism on the left or post-compose with a monoidal DCPO map on the right. We will usually refer to this profunctor more simply as the \emph{valuations profunctor}.
+
+The question is how direct image functors $f_*\colon\cat{E}\to\cat{E}'$ interact with the valuations profunctor. What we want is a 2-cell in the double category of categories, functors, and profunctors:
+\begin{equation}\label{eqn.direct_image_valuations}
+\begin{tikzcd}
+	\Fun{Frm}(\cat{E})\ar[r, tick, "V_{\cat{E}}"]\ar[d, "\Fun{Frm}(f_*)"']&\Fun{SMonDCPO}(\cat{E})\ar[d, "\Fun{SMonDCPO}(f_*)"]\\
+	\Fun{Frm}(\cat{E}')\ar[r, tick, "V_{\cat{E}'}"']&\Fun{SMonDCPO}(\cat{E}')\ar[ul, phantom, "?\Downarrow"]
+\end{tikzcd}
+\end{equation}
+where the functors on the left and right were (hopefully) established in \cref{sec.preserve_loc_frame}. Intuitively, given a valuation $\mu\colon F\to R$ upstairs, we want to define a valuation $\mu'\colon f_*F\to f_*R$ downstairs. There is an obvious candidate, namely $\mu'\coloneqq f_*\mu$. The question is whether this preserves the various structures.
+
+It should be obvious that $\mu'$ is monotonic. We believe that $\mu'$ will commute with directed joins by the work in \cref{sec.preserve_loc_frame}. Both the top and bottom element of an internal frame can be characterized by an equational theory, so they should be preserved by left-exact functors such as $f_*$. It remains to show that $\mu'$ satisfies inclusion-exclusion.
+
+To begin with, we need to know that $f_*$ commutes with binary joins; but what does this mean? We want to define binary joins equationally on a frame $F$ as $\vee\colon F\times F\to F$, and then ask that $f_*(\vee_F)=\vee_{f_*F}$, but then the question becomes ``in what sense is the binary join operation the same as the actual binary join?'' In other words, what if we're only preserving a structure, not the universal property it is supposed to satisfy?
+
+For any pair of objects $A^B$ in a topos there is a map $\im\colon A^B\to\Prop^A$, that ``sends a map to its image''. Namely, use the predicate $I\colon A\times A^B\to\Prop$ given by $I(a,f)=\exists(b:B)\ldotp f(b)=a$. Thus we get a diagram, and the above questions are whether it commutes:
+\[
+\begin{tikzcd}
+	F\times F\ar[d, equal]\ar[r, "\vee"]&F\\
+	F^{1+1}\ar[r, "I"']&\Prop^F\ar[u, "\bigvee"']\ar[ul, phantom, "?"]
+\end{tikzcd}
+\]
+The goal then is to encode the universal property itself in an equational way. Take the graph of the function $\vee\colon F\times F\to F$ and call it $G(\vee)\ss F\times F\times F$. There are two equations that characterize it as the graph of a function, so we know that $f_*$ will send it to the graph of a function, which must again be $f_*(\vee_F)$. We want to characterize its universal property. We thought it is roughly the following:
+\[
+\begin{tikzcd}
+	\{w,x,y,z:F\mid x\leq z, y\leq z, w=x\vee y\}\ar[r]\ar[d]\ar[dd, shift right=40pt, bend right=60pt, dotted]
+	&\{w,x,y,z:F\mid (x,y,w)\in G(\vee)\}\ar[d]\\
+	\{w,x,y,z:F\mid x\leq z, y\leq z\}\ar[r]&\{w,x,y,z:F\}\ar[ul, phantom, very near end, "\lrcorner"]\ar[d]\\
+	\{w,z\mid w\leq z\}\ar[r]&\{w,z:F\}
+\end{tikzcd}
+\]
+
+Now we have that the direct image map $f_*$ preserves everything that's equationally defined, so we are willing to bet on the following.
+\begin{proposition}
+A direct image functor $f_*\colon\cat{E}\to\cat{E'}$ preserves valuations in the sense that it induces a 2-cell as shown in \cref{eqn.direct_image_valuations}.
+\end{proposition}
 \chapter{Toy example}
 
 \todo[inline]{We can recycle some of the following to use as our running example for illustration}
@@ -2096,7 +2118,7 @@ Let $X$ be a type. A \emph{topology} on $X$ is a function $\Op:(X\to\Prop)\to\Pr
 \begin{enumerate}
 	\item $\Op(\lambda(x:X)\ldotp\top)$.
 	\item $\forall(\phi_1,\phi_2:X\to\Prop)\ldotp(\Op(\phi_1)\wedge\Op(\phi_2))\imp\Op(\lambda(x:X)\ldotp\phi_1 x\wedge\phi_2 x)$.
-	\item Suppose given $I:(X\to\Prop)\to\Prop$ satisfying $\forall(\phi:X\to\Prop)\ldotp I(\phi)\imp\Op(\phi)$. Then $\Op(\lambda(x:X)\ldotp\exists(\phi:X\to\Prop)\ldotp I(\phi)\wedge\phi (x))$.
+	\item Suppose given $I: \Op(X) \to \Prop$. Then $\Op(\lambda(x:X)\ldotp\exists(\phi:X\to\Prop)\ldotp I(\phi)\wedge\phi (x))$.
 \end{enumerate}
 In other words, the whole space $X$ is open, the intersection of two opens is open, and the union of any $I$-indexed set of opens is open, for any open system $I$. % It will be useful to define open systems: $\mathrm{OpSys}\coloneqq\{I:(X\to\Prop)\to\Prop\mid\forall \phi\ldotp I(\phi)\imp\Op(\phi)\}.$
 
@@ -2174,31 +2196,20 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 	\[
 		(P \imp_{\Op(X)} Q) \: = \: \exists R : \Op(X) \ldotp (R \land P \imp Q) \land R,
 	\]
-	using the desired adjointness in the form that for all $R : \Op(X)$,
+	where it is easy to see that this has the desired adjointness in the form that for all $R : \Op(X)$,
 	\[
 		\left[ R \land P \imp Q \right] \quad \Longleftrightarrow \quad \left[ R \imp (P \imp_{\Op(X)} Q) \right],
 	\]
-	together with the fact that the above $P \imp_{\Op(X)} Q$ is also open thanks to the assumption that arbitrary unions of opens are open.
+	and we also use the fact that the above $P \imp_{\Op(X)} Q$ is also open thanks to the assumption that arbitrary unions of opens are open.
 
 	Now we have
 	\begin{align*}
-		\exists R : & \Op(X) \ldotp (R \land P \imp Q) \land R \\
+		(P \imp_{\Op(X)} Q) \quad & \Leftrightarrow \quad \exists R : \Op(X) \ldotp (R \land P \imp Q) \land R \\
 			& \Leftrightarrow \quad \exists R : \Op(X) \ldotp (P \imp Q) \land R \\
 			& \Leftrightarrow \quad (P \imp Q),
 	\end{align*}
 	as was to be shown.
 \end{proof}
-
-The internal Heyting algebra $\Op(X)$ behaves a lot like $\Prop^X$ also in that it is closed under the existential quantifier by assumption. Taking the interior works as follows:
-
-\begin{definition}\label{def.interior}
-	If $(X,\Op(X))$ is an internal space and $P : X \to \Prop$ is a predicate, define its \emph{interior} $\interior(P)\colon X\to\Prop$ as follows:
-	\[
-		\interior(P) := \lambda x \ldotp \exists U : \Op(X) \ldotp U(x) \land (U \imp P).
-	\]
-\end{definition}
-
-This is the largest open predicate below $P$ by definition.
 
 \begin{lemma}
 	\label{lem.internal_space_at}
@@ -2208,6 +2219,17 @@ This is the largest open predicate below $P$ by definition.
 \begin{proof}
 	Use \Cref{prop.internal_space_implication} together with the formula $\At{K} P \, = \, (P \imp \At{K} \bot) \imp \At{K} \bot$ from \Cref{lem.at_double_neg}, and using that the constant predicate $\At{K} \bot$ is also open by \Cref{constants_open}.	
 \end{proof}
+
+Finally, taking the interior works as follows:
+
+\begin{definition}\label{def.interior}
+	If $(X,\Op(X))$ is an internal space and $P : X \to \Prop$ is a predicate, define its \emph{interior} $\interior(P)\colon X\to\Prop$ as follows:
+	\[
+		\interior(P) := \lambda x \ldotp \exists U : \Op(X) \ldotp U(x) \land (U \imp P).
+	\]
+\end{definition}
+
+This is the largest open predicate below $P$ by definition.
 
 
 \chapter{Flabbiness}
