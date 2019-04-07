@@ -383,7 +383,7 @@ Since the right-hand side clearly implies the left, we conclude that this implic
 \begin{axiom}\label{ax.atBoolean}
 	For every $K : \CB$ and $P : \Prop$,
 \[
-	\At{K} P \lor ( P \implies \At{K} \bot).
+	\At{K} P \lor ( P \imp \At{K} \bot).
 \]
 \end{axiom}
 
@@ -568,7 +568,18 @@ The notion of flabbiness is defined in \cref{def:flabby} and that of $\At{K}$-fl
 
 \section{Properties of the lower reals}
 
-For lower reals $a$ and $b$, we write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. We also use the more intuitive notation $q < a$ in place of $a(q)$ for $a\in\tLR$ and $q\in\tQQ$. This is consistent notation in the sense that the $q$ in $q < a$ can also be interpreted as a lower real, and then $q < a$ is indeed equivalent to $a(q)$.
+\begin{lemma}\label{lemma.plus_def}
+Let $a_1,a_2:\tLR$ be lower reals. The following are equivalent for $q:\tQQ$.
+\begin{enumerate}
+	\item $\exists(q_1,q_2:\tQQ)\ldotp (q<q_1+q_2)\wedge(q_1<a_1)\wedge(q_2<a_2)$
+	\item $\exists(q_1,q_2:\tQQ)\ldotp (q=q_1+q_2)\wedge(q_1<a_1)\wedge(q_2<a_2)$
+	\item $\exists(q_1,q_2:\tQQ)\ldotp (q\leq q_1+q_2)\wedge(q_1<a_1)\wedge(q_2<a_2)$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Clearly $(1)\imp(3)$ and $(2)\imp(3)$, and we have $(3)\imp(1)$ by roundededness. For $(3)\imp(2)$, take $q_1',q_2'$ satisfying (3); the result follows by setting $q_1\coloneqq q-q_2'$, so $q_1\leq q_1'<a_1$, and $q_2\coloneqq q_2'$.
+\end{proof}
+For lower reals $a$ and $b$, we denote by $a+b$ any of the equivalent conditions in \cref{lemma.plus_def}. We also write $a\leq b$ if $q < a$ implies $q < b$ for $q\in\tQQ$. We also use the more intuitive notation $q < a$ in place of $a(q)$ for $a\in\tLR$ and $q\in\tQQ$. This is consistent notation in the sense that the $q$ in $q < a$ can also be interpreted as a lower real, and then $q < a$ is indeed equivalent to $a(q)$.
 
 For $a\in\tLR$ and $P : \Prop$, let us write $P \lor a$ for the lower real with
 \[
@@ -630,15 +641,15 @@ It is easy to see that both expressions are indeed lower reals.
 	\label{lem:eps_order}
 	For every $a,b\in\tLR$,
 	\[
-		\left(\forall \epsilon : \tQQ\ldotp (\epsilon > 0) \imp (a \leq b + \epsilon)\right) \quad \Longrightarrow \quad \left( a \leq b \right).
+		\big(\forall \epsilon : \tQQ\ldotp (\epsilon > 0) \imp (a \leq b + \epsilon)\big) \quad \Longrightarrow \quad \left( a \leq b \right).
 	\]
 \end{lemma}
 
 \begin{proof}
-	We need to prove that $\epsilon < a$ implies $\epsilon < b$. We can choose $\epsilon' \in \tQQ$ such that $\epsilon < \epsilon' < a$. Applying the assumption to $\epsilon' - \epsilon > 0$, we have $a \le\epsilon b + \epsilon' - \epsilon$. Hence $\epsilon' < a$ implies $\epsilon' < b + \epsilon' - \epsilon$, or equivalently $\epsilon < b$, as was to be shown.
+	We need to prove that $q < a$ implies $q < b$. We can choose $q' \in \tQQ$ such that $q < q' < a$. Applying the assumption to $\epsilon\coloneqq q' - q > 0$, we have $a \le b + q' - q$. Hence $q' < a$ implies $q' < b + q' - q$, or equivalently $q < b$, as was to be shown.
 \end{proof}
 
-We now turn to the interaction of $\At{K}$-modalities with lower reals. For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$.
+We now turn to the interaction of $\At{K}$-modalities with lower reals. For $r\in\tLR$, we put $(\At{K}r)(q) := \At{K}(r(q))$, and as usual we may write $q<\At{K}r$.
 
 \begin{lemma}
 	$\At{K}r$ is again a lower real.	
@@ -714,12 +725,13 @@ For any $a,b:\tLR$,
 
 \begin{lemma}
 	\label{lem:subtract_q}
-	For $q,q':\tQQ$ and $a : \tLR$,
+	For all $q,q':\tQQ$ and $a,a' : \tLR$,
 	\begin{enumerate}
-	\item 
-		\[
-			q + q' < a + q' \quad \Longrightarrow \quad q < a.
-		\]
+	\item Adding rationals is \emph{cancelable}:
+		\begin{gather*}
+			q + q' < a + q' \quad \Longrightarrow \quad q < a,\\
+			a' + q' \leq a + q'\quad\Longrightarrow\quad a'\leq a.
+		\end{gather*}
 	\item For every $K$,
 		\begin{equation}
 			\label{eq.cancel_at_q'}
@@ -730,7 +742,7 @@ For any $a,b:\tLR$,
 
 \begin{proof}
 	\begin{enumerate}
-		\item The assumption means that there are $q_1,q_2\in\tQQ$ with $q + q' = q_1 + q_2$ and $q_1 < a$ as well as $q_2 < q'$. Hence $q = q_1 + q_2 - q' < q_1 < a$, as was to be shown.
+		\item The assumption of the first claim means that there are $q_1,q_2\in\tQQ$ with $q + q' = q_1 + q_2$ and $q_1 < a$ as well as $q_2 < q'$. Hence $q = q_1 + q_2 - q' < q_1 < a$, as was to be shown. For the second claim, take $q<a'$; then $q+q'<a'+q'\leq a+q'$ which implies $q<a'$ by the first claim.
 		\item The assumption is $q + q' < \At{K}(a + q')$ by \cref{lem.at_plus_commute}, or equivalently $\At{K}(q + q' < a + q')$. Therefore $\At{K}(q < a)$ follows from the previous part. \qedhere
 	\end{enumerate}
 \end{proof}
@@ -741,9 +753,12 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 	\label{lem:at_lower_real}
 	For all $a : \tLR$,
 	\[
-		\sup_{q \: : \: \At{K} q \leq \At{K} a} \At{K} q = \At{K}a = \inf_{q \: : \: \At{K} a \leq \At{K} q} \At{K} q,
+		\sup_{\{q \,\mid\, \At{K} q \leq \At{K} a\}} \At{K} q
+		\quad = \quad
+		\At{K}a 
+		\quad = \quad
+		\inf_{\{q \, \mid\, \At{K} a \leq \At{K} q\}} \At{K} q.
 	\]
-	where $q\in \tQQ$ ranges over all rationals satisfying the additional constraints.
 \end{lemma}
 
 \begin{proof}
@@ -761,7 +776,7 @@ Roughly, the following says that the lower $\At{K}$-reals coincide with the Dede
 \end{lemma}
 
 \begin{proof}
-	By \Cref{lem.at_plus_commute} and $q \leq \At{K} q$, it is enough to prove the $\leq$ inequality. Now if $q' < \At{K}(a + q) = \At{K} a + \At{K}q$, then by \eqref{eq.cancel_at_q'}, we get $q' - q < \At{K} a$, which implies the desired $q' < \At{K} a + q$.
+	By \Cref{lem.at_plus_commute} and $q \leq \At{K} q$, it is enough to prove $\At{K}(a + q) \leq \At{K}a + q$. Now if $q' < \At{K}(a + q) = \At{K} a + \At{K}q$, then by \eqref{eq.cancel_at_q'}, we get $q' - q < \At{K} a$, which implies the desired $q' < \At{K} a + q$.
 \end{proof}
 
 We also observe that the $\At{K}$-lower reals are totally ordered:
@@ -775,11 +790,11 @@ We also observe that the $\At{K}$-lower reals are totally ordered:
 \end{proposition}
 
 \begin{proof}
-	By \Cref{prop.N_or_vs_forall}, we have 
+	Let $Q'(q)\coloneqq((q<a)\imp\At{K}(q<b)$, and define $Q(q)\coloneqq\At{K}Q'(q)$ and $P\coloneqq\exists(q:\tQQ)\ldotp Q'(q)\imp\At{K}\bot$. By \cref{ax.atBoolean,prop.N_or_vs_forall}, we have 
 	\[
-		\left( \exists q : \tQQ \ldotp ((q < a) \imp \At{K} (q < b)) \imp \At{K} \bot \right) \quad \lor \quad \left( \forall q : \tQQ \ldotp \At{K} ((q < a) \imp \At{K} (q < b)) \right)
+		\left( \exists q : \tQQ \ldotp ((q < a) \imp \At{K} (q < b)) \imp \At{K} \bot \right) \quad \lor \quad \left( \forall q : \tQQ \ldotp \At{K} ((q < a) \imp \At{K} (q < b)) \right).
 	\]
-	In the second case, note that the implication $(q < a) \imp \At{K} (q < b)$ is already $\At{K}$-closed, and we can therefore assume it to hold. Hence the desired inequality $\At{K} a \leq \At{K} b$ is implied.
+	In the second case we have $\At{K}(q<a)\imp\At{K}(q<b)$ for all $q$, i.e.\ $(\At{K}a \leq \At{K}b)$.
 	
 	In the first case, we have $q$ such that $((q < a) \imp \At{K} (q < b)) \imp \At{K} \bot$. In particular it follows that $\At{K}(q < b) \imp \At{K} \bot$. By \Cref{lem:at_totally_ordered1}, this implies $\At{K} b \leq \At{K} q$ or $\At{K} \bot$; the latter is enough since then either desired inequality follows trivially, so assume $\At{K} b \leq \At{K} q$. Now if $\At{K}(q < a)$, we are done since then we have in particular $\At{K} q \leq \At{K} a$, which combined with the previous inequality gives the desired $\At{K} b \leq \At{K} a$. So assume $(q < a) \imp \At{K} \bot$. But then also $(q < a) \imp \At{K} (q < b)$, and therefore again $\At{K} \bot$, which we have already shown to be enough.
 \end{proof}
@@ -788,12 +803,12 @@ We also observe that the $\At{K}$-lower reals are totally ordered:
 	\label{prop.at_order_canc}
 	The $\At{K}$-lower reals are finitely order-cancellative: if
 	\[
-		\At{K} a + \At{K} c \leq \At{K} a + \At{K} c
+		\At{K} a + \At{K} c \leq \At{K} b + \At{K} c
 	\]
 	and there is $u \in \tQQ$ such that $\At{K} c \leq \At{K} u$, then it follows that $\At{K} a \leq \At{K} b$.
 \end{proposition}
 
-Here, the existence of $u$ is a finiteness condition on $c$.
+Here, the existence of rational $u$ is a finiteness condition on $c$.
 
 \begin{proof}
 	By \cref{lem:eps_order}, it is enough to show that $\At{K} a \leq \At{K} b + \varepsilon$ for every rational $\varepsilon > 0$. But by \Cref{lem.at_plus_rational,lem.at_plus_commute}, this inequality is equivalent to $\At{K} a \leq \At{K}(b + \varepsilon)$. By \Cref{prop.at_LR_total_order}, we can assume $\At{K}(b+\varepsilon) \leq \At{K} a$. Combining this with the assumption and using \Cref{lem.at_plus_commute} again, we get
@@ -802,7 +817,7 @@ Here, the existence of $u$ is a finiteness condition on $c$.
 	\]
 	Since clearly $\At{K}(b + c) \leq \At{K}(b + c + \varepsilon)$ by $\varepsilon > 0$, we get $\At{K}(b + c + \varepsilon) = \At{K}(b + c)$, and then $\At{K}(b + c + n\varepsilon) = \At{K}(b + c)$ for every $n \in \tNN$ by induction and \Cref{lem.at_plus_commute}.
 
-	Now suppose that we have $q : \tQQ$ with $q < \At{K}a$, and want to show $q < \At{K}b$. By \Cref{lem:at_totally_ordered1}, we can assume $\At{K} b \leq \At{K} q$. Since we already have $\At{K} c \leq \At{K} u$, we simplify notation by assuming $q = u$ without loss of generality, so that $\At{u}$ is an upper bound for both $\At{K}b$ and $\At{K}c$, and therefore $2\,\At{K}u$ is an upper bound for $\At{K}(b + c)$. Since every lower real has a rational lower bound, we can also find $\ell : \tQQ$ with $2 \At{K} \ell \leq b + c$.
+	Now suppose that we have $q : \tQQ$ with $q < \At{K}a$, and want to show $q < \At{K}b$. By \Cref{lem:at_totally_ordered1}, we can assume $\At{K} b \leq \At{K} q$. Since we already have $\At{K} c \leq \At{K} u$, we simplify notation by assuming $q = u$ without loss of generality, so that $\At{K}u$ is an upper bound for both $\At{K}b$ and $\At{K}c$, and therefore $2\,\At{K}u$ is an upper bound for $\At{K}(b + c)$. Since every lower real has a rational lower bound, we can also find $\ell : \tQQ$ with $2 \At{K} \ell \leq b + c$.
 
 	Hence we get $\At{K}(2\ell + \varepsilon n) \leq \At{K}(2u)$. Making $n$ large enough gives rationals $q_-,q_+\in \tQQ$ with $q_- < q_+$ but $\At{K} q_+ \leq \At{K} q_-$, and therefore $\At{K}(q_- < q_-)$, or $\At{K}\bot$, which is enough.
 \end{proof}
@@ -2182,7 +2197,7 @@ The functions $+:\tRR_j\times\tRR_j\to\tRR_j$ and $*:\tRR_j\times\tRR_j\to\tRR_j
 
 	Now we have
 	\begin{align*}
-		\exists R : & \Op(X) \ldotp (R \land P \imp Q) \land R \\
+		\exists R &: \Op(X) \ldotp (R \land P \imp Q) \land R \\
 			& \Leftrightarrow \quad \exists R : \Op(X) \ldotp (P \imp Q) \land R \\
 			& \Leftrightarrow \quad (P \imp Q),
 	\end{align*}
