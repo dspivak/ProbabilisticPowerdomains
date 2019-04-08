@@ -832,7 +832,7 @@ Here, the existence of rational $u$ is a finiteness condition on $c$.
 
 	Now suppose that we have $q : \tQQ$ with $q < \At{K}a$, and want to show $q < \At{K}b$. By \Cref{lem:at_totally_ordered1}, we can assume $\At{K} b \leq \At{K} q$. Since we already have $\At{K} c \leq \At{K} u$, we get $\At{K}(b + c) \leq \At{K}(q + u)$. Since every lower real has a rational lower bound, we can also find $\ell : \tQQ$ with $\At{K} \ell \leq b + c$.
 
-	Hence we get $\At{K}(\ell + \varepsilon n) \leq \At{K}(q + u)$. Making $n$ large enough gives rationals $q_-,q_+\in \tQQ$ with $q_- < q_+$ but $\At{K} q_+ \leq \At{K} q_-$, and therefore $\At{K}(q_- < q_-)$, or $\At{K}\bot$, which is enough.
+	Hence we get $\At{K}(\ell + \varepsilon n) \leq \At{K}(q + u)$. Making $n$ large enough gives rationals $q_-\coloneqq q+u$ and $q_+\coloneqq \ell+\varepsilon n$, so $q_- < q_+$. But $\At{K} q_+ \leq \At{K} q_-$ implies $\At{K}(q_- < q_-)$, or $\At{K}\bot$, which is enough.
 \end{proof}
 
 \begin{corollary}\label{cor.order_canc}
