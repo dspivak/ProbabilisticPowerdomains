@@ -1,0 +1,546 @@
+\documentclass[11pt, oneside, article]{memoir}
+
+\settrims{0pt}{0pt} % page and stock same size
+\settypeblocksize{*}{32pc}{*} % {height}{width}{ratio}
+\setlrmargins{*}{*}{1} % {spine}{edge}{ratio}
+\setulmarginsandblock{1in}{1in}{*} % height of typeblock computed
+\setheadfoot{\onelineskip}{2\onelineskip} % {headheight}{footskip}
+\setheaderspaces{*}{1.5\onelineskip}{*} % {headdrop}{headsep}{ratio}
+\checkandfixthelayout
+
+
+
+\usepackage{geometry}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{bbm}
+\usepackage{accents}
+\usepackage{newpxtext}
+\usepackage[utf8]{inputenc}
+\usepackage[varg,bigdelims]{newpxmath}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{mathpartir}
+\usepackage[bookmarks=true, colorlinks=true, linkcolor=blue!50!red, citecolor=orange,
+pdfencoding=unicode]{hyperref}
+\usepackage[capitalize]{cleveref}
+  \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
+\usepackage[backend=biber,style = alphabetic]{biblatex}
+  \addbibresource{Library20171206.bib}
+\usepackage{todonotes}
+
+
+
+\usetikzlibrary{
+	cd,
+	math,
+	decorations.markings,
+	positioning,
+	arrows.meta,
+	shapes,
+	calc,
+	fit,
+	quotes,
+	intersections}
+\hypersetup{final}
+\setlist{nosep}
+
+\tikzset{
+  tick/.style={postaction={
+    decorate,
+    decoration={markings, mark=at position 0.5 with {\draw[-] (0,.4ex) -- (0,-.4ex);}}}
+  },
+  tickx/.style={
+    postaction={ decorate,
+      decoration={markings,
+        mark=at position 0.5 with {
+          \fill circle [radius=.28ex];
+        }
+      }
+    }
+  }
+}
+
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter] %change [] to chapter if we want to change global numbering
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{axiom}{Axiom}
+\newtheorem*{axiom*}{Axiom}
+
+\theoremstyle{remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{warning}[theorem]{Warning}
+\newtheorem{question}[theorem]{Question}
+
+% environment for soundness proofs
+\newenvironment{soundproof}{\begin{proof}[Soundness proof]}{\end{proof}}
+
+\setcounter{axiom}{0}
+
+% Renewed commands
+
+\renewcommand{\ss}{\subseteq}
+
+% Macros %
+\DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\subtype}{[}{]}
+\DeclarePairedDelimiter{\classify}{\ulcorner}{\urcorner}
+
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator*{\colim}{colim}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Ob}{Ob}
+
+
+\newcommand{\const}[1]{\mathtt{#1}}
+\newcommand{\Set}[1]{\mathrm{#1}}
+\newcommand{\cat}[1]{\mathcal{#1}}
+\newcommand{\Cat}[1]{\mathbf{#1}}
+\newcommand{\fun}[1]{\mathit{#1}}
+\newcommand{\Fun}[1]{\mathsf{#1}}
+\newcommand{\Open}[1]{\mathcal{O}(#1)}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Frame}{\mathcal{F}}
+
+\newcommand{\smset}{\Cat{Set}}
+
+
+\newcommand{\tickar}{\begin{tikzcd}[baseline=-0.5ex,cramped,sep=small,ampersand replacement=\&]{}\ar[r,tick]\&{}\end{tikzcd}}
+\newcommand{\xtickar}[1]{\stackrel{#1}{\tickar}}
+\newcommand{\cocolon}{:\!}
+\newcommand{\iso}{\cong}
+\newcommand{\To}[1]{\xrightarrow{#1}}
+\newcommand{\Too}[1]{\xrightarrow{\;\;#1\;\;}}
+\newcommand{\from}{\leftarrow}
+\newcommand{\From}[1]{\xleftarrow{#1}}
+\newcommand{\Fromm}[1]{\xleftarrow{\;\;#1\;\;}}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\inj}{\rightarrowtail}
+\newcommand{\wavyto}{\rightsquigarrow}
+
+\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+
+
+\newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
+\newcommand{\hs}{\hspace{1.1pt}}
+
+
+\newcommand{\EE}{\mathbb{E}} % expectation value
+\newcommand{\II}{\mathbb{II}} % interval domain
+\newcommand{\IR}{\mathbb{IR}} % interval domain
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\LR}{\ul{\mathbb{R}}}
+
+\newcommand{\tNN}{\internal{N}\hs}
+\newcommand{\tQQ}{\internal{Q}\hs}
+\newcommand{\tQQp}{\tQQ_{+}}
+\newcommand{\tZZ}{\internal{Z}\hs}
+\newcommand{\tQQub}{\QQ^\infty}
+\newcommand{\tRR}{\internal{R}\hs}
+\newcommand{\tIR}{\internal{I\hs R}\hs}
+\newcommand{\tII}{\bar{\ubar{\tRR}}\hs}
+\newcommand{\tLR}{\ubar{\tRR}\hs}
+\newcommand{\tUR}{\bar{\tRR}\hs}
+\newcommand{\tRRub}{\tRR^\infty}
+\newcommand{\tIRub}{\internal{I\hs R}^\infty}
+\newcommand{\tLRub}{\ubar{\tRR}^{\infty}}
+\newcommand{\tURub}{\bar{\tRR}^{\infty}}
+\newcommand{\tIIub}{\bar{\ubar{\tRR}}^{\infty}}
+
+\newcommand{\tRRat}[1]{\tRR_{\SeeInline{#1}}}
+
+
+\newcommand{\tConst}{\mathtt{C}}
+\newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
+
+\newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
+\newcommand{\Psh}{\Fun{Psh}}
+\newcommand{\Shv}{\Fun{Shv}}
+\newcommand{\Cont}{\Fun{Cont}}
+\newcommand{\Idl}{\Set{Idl}}
+\newcommand{\yoneda}{\Fun{y}}
+
+\newcommand{\Prop}{\const{Prop}}
+\newcommand{\Time}{\const{Time}}
+\newcommand{\Pt}{\const{Pt}}
+\newcommand{\cc}{\const{cc}}
+\newcommand{\unit}{\const{1}}
+\newcommand{\Poset}{\Cat{Poset}}
+\renewcommand{\Top}{\Cat{Top}}
+\newcommand{\Op}{\Set{Op}}
+\renewcommand{\C}{\Cat{C}}
+\newcommand{\Sub}{\Set{Sub}}
+\newcommand{\pt}{\Fun{pt}}
+
+\newcommand{\op}{^\tn{op}}
+\newcommand{\el}[1]{\tn{el}#1}
+\newcommand{\asSh}{\Fun{Sh}} % sheafified object
+\newcommand{\toSh}{\Fun{sh}} % sheafification map from object to sheafified object
+
+\newcommand{\apart}{\,\#\,}
+\newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
+\newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
+\newcommand{\BaseTopos}{\mathcal{B}}
+\newcommand{\BaseSpace}{B}
+\newcommand{\CB}{C\BaseSpace}
+\newcommand{\Const}{\Fun{Const}}
+\newcommand{\Sky}{\Fun{Sky}}
+
+\newcommand{\Pointwise}{\pi}
+\newcommand{\AtSymbol}{{@}}
+\newcommand{\SeeSymbol}{{\down}}  % Old: \xi
+\newcommand{\InSymbol}{{\upclose}}% Old: \iota
+\newcommand{\At}[2][]{\AtSymbol^{#1}_{#2}}
+\newcommand{\See}[2][]{\SeeSymbol^{#1}_{#2}}
+\newcommand{\In}[2][]{\InSymbol^{#1}_{#2}}
+\newcommand{\AtInline}[1]{@{#1}}
+\newcommand{\SeeInline}[1]{\SeeSymbol{#1}}
+\newcommand{\InInline}[1]{\InSymbol{#1}}
+
+
+\newcommand{\sqss}{\sqsubseteq}
+\newcommand{\specupclose}{{\uparrow}}
+\newcommand{\specdownclose}{{\downarrow}}
+\newcommand{\upclose}{{\rotatebox[origin=c]{90}{$\twoheadrightarrow$}}}
+\newcommand{\downclose}{{\rotatebox[origin=c]{90}{$\twoheadleftarrow$}}}
+\newcommand{\down}{\mathord{\downarrow}}
+\newcommand{\up}{\mathord{\uparrow}}
+
+\newcommand{\imp}{\Rightarrow}
+\renewcommand{\iff}{\Leftrightarrow}
+\newcommand{\true}{\const{true}}
+\newcommand{\Bool}{\Set{Bool}}
+
+\newcommand{\Span}{\Cat{Span}}
+\newcommand{\set}{\text{--}\smset}
+
+
+\newcommand{\erase}[1]{}
+
+\linespread{1.2}
+\setsecnumdepth{subsection}
+\settocdepth{section}
+\setlength{\parindent}{15pt}
+
+%%%%%%%%%%%%% Document %%%%%%%%%%%%%
+\begin{document}
+
+\title{Towards synthetic Euclidean QFT}
+
+\author{Tobias Fritz and David Spivak}
+
+\maketitle
+
+
+%%%%%%%%% Chapter %%%%%%%%%
+
+This talk will be less ambitious than what the title suggests: it's more of a sketch of a research program. So far we only have some basic definitions and results. We are \emph{very} far from addressing the important aspects of QFT, such as the renormalization group.
+
+Originally intended as a theory of stochastic processes (1D), but we never use that assumption.
+
+\chapter{The meaning of ``synthetic''}
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+& synthetic & & analytic \\\hline\hline
+Planar geometry & Euclid & & Descartes \\\hline
+Quantum mechanics & C*-algebras & Hilbert spaces + operators & wave functions \\\hline
+Lorentzian QFT & (Schreiber-Shulman '15?) & e.g.~Haag-Kastler axioms & e.g.~Feynman diagrams \\\hline
+Euclidean QFT & \fbox{\fbox{??}} & regularity structures & Gibbs measures, DLR equation
+\end{tabular}
+\end{center}
+
+\chapter{The logic of space}
+
+What are the possible truth values of the proposition ``It is raining''?
+
+Whether it is raining or not is a function of both space and time! So arguably, the truth value should be a \emph{function} from spacetime to $\{\bot,\top\}$, or equivalently the \emph{collection of points in spacetime} at which it is raining. 
+
+At a boundary point we're not sure. Since ``It is raining'' is not clearly true, let's declare it to be false!
+
+$\Rightarrow$ The set of truth values is the set of opens $\Open{S}$, where $S$ is spacetime. 
+
+Similar to modal logic: the points can be thought of as ``possible worlds'', but with some ``cohesion'' which relates them.
+
+This defines the \emph{propositional} logic of space. Implication is given by
+\[
+	(U \Rightarrow V) := \bigvee_{W \: : \: W \cap U \subseteq V} W,
+\]
+which is the interior of $V\cup (X\setminus U)$. For example in $S = \R$,
+\[
+	((0,2) \Rightarrow (1,3)) = (-\infty, 0) \cup (1,\infty).
+\]
+
+As a special case, negation is $\lnot U := (U \Rightarrow \bot)$, which is the interior of the complement of $U$. 
+
+Generally, we have $U \cup \lnot U \neq S$: \emph{the law of excluded middle fails}. This is because the set of places where ``it is raining'' is true and the set of places where ``it is not raining'' is true do not cover the whole space: the rain has a boundary of points at which we're not sure!
+
+Similarly, $\lnot\lnot U \not\Rightarrow U$, i.e.~double negation elimination does not work. All other basic inference rules are still valid, such as modus ponens: 
+\[
+	(U \Rightarrow V) \land (V\Rightarrow W) \quad \Rightarrow \quad U \Rightarrow W.
+\]
+More precisely, the valid arguments are those which are \emph{constructive}, i.e.~those which can be interpreted as computer programs. Otherwise, all of mathematics can still be done, \emph{just as in ordinary logic}. Our logic internally \emph{does not know that it describes things that vary in space}!
+
+More precisely, the logic is intuitionistic type theory with equality (including propositional extensionality, functional extensionality) and a subtype classifier.
+
+\begin{center}
+\begin{tabular}{cc}
+	Topology & Logic \\
+	\hline
+	 $\subseteq$ & $\Rightarrow$ \\
+	 $\cup$ & $\lor$ \\
+	 $\cap$ & $\land$ \\
+	 $\emptyset$ & $\bot$ \\
+	 $X$ (whole space) & $\top$
+\end{tabular}
+\end{center}
+
+Thus these notations are largely interchangeable.
+
+\begin{example}
+One can use constructive reasoning to still prove the law of excluded middle in the weaker form $\lnot\lnot(U \lor \lnot U) = \bot$. The topological interpration is that $U \cup \lnot U$ is dense in $X$.
+\end{example}
+
+\begin{proof}
+	We need to show $((U \lor (U \imp \bot)) \imp \bot) \imp \bot$. This is because
+	\[
+		((U \lor (U \imp \bot)) \imp \bot \quad \Longrightarrow \quad (U \imp \bot) \land ((U \imp \bot) \imp \bot) \quad \Longrightarrow \quad \bot.
+	\]
+\end{proof}
+
+So far we have considered only propositional logic. But in order to do mathematics, we also need to be able to work with sets with structure as mathematical objects and introduce quantifiers! This is what \emph{topos theory} is about. Working inside a topos is like working with ordinary mathematical objects in constructive logic, although these objects now describe objects that vary in space---but ``from the inside'' of the topos, this is not visible!
+
+I do not have time to give precise definitions here, so let me only state that also in the presence of quantifiers, the valid arguments are those which are constructive. i.e.~can be turned into computer programs: the law of excluded middle and the \emph{axiom of choice} may not be used.
+
+A truth value in topos theory is an open set $U$, which can also be interpreted as a Boolean truth value ``$s\in U$'' which \emph{varies} in the point $s$. Similarly, a \emph{set} in topos theory is also a set that varies with $s$. These sets indeed just look like ordinary sets from the internal perspective given by the logic, but with slightly weaker properties in that e.g.~the axiom of choice does not hold. The external meaning of a set is that it is a \emph{family of sets varying in $s\in S$}, technically called a \emph{sheaf}. The logic allows us to reason about these families of sets \emph{as if} they were just individual sets.
+
+In terms of physics, we can think of such a family of sets as a bundle over spacetime with discrete fibres. This is enough for certain kinds of physics, e.g.~Dijkgraaf-Witten theory. But generally in order to do physics with fields, we also want to talk about fields as sections of bundles with non-discrete fibres, i.e.~of families of topological spaces varying with $s \in S$!
+
+Internally, the definition is just the usual definition of topological space!
+
+\begin{definition}
+A \emph{topological space} is an object $X$ together with a subobject $\mathcal{T} \subseteq \Prop^X$ such that:
+\begin{enumerate}
+\item $\emptyset,X\in\mathcal{T}$;
+\item $\mathcal{T}$ is closed under binary intersection;
+\item $\mathcal{T}$ is closed under arbitrary union.
+\end{enumerate}
+\end{definition}
+
+Here, $\Prop$ is the set (=sheaf) of truth values in our logic.
+
+\href{http://www.numdam.org/item?id=CM_1984__53_2_171_0}{Moerdijk '84} has worked out the precise relation between such internal topological spaces and ``ordinary'' external spaces (bundles) over $S$. They correspond to spaces over $S$, i.e.~continuous maps $X \to S$ where $X$ carries \emph{two} topologies: one which makes it into an \'etale space over $S$, and a coarser one which still makes $X \to S$ continuous.
+
+\chapter{Probability theory via logic}
+
+Let me take a step back and consider the case of ``Euclidean QFT'' in spacetime dimension $d = 0$: this is just probability theory.
+
+Probability theory assigns probabilities (real numbers) to logical propositions, like: what is the probability that it will be raining here tomorrow?
+
+What is the relevant structure of the collection of logical propositions in order for this to work? Under our identification with logic and topology, it seems natural to define:
+
+\begin{definition}
+	A \emph{continuous probability valuation} on a space $(X,\Open{X})$ is a map $\mu : \Open{X} \to \R_+$ such that:
+	\begin{enumerate}
+	\item $\mu(\bot) = 0$ and $\mu(\top) = 1$;
+	\item If $x\leq y$, then $\mu(x) \leq \mu(y)$;
+	\item $\mu(x \land y) + \mu(x \lor y) = \mu(x) + \mu(y)$;
+	\item For any directed family $(x_i)$, we have
+	\[
+		\mu\left( \bigvee_i x_i \right) = \sup_i \mu(x_i).
+	\]
+	\end{enumerate}
+\end{definition}
+
+The following is one of several related results establishing the correspondence with standard probability theory based on Kolmogorov's axioms:
+
+\begin{theorem}[\href{https://www.sciencedirect.com/science/article/pii/S0166864101002498}{Alvarez-Manilla '02}]
+If $X$ is regular, then the continuous probability valuations on $\Open{X}$ are in bijection with the regular $\tau$-smooth Borel probability measures on $X$.
+\end{theorem}
+
+For our purposes, working with continuous probability valuations is technically more convenient, so we will use the term \emph{probability space} to refer to a topological space $(X,\Open{X})$ equipped with a continuous probability valuation $\mu : \Open{X}\to\R_+$.
+
+Working with valuations on more general \emph{frames} may generally be the ``better'' approach towards measure and probability generally: based on similar definitions, one can resolve the Banach-Tarski paradox in $\R^n$ \emph{while retaining the measurability of all sets} (\href{https://www.sciencedirect.com/science/article/pii/S0168007211001874}{Simpson '12}). The trick is that disjoint sets with overlapping boundary are no longer disjoint, but intersect on some ``glue''.
+
+\chapter{Probability theory in toposes}
+
+There is now a simple obvious idea: formulate the definition of continuous probability valuation in terms of the logic! This will therefore result in a definition of probability space varying with $s \in S$. Could this be what we're looking for?
+
+Before being able to restate the definition of continuous probability valuation in our weaker logic, we first \emph{need to define the real numbers}. There are various possiblities, all based on:
+
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{definition}
+A \emph{lower cut} $L$ is a subset $L\subseteq\Q$ satisfying the following conditions:
+\begin{enumerate}
+\item if $a \in L$ and $b < a$, then $b\in L$;
+\item if $a \in L$, then there is $c\in L$ with $a < c$.
+\item There is $a\in L$.
+\end{enumerate}
+An \emph{upper cut} is defined analogously, but with the order reversed.
+\end{definition}
+
+Since everything now varies with $s\in S$, the subset relation $L \subseteq \Q$ here is such that for every $q\in\Q$, the containment ``$q\in L$'' is a truth value, i.e.~its truth varies with $s$.
+
+We now have sveral possible definitions of real numbers:
+
+\begin{itemize}
+\item Lower reals $\tLR$: the set of lower cuts $L$;
+\item Upper reals $\tUR$: the set of upper cuts $R$;
+\item Dedekind reals $\tRR$: the set of pairs $(L,R)$ with $L$ a lower cut and $R$ an upper cut, such that:
+\begin{enumerate}
+\item $L \cap R = \emptyset$;
+\item If $c < d$, then $c\in L$ or $d\in R$.
+\end{enumerate}
+\end{itemize}
+
+One can prove that these are equivalent using double negation elimination. However, in our weaker logic, it is no longer possible to prove that these are equivalent. This is a feature rather than a bug, since they indeed describe different sheaves! The global sections of these sets correspond, respectively, to
+
+\begin{itemize}
+\item Lower semicontinuous functions $S \to \R \cup \{+\infty\}$,
+\item Upper semicontinuous functions $S \to \R \cup \{-\infty\}$,
+\item Continuous functions $S \to \R$.
+\end{itemize}
+
+Which of these are most suitable to use in the context of probability theory? Lower reals are easy to bound from below, which matches up with the fact that membership in an open set is easy to witness: the indicator function of an open set is lower semi-continuous. Looking at the continuity condition on $\mu$, it seems most natural to assume that $\mu(x)$ is easy to bound from below, corresponding to the lower reals, which we use in the following internalized definition:
+
+\begin{definition}
+	A \emph{continuous probability valuation} on a topological space $(X,\Open{X})$ is a map $\mu : \Open{X} \to \tLR$ such that:
+\begin{enumerate}
+\item $\mu(\bot) = 0$ and $\mu(\top) = 1$;
+\item If $U\Rightarrow V$, then $\mu(U) \leq \mu(V)$;
+\item $\mu(U \land V) + \mu(U \lor V) = \mu(U) + \mu(V)$;
+\item For any directed family $(U_i)$, we have
+\[
+	\mu\left( \bigvee_i U_i \right) = \sup_i \mu(U_i).
+\]
+\end{enumerate}
+\end{definition}
+
+Thus we obtain a definition of probability space internal to a topos.
+
+\begin{conjecture}
+There is a sensible way to define expectation values $\langle A \rangle_\mu = \mathbb{E}_\mu[A]$ for (continuous) observables $A : X \to \tLR$.
+\end{conjecture}
+
+Let's see what this amounts to in a simple case, e.g.~where spacetime $S$ is a finite set. Then an internal space $X$ is externally the same thing as a space over $S$, i.e.~a map $X\to S$, or equivalently a space $X$ together with a partition indexed by $S$. A map $\mu : \Open{X} \to \tLR$ translates into an $S$-family of maps from each part to the real numbers; continuing like this, one arrives at:
+
+\begin{proposition}
+If $S$ is a discrete space, then the internal probability spaces $(X,\Open{X},\mu)$ are in correspondence with families of probability spaces $(X_s,\Open{X_s},\mu_s)_{s\in S}$.
+\end{proposition}
+
+In other words, we thereby have a definition of internal probability space whose external semantics is that of \emph{$S$-indexed family of probability spaces}. Also the observables $A : X \to \tLR$ are necessarily local quantities.
+
+This is clearly very different from a Euclidean QFT over $S$, which would correspond to a family of spaces $(X_s)_{s\in S}$ together with a probability valuation \emph{on the product space} $\prod_{s\in S} X_s$, corresponding to a \emph{joint distribution} of a family of random variables indexed by $S$.
+
+So it looks like our idea has failed, because our logic completely ignores the existence of \emph{correlations} between different points of $S$. It is simply not capable of expressing anything that is not of a local character.
+
+\chapter{Euclidean QFT, conjecturally}
+
+However, all is not lost yet: instead of using our logic over spacetime $S$, we can instead use it over a different space constructed from $S$!
+
+We are looking for a space in which not only the phrase ``It is raining'' is a logical proposition, but where also statements of a nonlocal character makes sense, such as ``The temperature varies by at most $20^\circ C$''. The truth of this statement is no longer a function of a \emph{point} in spacetime, but rather more generally of a \emph{region} in spacetime.
+
+\begin{definition}
+A \emph{region} in spacetime is a compact subset $K \subseteq S$. The collection of regions forms the \emph{hyperspace} $CS$, where the basic open sets are of the form $\{ K \subseteq U \}$ for some $U\in\Open{S}$.
+\end{definition}
+
+In the topos of sheaves on the hyperspace $CS$, the truth values vary with the region $K$, and are such that:
+\begin{itemize}
+\item if a statement is true in some region $K$, then it is also true in every smaller region; 
+\item if it is true in $K$, then it is also true in all slightly larger regions.
+\end{itemize}
+
+\begin{example}
+The statement ``The temperature varies by at most $20^\circ C$'' has a truth value of this form. Also for any region $K$, the statement ``The temperature varies by at most $20^\circ C$ in $K$'' has a truth value of the same form: it has the obvious true or false value on any region $K'$ with $K\subseteq K'$; and we simply declare it to be true on any other $K'$: unknowable statements in a given context are declared true by default.
+
+There is a general way to \emph{localize} any statement to a region $K$ as in this example. One does this by applying the \emph{modality} $\At{K}$ to the statement. I do not have time to explain this.
+\end{example}
+
+Roughly, a Euclidean quantum field theory is given by a probability measure on a suitable space of sections of a bundle over spacetime, $p : E \to S$. (This applies hopefully at least once the QFT has been constructed; how to construct it from a Hamiltonian including regularization and renormalization is a question which I cannot address at the moment.) As a family of spaces varying with $K\subseteq S$, we can also consider $p : E \to S$ as an internal topological space, which we denote by $\mathcal{E}$. Technically, this internalization is based on equipping the sheaf of sections of $p$ with a suitable internal topology.
+
+\begin{conjecture}
+Under suitable hypotheses on $S$, the Euclidean QFTs on $p : E \to S$ are in bijection with the internal continuous probability valuations $\mu$ on the internal topological space $\mathcal{E}$.
+\end{conjecture}
+
+In one spacetime dimension, this specializes to an alternative characterization of stochastic processes. Notably, our assumption on spacetime are very minimal, and will boil down to some mild separation condition on $S$.
+
+One can then conjecturally make sense the expectation value $\langle A \rangle_\mu$ of any continuous observable $A : \mathcal{E} \to \tLR$. This expectation value will again be an element of $\tLR$, corresponding to a lower semi-continuous function.
+
+\begin{example}
+For a real scalar field $\phi$, $p$ is simply the projection $S \times \R \to S$. Internally, $\phi \in \tRR_\pi$ is \emph{just a plain number}. Then for every $x\in S$, we have an observable $\phi(x)$ given by evaluating $\phi$ at $x$ within any region $K$ that contains $x$, and returning $\infty$ otherwise. It can internally be constructed as the lower cut given by defining the truth value of $a\in L$ as $\At{x}(a < \phi)$.
+
+$\Rightarrow$ We can also define correlation functions like $\langle \phi(x) \phi(y) \rangle_\mu$ in the internal language.
+\end{example}
+
+\todo[inline]{more speculative stuff comes now}
+
+\chapter{The relation to AQFT}
+
+This section is more speculative than the previous ones.
+
+One of the existing rigorous approaches to \emph{Lorentzian} QFT is \emph{Algebraic Quantum Field Theory}, based on the Haag--Kastler axioms. These are concerned with \emph{local nets of observables}, which are very similar to our internal spaces in $CS$. One important difference is that topological spaces are replaced by \emph{noncommutative} topological spaces, i.e. formal duals of~C*-algebras. Since the latter live in the Heisenberg picture, rather than restriction maps for local sections of bundles we now have \emph{inclusion} maps between algebras of observables.
+
+However, I do not know how to formulate the causality condition (commutativity of observables in spacelike separated region) in terms of the logic of space. This may be addressed in \href{https://arxiv.org/abs/1109.1397}{Nuiten '11}.
+
+\chapter{The DLR equations?}
+
+
+The DLR equations formalize the definition of Gibbs measure for lattice systems in the thermodynamic limit (infinite size). Compact regions and restriction to compact subregions also plays an important role there, so it seems natural to try and formulate these equations within our framework.
+
+Warning: highly speculative, I have not yet worked out the details
+
+Externally, the \emph{Hamiltonian} is a function that assigns to every local section a real number. Assuming nonnegativity, this function is such that it can only decrease as we restrict a local section to a subregion. So we can interpret it in terms of the upper reals:
+
+\begin{proposition}
+Assigning to every region $K$ the \emph{total energy} contained in $K$ is an internal map $\mathcal{E} \to \tUR$.
+\end{proposition}
+
+Let $P\mathcal{E}$ be the object of continuous probability valuations on $\mathcal{E}$. A \emph{specification} of local Gibbs measures is an internal map\footnote{Here, $CS$ is the constant sheaf of points of $CS$, describing $CS$ itself as an internal space whose frame of opens should be $\Omega$.}
+\[
+	\gamma : CS \times \mathcal{E} \to P\mathcal{E},
+\]
+which assigns to every region $K$ and field configuration $\phi\in\mathcal{E}$ a measure $\gamma(K,\phi)\in P\mathcal{E}$ which describes thermal fluctuations in $K$ with fixed boundary conditions given by $\phi$ on the outside of $K$. This map should satisfy the consistency condition
+\[
+	\gamma(K,\phi)(U) = \langle \gamma(K',-) (U) \rangle_{\gamma(K,\phi)}
+\]
+for every subregion $K'\subseteq K$, field configuration $\phi\in\mathcal{E}$, and open $U\in\Open{\mathcal{E}}$. (There are additional conditions which I am not mentioning now.)
+
+\begin{definition}
+A \emph{Gibbs measure} for a given specification $\gamma$ is $\mu\in P\mathcal{E}$ such that for all $K\in CS$ and $U \in \Open{\mathcal{E}}$,
+\[
+	\mu(U) = \langle \gamma(K,-)(U) \rangle_\mu.
+\]
+This is (one version of) the \emph{DLR equation}.
+\end{definition}
+
+
+
+\end{document}
