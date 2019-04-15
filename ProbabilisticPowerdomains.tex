@@ -1181,39 +1181,31 @@ Thus we are done by the first part and the cancellativity of \cref{cor.order_can
 \end{proof}
 
 \begin{lemma}
-	\label{lem.mu_at_Q}
-	For every internal space $(X,\Op(X))$ and valuation $\mu : \Op(X) \to \tLR$, we have $\At{K} \mu(Q) = 1$ for every $Q : \Op(X)$ which satisfies $\At{K} Q$.
+	\label{lem.naturality}
+	Suppose that $(X,\Op(X))$ is an internal space and $\mu : \Op(X) \to \tLR$ a valuation. Then for any $P, Q : \Op(X)$ with $\At{K} P$,
+	\[
+		\At{K} \mu(Q) = \At{K} \mu(P \imp Q).
+	\]
 \end{lemma}
 
 \begin{proof}
-	\tob{This doesn't work yet}
+	The inequality $\leq$ is clear by monotonicity. For the other direction, we prove that
+	\[
+		\At{K} \mu(P \imp Q)(q) \quad \Longrightarrow \quad \At{K} \mu(Q)(q)
+	\]
+	for every $q : \tQQ$. Since we want to prove an $\At{K}$-closed statement, we can strengthen the assumption of $\At{K} P$ to $P$. But then $P \imp Q$ is already equal to $Q$.
+\end{proof}
 
-	Since $\At{K} Q$ by assumption, we also have
-	\begin{equation}
-		\label{approx_Q}
-		\exists U : X \to \Prop \ldotp \At{K} U \land (U \imp Q)
-	\end{equation}
-	by \Cref{prop.at_to_nghbhd}. Now consider $D : \Op(X) \to \Prop$ given by
+\begin{lemma}
+	\label{lem.mu_at_Q}
+	For every $Q : \Op(X)$ which satisfies $\At{K} Q$, we have
 	\[
-		D(V) \: := \: \left( V \imp \exists U : X \to \Prop \ldotp \At{K} U \land (U \imp Q) \right).
+		\At{K} \mu(Q) = 1.
 	\]
-	Then it is easy to see that \eqref{approx_Q} is equivalent to $\exists V : \Op(X) \ldotp D(V) \land V$. Since $D$ is by definition a (the predicate associated to) a principal downset in a lattice, it follows that $D$ is directed. Hence we have
-	\[
-		\exists V : \Op(X) \ldotp D(V) \land \mu(V)(q) \: = \: (q < 1)
-	\]
-	for all $q : \tQQ$.
+\end{lemma}
 
-	We now show that $D$ is directed. Since $D$ holds on \eqref{approx_Q} itself, we know that $D$ is inhabited. If $D(V_1)$ and $D(V_2)$, then 
-
-	We have, for every $q : \tQQ$ with $q \geq 0$,
-	\[
-		\At{K} \mu(Q)(q) = \At{K} \exists U : X \to \Prop \ldotp \At{K} U \land (U \imp \mu(Q)(q)),
-	\]
-	which follows trivially upon 
-	\[
-		\At{K} \mu(Q)(q) = \At{K} \mu(\At{K} \bot \lor Q).
-	\]
-	where the second step is by \Cref{prop.valuations_OR}.
+\begin{proof}
+	Apply \Cref{lem.naturality} with $P := Q$.
 \end{proof}
 
 \begin{theorem}
