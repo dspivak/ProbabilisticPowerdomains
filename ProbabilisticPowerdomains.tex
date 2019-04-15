@@ -1189,11 +1189,14 @@ Thus we are done by the first part and the cancellativity of \cref{cor.order_can
 \end{lemma}
 
 \begin{proof}
-	The inequality $\leq$ is clear by monotonicity. For the other direction, we prove that
-	\[
-		\At{K} \mu(P \imp Q)(q) \quad \Longrightarrow \quad \At{K} \mu(Q)(q)
-	\]
-	for every $q : \tQQ$. Since we want to prove an $\At{K}$-closed statement, we can strengthen the assumption of $\At{K} P$ to $P$. But then $P \imp Q$ is already equal to $Q$.
+  Assuming $P$, the statement $\mu(Q)=\mu(P\imp Q)$ is a tautology. Thus we have $P\imp(\mu(Q)=\mu(P\imp Q))$, so by the naturality of $\At{K}$ we have
+  \[\At{K}P\imp\At{K}\big(\mu(Q)=\mu(P\imp Q)\big)\]
+  The result follows by another application of naturality.
+%	The inequality $\At{K} \mu(Q) \leq \At{K} \mu(P \imp Q)$ is clear by monotonicity. For the other direction, we prove that
+%	\[
+%		\At{K} \mu(P \imp Q)(q) \quad \Longrightarrow \quad \At{K} \mu(Q)(q)
+%	\]
+%	for every $q : \tQQ$. Since we want to prove an $\At{K}$-closed statement, we can strengthen the assumption of $\At{K} P$ to $P$. But then $P \imp Q$ is already equal to $Q$.
 \end{proof}
 
 \begin{lemma}
@@ -1222,7 +1225,7 @@ Thus we are done by the first part and the cancellativity of \cref{cor.order_can
 		\mu(P) + \mu(P \imp \At{K} \bot) & = \mu(P \lor (P \imp \At{K} \bot)) + 0 & & = \mu(P \lor (P \imp \At{K} \bot)), \\
 		\mu(\At{K}P) + \mu(P \imp \At{K} \bot) & = \mu(\At{K} P \lor (P \imp \At{K} \bot)) + 0 & &  = 1.
 	\end{align*}
-	Thus upon hitting both equations with $\At{K}$, the claim follows from the cancellativity of \Cref{prop.at_order_canc} if we can prove that $\At{K} \mu(P \lor (P \imp \At{K} \bot)) = \At{K} 1$. But this is now a consequence of \Cref{lem.mu_at_Q}.
+	Using \cref{lem.at_plus_commute} we can hit both equations with $\At{K}$. Since $\At{K}(P \imp \At{K} \bot)\leq\At{K}1$, the claim will follow from the cancellativity of \Cref{prop.at_order_canc} if we can prove that $\At{K} \mu(P \lor (P \imp \At{K} \bot)) = \At{K} 1$. But this is now a consequence of \Cref{lem.mu_at_Q,lem.at_vs_or}.
 \end{proof}
 
 \tob{We can probably get rid of everything from here to the appendix}
