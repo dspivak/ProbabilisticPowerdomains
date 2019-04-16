@@ -980,17 +980,6 @@ Roughly speaking, this expresses the fact that a point $K$ is a completely prime
     Now assume $K$ is in $W$. Then the assumption says that there is some $W'\subseteq W$ with $K\in W'$ and $W' \models \exists U\ldotp P(U) \wedge U$. This means that there is a cover $(V_i\to W')$ together with $U_i\in\Prop(V_i)$ such that $V_i \models P(U_i) \wedge U_i$. But now we have $U_i \subseteq V_i$ as well as $V_i \subseteq U_i$, so that $U_i = V_i$, and therefore $V_i \models P(V_i)$. Since $V_i$ is a cover of $W'$, there exists some $k$ such that $K \in V_k$. We now show the claim $W \models \exists U. (\In{U} P(U)) \wedge \At{K} U$ by proving $W \models (\In{V_k} P(V_k)) \wedge \At{K} V_k$, corresponding to the trivial cover of $W$ by itself. But now $W \models \In{V_k} P(V_k)$ follows from $V_k \models P(V_k)$, and $W \models \At{K} V_k$ from $K\in V_k$.
 \end{soundproof}
 
-\begin{proposition}
-Let $X$ be a flabby choice object and $P : X \to \Prop$ a predicate. Then for all $K \in C\BaseSpace$,
-\[
-	\At{K} \exists x\ldotp P(x) \: \Leftrightarrow \: \exists x\ldotp \At{K} P(x).
-\]
-\end{proposition}
-
-\begin{proof}
-The nontrivial direction is from left to right, so assume $\At{K} \exists x\ldotp P(x)$. Applying \cref{ax.at_to_nghbhd} to $\exists x\ldotp P(x)$, we can assume $\exists U\ldotp \At{K} U \wedge \In{U} \exists x\ldotp P(x)$, since in the other case $\At{K}\bot$ we are done by inhabitedness of $X$, which follows from flabbiness. Thanks to \cref{prop:flabbiness_equivalence}, we even obtain $U$ such that $\At{K} U$ and $\exists x\ldotp \In{U} P(x)$. Choosing this $x$, we obtain $\At{K} P(x)$ from \cref{ax.atvsin}.
-\end{proof}
-
 \chapter{Internal valuations}
 
 \section{Definition}
@@ -1230,58 +1219,37 @@ Thus we are done by the first part and the cancellativity of \cref{cor.order_can
 	For the first pair on the right-hand sides, we use \Cref{lem.mu_at_Q} together with the fact that hitting the two arguments of $\mu$ with $\At{K}$ gives $\top$, since $\At{K} P \lor (P \imp \At{K})$. For the second pair on the right-hand sides, we use the fact that they both imply $\At{K} \bot$, so that they are both upper bounded by $\At{K} \mu(\At{K} \bot) = \At{K} 0$ by monotonicity. But since $\mu$ is nonnegative to begin with, this value is clearly also a lower bounded, and hence both terms evaluate to $\At{K} 0$.
 \end{proof}
 
-\tob{We can probably get rid of everything from here to the appendix}
+\chapter{Families of point valuations}
 
-\begin{proposition}\label{prop.double_at}
-Let $K\in C\BaseSpace$ be a point, let $X\in\Shv(C\BaseSpace)$, and let $\mu\colon\Prop^X\to\tLR$ be a valuation. Then for any $P \in \Prop^X$,
-\[\mu(\At{K}P)=\ol{\At{K}\mu(\At{K}P)}.\]
-\end{proposition}
-\begin{proof}
-We have ; this and the fact that $\At{K}$ commutes with addition, are the only assumptions we use.
+For $\Op(X)$ the type of opens of an internal space, we write $\At{K} \Op(X)$ for the subtype of $\At{K}$-closed opens. As a special case, we have $\At{K} \Prop$, the type of $\At{K}$-closed propositions. 
 
-Clearly $\mu(\At{K}P)\leq\At{K}\mu(\At{K}P)$ and $\mu(P\imp\At{K}\bot)\leq\At{K}\mu(P\imp\At{K}\bot)$. By inclusion-exclusion we have
-\[\mu(\At{K}P)+\mu(P\imp\At{K}\bot)=\mu(\At{K}\bot)+\mu(\top),\]
-where we have used $(\At{K}P\vee(P\imp\At{K}\bot)) = \top$ for the second term on the right-hand side.
-Since $\At{K}\bot$ is a constant predicate, we have $\mu(\At{K}\bot)=i(\At{K}\bot)=\ol{\At{K}0}$, by \cref{prop.unique_probability_valuation_on_prop}. Therefore we have 
-\begin{align*}
-	\ol{\At{K}0}+1
-	&=\mu(\At{K}P)+\mu(P\imp\At{K}\bot)\\
-	&\leq\At{K}\mu(\At{K}P)+\At{K}\mu(P\imp\At{K}\bot)\\
-	&=\ol{\At{K}0}+\ol{\At{K}1}=\ol{\At{K}0}+1
-\end{align*}
-where in the third step, we have applied to same inclusion-exclusion relation again, together with the fact that,$\At{K}$ commutes with addition. Since the very first and the very last expression are the same, we conclude (by order-cancellativity) that both inequalities  $\mu(\At{K}P) \leq \At{K}\mu(\At{K}P)$ and $\At{K}\mu(P\imp\At{K}\bot) \leq \At{K}\mu(P\imp\At{K}\bot)$ are in fact equalities.
-\end{proof}
+\begin{definition}
+	An \emph{$\At{K}$-topology} on $X$ is a function $\Op:(X\to\At{K}\Prop)\to\At{K}\Prop$ satisfying the following conditions:
+\begin{enumerate}
+	\item $\Op(\lambda(x:X)\ldotp\top)$.
+	\item $\forall(\phi_1,\phi_2:X\to\At{K}\Prop)\ldotp(\Op(\phi_1)\wedge\Op(\phi_2))\imp\Op(\lambda(x:X)\ldotp\phi_1 x\wedge\phi_2 x)$.
+	\item Suppose given $I: \Op(X) \to \At{K}\Prop$. Then $\Op(\lambda(x:X)\ldotp\At{K}\exists(\phi:X\to\At{K}\Prop)\ldotp I(\phi)\wedge\phi (x))$.
+\end{enumerate}
+\end{definition}
 
+The idea is that semantically, an $\At{K}$-topology only equips the stalk of $X$ at $K$ with a topology.
 
-\begin{lemma}\label{lem.In_At_logic}
-If $K\ss U$ then $\In{U}P\imp\At{K}P$, for all $P$.
+\begin{lemma}
+	For $(X, \Op(X))$ an internal space, the type $\At{K} \Op(X)$ is an $\At{K}$-topology on $X$.
 \end{lemma}
+
 \begin{proof}
-If $K\ss U$ then $\At{K}U$, i.e.\ $(U\imp(\down K)^c)\imp(\down K)^c$. Thus if $U\imp P$ and $P\imp(\down K)^c$ then $(\down K)^c$.
+	The binary intersection property holds because it holds for $\Op(X)$.
+
+	Concerning arbitrary unions, we use the flabbiness of $\Op(X)$ of \Cref{prop:opens_flabby} and \Cref{ax:flabby_vs_at}. This shows that the predicate $\lambda x. \exists \phi : X \to \At{K} \Prop \ldotp I(\phi) \land \phi(x)$ is again $\At{K}$-closed, since both $I(\phi)$ and $\phi(x)$ are. Since this predicate is again in $\Op(X)$, the claim follows by definition of $\At{K} \Op(X)$.
 \end{proof}
 
-\begin{proposition}
-For all $K\subseteq U$ and $P\colon X\to\Prop$ we have
-\[\At{K}\mu(P)=\At{K}\mu(\In{U}P).\]
-\end{proposition}
-\begin{proof}
-One direction is trivial. For any $q:\tQQ$ we have
-\begin{align*}
-	\At{K}\mu(\In{U}P)(q)
-	&\imp\At{K}\In{U}\mu(\In{U}P)(q)\\
-	&=\At{K}\In{U}\mu(P)(q)&\text{\cref{prop.In_probability_valuation}}\\
-	&\imp\At{K}\At{K}\mu(P)(q)&\text{\cref{lem.In_At_logic}}\\	
-	&=\At{K}\mu(P)(q).
-\end{align*}
-\end{proof}
+We also write $\At{K} \tLR$ for the type of $\At{K}$-closed lower reals, which is isomorphic to the type of $\At{K}$-lower reals of TTT.
 
-Here, the equation $\At{K}\In{U} = \At{K}$ follows straightforwardly from the definitions of the modalities, together with the fact that the assumption $K\subseteq U$ is equivalent to $U \lor (\down K)^c = \top$.
-
-We say that $U$ is coprime if it satisfies the following for all $P,Q$:
-\[(U\imp (P\vee Q))\iff((U\imp P)\vee(U\imp Q)).\]
-The interval domain $\IR$ has a basis $\upclose[d',u']$ of coprime opens. 
-
-
+\begin{definition}
+	Let $(X, \Op(X))$ be an internal space. An \emph{$\At{K}$-valuation} is a map $\nu_K : \At{K} \Op(X) \to \At{K} \tLR$
+	\tob{Think about directedness}
+\end{definition}
 
 
 
