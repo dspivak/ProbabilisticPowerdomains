@@ -285,6 +285,24 @@ pdfencoding=unicode]{hyperref}
 
 %%%%%%%%% Chapter %%%%%%%%%
 
+\chapter{David question}
+Let $(X,F)$ be an internal topological space in the temporal topos (so every ``open set" $f:F$ is of the form $f\colon X\to \Prop$), and let $\tLR$ denote the lower reals.
+
+Externally, one might define a probability measure on $F$ to be a map of sheaves $\mu\colon F \to \tLR$ such that 
+\begin{enumerate}
+	\item for all lengths $\ell$, the function $\mu(\ell)\colon F(\ell)\to\tLR(\ell)$ is a probability valuation; and
+	\item for subintervals $\ell'\ss\ell$, the restriction map $F(\ell)\to F(\ell')$ is measure preserving.
+\end{enumerate}
+I think this is generally stronger than the internal condition, that $\mu$ be an internal probability valuation. If every $f:F$ is clopen, i.e. has a complementary open set, then I think the two notions are equivalent. 
+
+I think we can add an additional axiom to the internal characterization to obtain the external one.
+
+Assume that for any $p:\Prop$ and open set $f:F$, the set $(p \imp f)$ is again open. I may not need quite so strong an assumption. Then I conjecture that an internal valuation $\mu$ externally satisfies 1 and 2 iff it satisfies the proposition
+\[\forall(t:\Time)(a,b:\tRR)(f:F).\In{[a,b]}\mu(f)=\mu(\In{[a,b]}f)\]
+or written out without the jargon:
+\[\forall(t:\Time)(a,b:\tRR)(q:\tQQ)(f:F).[a\leq t\leq b)\imp(q<\mu(f))]\iff q<\mu[(a\leq t\leq b)\imp f]
+\]
+
 \chapter{Introduction}
 
 \chapter{Logical axioms and their soundness}
