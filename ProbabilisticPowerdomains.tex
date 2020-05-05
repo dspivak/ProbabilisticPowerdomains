@@ -34,6 +34,7 @@ pdfencoding=unicode]{hyperref}
 \usepackage[color=white]{todonotes}
 \usepackage{showkeys}
 \newcommand{\tob}[1]{\todo[color=blue!40,inline]{\textbf{T:} #1}}
+\newcommand{\dis}[1]{\todo[color=red!40,inline]{\textbf{D:} #1}}
 
 
 
@@ -331,7 +332,9 @@ The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
 
 \tob{The following is probably irrelevant:}
 
-If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is $\downarrow K=\{K'\in C\BaseSpace\mid K\ss K'\}$. It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
+If $\BaseSpace$ is Hausdorff, then the closure of a point $K\in C\BaseSpace$ is
+\[\down K=\{K'\in C\BaseSpace\mid K\ss K'\}.\] 
+It is closed since any $K'\not\supseteq K$ can be separated from a chosen $b\in K\setminus K'$ by an open, and it is clearly the smallest closed set containing $K$. It follows that the specialization preorder is reverse containment\footnote{The Sierpinski space shows that this is not true in general.}, and it is directed complete~\cite[Proposition~3.1]{Edalat:1995a}.
 
 \todo[inline]{I'm not sure if the topology necessarily coincides with the Scott topology. Prop 3.1(iii) of Edalat suggests that it doesn't. But perhaps in the locally compact case?}
 
@@ -350,7 +353,7 @@ Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \
 \end{lemma}
 
 \begin{proof}
-	For every $K$ contained in an open $U$, we need to find a connected open neighborhood of $K$ contained in $U$. Since $U$ is open, there is $\wh{U} \subseteq \BaseSpace$ such that every $K'\subseteq \wh{U}$ is in $U$. Now the set of all compacts contained in $\wh{U}$ is a basic neighborhood of $K$ contained in $U$, and it is connected since its specialization preorder is connected.
+	For every $K$ contained in an open $U$, we need to find a connected open neighborhood of $K$ contained in $U$. Since $U$ is open, there is $\wh{U} \subseteq \BaseSpace$ such that $K\in\wh{U}$ and every $K'\subseteq \wh{U}$ is in $U$. Now the set of all compacts contained in $\wh{U}$ is a basic neighborhood of $K$ contained in $U$, and it is connected since its specialization preorder is connected.
 \end{proof}
 
 \begin{corollary}
@@ -364,37 +367,37 @@ Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \
 
 \section{Axioms and soundness proofs}
 
+We work in a Grothendieck topos $\cat{E}$ (i.e.\ the category of sheaves on a site). In particular, it is equipped with a natural numbers object $\tNN$.
+
 We only work with $\At{}$ modalities explicitly, since In and See are easy to define directly in terms of the logic, so that introducing notation for them would not decrease formula complexity by much.
 
-In other words, we only equip standard first-order intuitionistic type theory with an additional system of modalities $\{ \At{K} \: : \: K\in \CB\}$ indexed by some type $\CB$.
+In other words, we only equip standard first-order intuitionistic type theory with an additional system of modalities $\{ \At{K} \: : \: K\in \CB\}$ indexed by some type $\CB$. \dis{Do we need $\CB$ to have an order or anything? Aren't we using that $\At{K}$ means $((-\imp k)\imp k)$ for some  $k:\Prop$?}
 
 Our soundness proofs refer to the intended semantics.
-
-\tob{Todo: this shouldn't be an axiom, since induction is part of the definition of a natural numbers object. So instead the axiom should probably be that a natural numbers object $\tNN$ exists}
-
-\begin{axiom}
-	\label{ax:N_well_ordered}
-	For every $P : \tNN\to\Prop$,
-	\[
-		P(0) \quad \Longrightarrow \quad \left( \forall n : \tNN \ldotp P(n) \imp P(n+1) \right) \quad \Longrightarrow \quad \forall n : \tNN \ldotp P(n).
-	\]
-\end{axiom}
 
 We now axiomatize the assumption that our topos has enough points:
 
 \begin{axiom}\label{ax.enough_points}
 For every $P:\Prop$,
 \[
-	\forall K\ldotp \At{K} P \: \Longrightarrow \: P.
+	(\forall K\ldotp \At{K} P) \imp P.
 \]
 \end{axiom}
 
 Since the right-hand side clearly implies the left, we conclude that this implication is actually an equality of propositions.
 
+
 \begin{soundproof}
 	We need to show that if $U \models \forall K\ldotp \At{K} P \imp \At{K} Q$, then also $U \models (P \imp Q)$.
 
 	Proving the contrapositive, we assume $U \not\models (P \imp Q)$, which means that there is a point $K \in (U\cap P)\setminus Q$. Then we have $U \not\models (\At{K} P \imp \At{K} Q)$, which shows in particular that $U\not\models \forall K\ldotp \At{K} P \imp \At{K} Q$.
+\end{soundproof}
+
+\dis{Does the following work?}
+\begin{soundproof}
+	We need to show that if $U \models \forall K\ldotp \At{K} P$, then also $U \models P$.
+
+	Proving the contrapositive, we assume $U \not\models P$, which means $U\not\ss P$; thus there is a point $K \in U\setminus P$. Then $P\cap U\ss(\down K)^c$, and since $U\not\ss (\down K)^c$, so since $\At{K}P=((P \imp K^c) \imp K^c)$, we have $U \not\models \At{K} P$ as desired.
 \end{soundproof}
 
 
@@ -420,11 +423,11 @@ Hence the topos of $\At{K}$-sheaves is Boolean.
 \end{axiom}
 
 \begin{soundproof}
-	Let $U\ss\CB$ be open. We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\downarrow K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W')$, we have $W' \ss P(n)$.
+	Let $U\ss\CB$ be open. We need to show that if $U \models \forall n\ldotp P(n) \lor \At{K} \bot$, then also $U \models \At{K} \forall n : \tNN \ldotp P(n)$. The assumption says equivalently that for all $V\subseteq U$ and $n\in \tNN(V)$, we have $V \subseteq P(n) \cup (\down K)^c$. The claim is that if $K\in U$, then there is $W$ with $K\in W \subseteq U$ such that for all $W'\subseteq W$ and $n\in\tNN(W')$, we have $W' \ss P(n)$.
 
 	So suppose $K\in U$, and consider the set
 	\[
-		W := \uparrow (U \cap (\downarrow K)).
+		W := \up (U \cap (\down K)).
 	\]
 		We show that $W$ is open, by proving that every $K'\in W$ has a neighborhood contained in $W$. By definition of $W$, there is $\wt{K} \supseteq K'$ with $\wt{K} \in U$ and $K \subseteq \wt{K}$. By openness of $U$, we have a $B$-open $\wt{U} \subseteq B$ such that $\wt{K} \subseteq \wt{U}$, and also every other $\wh{K} \subseteq \wt{U}$ is in $U$. Considering $\wt{U}$ as a basic open of $\CB$, we have $K'\in\wt{U}$, and for any other $\wh{K}\in\wt{U}$, we have $\wh{K}\in W$ because $\wh{K}\ss(\wh{K}\cup\wt{K})\supseteq K$ and $(\wh{K}\cup\wt{K})\in\wt{U}\ss U$. Hence $\wt{U}$ is the desired neighborhood of $K'$ which lies in $W$.
 
