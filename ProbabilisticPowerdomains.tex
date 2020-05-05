@@ -308,7 +308,7 @@ or written out without the jargon:
 
 \chapter{Logical axioms and their soundness}
 
-\section{Intended semantics}
+\section{The upper space}
 
 \tob{Let's see at the end whether our proofs go through more generally still, i.e.~for spaces that are not necessarily spaces of compacts}
 
@@ -318,17 +318,6 @@ For a topological space $\BaseSpace$, we denote by $\CB$ its set of nonempty com
 \]
 
 For any $K\in CB$, we write $\At{K} := ((- \imp K^c) \imp K^c)$ for the associated quasi-closed modality, where $K^c$ denotes the interior of the complement of the point $\{K\}\in\CB$. 
-
-\begin{proposition}
-If $K$ is a point then the topos of sheaves for the associated modality $\At{K}$ is a copy of $\smset$.
-\end{proposition}
-\begin{proof}
-A subsheaf $X\inj Y$ is $\At{K}$-dense if for every open $U$ in $C\BaseSpace$, either $K\not\in U$ or for every section $y\in Y(U)$, there exists $V\ss U$ with $K\in V$ and $\restrict{y}{V}\in X$. Recall that $F$ is an $\At{K}$-sheaf iff $F\to 1$ is right-orthogonal to every $\At{K}$-dense map.
-
-Suppose $F$ is an $\At{K}$-sheaf; we will show that it is a skyscraper sheaf at $K$, i.e.\ there is a set $S$ such that for any open $U$, if $K\in U$ then $F(U)=S$ and if $K\not\in U$ then $F(U)=\{*\}$. Indeed let $S\coloneqq F(C\BaseSpace)$. For any $U$, if $K\in U$ then $\yoneda U\to\yoneda X$ is $\At{K}$-dense, and right-orthogonality means that the restriction map $F(X)\to F(U)$ is an iso. If $K\not\in U$ then $\emptyset\to\yoneda U$ is dense, and right-orthogonality means that $F(U)\to 1$ is an iso. Thus $F$ is the skyscraper on $S$.
-
-The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
-\end{proof}
 
 \tob{The following is probably irrelevant:}
 
@@ -363,6 +352,19 @@ Suppose that we have opens $P,Q\subseteq C\BaseSpace$ such that $(P\cap Q)\cap \
 
 \begin{proof}
 	This follows from local connectedness.
+\end{proof}
+
+\section{Semantics of the $\At{K}$-modality}
+
+\begin{proposition}
+If $K$ is a point then the topos of sheaves for the associated modality $\At{K}$ is a copy of $\smset$.
+\end{proposition}
+\begin{proof}
+A subsheaf $X\inj Y$ is $\At{K}$-dense if for every open $U$ in $C\BaseSpace$, either $K\not\in U$ or for every section $y\in Y(U)$, there exists $V\ss U$ with $K\in V$ and $\restrict{y}{V}\in X$. Recall that $F$ is an $\At{K}$-sheaf iff $F\to 1$ is right-orthogonal to every $\At{K}$-dense map.
+
+Suppose $F$ is an $\At{K}$-sheaf; we will show that it is a skyscraper sheaf at $K$, i.e.\ there is a set $S$ such that for any open $U$, if $K\in U$ then $F(U)=S$ and if $K\not\in U$ then $F(U)=\{*\}$. Indeed let $S\coloneqq F(C\BaseSpace)$. For any $U$, if $K\in U$ then $\yoneda U\to\yoneda X$ is $\At{K}$-dense, and right-orthogonality means that the restriction map $F(X)\to F(U)$ is an iso. If $K\not\in U$ then $\emptyset\to\yoneda U$ is dense, and right-orthogonality means that $F(U)\to 1$ is an iso. Thus $F$ is the skyscraper on $S$.
+
+The category of skyscraper sheaves at $K$ is equivalent to $\smset$.
 \end{proof}
 
 \section{Axioms and soundness proofs}
@@ -463,6 +465,8 @@ Since the implication from right is left is easy to prove for every modality, we
 	We now use the characterization of $\At{K}$-flabbiness of \cref{prop.at_flabby_semantics} to get $x'\in X(U)$ which represents the same germ at $K$ as $x$. Then we indeed have $U\models \At{K} P(x')$ since $W\models P(x)$.
 \end{soundproof}
 
+\tob{Todo: explain that the axiom does not hold without the flabbiness assumption}
+
 \chapter{Consequences of the axiomatics}
 
 \section{General properties of the modalities}
@@ -476,7 +480,7 @@ Since the implication from right is left is easy to prove for every modality, we
 \end{lemma}
 
 \begin{proof}
-	The left-to-right implication is straightforward. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, which is enough.
+	The left-to-right implication is straightforward and holds for every modality. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, which is enough.
 \end{proof}
 
 \begin{lemma}
@@ -547,6 +551,7 @@ The following observation is closely related to Axiom 9 of TTT. It can be interp
 \end{proposition}
 
 \begin{proof}
+	\tob{we still need to show that flabbiness implies $\At{K}$-flabbiness}
 	Combine \cref{ax:flabby_vs_at} with \cref{prop:opens_flabby}.	
 \end{proof}
 
@@ -2288,7 +2293,7 @@ This is analogous to the previous proof. So suppose that we have $P : \Op(X) \to
 	%\]
 	\begin{equation}
 		\label{eq.at_flabby}
-		\left( \At{K} \exists x : X \ldotp P(x)\right) \: \Longrightarrow \: \subsing{P} \: \Longrightarrow \: \exists x : X \ldotp (\exists y : X \ldotp P(y)) \imp \At{K} P(x) .
+		\left( \At{K} \exists x : X \ldotp P(x)\right) \: \Longrightarrow \: \subsing{P} \: \Longrightarrow \: \exists x : X \ldotp \left[ (\exists y : X \ldotp P(y)) \imp \At{K} P(x) \right] .
 	\end{equation}
 \end{definition}
 
