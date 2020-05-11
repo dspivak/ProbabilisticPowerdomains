@@ -1,0 +1,296 @@
+\documentclass[11pt, oneside, article]{memoir} 
+\settrims{0pt}{0pt} % page and stock same size
+\settypeblocksize{*}{35pc}{*} % {height}{width}{ratio}
+\setlrmargins{*}{*}{1} % {spine}{edge}{ratio}
+\setulmarginsandblock{1in}{1in}{*} % height of typeblock computed
+\setheadfoot{\onelineskip}{2\onelineskip} % {headheight}{footskip}
+\setheaderspaces{*}{1.5\onelineskip}{*} % {headdrop}{headsep}{ratio}
+\checkandfixthelayout
+
+
+
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{bbm}
+\usepackage{accents}
+\usepackage{newpxtext}
+\usepackage[utf8]{inputenc}
+\usepackage[varg,bigdelims]{newpxmath}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{mathpartir}
+\usepackage[bookmarks=true, colorlinks=true, linkcolor=blue!50!red, citecolor=orange,
+pdfencoding=unicode]{hyperref}
+\usepackage[capitalize]{cleveref}
+  \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
+\usepackage[backend=biber,style = alphabetic]{biblatex}
+  \addbibresource{Library20171206.bib}
+
+%%%% draft stuff
+\usepackage[color=white]{todonotes}
+\usepackage{showkeys}
+\newcommand{\tob}[1]{\todo[color=blue!40,inline]{\textbf{T:} #1}}
+\newcommand{\dis}[1]{\todo[color=red!40,inline]{\textbf{D:} #1}}
+
+
+
+\usetikzlibrary{
+	cd,
+	math,
+	decorations.markings,
+	positioning,
+	arrows.meta,
+	shapes,
+	calc,
+	fit,
+	quotes,
+	intersections}
+\hypersetup{final}
+\setlist{nosep}
+
+\tikzset{
+  tick/.style={postaction={
+    decorate,
+    decoration={markings, mark=at position 0.5 with {\draw[-] (0,.4ex) -- (0,-.4ex);}}}
+  },
+  tickx/.style={
+    postaction={ decorate,
+      decoration={markings,
+        mark=at position 0.5 with {
+          \fill circle [radius=.28ex];
+        }
+      }
+    }
+  }
+}
+
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter] %change [] to chapter if we want to change global numbering
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{axiom}{Axiom}
+\newtheorem{assumption}{Assumption}
+\newtheorem*{axiom*}{Axiom}
+
+\theoremstyle{remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{warning}[theorem]{Warning}
+\newtheorem{question}[theorem]{Question}
+
+% environment for soundness proofs
+\newenvironment{soundproof}{\begin{proof}[Soundness proof]}{\end{proof}}
+
+\setcounter{axiom}{0}
+
+% Renewed commands
+
+\renewcommand{\ss}{\subseteq}
+
+% Macros %
+\DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\subtype}{[}{]}
+\DeclarePairedDelimiter{\classify}{\ulcorner}{\urcorner}
+
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator*{\colim}{colim}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Ob}{Ob}
+\DeclareMathOperator{\interior}{int}
+
+\newcommand{\const}[1]{\mathtt{#1}}
+\newcommand{\Set}[1]{\mathrm{#1}}
+\newcommand{\cat}[1]{\mathcal{#1}}
+\newcommand{\Cat}[1]{\mathbf{#1}}
+\newcommand{\fun}[1]{\mathit{#1}}
+\newcommand{\Fun}[1]{\mathsf{#1}}
+
+\newcommand{\smset}{\Cat{Set}}
+
+
+\newcommand{\tickar}{\begin{tikzcd}[baseline=-0.5ex,cramped,sep=small,ampersand replacement=\&]{}\ar[r,tick]\&{}\end{tikzcd}}
+\newcommand{\xtickar}[1]{\stackrel{#1}{\tickar}}
+\newcommand{\cocolon}{:\!}
+\newcommand{\iso}{\cong}
+\newcommand{\To}[1]{\xrightarrow{#1}}
+\newcommand{\Too}[1]{\xrightarrow{\;\;#1\;\;}}
+\newcommand{\from}{\leftarrow}
+\newcommand{\From}[1]{\xleftarrow{#1}}
+\newcommand{\Fromm}[1]{\xleftarrow{\;\;#1\;\;}}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\inj}{\rightarrowtail}
+\newcommand{\wavyto}{\rightsquigarrow}
+
+\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+\newcommand{\subsing}[1]{\mathrm{subsing}(#1)}	% subsingleton predicate
+\newcommand{\conn}[1]{\mathrm{conn}(#1)}	% connectedness predicate
+
+\newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
+\newcommand{\hs}{\hspace{1.1pt}}
+
+
+\newcommand{\EE}{\mathbb{E}} % expectation value
+\newcommand{\II}{\mathbb{II}} % interval domain
+\newcommand{\IR}{\mathbb{IR}} % interval domain
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\LR}{\ul{\mathbb{R}}}
+
+\newcommand{\tNN}{\internal{N}\hs}
+\newcommand{\tQQ}{\internal{Q}\hs}
+\newcommand{\tQQp}{\tQQ_{+}}
+\newcommand{\tZZ}{\internal{Z}\hs}
+\newcommand{\tQQub}{\QQ^\infty}
+\newcommand{\tRR}{\internal{R}\hs}
+\newcommand{\tIR}{\internal{I\hs R}\hs}
+\newcommand{\tII}{\bar{\ubar{\tRR}}\hs}
+\newcommand{\tLR}{\ubar{\tRR}\hs}
+\newcommand{\tUR}{\bar{\tRR}\hs}
+\newcommand{\tRRub}{\tRR^\infty}
+\newcommand{\tIRub}{\internal{I\hs R}^\infty}
+\newcommand{\tLRub}{\ubar{\tRR}^{\infty}}
+\newcommand{\tURub}{\bar{\tRR}^{\infty}}
+\newcommand{\tIIub}{\bar{\ubar{\tRR}}^{\infty}}
+
+\newcommand{\tRRat}[1]{\tRR_{\SeeInline{#1}}}
+
+
+\newcommand{\tConst}{\mathtt{C}}
+\newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
+
+\newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
+\newcommand{\Psh}{\Fun{Psh}}
+\newcommand{\Shv}{\Fun{Shv}}
+\newcommand{\Cont}{\Fun{Cont}}
+\newcommand{\Idl}{\Set{Idl}}
+\newcommand{\yoneda}{\Fun{y}}
+
+\newcommand{\Prop}{\const{Prop}}
+\newcommand{\Time}{\const{Time}}
+\newcommand{\Pt}{\const{Pt}}
+\newcommand{\cc}{\const{cc}}
+\newcommand{\unit}{\const{1}}
+\newcommand{\Poset}{\Cat{Poset}}
+\renewcommand{\Top}{\Cat{Top}}
+\newcommand{\Op}{\Set{Op}}
+\renewcommand{\C}{\Cat{C}}
+\newcommand{\Sub}{\Set{Sub}}
+\newcommand{\pt}{\Fun{pt}}
+\newcommand{\lsc}{\Fun{LsC}}
+
+\newcommand{\op}{^\tn{op}}
+\newcommand{\el}[1]{\tn{el}#1}
+\newcommand{\asSh}{\Fun{Sh}} % sheafified object
+\newcommand{\toSh}{\Fun{sh}} % sheafification map from object to sheafified object
+
+\newcommand{\inv}{^{-1}}
+
+\newcommand{\apart}{\,\#\,}
+\newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
+\newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
+\newcommand{\BaseTopos}{\mathcal{B}}
+\newcommand{\BaseSpace}{B}
+\newcommand{\CB}{C\BaseSpace}
+\newcommand{\Const}{\Fun{Const}}
+\newcommand{\Sky}{\Fun{Sky}}
+
+\newcommand{\Pointwise}{\pi}
+\newcommand{\AtSymbol}{{@}}
+\newcommand{\SeeSymbol}{{\down}}  % Old: \xi
+\newcommand{\InSymbol}{{\upclose}}% Old: \iota
+\newcommand{\At}[2][]{\AtSymbol^{#1}_{#2}}
+\newcommand{\See}[2][]{\SeeSymbol^{#1}_{#2}}
+\newcommand{\In}[2][]{\InSymbol^{#1}_{#2}}
+\newcommand{\AtInline}[1]{@{#1}}
+\newcommand{\SeeInline}[1]{\SeeSymbol{#1}}
+\newcommand{\InInline}[1]{\InSymbol{#1}}
+
+
+\newcommand{\sqss}{\sqsubseteq}
+\newcommand{\specupclose}{{\uparrow}}
+\newcommand{\specdownclose}{{\downarrow}}
+\newcommand{\upclose}{{\rotatebox[origin=c]{90}{$\twoheadrightarrow$}}}
+\newcommand{\downclose}{{\rotatebox[origin=c]{90}{$\twoheadleftarrow$}}}
+\newcommand{\down}{\mathord{\downarrow}}
+\newcommand{\up}{\mathord{\uparrow}}
+
+\newcommand{\imp}{\Rightarrow}
+\renewcommand{\iff}{\Leftrightarrow}
+\newcommand{\true}{\const{true}}
+\newcommand{\Bool}{\Set{Bool}}
+\newcommand{\ev}{\fun{ev}}
+
+\newcommand{\Span}{\Cat{Span}}
+\newcommand{\set}{\text{--}\smset}
+
+\newcommand{\adj}[5][30pt]{%[size] Cat L, Left, Right, Cat R.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Rightarrow" yshift=-.4pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
+
+\newcommand{\adjr}[5][30pt]{%[size] Cat R, Right, Left, Cat L.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Leftarrow" yshift=-.6pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
+
+
+\newcommand{\erase}[1]{}
+
+\linespread{1.2}
+\setsecnumdepth{subsection}
+\settocdepth{section}
+\setlength{\parindent}{15pt}
+
+% ================ Document ================%
+\begin{document}
+
+\title{Stochastic Processes as Internal Probability Valuations}
+\author{Tobias Fritz and David I.\ Spivak\thanks{}}
+\date{\vspace{-.3in}}
+
+\maketitle
+
+% ======== Abstract ========%
+\begin{abstract}
+
+\end{abstract}
+
+\tableofcontents*
+
+
+% ======== Chapter ========%
+\chapter{Introduction}
+
+
+\printbibliography
+
+\end{document}
