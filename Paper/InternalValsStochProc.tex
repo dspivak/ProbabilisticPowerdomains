@@ -28,7 +28,7 @@ pdfencoding=unicode]{hyperref}
 \usepackage[capitalize]{cleveref}
   \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
 \usepackage[backend=biber,style = alphabetic]{biblatex}
-  \addbibresource{Library20171206.bib}
+  \addbibresource{Library20200511.bib}
 
 %%%% draft stuff
 \usepackage[color=white]{todonotes}
@@ -153,12 +153,11 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\EE}{\mathbb{E}} % expectation value
 \newcommand{\II}{\mathbb{II}} % interval domain
 \newcommand{\IR}{\mathbb{IR}} % interval domain
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\QQ}{\mathbb{Q}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\VV}{\mathbb{V}}
-\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\nn}{\mathbb{N}}
+\newcommand{\pp}{\mathbb{P}}
+\newcommand{\qq}{\mathbb{Q}}
+\newcommand{\rr}{\mathbb{R}}
+\newcommand{\zz}{\mathbb{Z}}
 \newcommand{\LR}{\ul{\mathbb{R}}}
 
 \newcommand{\tNN}{\internal{N}\hs}
@@ -290,13 +289,83 @@ pdfencoding=unicode]{hyperref}
 % ======== Chapter ========%
 \chapter{Introduction}
 
+Entities we observe---either casually or as scientists---exhibit time-varying behavior that we may wish to model. We may be able to monitor the entity with respect to a collection of variables whose values change as the entity performs various actions. The variables we monitor for a weather system are quite different than those we monitor for a mouse, but in each case we notice that the variables take on certain characteristic patterns as they change through time. The better we can understand and model the entity's behavior patterns, the better we are able to predict and have some degree of control when we interact with the entity.
+
+The characteristic patterns of an entity can be formalized using a stochastic process \cite{doob1934stochastic}. For example Brownian motion as developed by Albert Einstein to model the random movement of pollen particles in water \cite{einstein1956investigations}, was later formalized by Norbert Weiner as a stochastic process. Given a measurable space $S$ (the \emph{state space}) and a set $T$ (the \emph{time line}), a stochastic process can be defined as a probability distribution $p$ on $S^T$, the measurable space of functions $s\colon T\to S$. Each such $s$ is a behavior, and the stochastic process tells us the probability that any given measurable set of behaviors will occur.
+
+A version of the Kolmogorov extension theorem (KET) roughly says that we can reconstruct such a stochastic process $p$ from its finite marginals. That is, for each finite subset $F\ss T$ there is a measurable function $\pi^{T\from F}\colon S^T\to S^F$, and we can push forward $p$ to a probability measure $\pi^{T\from F}_*(p)$ on $S^F$. Given $F'\ss F$, we of course have compatibility $\pi^{T\from F'}_*(p)=\pi^{T\from F}_*\circ\pi^{F\from F'}_*(p)$. The KET says that if we instead have a compatible family of probability measures $p_F$ on $S^F$ for all finite $F\ss T$, then there is a unique probability measure $p$ on $S^T$ such that $p_F=\pi^{T\from F}_*(p)$. Here is a more category-theoretic version.
+
+\begin{theorem}[Kolmogorov extension theorem]
+The functor of Radon measures on a suitable category of spaces (completely regular Hausdorff) commutes with cofiltered limits.
+\end{theorem}
+\begin{proof}
+\cite[Theorem 2.5]{danos2015dirichlet}
+\end{proof}
+
+The authors were led to this subject by considering the same guiding question---that of understanding characteristic patterns of behavior---within a different mathematical model. In particular, \emph{temporal type theory} \cite{schultz2019temporal} studies various types of behavior category theoretically, using sheaves on a space of time intervals. Such sheaves form a topos $\cat{B}$ and one can use the internal language of the topos to make statements, written in a logical style, about how various entities will behave. We were interested in the question of whether probabilistic statements could also be made within that internal language. In particular, we asked the question: do internal valuations on $\cat{B}$ coincide with stochastic processes?
+
+In attempting to answer that question, we found it helpful to generalize the statement, in particular the spaces on which it holds. 
+
+% ==== Section ====%
+\section{Plan of the paper}
+In \cref{chap.background}
+
+
+% ======== Chapter ========%
+\chapter{Background}\label{chap.background}
+
+% ==== Section ====%
+\section{Grothendieck toposes}
+
+% ==== Section ====%
+\section{Internal language and modalities}
+
+% ==== Section ====%
+\section{Internal topological spaces and Moerdijk's theorem}
+
+% ==== Section ====%
+\section{Valuations}
+
+\begin{definition}
+A \emph{valuation} $\mu$ on a topological space $(X,\Op)$ assigns a real number $\mu(U)\in\rr$ to each open $U\in\Op$ such that
+\begin{enumerate}
+	\item $\mu(\varnothing)=0$;
+	\item If $U\ss V$ then $\mu(U)\leq\mu(V)$; and
+	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
+\end{enumerate}
+A valuation is called \emph{continuous} if
+\begin{enumerate}[resume]
+	\item for all directed sets $(U_i)_{i\in I}\ss\Op$,%
+	\footnote{A set $(U_i)_{i\in I}$ is directed if $I$ is nonempty and, for every $i_1,i_2\in I$ there is some $j\in I$ with $U_{i_1}\cup U_{i_2}\ss U_j$.}
+	 one has $\sup_{i\in I}\mu(U_i)=\mu(\bigcup_{i\in I}U_i)$.
+\end{enumerate}
+A continuous valuation is called a \emph{probability valuation} if
+\begin{enumerate}[resume]
+	\item $\mu(X)=1$.
+\end{enumerate}
+\end{definition}
+
+
+When they agree with probability measures.
+
+% ======== Chapter ========%
+\chapter{Axioms and basic theory}
+
+% ======== Chapter ========%
+\chapter{Main theorem}
+
+% ======== Chapter ========%
+\chapter{Open questions}
+
 \begin{enumerate}
 	\item Stochastic processes
   \begin{enumerate}
   	\item Origin
 		\item Examples and importance
 		\item Sheaf-theoretic definition from email (points)
-		\item Kolmogorov extension theorem 
+		\item Kolmogorov extension theorem (The functor of Radon measures on a suitable category of spaces (completely regular Hausdorff) commutes with cofiltered limits.
+%https://www.sciencedirect.com/science/article/pii/S1571066115000778		
+		)
 	\end{enumerate}	
 	\item Temporal type theory
   \begin{enumerate}
@@ -306,12 +375,27 @@ pdfencoding=unicode]{hyperref}
 		\item Internal valuations = stochastic processes?
 	\end{enumerate}	
 	\item Generalization: Vietoris hyperspaces
+  \begin{enumerate}
+  	\item Some regularity condition (locally compact, Hausdorff)
+		\item Use hyperspace for that
+		\item Or even more generally: "a topos with enough points"
+		\item Topos of sheaves on any space?
+	\end{enumerate}	
+		
 	\item Plan
   \begin{enumerate}
-  	\item Background (toposes---internal language---and valuations)
+  	\item Background
+	  \begin{enumerate}
+	  	\item Toposes
+			\item Internal language
+			\item Modalities, quasi-closed
+			\item Internal spaces -- Moerdijk's theorem
+			\item Valuations
+		\end{enumerate}
 		\item Axioms and soundness
 		\item Development of theory
 		\item Main theorem
+		\item Open questions
 	\end{enumerate}	
 \end{enumerate}
 
