@@ -373,7 +373,7 @@ We work in a Grothendieck topos $\cat{E}$ (i.e.\ the category of sheaves on a si
 
 We only work with $\At{}$ modalities explicitly, since In and See are easy to define directly in terms of the logic, so that introducing notation for them would not decrease formula complexity by much.
 
-In other words, we only equip standard first-order intuitionistic type theory with an additional system of modalities $\{ \At{K} \: : \: K\in \CB\}$ indexed by some type $\CB$. \dis{Do we need $\CB$ to have an order or anything? Aren't we using that $\At{K}$ means $((-\imp k)\imp k)$ for some  $k:\Prop$?}
+In other words, we only equip standard first-order intuitionistic type theory with an additional system of modalities $\{ \At{K} \: : \: K\in \CB\}$ indexed by some type $\CB$. 
 
 Our soundness proofs refer to the intended semantics.
 
@@ -480,7 +480,7 @@ Since the implication from right is left is easy to prove for every modality, we
 \end{lemma}
 
 \begin{proof}
-	The left-to-right implication is straightforward and holds for every modality. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, which is enough.
+	The left-to-right implication is straightforward and holds for every modality. For the right-to-left implication, we can assume $P \imp \At{K} \bot$ by the decidability \cref{ax.atBoolean}. But then we get $\At{K} \bot$ by assumption, and of course it implies $\At{K}P$.
 \end{proof}
 
 \begin{lemma}
@@ -565,7 +565,7 @@ The notion of flabbiness is defined in \cref{def:flabby} and that of $\At{K}$-fl
 \end{lemma}
 
 \begin{proof}
-	We start with the tautology
+	We start with the tautology \dis{Why is this a tautology?}
 	\[
 		\forall n : \tNN \ldotp \left( P(n) \imp \At{K} \bot \: \lor \: \exists n' : \tNN \ldotp \At{K} P(n') \right),
 	\]
@@ -631,20 +631,20 @@ It is easy to see that $P \lor a$ is again down-closed, rounded, and inhabited, 
 	\label{lem.or_add_LR}
 	For $a,b\in\tLR$ and $P : \Prop$,
 	\[
-		P \lor (a + b) = P \lor a + P \lor b = P \lor a + b.
+		P \lor (a + b) = (P \lor a) + (P \lor b) = (P \lor a) + b.
 	\]
 \end{lemma}
 
 \begin{proof}
-	Applied to $q \in \tQQ$, the left-hand side is
+	Applied to $q \in \tQQ$, the left-hand formula is
 	\[
 		P \lor \exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land a(q_1) \land b(q_2),
 	\]
-	while the middle-hand side is
+	while the middle formula is
 	\[
 		\exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land (P \lor a(q_1)) \land (P \lor b(q_2)),
 	\]
-	and the right-hand side is
+	and the right-hand formula is
 	\[
 		\exists q_1, q_2  : \tQQ \ldotp (q \leq q_1 + q_2) \land (P \lor a(q_1)) \land b(q_2),
 	\]
