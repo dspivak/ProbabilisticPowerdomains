@@ -16,6 +16,7 @@
 \usepackage{bbm}
 \usepackage{accents}
 \usepackage{newpxtext}
+\usepackage{dutchcal}
 \usepackage[utf8]{inputenc}
 \usepackage[varg,bigdelims]{newpxmath}
 \usepackage[usenames,dvipsnames]{xcolor}
@@ -118,8 +119,9 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Set}[1]{\mathrm{#1}}
 \newcommand{\cat}[1]{\mathcal{#1}}
 \newcommand{\Cat}[1]{\mathbf{#1}}
-\newcommand{\fun}[1]{\mathit{#1}}
+\newcommand{\fun}[1]{\mathcal{#1}}
 \newcommand{\Fun}[1]{\mathsf{#1}}
+\newcommand{\sheaf}[1]{\fun{#1}}
 
 \newcommand{\smset}{\Cat{Set}}
 
@@ -134,7 +136,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\From}[1]{\xleftarrow{#1}}
 \newcommand{\Fromm}[1]{\xleftarrow{\;\;#1\;\;}}
 \newcommand{\surj}{\twoheadrightarrow}
-\newcommand{\inj}{\rightarrowtail}
+\newcommand{\inj}{\hookrightarrow}
 \newcommand{\wavyto}{\rightsquigarrow}
 
 \newcommand{\tn}[1]{\textnormal{#1}}
@@ -147,6 +149,9 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\conn}[1]{\mathrm{conn}(#1)}	% connectedness predicate
 
 \newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
+\renewcommand{\sec}{\sheaf{Sec}}
+
+
 \newcommand{\hs}{\hspace{1.1pt}}
 
 
@@ -154,38 +159,38 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\II}{\mathbb{II}} % interval domain
 \newcommand{\IR}{\mathbb{IR}} % interval domain
 \newcommand{\nn}{\mathbb{N}}
-\newcommand{\pp}{\mathbb{P}}
 \newcommand{\qq}{\mathbb{Q}}
 \newcommand{\rr}{\mathbb{R}}
 \newcommand{\zz}{\mathbb{Z}}
 \newcommand{\LR}{\ul{\mathbb{R}}}
 
-\newcommand{\tNN}{\internal{N}\hs}
-\newcommand{\tQQ}{\internal{Q}\hs}
+\newcommand{\tnn}{\internal{N}\hs}
+\newcommand{\tqq}{\internal{Q}\hs}
 \newcommand{\tQQp}{\tQQ_{+}}
 \newcommand{\tZZ}{\internal{Z}\hs}
 \newcommand{\tQQub}{\QQ^\infty}
-\newcommand{\tRR}{\internal{R}\hs}
+\newcommand{\trr}{\internal{R}\hs}
 \newcommand{\tIR}{\internal{I\hs R}\hs}
-\newcommand{\tII}{\bar{\ubar{\tRR}}\hs}
-\newcommand{\tLR}{\ubar{\tRR}\hs}
-\newcommand{\tUR}{\bar{\tRR}\hs}
-\newcommand{\tRRub}{\tRR^\infty}
+\newcommand{\tII}{\bar{\ubar{\trr}}\hs}
+\newcommand{\tLR}{\ubar{\trr}\hs}
+\newcommand{\tUR}{\bar{\trr}\hs}
+\newcommand{\trrub}{\trr^\infty}
 \newcommand{\tIRub}{\internal{I\hs R}^\infty}
-\newcommand{\tLRub}{\ubar{\tRR}^{\infty}}
-\newcommand{\tURub}{\bar{\tRR}^{\infty}}
-\newcommand{\tIIub}{\bar{\ubar{\tRR}}^{\infty}}
+\newcommand{\tLRub}{\ubar{\trr}^{\infty}}
+\newcommand{\tURub}{\bar{\trr}^{\infty}}
+\newcommand{\tIIub}{\bar{\ubar{\trr}}^{\infty}}
 
-\newcommand{\tRRat}[1]{\tRR_{\SeeInline{#1}}}
+\newcommand{\trrat}[1]{\trr_{\SeeInline{#1}}}
 
+\newcommand{\pow}{\mathcal{P}}
 
 \newcommand{\tConst}{\mathtt{C}}
 \newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
 
 \newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
-\newcommand{\Psh}{\Fun{Psh}}
-\newcommand{\Shv}{\Fun{Shv}}
-\newcommand{\Cont}{\Fun{Cont}}
+\newcommand{\psh}{\Fun{Psh}}
+\newcommand{\shv}{\Fun{Shv}}
+\newcommand{\cont}{\Fun{Cont}}
 \newcommand{\Idl}{\Set{Idl}}
 \newcommand{\yoneda}{\Fun{y}}
 
@@ -199,7 +204,6 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Op}{\Set{Op}}
 \renewcommand{\C}{\Cat{C}}
 \newcommand{\Sub}{\Set{Sub}}
-\newcommand{\pt}{\Fun{pt}}
 \newcommand{\lsc}{\Fun{LsC}}
 
 \newcommand{\op}{^\tn{op}}
@@ -209,9 +213,14 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\inv}{^{-1}}
 
+\newcommand{\cpct}[1]{\Set{Cpct}_{#1}}
+\newcommand{\pt}[1]{\wh{#1}}
+\newcommand{\bas}[1]{\wh{#1}}
+
+
 \newcommand{\apart}{\,\#\,}
-\newcommand{\restrict}[2]{#1\big|\hspace{0in}_{#2}}
-\newcommand{\restrictsm}[2]{#1|\hspace{0in}_{#2}}
+\newcommand{\rest}[2]{#1\big|\hspace{0in}_{#2}}
+\newcommand{\restsm}[2]{#1|\hspace{0in}_{#2}}
 \newcommand{\BaseTopos}{\mathcal{B}}
 \newcommand{\BaseSpace}{B}
 \newcommand{\CB}{C\BaseSpace}
@@ -283,7 +292,7 @@ pdfencoding=unicode]{hyperref}
 
 \end{abstract}
 
-\tableofcontents*
+%\tableofcontents*
 
 
 % ======== Chapter ========%
@@ -302,6 +311,8 @@ The functor of Radon measures on a suitable category of spaces (completely regul
 \cite[Theorem 2.5]{danos2015dirichlet}
 \end{proof}
 
+
+
 The authors were led to this subject by considering the same guiding question---that of understanding characteristic patterns of behavior---within a different mathematical model. In particular, \emph{temporal type theory} \cite{schultz2019temporal} studies various types of behavior category theoretically, using sheaves on a space of time intervals. Such sheaves form a topos $\cat{B}$ and one can use the internal language of the topos to make statements, written in a logical style, about how various entities will behave. We were interested in the question of whether probabilistic statements could also be made within that internal language. In particular, we asked the question: do internal valuations on $\cat{B}$ coincide with stochastic processes?
 
 In attempting to answer that question, we found it helpful to generalize the statement, in particular the spaces on which it holds. 
@@ -315,10 +326,172 @@ In \cref{chap.background}
 \chapter{Background}\label{chap.background}
 
 % ==== Section ====%
-\section{Grothendieck toposes}
+\section{Spaces of compacts}
+
+We often denote a topological space $(X,\Op_X)$ by its set of points $X$, leaving $\Op_X$ implicit.
+
+For any topological space $X$, consider the set $\cpct{X}$ whose elements are the nonempty compact subsets $K\ss X$; as a point we denote it $\pt{K}\in\cpct{X}$. We can endow $\cpct{X}$ with the \emph{upper space} topology, which has the following basis. For every $U\ss X$ open, let $\bas{U}=\{\pt{K}\in\cpct{X}\mid K\ss U\}$.
+
+\begin{example}
+Let $T$ be a set endowed with a discrete topology. Then a subset is compact iff it is finite. If $t\neq t'$ are distinct elements of $T$ then $\bas{\{t\}}$, $\bas{\{t'\}}$, and $\bas{\{t,t'\}}$ are all open, and the inequality $\bas{\{t\}}\cup\bas{\{t'\}}\subset\bas{\{t,t'\}}$ is strict, containing two and three points respectively.
+\end{example}
+
+% ==== Section ====%
+\section{Sheaves on a topological space}
+
+For any topological space $(X,\Op_X)$, we consider $\Op_X$ as a category whose objects are open subsets $U\in\Op_X$ and for which there is a unique morphism $i_{V,U}\colon V\to U$ whenever $V\ss U$. We denote $i_{V,X}$ simply by $i_V$.
+
+\begin{definition}[Sheaf]\label{def.sheaf}
+Let $(X,\Op_X)$ be a topological space. A \emph{presheaf} on $X$ is a functor $\sheaf{F}\colon\Op_X\op\to\smset$. For each open $U\in\Op_X$ we refer to $\sheaf{F}(U)$ as the set of \emph{$\sheaf{F}$-sections on $U$}. Given an open subset $i_{V,U}\colon V\ss U$, we denote the function $\sheaf{F}(i_{V,U})$ by $\rest{-}{V}\colon\sheaf{F}(U)\to\sheaf{F}(V)$; for any $f\in\sheaf{F}(U)$, we refer to $\rest{f}{V}$ as the \emph{restriction of $f$ to $V$}.
+
+Given a set $I$, collection of open sets $U\colon I\to\Op_X$, and family of sections $f_i\in\sheaf{F}(U_i)$, one for each $i\in I$, we say that $(f_i)_{i\in I}$ is a \emph{compatible family} if for every $i,j\in I$ we have $\rest{f_i}{U_i\cap U_j}=\rest{f_j}{U_i\cap U_j}$. We say that $\sheaf{F}$ satisfies the \emph{sheaf condition} for the compatible family $(f_i)_{i\in I}$ if there exists a unique $f\in \sheaf{F}(\bigcup_{i\in I}U_i)$ such that $\rest{f}{U_i}=f_i$ for each $i\in I$. We say that $\sheaf{F}$ is a \emph{sheaf} if it satisfies the sheaf condition for every set $I$, $U$, and $(f_i)_{i\in I}$.
+
+A \emph{morphism $\sheaf{F}\to\sheaf{G}$ of presheaves (resp.\ sheaves) on $X$} is defined simply as a natural transformation between the functors. Denote by $\shv(X)$ the category of sheaves and their morphisms.
+\end{definition}
+
+\begin{remark}[Unique section on $\varnothing$]\label{rem.unique_sec_empty}
+When $I=\varnothing$ is empty then the unique $I$-indexed family of sections is compatible, so $\cat{F}\colon\Op_X\op\to\smset$ satisfies the sheaf condition for this family iff $\sheaf{F}(\varnothing)\cong 1$ is a singleton set.
+\end{remark}
+
+\begin{remark}[Defining a sheaf on basic opens]
+If $(U_b)_{b\in B}$ is a basis for the topology on $X$, then a sheaf $\sheaf{F}$ on $X$ determines a set $\sheaf{F}(U_b)$ for each $U_b$, a function $\sheaf{F}(U_b)\to\sheaf{F}_{U_{b'}}$ for $U_b'\ss U_b$, and a sheaf condition for every compatible family of basic opens whose union is again a basic open. 
+
+Conversely, suppose we define $\sheaf{G}$ only on basic opens: give a set $\sheaf{G}(U_b)$ for each basic $U_b$ and a restriction map $\sheaf{G}(U_b)\to\sheaf{G}(U_{b'})$ whenever $U_{b'}\ss U_b$. Suppose further that for every covering $U=\bigcup_{i\in I}U_i$, with $U$ and each $U_i$ basic, and for each family $g_i\in\sheaf{G}(U_i)$ that are compatible (in the sense that on all basic opens $U'\ss U_i\cap U_j$ we have $\rest{g_i}{U'}=\rest{g_j}{U'}$), there exists a unique $g\in \sheaf{G}(U)$ with $\rest{g}{U_i}=g_i$. Then $\sheaf{G}$ extends uniquely to a sheaf on the whole space $X$.
+\end{remark}
+
+\begin{example}[$\smset$ as a topos]\label{ex.set_topos}
+Let $\{*\}$ be the unique one-point topological space. It has two open sets $\varnothing\ss\{*\}$, so a presheaf $\sheaf{F}$ on $\{*\}$ consists of a function $\sheaf{F}(\{*\})\to\sheaf{F}(\varnothing)$. By \cref{rem.unique_sec_empty}, if $\sheaf{F}$ is to be a sheaf then $\sheaf{F}(\varnothing)\cong 1$. It follows that sheaves on a point are simply sets,
+\[
+\shv(\{*\})\cong\smset.
+\]
+Thus $\smset$ is an example of a topos, in some sense the primordial one.
+\end{example}
+
+\begin{example}[Representables]\label{ex.representable_sheaf}
+Let $X$ be a space. For every open $U\ss X$ open, there is a sheaf $y_U\in\shv(X)$ called the \emph{representable on $U$}; it is given by $y_U=\Op_X(-,U)$, or more explicitly
+\[
+	y_U(V)=
+	\begin{cases}
+	\{*\}&\tn{ if }V\ss U\\
+	\varnothing&\tn{ if }V\not\ss U
+	\end{cases}
+\]
+For any sheaf $\sheaf{F}$, the product $\sheaf{F}_U\coloneqq y_U\times\sheaf{F}$ is isomorphic to $\sheaf{F}$ on opens $V\ss U$ and empty otherwise; we call it the \emph{restriction of $\sheaf{F}$ to $U$}. Thus by \cref{def.sheaf} we can restrict both sheaves and sections of sheaves to open subsets.
+\end{example}
+
+\begin{example}\label{ex.sections}
+Let $F\colon Y\to X$ be a morphism of topological spaces. The \emph{sheaf of local $F$-sections}, denoted $\sec_F$, is the sheaf defined on an open set $U\ss X$ as
+\begin{equation}\label{eqn.sections}
+\sec_F(U)\coloneqq\{f\colon U\to Y\mid F\circ f=i_U\}
+\qquad
+\begin{tikzcd}
+	&Y\ar[d, "F"]\\
+	U\ar[r, hook, "i_U"']\ar[ur, dashed, "f"]&
+	X
+\end{tikzcd}
+\end{equation}
+with the restriction map for $V\ss U$ given by $\rest{f}{V}\coloneqq f\circ i_{V,U}$. It is a sheaf because, abstractly speaking, the union of open subsets is their colimit as topological spaces; or more concretely because any compatible family $(f_i\colon U_i\to Y)$ of local sections defines a unique function $f\colon \cup_iU_i\to Y$ on points, and one can check that $f$ is continuous.
+
+In particular, given a space $R$, we can apply the above construction to the projection $\pi\colon R\times X\to X$. In this case $\sec_\pi$ sends $U\ss X$ to the set of all continuous maps $U\to R$. We denote this sheaf in typewriter font $\internal{R}$.
+
+We will have occasion to consider this construction in the case when $R=\rr$ is the usual topological space of real numbers; we call $\trr$ the \emph{sheaf of Dedekind real numbers on $X$}. We will also consider this construction for $R=\nn$; we call $\tnn$ the \emph{sheaf of natural numbers on $X$}. If $U$ is an open with $k$ connected components, we have $\tnn(U)\cong\nn^k$.
+\end{example}
+
+\begin{definition}[Stalk]
+Let $\sheaf{F}$ be a sheaf on $X$ and $x\in X$ a point. The \emph{stalk of $\sheaf{F}$ at $x$}, denoted $\sheaf{F}_x$ is given by the colimit
+\[\sheaf{F}_x\coloneqq\colim_{x\in U\in\Op_X}\sheaf{F}(U).\]
+That is, $\sheaf{F}_x$ is the set $\{(U,f)\mid U\in\Op_X, x\in U, f\in \sheaf{F}(U)\}/\sim$ where we put $(U,f)\sim (U',f')$ iff $\rest{f}{U\cap U'}=\rest{f'}{U\cap U'}$. Write $[U,f]\in \sheaf{F}_x$ to denote the equivalence class represented by $(U,f)$.
+\end{definition}
+
+The following is well-known, but we recall it here to fix ideas and notation.
+
+\begin{proposition}
+For every sheaf $\sheaf{F}$ on $X$, there exists a topological space $E_\sheaf{F}$ and a local homeomorphism $\pi\colon E_\sheaf{F}\to X$ such that $\sec_\pi\cong\sheaf{F}$.
+\end{proposition}
+\begin{proof}
+Consider the set $E_\sheaf{F}\coloneqq\bigsqcup_{x\in X}\sheaf{F}_x$ given by the disjoint union of all stalks of $\sheaf{F}$; it comes with an obvious function $\pi\colon E_\sheaf{F}\to X$ sending $(x,[U,f])\mapsto x$. We define a topology on $E_\sheaf{F}$ by giving a basis; namely for every open $U\ss X$ and element $f\in\sheaf{F}(U)$, the set $(U,f)\coloneqq\{(x,[U,f])\mid x\in U\}$ is a basic open. Now we see that $\pi$ is a local homeomorphism because for any $x$, the image of a basic open is $\pi(U,f)=U$ and one can check that the bijection $(U,f)\to U$ sending $(x,[U,f])\mapsto x$, and its inverse, are both continuous.
+
+Given an open $U$ and a section $f\in\sheaf{F}(U)$, we obtain a local section $U\to E_\sheaf{F}$ of $\pi$ by sending $x\mapsto (x,[U,f])$. Going the other way, an arbitrary local section $g\colon U\to E_\sheaf{F}$ assigns to each $x\in U$ some $(x,[V_x,g_x])\in E_\sheaf{F}$. Fix $u\in U$. We may assume $(V_u,g_u)$ is a basic open without changing the section $g$. Because \eqref{eqn.sections} commutes and $\pi$ is a local homeomorphism, $g\inv(V_u,g_u)=U\cap V_u$, which implies that for all $x\in U\cap V_u$ we have $g_{x}=g_u$ on $V_x\cap V_u$. Thus we may assume $V_x=V_u$ and $g_x=g_u$ for all $x\in V_u$. Repeating this for all $u$, we obtain a cover $\{V_u\}_{u\in U}$ of $U$ and a compatible family of sections $g_u$, which we can glue to obtain the desired section of $\sheaf{F}(U)$.
+\end{proof}
+
+Together, the space $E_\sheaf{F}$ and local homeomorphism $\pi\colon E_\sheaf{F}\to X$ are called the \emph{\'etal\'e space associated to $\sheaf{F}$}. Note that one can compute stalks of $\sheaf{F}$ using only basic opens, and also compute $E_\sheaf{F}$ using only basic opens throughout the definition.
+
+\begin{theorem}\label{thm.sheafify}
+For any space $X$, the inclusion $i\colon\shv(X)\to\psh(X)$ has a left adjoint
+\[
+\adj{\psh(X)}{\fun{sh}}{i}{\shv(X)}
+\]
+and $\fun{sh}$ preserves finite limits.
+\end{theorem}
+We will not give a proof here, but we will give the construction. To every presheaf $\sheaf{F}$, define its \emph{sheafification} $\fun{sh}(\sheaf{F})$ by
+\[
+	\fun{sh}(\sheaf{F})(U)
+	\coloneqq
+	\left\{(f_u)\in\prod_{u\in U}\sheaf{F}_u\;\middle|\;
+	\parbox{2.8in}{$\forall u\in U,\exists V\tn{ open}, u\in V\tn{ and }\\\exists f_V\in\sheaf{F}(V)
+\tn{ such that } f_u=[V, f_V]\tn { in }\sheaf{F}_u.$}
+\right\}.
+\]
+
+
+% ==== Section ====%
+\section{The topos of sheaves on $X$}
+
+The category of sheaves on $X$ has excellent formal properties, quite similar to those of the category $\smset$. In particular it forms a Grothendieck topos. 
+
+\begin{definition}
+An \emph{Grothendieck topos} is a category $\cat{E}$ that 
+\begin{enumerate}
+	\item has all small limits and colimits;
+	\item is Cartesian closed;
+	\item has a subobject classifier $\top\colon 1\to\Omega$; and
+	\item has a small generating set.
+\end{enumerate}
+\end{definition}
+We assume the reader knows the definition of the first two, though we note that while limits are computed pointwise,
+\[\Big(\lim_{i\in I}\sheaf{F_i}\Big)(U)=\lim_{i\in I}\big(\sheaf{F_i}(U)\big),\]
+colimits are not: after taking the pointwise colimit, one must sheafify as in \cref{thm.sheafify}.
+
+ What it means for $\top\colon 1\to \Omega$ to be a \emph{subobject classifier} is that for any monomorphism $i\colon A\inj B$, there exists a unique morphism $\classify{i}\colon B\to\Omega$ such that the following square is a pullback
+\[
+\begin{tikzcd}
+	A\ar[r, "!"]\ar[d, "i"']&
+	1\ar[d, "\top"]\\
+	B\ar[r, "\classify{i}"']&
+	\Omega\ar[ul, phantom, very near end, "\lrcorner"]
+\end{tikzcd}
+\]
+What is means that $\cat{E}$ has a generating set is that there exists a set $I$ and objects $(x_i)_{i\in I}$ that can distinguish between every parallel pair of morphisms. That is, for any objects $a,b$ and morphisms $g,g'\colon a\to b$ in $\cat{E}$, if $g\circ f=g'\circ f$ for all $i\in I$ and $f\colon x_i\to a$ then $g=g'$.
+
+\begin{definition}
+In a category $\cat{E}$ with a terminal object $1$, a \emph{natural numbers object} is a tuple $(\tnn,z,s)$, where $\tnn\in\cat{E}$ is an object, $z\colon 1\to\tnn$ is a morphism called \emph{zero}, and a $s\colon \tnn\to \tnn$ is a morphism called \emph{successor}, that is universal in the sense that for any $(N',z',s')$, with $z'\colon 1\to N'$ and $s'\colon N'\to N'$, there exists a unique morphism $\mathrm{ind}_{z',s'}\colon N\to N'$ such that the following diagram commutes:
+\[
+\begin{tikzcd}
+	1\ar[r, "z"]\ar[d, equal]&
+	\tnn\ar[r, "s"]\ar[d, "\mathrm{ind}_{z',s'}"]&
+	\tnn\ar[d, "\mathrm{ind}_{z',s'}"]\\
+	1\ar[r, "z'"']&
+	N'\ar[r, "s'"']&
+	N'
+\end{tikzcd}
+\]
+\end{definition}
+
+Every Grothendieck topos has a natural numbers object given by the coproduct $\tnn\coloneqq\coprod_{n\in\nn}\{*\}$ with $z=(0,*)$ and $s(n,*)=(n+1,*)$. As a sheaf, $\tnn$ has the description from \cref{ex.sections}.
+
 
 % ==== Section ====%
 \section{Internal language and modalities}
+
+The analogy between any topos $\cat{E}$ and the category (topos) of sets is deep enough that one can write formulas for set-theoretic objects in the usual way, and interpret them as formulas for objects in $\cat{E}$ using a system called \emph{Kripke-Joyal semantics}. For example, if $A$ and $B$ are sets then 
+\[
+\{f\colon A\to B\mid \forall (b:B).\exists(a:A). f(a)=b\}
+\]
+is the set-theoretic way of expressing the set of surjections $A\surj B$, i.e.\ epimorphisms in the category of sets. Using Kripke-Joyal semantics, this formula has a unique interpretation in an arbitrary topos $\cat{E}$ for arbitrary objects $A,B\in\cat{E}$. If $\cat{E}=\shv(X)$ for some space $X$ and $A,B$ are sheaves on $X$, then the above formula corresponds to the sheaf that assigns to $U\ss X$ the set of all epimorphisms of sheaves $A_U\to B_U$, where $A_U$ and $B_U$ are the restrictions of $A$ and $B$ to $U$ (see \cref{ex.representable_sheaf}).
+
+Perhaps more convincing is the case of real numbers. Dedekind's definition of a real number was as a pair of subsets of $\qq$ satisfying certain properties: one is down-closed, the other is up-closed, they do not intersect, etc. These properties can all be written set-theoretically and interpreted in $\cat{E}=\shv(X)$ using Kripke-Joyal semantics. It turns out that the resulting sheaf $\trr$ is precisely the sheaf of Dedekind real numbers on $X$ from \cref{ex.sections}, i.e.\ $\trr(U)\cong\{f\colon U\to\rr\mid f\tn{ continuous}\}$. This is often considered strong evidence that the Kripke-Joyal semantics works sensibly.
+
+
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
@@ -327,19 +500,19 @@ In \cref{chap.background}
 \section{Valuations}
 
 \begin{definition}
-A \emph{valuation} $\mu$ on a topological space $(X,\Op)$ assigns a real number $\mu(U)\in\rr$ to each open $U\in\Op$ such that
+A \emph{valuation} $\mu$ on a topological space $(X,\Op_X)$ assigns a real number $\mu(U)\in\rr$ to each open $U\in\Op_X$ and satisfies the following conditions:
 \begin{enumerate}
 	\item $\mu(\varnothing)=0$;
 	\item If $U\ss V$ then $\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 \end{enumerate}
-A valuation is called \emph{continuous} if
+A valuation $\mu$ is called \emph{continuous} if
 \begin{enumerate}[resume]
 	\item for all directed sets $(U_i)_{i\in I}\ss\Op$,%
 	\footnote{A set $(U_i)_{i\in I}$ is directed if $I$ is nonempty and, for every $i_1,i_2\in I$ there is some $j\in I$ with $U_{i_1}\cup U_{i_2}\ss U_j$.}
 	 one has $\sup_{i\in I}\mu(U_i)=\mu(\bigcup_{i\in I}U_i)$.
 \end{enumerate}
-A continuous valuation is called a \emph{probability valuation} if
+A continuous valuation $\mu$ is called a \emph{probability valuation} if
 \begin{enumerate}[resume]
 	\item $\mu(X)=1$.
 \end{enumerate}
