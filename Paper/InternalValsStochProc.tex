@@ -166,14 +166,14 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\tnn}{\internal{N}\hs}
 \newcommand{\tqq}{\internal{Q}\hs}
+\newcommand{\tnnqq}{{\internal{Q}\hs}_{\geq0}}
 \newcommand{\tQQp}{\tQQ_{+}}
 \newcommand{\tZZ}{\internal{Z}\hs}
 \newcommand{\tQQub}{\QQ^\infty}
 \newcommand{\trr}{\internal{R}\hs}
 \newcommand{\tIR}{\internal{I\hs R}\hs}
 \newcommand{\tII}{\bar{\ubar{\trr}}\hs}
-\newcommand{\tLR}{\ubar{\trr}\hs}
-\newcommand{\tUR}{\bar{\trr}\hs}
+\newcommand{\tlrr}{\ubar{\trr}\hs}
 \newcommand{\trrub}{\trr^\infty}
 \newcommand{\tIRub}{\internal{I\hs R}^\infty}
 \newcommand{\tLRub}{\ubar{\trr}^{\infty}}
@@ -338,9 +338,42 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 % ==== Section ====%
 \section{Lower nonnegative reals}
 
+\begin{definition}[Lower nonnegative reals]
+Let $\tnnqq$ denote the nonnegative rationals. We define the type of \emph{lower nonnegative reals}, denoted $\tlrr$ as
+\[
+\tlrr=\{r_>\colon\tnnqq\to\prop\mid\forall(q:\tqq). r_>q\iff\exists(q':\tqq).r_>q'\wedge q'>q\}.%
+\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real $r$ is defined as the set of nonnegative rationals that are lower bounds for $r$.}
+\]
+We often write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
+\end{definition}
+
+We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
+
+\begin{definition}[Order on lower reals]
+Given lower reals $r,r'$,
+%we say that $r$ \emph{is greater than} $r'$ and write $r>r'$ to denote the following proposition:
+%\[
+%	r>r'\coloneqq\exists (q:\tnnqq).r>q\wedge\forall(q'.\tnnqq).r'>q'\imp q>q'.
+%\]
+we say that $r$ \emph{is above} $r'$ and write $r\geq r'$ to denote the following proposition:
+\[
+	r\geq r'\coloneqq\forall(q:\tnnqq).r'>q\imp r>q.
+\]
+\end{definition}
+
+The following is straightforward when working in the internal logic; for more on this see \cref{sec.logic,sec.internal_language,sec.modalities}.
+
+\begin{proposition}[$\geq$ is a partial order]
+For all lower reals $r,r',r'':\tlrr$, we have
+\begin{enumerate}
+	\item $r\geq r$
+	\item $(r\geq r')\imp(r'\geq r'')\imp(r\geq r'')$
+	\item $(r\geq r')\imp(r'\geq r)\imp r=r'$
+\end{enumerate}
+\end{proposition}
 
 
-
+\
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
@@ -597,7 +630,7 @@ With all these definitions, logical deductions can be carried out in the usual s
 We will give an example of this sort of deduction in \cref{ex.modality_deduction}.
 
 % ==== Section ====%
-\section{The internal language of $\shv(X)$}
+\section{The internal language of $\shv(X)$}\label{sec.internal_language}
 
 The analogy between any topos $\cat{E}$ and the category (topos) of sets is deep enough that one can write formulas for set-theoretic objects in the usual way, and interpret them as formulas for objects in $\cat{E}$ using a system called \emph{Kripke-Joyal semantics}. For example, if $A$ and $B$ are sets then 
 \begin{equation}\label{eqn.epi}
@@ -656,7 +689,7 @@ Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ a
 In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$.
 
 % ==== Section ====%
-\section{Modalities on $\shv(X)$}
+\section{Modalities on $\shv(X)$}\label{sec.modalities}sec.logic
 
 Modalities operate on propositions to give new propositions that hold more generally. More precisely, we have the following definition. 
 \begin{definition}[Modality]\label{def.modality}
