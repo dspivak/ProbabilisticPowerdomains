@@ -461,7 +461,7 @@ A \emph{valuation} $\mu$ on a topological space $(X,\Op_X)$ assigns a real numbe
 \end{enumerate}
 A valuation $\mu$ is called \emph{continuous} if
 \begin{enumerate}[resume]
-	\item for all directed sets $(U_i)_{i\in I}\ss\Op$,%
+	\item for all directed sets $(U_i)_{i\in I}\ss\Op_X$,%
 	\footnote{A set $(U_i)_{i\in I}$ is directed if $I$ is nonempty and, for every $i_1,i_2\in I$ there is some $j\in I$ with $U_{i_1}\cup U_{i_2}\ss U_j$.}
 	 one has $\sup_{i\in I}\mu(U_i)=\mu(\bigcup_{i\in I}U_i)$.
 \end{enumerate}
@@ -478,7 +478,49 @@ Probability valuations coincide with probability measures....
 Internalize the definition.
 
 % ======== Chapter ========%
-\chapter{Axioms and basic theory}
+\chapter{Basic theory of internal valuations}
+
+Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the unit interval, given by $\inc(P)(q) := P$.
+
+\begin{proposition}
+	There is precisely one valuation on $1$, namely the inclusion $\inc : \prop \to [0,1]$.
+\end{proposition}
+
+\tob{Comment on the way in how the internal reasoning looks absurd at first look?}
+
+\begin{proof}
+	We first show that $\inc$ is indeed valuation. The normalization conditions are trivial, while monotonicity is as follows: if $P \Rightarrow Q$, then also $\inc(P) \le \inc(Q)$, since clearly
+	\[
+		\inc(P)(q) \: \Longrightarrow \: P \: \Longrightarrow \: Q \: \Longrightarrow \: \inc(Q)(q)
+	\]
+	for all $q$. Concerning modularity, for $P,Q : \prop$ we prove both inequality directions of the claimed equation
+	\[
+		\inc(P \lor Q) + \inc(P \land Q) = \inc(P) + \inc(Q).
+	\]
+	Indeed $q < \inc(P \lor Q) + \inc(P \land Q)$ means that there are $q_\lor$ and $q_\land$ such that $q = q_\lor + q_\land$ and
+	\[
+		q_\lor < \inc(P \lor Q), \qquad q_\land < \inc(P \land Q),
+	\]
+	which means that $P \lor Q$ and $P \land Q$ both hold. But then clearly also $P$ and $Q$ hold, so that $q_\lor < \inc(P)$ and $q_\land < \inc(Q)$, which proves the desired $q < \inc(P) + \inc(Q)$. For the other direction, suppose that $q < \inc(P) + \inc(Q)$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \inc(P)$ and $q_Q < \inc(Q)$. But then both $P$ and $Q$ hold, and therefore so do $P \lor Q$ and $P \land Q$. This proves that $q_P < \inc(P \lor Q)$ and $q_Q < \inc(P \land Q)$.
+	\tob{The previous doesn't actually quite work if we assume that elements of $[0,1]$ or the nonnegative lower reals are defined as predicates on $\qq_+$. We still have to distinguish the case where one number vanishes separately. Fix this once we have definite definitions}
+
+	Concerning Scott continuity, suppose that $D : \prop \to \prop$ specifies a directed subtype. Then we need to prove that
+	\[
+		\inc\left( \exists P : \prop . D(P) \land P \right) = \sup_{P : \prop \:\mid\: D(p)} \inc(P),
+	\]
+	again by proving both inequalities. If $q < \inc\left( \exists P : \prop . D(P) \land P \right)$, then $\exists P : \prop . D(P) \land P$ holds. But then $q < \inc(P)$ as well, from which the claim follows. For the other inequality, if $q < \sup_{P : \prop \:\mid\: D(p)} \inc(P)$, then there must be $P : \prop$ such that $D(P)$ and $q < \inc(P)$, so that also $P$ holds. But then we have $\exists P : \prop . D(P) \land P$, and hence also $q < \inc\left( \exists P : \prop . D(P) \land P \right)$. This completes the first half, showing that $\inc : \prop \to [0,1]$ is indeed a valuation.
+
+	Now let $\mu : \prop \to [0,1]$ be any valuation on $1$. 
+
+
+\end{proof}
+
+% ======== Chapter ========%
+\chapter{Axioms for toposes with enough points}
+
+\tob{Introduce $\At{x}$ or $\At{K}$ here?}
+
+For each axiom, we also include a soundness proof.
 
 % ======== Chapter ========%
 \chapter{Main theorem}
@@ -820,70 +862,6 @@ This gave us a taste of how logical arguments can go. The fact is that anything 
 \section{Internal topological spaces and Moerdijk's theorem}
 
 % ==== Section ====%
-\section{Valuations}
-
-\begin{definition}
-A \emph{valuation} $\mu$ on a topological space $(X,\Op_X)$ assigns a real number $\mu(U)\in\rr$ to each open $U\in\Op_X$ and satisfies the following conditions:
-\begin{enumerate}
-	\item $\mu(\varnothing)=0$;
-	\item If $U\ss V$ then $\mu(U)\leq\mu(V)$; and
-	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-\end{enumerate}
-A valuation $\mu$ is called \emph{continuous} if
-\begin{enumerate}[resume]
-	\item for all directed sets $(U_i)_{i\in I}\ss\Op_X$,%
-	\footnote{A set $(U_i)_{i\in I}$ is directed if $I$ is nonempty and, for every $i_1,i_2\in I$ there is some $j\in I$ with $U_{i_1}\cup U_{i_2}\ss U_j$.}
-	 one has $\sup_{i\in I}\mu(U_i)=\mu(\bigcup_{i\in I}U_i)$.
-\end{enumerate}
-A continuous valuation $\mu$ is called a \emph{probability valuation} if
-\begin{enumerate}[resume]
-	\item $\mu(X)=1$.
-\end{enumerate}
-\end{definition}
-
-\begin{theorem}
-Probability valuations coincide with probability measures....
-\end{theorem}
-
-Internalize the definition.
-
-% ======== Chapter ========%
-\chapter{Basic theory of internal valuations}
-
-Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the unit interval, given by $\inc(P)(q) := P$.
-
-\begin{proposition}
-	There is precisely one valuation on $1$, namely the inclusion $\inc : \prop \to [0,1]$.
-\end{proposition}
-
-\tob{Comment on the way in how the internal reasoning looks absurd at first look?}
-
-\begin{proof}
-	We first show that $\inc$ is indeed valuation. The normalization conditions are trivial, while monotonicity is as follows: if $P \Rightarrow Q$, then also $\inc(P) \le \inc(Q)$, since clearly
-	\[
-		\inc(P)(q) \: \Longrightarrow \: P \: \Longrightarrow \: Q \: \Longrightarrow \: \inc(Q)(q)
-	\]
-	for all $q$. Concerning modularity, for $P,Q : \prop$ we prove both inequality directions of the claimed equation
-	\[
-		\inc(P \lor Q) + \inc(P \land Q) = \inc(P) + \inc(Q).
-	\]
-	Indeed $q < \inc(P \lor Q) + \inc(P \land Q)$ means that there are $q_\lor$ and $q_\land$ such that $q = q_\lor + q_\land$ and
-	\[
-		q_\lor < \inc(P \lor Q), \qquad q_\land < \inc(P \land Q),
-	\]
-	which means that $P \lor Q$ and $P \land Q$ both hold. But then clearly also $P$ and $Q$ hold, so that $q_\lor < \inc(P)$ and $q_\land < \inc(Q)$, which proves the desired $q < \inc(P) + \inc(Q)$. For the other direction, suppose that $q < \inc(P) + \inc(Q)$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \inc(P)$ and $q_Q < \inc(Q)$. But then both $P$ and $Q$ hold, and therefore so do $P \lor Q$ and $P \land Q$. This proves that $q_P < \inc(P \lor Q)$ and $q_Q < \inc(P \land Q)$.
-	\tob{The previous doesn't actually quite work if we assume that elements of $[0,1]$ or the nonnegative lower reals are defined as predicates on $\qq_+$. We still have to distinguish the case where one number vanishes separately. Fix this once we have definite definitions}
-
-	Concerning Scott continuity, suppose that $D : \prop \to \prop$ specifies a directed subtype. Then we need to prove that
-	\[
-		\inc\left( \exists P : \prop . D(P) \land P \right) = \sup_{P : \prop \:\mid\: D(p)} \inc(P),
-	\]
-	again by proving both inequalities. If $q < \inc\left( \exists P : \prop . D(P) \land P \right)$, then $\exists P : \prop . D(P) \land P$ holds. But then $q < \inc(P)$ as well, from which the claim follows. For the other inequality, if $q < \sup_{P : \prop \:\mid\: D(p)} \inc(P)$, then there must be $P : \prop$ such that $D(P)$ and $q < \inc(P)$, so that also $P$ holds. But then we have $\exists P : \prop . D(P) \land P$, and hence also $q < \inc\left( \exists P : \prop . D(P) \land P \right)$. This completes the first half, showing that $\inc : \prop \to [0,1]$ is indeed a valuation.
-
-	Now let $\mu : \prop \to [0,1]$ be any valuation on $1$. 
-
-
-\end{proof}
 
 % ======== Chapter ========%
 \chapter{Main theorem}
