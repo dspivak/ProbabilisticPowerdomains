@@ -250,6 +250,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\imp}{\Rightarrow}
 \renewcommand{\iff}{\Leftrightarrow}
 \newcommand{\true}{\const{true}}
+\newcommand{\false}{\const{false}}
 \newcommand{\Bool}{\Set{Bool}}
 \newcommand{\ev}{\fun{ev}}
 
@@ -368,7 +369,7 @@ Thus $\smset$ is an example of a topos, in some sense the primordial one.
 \end{example}
 
 \begin{example}[Representables]\label{ex.representable_sheaf}
-Let $X$ be a space. For every open $U\ss X$ open, there is a sheaf $y_U\in\shv(X)$ called the \emph{representable on $U$}; it is given by $y_U=\Op_X(-,U)$, or more explicitly
+Let $X$ be a space. For every open $U\in\Op_X$, there is a sheaf $y_U\in\shv(X)$ called the \emph{representable on $U$}; it is given by $y_U=\Op_X(-,U)$, or more explicitly
 \[
 	y_U(V)=
 	\begin{cases}
@@ -377,6 +378,12 @@ Let $X$ be a space. For every open $U\ss X$ open, there is a sheaf $y_U\in\shv(X
 	\end{cases}
 \]
 For any sheaf $\sheaf{F}$, the product $\sheaf{F}_U\coloneqq y_U\times\sheaf{F}$ is isomorphic to $\sheaf{F}$ on opens $V\ss U$ and empty otherwise; we call it the \emph{restriction of $\sheaf{F}$ to $U$}. Thus by \cref{def.sheaf} we can restrict both sheaves and sections of sheaves to open subsets.
+\end{example}
+
+\begin{example}[Sheaf of opens, $\Omega$]\label{ex.subobject_classifier}
+Let $X$ be a space. For every open $U\in\Op_X$, let $\Omega(U)\coloneqq\{V\in\Op_X\mid V\ss U\}$. This defines a presheaf, where for any $U'\ss U$ and $V\ss U$ we define the restriction of $V$ to $U'$ by $\rest{V}{U'}\coloneqq V\cap U'$. It is a sheaf because for any $(U_i)_{i\in I}$ and choices of $V_i\ss U_i$, the element $\bigcup_iV_i\in\Omega(\bigcup_i U_i)$ is the unique element that restricts on each $U_i$ to the chosen section $V_i$.
+
+Note that in $\smset=\shv(\{*\})$ the above description reduces to $\Omega(*)=\{V\ss\{*\}\}\cong\{\varnothing,\{*\}\}$. This two-element set can be fruitfully identified with the booleans $\{\true,\false\}$ as we will see in \cref{sec.logic}.
 \end{example}
 
 \begin{example}\label{ex.sections}
@@ -439,7 +446,7 @@ We will not give a proof here, but we will give the construction. To every presh
 
 The category of sheaves on $X$ has excellent formal properties, quite similar to those of the category $\smset$. In particular it forms a Grothendieck topos. 
 
-\begin{definition}
+\begin{definition}[Grothendieck topos]\label{def.Grothendieck_topos}
 An \emph{Grothendieck topos} is a category $\cat{E}$ that 
 \begin{enumerate}
 	\item has all small limits and colimits;
@@ -450,18 +457,28 @@ An \emph{Grothendieck topos} is a category $\cat{E}$ that
 \end{definition}
 We assume the reader knows the definition of the first two, though we note that while limits are computed pointwise,
 \[\Big(\lim_{i\in I}\sheaf{F_i}\Big)(U)=\lim_{i\in I}\big(\sheaf{F_i}(U)\big),\]
-colimits are not: after taking the pointwise colimit, one must sheafify as in \cref{thm.sheafify}.
+colimits are not: after taking the pointwise colimit, one must sheafify as in \cref{thm.sheafify}. We also note that the exponential $Y^X$ denotes the sheaf whose sections on $U\ss X$ is given by the set of sheaf homomorphisms $X_U\to Y_U$ between the restrictions of $X$ and $Y$ to $U$, as in \cref{ex.representable_sheaf}.
 
  What it means for $\top\colon 1\to \Omega$ to be a \emph{subobject classifier} is that for any monomorphism $i\colon A\inj B$, there exists a unique morphism $\classify{i}\colon B\to\Omega$ such that the following square is a pullback
-\[
+\begin{equation}\label{eqn.subobject_classifier}
 \begin{tikzcd}
 	A\ar[r, "!"]\ar[d, "i"']&
 	1\ar[d, "\top"]\\
 	B\ar[r, "\classify{i}"']&
 	\Omega\ar[ul, phantom, very near end, "\lrcorner"]
 \end{tikzcd}
+\end{equation}
+Note that any category, a morphism out of a terminal object $1$ is a vacuously a monomorphism and the pullback of a monomorphism is a monomorphism. Thus we have a bijection: for every morphism $B\to \Omega$, the pullback of $\top$ is a monomorphism into $B$ and every monomorphism into $B$ arises in this way.
+
+What it means that $\cat{E}$ has a generating set is that there exists a set $I$ and objects $(x_i)_{i\in I}$ that can distinguish between every parallel pair of morphisms. That is, for any objects $a,b$ and morphisms $g,g'\colon a\to b$ in $\cat{E}$, if $g\circ f=g'\circ f$ for all $i\in I$ and $f\colon x_i\to a$ then $g=g'$.
+
+\begin{remark}
+As one may guess, the subobject classifier for $\shv(X)$ is the sheaf $\Omega$ of opens from \cref{ex.subobject_classifier}. Given $i\colon A\inj B$, the sheaf morphism $\classify{i}\colon B\to\Omega$ is defined on $U\ss X$ by sending $b\in B(U)$ to the open set
+\[
+	\classify{i}(U)(b)\coloneqq
+	\bigcup\left\{V\ss U\;\middle|\;\exists a\in A(V) \tn{ such that } i(a)=\rest{b}{V}\right\}.
 \]
-What is means that $\cat{E}$ has a generating set is that there exists a set $I$ and objects $(x_i)_{i\in I}$ that can distinguish between every parallel pair of morphisms. That is, for any objects $a,b$ and morphisms $g,g'\colon a\to b$ in $\cat{E}$, if $g\circ f=g'\circ f$ for all $i\in I$ and $f\colon x_i\to a$ then $g=g'$.
+\end{remark}
 
 \begin{definition}
 In a category $\cat{E}$ with a terminal object $1$, a \emph{natural numbers object} is a tuple $(\tnn,z,s)$, where $\tnn\in\cat{E}$ is an object, $z\colon 1\to\tnn$ is a morphism called \emph{zero}, and a $s\colon \tnn\to \tnn$ is a morphism called \emph{successor}, that is universal in the sense that for any $(N',z',s')$, with $z'\colon 1\to N'$ and $s'\colon N'\to N'$, there exists a unique morphism $\mathrm{ind}_{z',s'}\colon N\to N'$ such that the following diagram commutes:
@@ -480,17 +497,54 @@ In a category $\cat{E}$ with a terminal object $1$, a \emph{natural numbers obje
 Every Grothendieck topos has a natural numbers object given by the coproduct $\tnn\coloneqq\coprod_{n\in\nn}\{*\}$ with $z=(0,*)$ and $s(n,*)=(n+1,*)$. As a sheaf, $\tnn$ has the description from \cref{ex.sections}.
 
 
+\section{Logic in a topos}\label{sec.logic}
+
+In any topos, one can interpret the logical constants $\true,\false$, the logical operations $\wedge,\vee,\imp,\neg$, and the logical quantifiers $\forall,\exists$ in terms of the subobject classifier $\Omega$. In the topos $\smset$, we saw in \cref{ex.subobject_classifier} that $\Omega$ can be identified with the booleans, and we are accustomed to thinking of the logic in terms of operations on booleans. The point is that this can be generalized.
+
+We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagine the sphere $S$ as the surface of the earth; by \cref{ex.subobject_classifier}, sections of the sheaf $\Omega$ are open subsets of $S$. In the topos $\shv(S)$, when one asks ``is it raining'', we can answer it with the largest open set $U\ss S$ throughout which it is raining. On the topos of sheaves on a single point, open sets are either everything or empty, recovering the notion of ``yes/no.''
+
+Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op_X$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\ss U$ and write $V\leq V'$ iff $V\ss V'$. Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
+
+To interpret the logical constants, operations, and quantifiers in $\Omega$, or more specifically in the set $\Omega(U)$ for some open $U\ss X$, we need only think about their universal properties, and then define operations on open sets accordingly. For example $\true$ should be the maximal element, so we take $\true\in\Omega(U)$ to denote the open $U\ss U$; similarly $\false$ denotes the open $\varnothing\ss U$. For $V,V'\ss U$, the conjunction $V\wedge V'$ should be the maximal element under both $V$ and $V'$, so it denotes the open $V\cap V'$; similarly $V\vee V'$ denotes the open $V\cup V'$.
+
+Implication and negation are only slightly more involved. Logically, we say that hypothesis $V$ is enough to prove $V_1\imp V_2$ when $V\wedge V_1$ is enough to prove $V_2$. Thus we define $V_1\imp V_2$ to be the open set $\bigcup\{V\ss U\mid (V\cap V_1)\ss V_2\}$. As a particular case, defining $\neg V\coloneqq (V\imp \false)$, we can identify $\neg V$ with the interior of the complement of $V$. For example, if $U=\rr$ and $V=\rr-\{0\}$, then $\neg V=\false$ and $\neg\neg V=\true$; in general there is an inequality $V\leq\neg\neg V$, which may be strict. Toposes for which $\neg\neg V=V$ are called \emph{boolean}, and correspond to topological spaces that are totally disconnected.
+
+To define $\exists$ and $\forall$, we need to discuss predicates. For any sheaf $X$, a \emph{predicate on $X$} is a sheaf morphism $p\colon X\to\Omega$. The quantifiers $\forall(x:X)$ and $\exists(x:X)$ take a predicate in two variables, say $q\colon X\times Y\to\Omega$ and return a predicate $Y\to\Omega$ in one variable. Namely, define $\exists(x:X).q(x)$ to be the sheaf morphism $Y\to\Omega$ that on any $U\in\Op_X$ assigns to a given $y\in Y(U)$ the open set
+\[
+\big(\exists(x:X).q(x)\big)_U(y)\coloneqq\bigcup\left\{V\ss U\;\middle|\;\exists x\in X(V), q_V\big(x,\rest{y}{V}\big)=V\right\}\cong\bigcup_{V\ss U,x\in X(V)}q_V\big(x,\rest{y}{V}\big).
+\]
+The universal quantifier is the most involved. Define $\forall(x:X).q(x)$ to be the sheaf morphism $Y\to\Omega$ that on any $U\in\Op_X$ assigns to a given $y\in Y(U)$ the open set
+\[
+\big(\forall(x:X).q(x)\big)_U(y)\coloneqq\bigcup\left\{V\ss U\;\middle|\;
+\forall V'\ss V \tn{ open, and } \forall x\in X(V'), q_{V'}\big(x,\rest{y}{V'}\big)=V'\right\}.
+\]
+
+With all these definitions, logical deductions can be carried out in the usual style, with the caveat that they must be constructive. It is an extra axiom to say $\neg\neg V=V$ or $\neg\forall (x:X).q(x) = \exists (x:X)\neg q(x)$; such ``tricks'' with negation do not hold unless the topos happens to have a simplified form (e.g.\ if it happens to be totally disconnected).
+
 % ==== Section ====%
 \section{Internal language and modalities}
 
 The analogy between any topos $\cat{E}$ and the category (topos) of sets is deep enough that one can write formulas for set-theoretic objects in the usual way, and interpret them as formulas for objects in $\cat{E}$ using a system called \emph{Kripke-Joyal semantics}. For example, if $A$ and $B$ are sets then 
-\[
+\begin{equation}\label{eqn.epi}
 \{f\colon A\to B\mid \forall (b:B).\exists(a:A). f(a)=b\}
-\]
+\end{equation}
 is the set-theoretic way of expressing the set of surjections $A\surj B$, i.e.\ epimorphisms in the category of sets. Using Kripke-Joyal semantics, this formula has a unique interpretation in an arbitrary topos $\cat{E}$ for arbitrary objects $A,B\in\cat{E}$. If $\cat{E}=\shv(X)$ for some space $X$ and $A,B$ are sheaves on $X$, then the above formula corresponds to the sheaf that assigns to $U\ss X$ the set of all epimorphisms of sheaves $A_U\to B_U$, where $A_U$ and $B_U$ are the restrictions of $A$ and $B$ to $U$ (see \cref{ex.representable_sheaf}).
 
 Perhaps more convincing is the case of real numbers. Dedekind's definition of a real number was as a pair of subsets of $\qq$ satisfying certain properties: one is down-closed, the other is up-closed, they do not intersect, etc. These properties can all be written set-theoretically and interpreted in $\cat{E}=\shv(X)$ using Kripke-Joyal semantics. It turns out that the resulting sheaf $\trr$ is precisely the sheaf of Dedekind real numbers on $X$ from \cref{ex.sections}, i.e.\ $\trr(U)\cong\{f\colon U\to\rr\mid f\tn{ continuous}\}$. This is often considered strong evidence that the Kripke-Joyal semantics works sensibly.
 
+We cannot give a complete description of the Kripke-Joyal semantics here; for that see \cite{MacLane.Moerdijk:1992a}. Instead, we give the basic idea and hope that readers can use it to follow along, reserving a complete understanding for when they have time to go deeper.
+
+Set-theoretic formulas such as \eqref{eqn.epi}, written in set-builder or \emph{comprehension} notation $\{\cdots\mid\cdots\}$ consist of a left part and a right part. The left-hand part is a term of some type, where the type can be any set. For example $r:\rr$ or $(x,y): X\times Y$ or $f:Y\to Z$. In a more general topos $\cat{E}$, a type can be any object of $\cat{E}$. Toposes have products $(X\times Y)$ and exponentials $Z^Y$ (denoting the sheaf of local sheaf homomorphisms $Y\to Z$; see after \cref{def.Grothendieck_topos}), which can be used to construct more complex objects, allowing us to write the above terms $(x,y):X\times Y$ and $f:Y\to Z$ just as we did for sets. We refer readers to \cite[Section VI.5]{MacLane.Moerdijk:1992a} for details.
+
+In the comprehension syntax $\{x:X\mid\varphi(x)\}$, the right-hand part is a logical formula $\varphi$ whose only free variable is $x$ (though $x$ itself may be constructed as a tuple of other variables). Note that $\varphi$ possibly could have additional \emph{bound} variables introduced by quantifiers. For example in \eqref{eqn.epi}, we have $\varphi=\forall (b:B).\exists(a:A). f(a)=b$, which has bound variables $b:B$ and $a:A$, and free variable $f$ introduced on the left-hand part. The formula $\varphi$ denotes a sheaf morphism $X\to\Omega$. Pulling back the monomorphism $\top\colon 1\to\Omega$, we obtain a subobject of $X$ in the top left, which is what the comprehension syntax actually means:
+\[
+\begin{tikzcd}
+	\{x:X\mid\varphi(x)\}\ar[r, "!"]\ar[d, "i"']&
+	1\ar[d, "\top"]\\
+	X\ar[r, "\varphi"']&
+	\Omega\ar[ul, phantom, very near end, "\lrcorner"]
+\end{tikzcd}
+\]
 
 
 % ==== Section ====%
