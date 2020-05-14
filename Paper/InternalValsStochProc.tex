@@ -69,7 +69,7 @@ pdfencoding=unicode]{hyperref}
   }
 }
 
-
+\crefalias{chapter}{section}
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[chapter] %change [] to chapter if we want to change global numbering
@@ -166,7 +166,6 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\tnn}{\internal{N}\hs}
 \newcommand{\tqq}{\internal{Q}\hs}
-\newcommand{\tnnqq}{{\internal{Q}\hs}_{\geq0}}
 \newcommand{\tQQp}{\tQQ_{+}}
 \newcommand{\tZZ}{\internal{Z}\hs}
 \newcommand{\tQQub}{\QQ^\infty}
@@ -339,14 +338,17 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 \section{Lower nonnegative reals}
 
 \begin{definition}[Lower nonnegative reals]
-Let $\tnnqq$ denote the nonnegative rationals. We define the type of \emph{lower nonnegative reals}, denoted $\tlrr$ as
-\[
-\tlrr=\{r_>\colon\tnnqq\to\prop\mid\forall(q:\tqq). r_>q\iff\exists(q':\tqq).r_>q'\wedge q'>q\}.%
+We define a \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
 \footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as the set of nonnegative rationals that are lower bounds.}
+\begin{enumerate}
+	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$
+	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
+	\item (rounded) $\forall (q:\tqq).r_>q\imp\exists (q':\tqq).q'>q\wedge r_>q'$.
+\end{enumerate}
+Define the \emph{type of lower nonnegative reals}, denoted $\tlrr$, to be
+\[\tlrr\coloneqq\{r_>\colon\tqq\to\prop\mid r_>\tn{ nonnegative, down-closed, rounded}\}.
 \]
 We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
-
-It is often convenient to have names for the two directions of the $\iff$. The implication $r_>q\imp\exists(q':\tqq).r_>q'\wedge q'>q$ is called \emph{roundedness} and its inverse is called \emph{down-closure}.
 \end{definition}
 
 We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
@@ -355,12 +357,13 @@ We now want to define order and addition of lower reals, as well as the inclusio
 Given lower reals $r,r'$,
 %we say that $r$ \emph{is greater than} $r'$ and write $r>r'$ to denote the following proposition:
 %\[
-%	r>r'\coloneqq\exists (q:\tnnqq).r>q\wedge\forall(q'.\tnnqq).r'>q'\imp q>q'.
+%	r>r'\coloneqq\exists (q:\tqq).r>q\wedge\forall(q'.\tqq).r'>q'\imp q>q'.
 %\]
 we say that $r$ \emph{is above} $r'$ and write $r\geq r'$ to denote the following proposition:
-\[
-	r\geq r'\coloneqq\forall(q:\tnnqq).r'>q\imp r>q.
-\]
+\begin{equation}\label{eqn.real_order}
+	r\geq r'\coloneqq\forall(q:\tqq).r'>q\imp r>q.
+\end{equation}
+We may write $r'\leq r$ to denote $r\geq r'$.
 \end{definition}
 
 The following is straightforward when working in the internal logic; for more on this see \cref{sec.logic,sec.internal_language,sec.modalities}.
@@ -375,11 +378,10 @@ For all lower reals $r,r',r'':\tlrr$, we have
 \end{proposition}
 
 \begin{definition}[Addition of lower reals]\label{def.sum_lr}
-Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tnnqq\to\prop$ to be the predicate%
-\footnote{The first two clauses, $(r_1=\bot\wedge r_2>q)\vee(r_2=\bot\wedge r_1>q)$, are the cost of only testing on $\tnnqq$ rather than on all of $\tqq$. Without these clauses, $0$ is not a unit for addition.}
-\begin{multline}\label{eqn.sum_lr}
-(r_1+r_2)_>q\coloneqq
-(r_1=\bot\wedge r_2>q)\vee(r_2=\bot\wedge r_1>q)\vee\\\exists (q_1,q_2:\tnnqq).(r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).\end{multline}
+Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tqq\to\prop$ to be the predicate
+\begin{equation}\label{eqn.sum_lr}
+(r_1+r_2)_>q\coloneqq\exists (q_1,q_2:\tqq).(r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).
+\end{equation}
 We show it is indeed a lower real in \cref{prop.sum_lr}.
 \end{definition}
 
@@ -387,24 +389,60 @@ We show it is indeed a lower real in \cref{prop.sum_lr}.
 The predicate $(r_1+r_2)_>$ defined in \cref{def.sum_lr} is a lower real.
 \end{proposition}
 \begin{proof}
-We need to show that $\forall(q:\tqq). (r_1+r_2)_>q\iff\exists(q':\tqq).(r_1+r_2)_>q'\wedge q'>q$.
+We need to show that $(r_1+r_2)_>$ is nonnegative, down-closed, and rounded.
 
-\noindent($\imp$): For roundedness, choose a rational $q$ and suppose $(r_1+r_2)>q$. By definition we have $q_1,q_2$ with $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$. By roundedness of $r_1$ and $r_2$, we have rationals $q_1',q_2'$ with $r_1>q_1'>q_1$ and $r_2>q_2'>q_2$. Then letting $q'=q_1'+q_2'$, we have $(r_1+r_2)>q'$ and $q'>q$, as desired.
+\noindent (Nonnegative): If $0>q$, take $q_1=q_2\coloneqq q/2$. Then $q_1+q_2=q$ and $r_1>q_1$ and $r_2>q_2$ by assumption, so $r_1+r_2>q$.
 
-\noindent($\Leftarrow$): For down-closure, choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\epsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\epsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
+\noindent(Down-closed): Choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\epsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\epsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
+
+\noindent(Rounded): Choose a rational $q$ and suppose $(r_1+r_2)>q$. By definition we have $q_1,q_2$ with $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$. By roundedness of $r_1$ and $r_2$, we have rationals $q_1',q_2'$ with $r_1>q_1'>q_1$ and $r_2>q_2'>q_2$. Then letting $q'=q_1'+q_2'$, we have $(r_1+r_2)>q'$ and $q'>q$, as desired.
 \end{proof}
 
-\begin{definition}[Rationals ``are'' lower reals]
-There is a function $\tnnqq\to\tlrr$ sending $q$ to the predicate $q_>\colon\tnnqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
+\begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
+Let $\tqq_{\geq0}\coloneqq\{q:\tqq\mid q\geq0\}$. There is a function $\tqq_{\geq0}\to\tlrr$ sending $q$ to the predicate $q_>\colon\tqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
 \footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
- We often write $q:\tlrr$ to denote this lower real. In particular $0$ denotes the lower real $q\mapsto\false$.
+ We often write $q:\tlrr$ to denote this lower real.
 \end{definition}
+
+We leave the following to the reader.
+\begin{proposition}
+The inclusion of nonnegative rationals into lower reals from \cref{def.rationals_are_reals} preserves order and sum.
+\end{proposition}
 
 \begin{proposition}
 The lower reals form a commutative monoid $(\tlrr,0,+)$.
 \end{proposition}
 \begin{proof}
-Commutativity and unitality of $0$ are obvious from the definition \eqref{eqn.sum_lr}. It remains to test associativity. but now there are nine cases!!
+\noindent (Commutativity): obvious from the definition \eqref{eqn.sum_lr}.
+
+\noindent (Unitality): First we show that $r>q$ implies $r+0>q$. By roundedness, take $r>q'>q$ and let $q_0=q-q'$. Then $r>q'$, $0>q_0$, and $q=q'+q_0$, so $r+0>q$. Second we show that $r+0>q$ implies $r>q$. By definition there exists $q_1,q_2$ with $r>q_1$, $0>q_2$, and $q=q_1+q_2$. But then $r>q_1>q_1+q_2=q$.
+
+\noindent (Associativity): Both sides of associativity $(r_1+r_2)+r_3=^?r_1+(r_2+r_3)$ are directly seen to be equivalent to the formula $\exists(q_1,q_2,q_3:\tqq).(r_1>q_1)\wedge(r_2>q_2)\wedge(r_3>q_3)\wedge(q=q_1+q_2+q_3)$.
+\end{proof}
+
+\begin{proposition}[Order cancellativity]
+Suppose $r_0,r_1,r_2:\trr$ are lower reals and that $r_0$ is bounded in the sense that $q_0\geq r_0$ for some $q_0:\tqq$. If $r_0+r_1\geq r_0+r_2$ then $r_1\geq r_2$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\begin{definition}[Propositions ``are'' lower reals]\label{def.props_are_reals}
+There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $\tqq\to\prop$ given by $q\mapsto(q<0)\vee p$.%
+\footnote{We leave it to the reader to check that this is indeed a lower nonnegative real.}
+\end{definition}
+
+\begin{proposition}
+Let $p,p':\prop$ be propositions, considered as lower reals. Then 
+\begin{enumerate}
+	\item $p'\leq p$ iff $p'\imp p$
+	\item $p+p'=p\vee p'$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+If $p'\leq p$ then applying \eqref{eqn.real_order} with $q=1$ we have $p'\imp p$ as desired. The converse is similarly straightforward.
+
+Suppose $(p+p')>q_0$, and let $q,q'$ be such that $p>q$, $p'>q'$, and $q_0=q+q'$. If $0>q_0$ then either $0>q$ or $0>q'$, so either $p$ or $p'$. Rationals are decidable so either $(0>q_0)\vee\neg(0>q_0)$ holds, so we may assume $\neg(0>q_0)$. Then either $0>q$ or $0>q'$, so either $p$ or $p'$ holds by definition.
 \end{proof}
 
 % ==== Section ====%
@@ -634,7 +672,7 @@ In any topos, one can interpret the logical constants $\true,\false$, the logica
 We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagine the sphere $S$ as the surface of the earth; by \cref{ex.subobject_classifier}, sections of the sheaf $\Omega$ are open subsets of $S$. In the topos $\shv(S)$, when one asks ``is it raining'', we can answer it with the largest open set $U\ss S$ throughout which it is raining. On the topos of sheaves on a single point, open sets are either everything or empty, recovering the notion of ``yes/no.''
 
 Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op_X$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\ss U$ and write
-\begin{equation}\label{eqn.order}
+\begin{equation}\label{eqn.prop_order}
 V\leq V'\tn{ iff }V\ss V'.
 \end{equation} 
 Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
@@ -688,7 +726,7 @@ In the comprehension syntax $\{x:X\mid\varphi(x)\}$, the right-hand part is a lo
 
 The Kripke-Joyal semantics invites us not to give the largest open set throughout which a proposition $\varphi$ is true, but instead to simply know whether it is true throughout a given open $U\in\Op_X$. The notation for this is $U\forces\varphi$ and pronounced \emph{$U$ forces $\varphi$}.%
 \footnote{The terminology ``forcing'' comes from Cohen's proof of the independence of the continuum hypothesis.}
-We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.order}.
+We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.prop_order}.
 
 Here is a list of rules for $\forces$,%
 \footnote{The list is not minimal: many of the rules shown follow from others. In fact rule 1 is complete! The other rules simply remind us of the semantics of the logical symbols.
