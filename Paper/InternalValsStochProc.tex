@@ -434,16 +434,18 @@ There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $\tqq\to\p
 \end{definition}
 
 \begin{proposition}
-Let $p,p':\prop$ be propositions, considered as lower reals. Then 
+Let $p,p':\prop$ be propositions, considered as lower reals. Then for any $r:\trr$ we have 
 \begin{enumerate}
 	\item $p'\leq p$ iff $p'\imp p$
-	\item $p+p'=p\vee p'$.
+	\item $p+r=p\vee r$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-If $p'\leq p$ then applying \eqref{eqn.real_order} with $q=1$ we have $p'\imp p$ as desired. The converse is similarly straightforward.
+If $p'\leq p$ then applying \eqref{eqn.real_order} with $q=1$ we have $p'\imp p$ as desired. The converse is similarly straightforward. The rest of the proof deals with the second claim; recall that $(p+r)>q$ means $\exists(q_p,q_r:\tqq).(0>q_p\vee p)\wedge(r>q_r)\wedge (q=q_p+q_r)$.
 
-Suppose $(p+p')>q_0$, and let $q,q'$ be such that $p>q$, $p'>q'$, and $q_0=q+q'$. If $0>q_0$ then either $0>q$ or $0>q'$, so either $p$ or $p'$. Rationals are decidable so either $(0>q_0)\vee\neg(0>q_0)$ holds, so we may assume $\neg(0>q_0)$. Then either $0>q$ or $0>q'$, so either $p$ or $p'$ holds by definition.
+We first show that $p\vee (r>q)$ implies $(p+r)>q$. If $p$ then taking $q_r=-1$ and $q_p=1+q$, we have $(p+r)>q$. If $r>q$ then by roundedness we can find $q_r:\tqq$ such $r>q_r>q$. Then with $q_p\coloneqq q-q_r$ we have $(p+r)>q$.
+
+Finally, we show $(p+r)>q$ implies $p\vee(r>q)$. Assuming $(p+r)>q$, we have either $p$ or $q_p,q_r:\tqq$ with $0>q_p$ and $r>q_r$ and $q=q_p+q_r$. In the first case we're done, and in the second, $r>q_r>q_r+q_p=q$.
 \end{proof}
 
 % ==== Section ====%
