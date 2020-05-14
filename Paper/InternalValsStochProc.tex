@@ -187,6 +187,8 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\tConst}{\mathtt{C}}
 \newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
 
+\newcommand{\forces}{\Vdash}
+
 \newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
 \newcommand{\psh}{\Fun{Psh}}
 \newcommand{\shv}{\Fun{Shv}}
@@ -194,7 +196,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Idl}{\Set{Idl}}
 \newcommand{\yoneda}{\Fun{y}}
 
-\newcommand{\Prop}{\const{Prop}}
+\newcommand{\prop}{\const{Prop}}
 \newcommand{\Time}{\const{Time}}
 \newcommand{\Pt}{\const{Pt}}
 \newcommand{\cc}{\const{cc}}
@@ -473,6 +475,10 @@ Note that any category, a morphism out of a terminal object $1$ is a vacuously a
 What it means that $\cat{E}$ has a generating set is that there exists a set $I$ and objects $(x_i)_{i\in I}$ that can distinguish between every parallel pair of morphisms. That is, for any objects $a,b$ and morphisms $g,g'\colon a\to b$ in $\cat{E}$, if $g\circ f=g'\circ f$ for all $i\in I$ and $f\colon x_i\to a$ then $g=g'$.
 
 \begin{remark}
+In this paper, we will only work with a special kind of Grothendieck topos, namely one of the form $\cat{E}\coloneqq\shv(X)$ for a chosen topological space $(X,\Op_X)$, which we refer to as the \emph{site} for the topos. In reality there may be many sites for the same topos, but we take $X$ as given.
+\end{remark}
+
+\begin{remark}
 As one may guess, the subobject classifier for $\shv(X)$ is the sheaf $\Omega$ of opens from \cref{ex.subobject_classifier}. Given $i\colon A\inj B$, the sheaf morphism $\classify{i}\colon B\to\Omega$ is defined on $U\ss X$ by sending $b\in B(U)$ to the open set
 \[
 	\classify{i}(U)(b)\coloneqq
@@ -503,26 +509,36 @@ In any topos, one can interpret the logical constants $\true,\false$, the logica
 
 We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagine the sphere $S$ as the surface of the earth; by \cref{ex.subobject_classifier}, sections of the sheaf $\Omega$ are open subsets of $S$. In the topos $\shv(S)$, when one asks ``is it raining'', we can answer it with the largest open set $U\ss S$ throughout which it is raining. On the topos of sheaves on a single point, open sets are either everything or empty, recovering the notion of ``yes/no.''
 
-Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op_X$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\ss U$ and write $V\leq V'$ iff $V\ss V'$. Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
+Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op_X$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\ss U$ and write
+\begin{equation}\label{eqn.order}
+V\leq V'\tn{ iff }V\ss V'.
+\end{equation} 
+Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
 
 To interpret the logical constants, operations, and quantifiers in $\Omega$, or more specifically in the set $\Omega(U)$ for some open $U\ss X$, we need only think about their universal properties, and then define operations on open sets accordingly. For example $\true$ should be the maximal element, so we take $\true\in\Omega(U)$ to denote the open $U\ss U$; similarly $\false$ denotes the open $\varnothing\ss U$. For $V,V'\ss U$, the conjunction $V\wedge V'$ should be the maximal element under both $V$ and $V'$, so it denotes the open $V\cap V'$; similarly $V\vee V'$ denotes the open $V\cup V'$.
 
-Implication and negation are only slightly more involved. Logically, we say that hypothesis $V$ is enough to prove $V_1\imp V_2$ when $V\wedge V_1$ is enough to prove $V_2$. Thus we define $V_1\imp V_2$ to be the open set $\bigcup\{V\ss U\mid (V\cap V_1)\ss V_2\}$. As a particular case, defining $\neg V\coloneqq (V\imp \false)$, we can identify $\neg V$ with the interior of the complement of $V$. For example, if $U=\rr$ and $V=\rr-\{0\}$, then $\neg V=\false$ and $\neg\neg V=\true$; in general there is an inequality $V\leq\neg\neg V$, which may be strict. Toposes for which $\neg\neg V=V$ are called \emph{boolean}, and correspond to topological spaces that are totally disconnected.
+Implication and negation are only slightly more involved. Logically, we say that hypothesis $V$ is enough to prove $V_1\imp V_2$ when $V\wedge V_1$ is enough to prove $V_2$. Thus we define $V_1\imp V_2$ to be the open set
+\begin{equation}\label{eqn.implication}
+	(V_1\imp V_2)\coloneqq\bigcup\{V\ss U\mid (V\cap V_1)\ss V_2\}.
+\end{equation}
+ As a particular case, defining $\neg V\coloneqq (V\imp \false)$, we can identify $\neg V$ with the interior of the complement of $V$. For example, if $U=\rr$ and $V=\rr-\{0\}$, then $\neg V=\false$ and $\neg\neg V=\true$; in general there is an inequality $V\leq\neg\neg V$, which may be strict. Toposes for which $\neg\neg V=V$ are called \emph{boolean}, and correspond to topological spaces that are totally disconnected.
 
-To define $\exists$ and $\forall$, we need to discuss predicates. For any sheaf $X$, a \emph{predicate on $X$} is a sheaf morphism $p\colon X\to\Omega$. The quantifiers $\forall(x:X)$ and $\exists(x:X)$ take a predicate in two variables, say $q\colon X\times Y\to\Omega$ and return a predicate $Y\to\Omega$ in one variable. Namely, define $\exists(x:X).q(x)$ to be the sheaf morphism $Y\to\Omega$ that on any $U\in\Op_X$ assigns to a given $y\in Y(U)$ the open set
+To define $\exists$ and $\forall$, we need to discuss predicates. For any sheaf $A$, a \emph{predicate on $A$} is a sheaf morphism $p\colon A\to\Omega$. The quantifiers $\forall(a:A)$ and $\exists(a:A)$ take a predicate in two variables, say $q\colon A\times B\to\Omega$ and return a predicate $B\to\Omega$ in one variable. Namely, define $\exists(a:A).q(a)$ to be the sheaf morphism $B\to\Omega$ that on any $U\in\Op_X$ assigns to a given $b\in B(U)$ the open set
 \[
-\big(\exists(x:X).q(x)\big)_U(y)\coloneqq\bigcup\left\{V\ss U\;\middle|\;\exists x\in X(V), q_V\big(x,\rest{y}{V}\big)=V\right\}\cong\bigcup_{V\ss U,x\in X(V)}q_V\big(x,\rest{y}{V}\big).
+\big(\exists(a:A).q(a)\big)_U(b)\coloneqq\bigcup\left\{V\ss U\;\middle|\;\exists a\in A(V), q_V\big(a,\rest{b}{V}\big)=V\right\}\cong\bigcup_{V\ss U,a\in A(V)}q_V\big(a,\rest{b}{V}\big).
 \]
-The universal quantifier is the most involved. Define $\forall(x:X).q(x)$ to be the sheaf morphism $Y\to\Omega$ that on any $U\in\Op_X$ assigns to a given $y\in Y(U)$ the open set
+The universal quantifier is the most involved. Define $\forall(a:A).q(a)$ to be the sheaf morphism $B\to\Omega$ that on any $U\in\Op_X$ assigns to a given $b\in B(U)$ the open set
 \[
-\big(\forall(x:X).q(x)\big)_U(y)\coloneqq\bigcup\left\{V\ss U\;\middle|\;
-\forall V'\ss V \tn{ open, and } \forall x\in X(V'), q_{V'}\big(x,\rest{y}{V'}\big)=V'\right\}.
+\big(\forall(a:A).q(a)\big)_U(b)\coloneqq\bigcup\left\{V\ss U\;\middle|\;
+\forall V'\ss V \tn{ open, and } \forall a\in A(V'), q_{V'}\big(a,\rest{b}{V'}\big)=V'\right\}.
 \]
 
-With all these definitions, logical deductions can be carried out in the usual style, with the caveat that they must be constructive. It is an extra axiom to say $\neg\neg V=V$ or $\neg\forall (x:X).q(x) = \exists (x:X)\neg q(x)$; such ``tricks'' with negation do not hold unless the topos happens to have a simplified form (e.g.\ if it happens to be totally disconnected).
+With all these definitions, logical deductions can be carried out in the usual style, with the caveat that they must be constructive. It is an extra axiom to say $\neg\neg V=^?V$ or $\neg\forall (a:A).q(a) =^? \exists (a:A)\neg q(a)$; such ``tricks'' with negation do not hold unless the site happens to have a simplified form (e.g.\ if it happens to be totally disconnected).
+
+We will give an example of this sort of deduction in \cref{ex.modality_deduction}.
 
 % ==== Section ====%
-\section{Internal language and modalities}
+\section{The internal language of $\shv(X)$}
 
 The analogy between any topos $\cat{E}$ and the category (topos) of sets is deep enough that one can write formulas for set-theoretic objects in the usual way, and interpret them as formulas for objects in $\cat{E}$ using a system called \emph{Kripke-Joyal semantics}. For example, if $A$ and $B$ are sets then 
 \begin{equation}\label{eqn.epi}
@@ -545,6 +561,96 @@ In the comprehension syntax $\{x:X\mid\varphi(x)\}$, the right-hand part is a lo
 	\Omega\ar[ul, phantom, very near end, "\lrcorner"]
 \end{tikzcd}
 \]
+
+The Kripke-Joyal semantics invites us not to give the largest open set throughout which a proposition $\varphi$ is true, but instead to simply know whether it is true throughout a given open $U\in\Op_X$. The notation for this is $U\forces\varphi$ and pronounced \emph{$U$ forces $\varphi$}.%
+\footnote{The terminology ``forcing'' comes from Cohen's proof of the independence of the continuum hypothesis.}
+We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.order}.
+
+Here is a list of rules for $\forces$,%
+\footnote{The list is not minimal: many of the rules shown follow from others. In fact rule 1 is complete! The other rules simply remind us of the semantics of the logical symbols.
+}
+where $I$ denotes any set, $U, U_i, V$ denote any opens, and $\varphi,\varphi_i,\psi$ denote any predicates:
+\begin{enumerate}
+	\item Suppose that the open set corresponding to $\varphi\in\prop$ is $U\in\Op_X$. Then $V\forces\varphi$ iff $V\ss U$.
+  \item If $\varphi\leq\psi$ in $\prop$ and $U\forces\varphi$ then $U\forces\psi$.
+  \item $U_i\forces\varphi$ for each $i\in I$ implies $\left(\bigcup_{i\in I}U_i\right)\forces\varphi$.
+  \item $U\forces\true$ for every $U$.
+  \item $U\forces\false$ iff $U=\varnothing$.
+  \item $U\forces\varphi\wedge\psi$ iff $U\forces\varphi$ and $U\forces\psi$.
+  \item $U\forces\varphi_1\vee\varphi_2$ iff there exist $U_1,U_2$ with $U=U_1\cup U_2$ and $U_1\forces\varphi_1$ and $U_2\forces\varphi_2$.
+  \item $U\forces \varphi\imp\psi$ iff whenever $V\forces\varphi$ holds for $V\ss U$, then also $V\forces\psi$ holds.
+  \item $U\forces\neg\varphi$ iff whenever $V\forces\varphi$ holds for $V\ss U$, then $V=\varnothing$.
+  \item $U\forces\exists (a:A).\varphi(a)$ iff there exists $(U_i)_{i\in I}$ and $a_i\in A(U_i)$ for each $i\in I$, with $U=\bigcup_iU_i$ and $U_i\forces\varphi(a_i)$.
+  \item $U\forces\forall (a:A).\varphi(a)$ iff for every $V\ss U$ and $a\in A(V)$ it holds that $V\forces \varphi(a)$.
+\end{enumerate}
+We say that $\varphi$ holds in the topos $\shv(X)$ when $X\forces\varphi$.
+
+
+\begin{example}
+Let $X=\{*\}$. We will show that the formula $\varphi\coloneqq\forall (p:\prop).p\vee\neg p$ holds using the Kripke-Joyal semantics, i.e.\ that $X\forces\varphi$. The proof goes as follows:
+
+By rule 11, we need that for every $V\ss X$ and every $p:\prop(V)$ it holds that $V\forces p\vee\neg p$. But $V$ is either $\varnothing$ or $X$ and in the first case $V$ forces everything by rule 1, so we may assume $V=X$. By rule 7, it suffices to show that $X\forces p$ and $\varnothing\forces\neg p$ or that $X\forces\neg p$ and $\varnothing\forces p$. Again by rule 1 this reduces to showing either that $X\forces p$ or $X\forces\neg p$.
+
+Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ and $\varnothing$. If it is $X$ then $X\forces p$ by rule 1. So we may assume $p$ corresponds to $\varnothing$, in which case only $\varnothing\forces p$ by rule 1 and we have $X\forces\neg p$ by rule 9, completing the proof.
+\end{example}
+
+In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$.
+
+% ==== Section ====%
+\section{Modalities on $\shv(X)$}
+
+Modalities operate on propositions to give new propositions that hold more generally. More precisely, we have the following definition. 
+\begin{definition}[Modality]\label{def.modality}
+A \emph{modality} on a topos $\cat{E}$ is a morphism $j\colon\prop\to\prop$ satisfying the following three axioms for $p,q:\prop$:
+\begin{enumerate}
+	\item $p\imp j(p)$;
+	\item $j(j(p))=j(p)$.
+\end{enumerate}
+These first two say that $j$ is a \emph{closure operator}. The following four axioms are equivalent, and to be a modality $j$ is required to satisfy any one---hence all---of them:
+\begin{enumerate}[label=3\alph*.]
+  \item $(p\imp q)\imp jp\imp jq$
+  \item $jp\imp(p\imp jq)\imp jq$
+  \item $j(p\imp q)\imp jp\imp jq$
+  \item $(jp\wedge jq)\imp j(p\wedge q)$.
+\end{enumerate}
+\end{definition}
+The equivalence of the conditions 3a -- 3d can be found in \cite[Lemma 4.6]{schultz2019temporal}.
+
+It turns out that modalities on $\cat{E}$ correspond one-to-one with subtoposes of $\cat{E}$, though we do not need that here. We will discuss three sorts of modalities, called \emph{open, closed}, and \emph{quasi-closed}, associated to open sets $U\in\Op_X$, or equivalently to propositions $u:\prop$.
+
+\begin{definition}\label{def.open_closed_qc}
+Let $u:\prop$ be a proposition. We have the following modalities:
+\begin{description}
+	\item[Open:] $O_u(p)\coloneqq u\imp p$;
+	\item[Closed:] $C_u(p)\coloneqq u\vee p$; and
+	\item[Quasi-closed:] $Q_u(p)\coloneqq (p\imp u)\imp u$.
+\end{description}
+\end{definition}
+
+Above we promised to give examples of logical deductions. Now we will show that each of the purported modalities in \cref{def.open_closed_qc} is indeed a modality using logical deductions.
+
+\begin{example}\label{ex.modality_deduction}
+Let $u:\prop$; we want to show that $O_u$, $C_u$, and $Q_u$ from \cref{def.open_closed_qc} are modalities in the sense of \cref{def.modality}. We begin with $j=O_u$; let $p:\prop$ be a proposition. We begin by being quite pedantic and eventually move toward the style of deduction that we will use in the paper.
+
+Claim: $p\imp (u\imp p)$. Proof: 1. To show $p\imp (u\imp p)$ it suffices to assume $p$ and prove $u\imp p$. 2. Assume $p$. 3. To prove $u\imp p$ it suffices to assume $u$ and prove $p$. 4. Assume $u$. 5. $p$ holds by line 2, completing the proof.
+
+Claim: $(u\imp(u\imp p))\imp (u\imp p)$. Proof: Assume $u\imp (u\imp p)$; we wish to prove $u\imp p$. Assume $u$; we wish to prove $p$. Since $u\imp (u\imp p)$ and $u$, we have $u\imp p$. Since $u\imp p$ and $u$, we have $p$, completing the proof.
+
+Claim: $(p\imp q)\imp (u\imp p)\imp (u\imp q)$. Proof: Assume $p\imp q$; we need to show $(u\imp p)\imp (u\imp q)$. Assume $u\imp p$; we need to show $u\imp q$. Assume $u$; we need to show $q$. Since $u$ and $u\imp p$ we have $p$. Since $p$ and $p\imp q$ we have $q$.
+
+Here's a faster version of the third claim. Assume $p\imp q$ and $u\imp q$ and $u$. Then $q$. We will follow this style going forward.
+
+Proving that $j=C_u$ is a modality will give us practice with $\vee$, which could be useful since proving $p\vee q$ is not the same as proving $\neg(\neg p\wedge\neg q)$. To prove $p\vee q$, one must prove $p$ or prove $q$. To prove $p\vee q \imp r$, one must prove $p\imp r$ and $q\imp r$.
+
+Claim: $p\imp (u\vee p)$; proof: assume $p$ then $u\vee p$. Claim: $(u\vee (u\vee p))\imp (u\vee p)$; proof: if $u$ then $u\vee p$; if $p$ then $u\vee p$. Claim: $(p\imp q)\imp (u\vee p)\imp (u\vee q)$; proof: assume $p\imp q$ and $u\vee p$; if $u$ then $u\vee q$ and if $p$ then $q$, so $u\vee q$.
+
+Proving that $j=Q_c$ is a modality is basically more of the same. We prove only axiom 2 and leave the rest to the reader.
+
+Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u)$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
+\end{example}
+
+This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
+
 
 
 % ==== Section ====%
