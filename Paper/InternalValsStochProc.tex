@@ -69,7 +69,7 @@ pdfencoding=unicode]{hyperref}
   }
 }
 
-
+\crefalias{chapter}{section}
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[chapter] %change [] to chapter if we want to change global numbering
@@ -173,8 +173,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\trr}{\internal{R}\hs}
 \newcommand{\tIR}{\internal{I\hs R}\hs}
 \newcommand{\tII}{\bar{\ubar{\trr}}\hs}
-\newcommand{\tLR}{\ubar{\trr}\hs}
-\newcommand{\tUR}{\bar{\trr}\hs}
+\newcommand{\tlrr}{\ubar{\trr}\hs}
 \newcommand{\trrub}{\trr^\infty}
 \newcommand{\tIRub}{\internal{I\hs R}^\infty}
 \newcommand{\tLRub}{\ubar{\trr}^{\infty}}
@@ -326,20 +325,183 @@ In attempting to answer that question, we found it helpful to generalize the sta
 In \cref{chap.background}
 
 
+\section*{Acknowledgements}
+David Spivak acknowledges the support from Honeywell and from AFOSR grants FA9550-17-1-0058 and FA9550-19-1-0113.
+
+
+
 % ======== Chapter ========%
 \chapter{Background}\label{chap.background}
 
+For background on sheaves, toposes, internal logic, and modalities, see \cref{sec.topos_background}.
+
 % ==== Section ====%
-\section{Spaces of compacts}
+\section{Lower nonnegative reals}
 
-We often denote a topological space $(X,\Op_X)$ by its set of points $X$, leaving $\Op_X$ implicit.
+\begin{definition}[Lower nonnegative reals]
+We define a \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
+\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as the set of nonnegative rationals that are lower bounds.}
+\begin{enumerate}
+	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$
+	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
+	\item (rounded) $\forall (q:\tqq).r_>q\imp\exists (q':\tqq).q'>q\wedge r_>q'$.
+\end{enumerate}
+Define the \emph{type of lower nonnegative reals}, denoted $\tlrr$, to be
+\[\tlrr\coloneqq\{r_>\colon\tqq\to\prop\mid r_>\tn{ nonnegative, down-closed, rounded}\}.
+\]
+We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
+\end{definition}
 
-For any topological space $X$, consider the set $\cpct{X}$ whose elements are the nonempty compact subsets $K\ss X$; as a point we denote it $\pt{K}\in\cpct{X}$. We can endow $\cpct{X}$ with the \emph{upper space} topology, which has the following basis. For every $U\ss X$ open, let $\bas{U}=\{\pt{K}\in\cpct{X}\mid K\ss U\}$.
+We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
 
-\begin{example}
-Let $T$ be a set endowed with a discrete topology. Then a subset is compact iff it is finite. If $t\neq t'$ are distinct elements of $T$ then $\bas{\{t\}}$, $\bas{\{t'\}}$, and $\bas{\{t,t'\}}$ are all open, and the inequality $\bas{\{t\}}\cup\bas{\{t'\}}\subset\bas{\{t,t'\}}$ is strict, containing two and three points respectively.
-\end{example}
+\begin{definition}[Order on lower reals]
+Given lower reals $r,r'$,
+%we say that $r$ \emph{is greater than} $r'$ and write $r>r'$ to denote the following proposition:
+%\[
+%	r>r'\coloneqq\exists (q:\tqq).r>q\wedge\forall(q'.\tqq).r'>q'\imp q>q'.
+%\]
+we say that $r$ \emph{is above} $r'$ and write $r\geq r'$ to denote the following proposition:
+\begin{equation}\label{eqn.real_order}
+	r\geq r'\coloneqq\forall(q:\tqq).r'>q\imp r>q.
+\end{equation}
+We may write $r'\leq r$ to denote $r\geq r'$.
+\end{definition}
 
+The following is straightforward when working in the internal logic; for more on this see \cref{sec.logic,sec.internal_language,sec.modalities}.
+
+\begin{proposition}[$\geq$ is a partial order]
+For all lower reals $r,r',r'':\tlrr$, we have
+\begin{enumerate}
+	\item $r\geq r$
+	\item $(r\geq r')\imp(r'\geq r'')\imp(r\geq r'')$
+	\item $(r\geq r')\imp(r'\geq r)\imp r=r'$
+\end{enumerate}
+\end{proposition}
+
+\begin{definition}[Addition of lower reals]\label{def.sum_lr}
+Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tqq\to\prop$ to be the predicate
+\begin{equation}\label{eqn.sum_lr}
+(r_1+r_2)_>q\coloneqq\exists (q_1,q_2:\tqq).(r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).
+\end{equation}
+We show it is indeed a lower real in \cref{prop.sum_lr}.
+\end{definition}
+
+\begin{proposition}\label{prop.sum_lr}
+The predicate $(r_1+r_2)_>$ defined in \cref{def.sum_lr} is a lower real.
+\end{proposition}
+\begin{proof}
+We need to show that $(r_1+r_2)_>$ is nonnegative, down-closed, and rounded.
+
+\noindent (Nonnegative): If $0>q$, take $q_1=q_2\coloneqq q/2$. Then $q_1+q_2=q$ and $r_1>q_1$ and $r_2>q_2$ by assumption, so $r_1+r_2>q$.
+
+\noindent(Down-closed): Choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\epsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\epsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
+
+\noindent(Rounded): Choose a rational $q$ and suppose $(r_1+r_2)>q$. By definition we have $q_1,q_2$ with $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$. By roundedness of $r_1$ and $r_2$, we have rationals $q_1',q_2'$ with $r_1>q_1'>q_1$ and $r_2>q_2'>q_2$. Then letting $q'=q_1'+q_2'$, we have $(r_1+r_2)>q'$ and $q'>q$, as desired.
+\end{proof}
+
+\begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
+Let $\tqq_{\geq0}\coloneqq\{q:\tqq\mid q\geq0\}$. There is a function $\tqq_{\geq0}\to\tlrr$ sending $q$ to the predicate $q_>\colon\tqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
+\footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
+ We often write $q:\tlrr$ to denote this lower real.
+\end{definition}
+
+We leave the following to the reader.
+\begin{proposition}
+The inclusion of nonnegative rationals into lower reals from \cref{def.rationals_are_reals} preserves order and sum.
+\end{proposition}
+
+\begin{proposition}
+The lower reals form a commutative monoid $(\tlrr,0,+)$.
+\end{proposition}
+\begin{proof}
+\noindent (Commutativity): obvious from the definition \eqref{eqn.sum_lr}.
+
+\noindent (Unitality): First we show that $r>q$ implies $r+0>q$. By roundedness, take $r>q'>q$ and let $q_0=q-q'$. Then $r>q'$, $0>q_0$, and $q=q'+q_0$, so $r+0>q$. Second we show that $r+0>q$ implies $r>q$. By definition there exists $q_1,q_2$ with $r>q_1$, $0>q_2$, and $q=q_1+q_2$. But then $r>q_1>q_1+q_2=q$.
+
+\noindent (Associativity): Both sides of associativity $(r_1+r_2)+r_3=^?r_1+(r_2+r_3)$ are directly seen to be equivalent to the formula $\exists(q_1,q_2,q_3:\tqq).(r_1>q_1)\wedge(r_2>q_2)\wedge(r_3>q_3)\wedge(q=q_1+q_2+q_3)$.
+\end{proof}
+
+\begin{proposition}[Order cancellativity]
+Suppose $r_0,r_1,r_2:\trr$ are lower reals and that $r_0$ is bounded in the sense that $q_0\geq r_0$ for some $q_0:\tqq$. If $r_0+r_1\geq r_0+r_2$ then $r_1\geq r_2$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\begin{definition}[Propositions ``are'' lower reals]\label{def.props_are_reals}
+There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $\tqq\to\prop$ given by $q\mapsto(q<0)\vee p$.%
+\footnote{We leave it to the reader to check that this is indeed a lower nonnegative real.}
+\end{definition}
+
+\begin{proposition}
+Let $p,p':\prop$ be propositions, considered as lower reals. Then 
+\begin{enumerate}
+	\item $p'\leq p$ iff $p'\imp p$
+	\item $p+p'=p\vee p'$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+If $p'\leq p$ then applying \eqref{eqn.real_order} with $q=1$ we have $p'\imp p$ as desired. The converse is similarly straightforward.
+
+Suppose $(p+p')>q_0$, and let $q,q'$ be such that $p>q$, $p'>q'$, and $q_0=q+q'$. If $0>q_0$ then either $0>q$ or $0>q'$, so either $p$ or $p'$. Rationals are decidable so either $(0>q_0)\vee\neg(0>q_0)$ holds, so we may assume $\neg(0>q_0)$. Then either $0>q$ or $0>q'$, so either $p$ or $p'$ holds by definition.
+\end{proof}
+
+% ==== Section ====%
+\section{Internal topological spaces and Moerdijk's theorem}
+
+% ==== Section ====%
+\section{Valuations}
+
+\begin{definition}
+A \emph{valuation} $\mu$ on a topological space $(X,\Op_X)$ assigns a real number $\mu(U)\in\rr$ to each open $U\in\Op_X$ and satisfies the following conditions:
+\begin{enumerate}
+	\item $\mu(\varnothing)=0$;
+	\item If $U\ss V$ then $\mu(U)\leq\mu(V)$; and
+	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
+\end{enumerate}
+A valuation $\mu$ is called \emph{continuous} if
+\begin{enumerate}[resume]
+	\item for all directed sets $(U_i)_{i\in I}\ss\Op$,%
+	\footnote{A set $(U_i)_{i\in I}$ is directed if $I$ is nonempty and, for every $i_1,i_2\in I$ there is some $j\in I$ with $U_{i_1}\cup U_{i_2}\ss U_j$.}
+	 one has $\sup_{i\in I}\mu(U_i)=\mu(\bigcup_{i\in I}U_i)$.
+\end{enumerate}
+A continuous valuation $\mu$ is called a \emph{probability valuation} if
+\begin{enumerate}[resume]
+	\item $\mu(X)=1$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}
+Probability valuations coincide with probability measures....
+\end{theorem}
+
+Internalize the definition.
+
+% ======== Chapter ========%
+\chapter{Axioms and basic theory}
+
+% ======== Chapter ========%
+\chapter{Main theorem}
+
+% ======== Chapter ========%
+\chapter{Open questions}
+
+
+\appendix
+
+% ======== Chapter ========%
+\chapter{Topos theoretic background}\label{sec.topos_background}
+%% ==== Section ====%
+%\section{Spaces of compacts}
+%
+%We often denote a topological space $(X,\Op_X)$ by its set of points $X$, leaving $\Op_X$ implicit.
+%
+%For any topological space $X$, consider the set $\cpct{X}$ whose elements are the nonempty compact subsets $K\ss X$; as a point we denote it $\pt{K}\in\cpct{X}$. We can endow $\cpct{X}$ with the \emph{upper space} topology, which has the following basis. For every $U\ss X$ open, let $\bas{U}=\{\pt{K}\in\cpct{X}\mid K\ss U\}$.
+%
+%\begin{example}
+%Let $T$ be a set endowed with a discrete topology. Then a subset is compact iff it is finite. If $t\neq t'$ are distinct elements of $T$ then $\bas{\{t\}}$, $\bas{\{t'\}}$, and $\bas{\{t,t'\}}$ are all open, and the inequality $\bas{\{t\}}\cup\bas{\{t'\}}\subset\bas{\{t,t'\}}$ is strict, containing two and three points respectively.
+%\end{example}
+%
 % ==== Section ====%
 \section{Sheaves on a topological space}
 
@@ -511,7 +673,7 @@ In any topos, one can interpret the logical constants $\true,\false$, the logica
 We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagine the sphere $S$ as the surface of the earth; by \cref{ex.subobject_classifier}, sections of the sheaf $\Omega$ are open subsets of $S$. In the topos $\shv(S)$, when one asks ``is it raining'', we can answer it with the largest open set $U\ss S$ throughout which it is raining. On the topos of sheaves on a single point, open sets are either everything or empty, recovering the notion of ``yes/no.''
 
 Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op_X$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\ss U$ and write
-\begin{equation}\label{eqn.order}
+\begin{equation}\label{eqn.prop_order}
 V\leq V'\tn{ iff }V\ss V'.
 \end{equation} 
 Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
@@ -539,7 +701,7 @@ With all these definitions, logical deductions can be carried out in the usual s
 We will give an example of this sort of deduction in \cref{ex.modality_deduction}.
 
 % ==== Section ====%
-\section{The internal language of $\shv(X)$}
+\section{The internal language of $\shv(X)$}\label{sec.internal_language}
 
 The analogy between any topos $\cat{E}$ and the category (topos) of sets is deep enough that one can write formulas for set-theoretic objects in the usual way, and interpret them as formulas for objects in $\cat{E}$ using a system called \emph{Kripke-Joyal semantics}. For example, if $A$ and $B$ are sets then 
 \begin{equation}\label{eqn.epi}
@@ -565,7 +727,7 @@ In the comprehension syntax $\{x:X\mid\varphi(x)\}$, the right-hand part is a lo
 
 The Kripke-Joyal semantics invites us not to give the largest open set throughout which a proposition $\varphi$ is true, but instead to simply know whether it is true throughout a given open $U\in\Op_X$. The notation for this is $U\forces\varphi$ and pronounced \emph{$U$ forces $\varphi$}.%
 \footnote{The terminology ``forcing'' comes from Cohen's proof of the independence of the continuum hypothesis.}
-We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.order}.
+We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.prop_order}.
 
 Here is a list of rules for $\forces$,%
 \footnote{The list is not minimal: many of the rules shown follow from others. In fact rule 1 is complete! The other rules simply remind us of the semantics of the logical symbols.
@@ -598,7 +760,7 @@ Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ a
 In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$.
 
 % ==== Section ====%
-\section{Modalities on $\shv(X)$}
+\section{Modalities on $\shv(X)$}\label{sec.modalities}sec.logic
 
 Modalities operate on propositions to give new propositions that hold more generally. More precisely, we have the following definition. 
 \begin{definition}[Modality]\label{def.modality}
@@ -647,7 +809,7 @@ Claim: $p\imp (u\vee p)$; proof: assume $p$ then $u\vee p$. Claim: $(u\vee (u\ve
 
 Proving that $j=Q_c$ is a modality is basically more of the same. We prove only axiom 2 and leave the rest to the reader.
 
-Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u)$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
+Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
 \end{example}
 
 This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
