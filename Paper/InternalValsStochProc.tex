@@ -342,9 +342,11 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 Let $\tnnqq$ denote the nonnegative rationals. We define the type of \emph{lower nonnegative reals}, denoted $\tlrr$ as
 \[
 \tlrr=\{r_>\colon\tnnqq\to\prop\mid\forall(q:\tqq). r_>q\iff\exists(q':\tqq).r_>q'\wedge q'>q\}.%
-\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real $r$ is defined as the set of nonnegative rationals that are lower bounds for $r$.}
+\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as the set of nonnegative rationals that are lower bounds.}
 \]
-We often write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
+We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
+
+It is often convenient to have names for the two directions of the $\iff$. The implication $r_>q\imp\exists(q':\tqq).r_>q'\wedge q'>q$ is called \emph{roundedness} and its inverse is called \emph{down-closure}.
 \end{definition}
 
 We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
@@ -372,8 +374,38 @@ For all lower reals $r,r',r'':\tlrr$, we have
 \end{enumerate}
 \end{proposition}
 
+\begin{definition}[Addition of lower reals]\label{def.sum_lr}
+Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tnnqq\to\prop$ to be the predicate%
+\footnote{The first two clauses, $(r_1=\bot\wedge r_2>q)\vee(r_2=\bot\wedge r_1>q)$, are the cost of only testing on $\tnnqq$ rather than on all of $\tqq$. Without these clauses, $0$ is not a unit for addition.}
+\begin{multline}\label{eqn.sum_lr}
+(r_1+r_2)_>q\coloneqq
+(r_1=\bot\wedge r_2>q)\vee(r_2=\bot\wedge r_1>q)\vee\\\exists (q_1,q_2:\tnnqq).(r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).\end{multline}
+We show it is indeed a lower real in \cref{prop.sum_lr}.
+\end{definition}
 
-\
+\begin{proposition}\label{prop.sum_lr}
+The predicate $(r_1+r_2)_>$ defined in \cref{def.sum_lr} is a lower real.
+\end{proposition}
+\begin{proof}
+We need to show that $\forall(q:\tqq). (r_1+r_2)_>q\iff\exists(q':\tqq).(r_1+r_2)_>q'\wedge q'>q$.
+
+\noindent($\imp$): For roundedness, choose a rational $q$ and suppose $(r_1+r_2)>q$. By definition we have $q_1,q_2$ with $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$. By roundedness of $r_1$ and $r_2$, we have rationals $q_1',q_2'$ with $r_1>q_1'>q_1$ and $r_2>q_2'>q_2$. Then letting $q'=q_1'+q_2'$, we have $(r_1+r_2)>q'$ and $q'>q$, as desired.
+
+\noindent($\Leftarrow$): For down-closure, choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\epsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\epsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
+\end{proof}
+
+\begin{definition}[Rationals ``are'' lower reals]
+There is a function $\tnnqq\to\tlrr$ sending $q$ to the predicate $q_>\colon\tnnqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
+\footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
+ We often write $q:\tlrr$ to denote this lower real. In particular $0$ denotes the lower real $q\mapsto\false$.
+\end{definition}
+
+\begin{proposition}
+The lower reals form a commutative monoid $(\tlrr,0,+)$.
+\end{proposition}
+\begin{proof}
+Commutativity and unitality of $0$ are obvious from the definition \eqref{eqn.sum_lr}. It remains to test associativity. but now there are nine cases!!
+\end{proof}
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
@@ -738,7 +770,7 @@ Claim: $p\imp (u\vee p)$; proof: assume $p$ then $u\vee p$. Claim: $(u\vee (u\ve
 
 Proving that $j=Q_c$ is a modality is basically more of the same. We prove only axiom 2 and leave the rest to the reader.
 
-Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u)$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
+Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
 \end{example}
 
 This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
