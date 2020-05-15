@@ -622,21 +622,53 @@ For each axiom, we also include a soundness proof.
 % ======== Chapter ========%
 \chapter{Interaction of valuations and modalities}
 
-\begin{proposition}
-	\label{}
+\begin{theorem}
+	\label{vals_vs_modalities}
 	Let $j$ be a decidable modality and $\mu$ a valuation on an internal space $(X,\Op_X)$. Then for all $P : \Op_X$,
 	\[
 		\mu(jP) = j \mu(P).	
 	\]
-\end{proposition}
+\end{theorem}
 
 Note that $jP$ is again open by \Cref{props_open}, which is necessary in order for $\mu$ to be applicable to $jP$.
 
 \begin{proof}
-	Since $jP \land (P \Rightarrow j\bot)$ is equivalent to $j\bot$, applying the modularity law to $jP$ and $P \Rightarrow j\bot$ results in
+	We first prove two auxiliary statements, both of which are special cases of the overall result.
+	\begin{itemize}
+		\item If $Q$ is any $j$-closed open, then $\mu(Q)$ is a $j$-closed lower real.
+			
+			To begin the proof, we have the equivalences
+			\begin{align*}
+				Q \land (Q \Rightarrow j\bot) \quad & \Longleftrightarrow \quad j\bot, \\
+				Q \lor (Q \Rightarrow j\bot) \quad & \Longleftrightarrow \quad \top,
+			\end{align*}
+			where the second one is an instance of the decidability assumption on $j$. Hence applying the modularity law to $Q$ and $Q \Rightarrow j\bot$ results in the equation
+			\begin{align}
+				\label{j_modularity}
+				\begin{split}
+					\mu(Q) + \mu(Q \Rightarrow j\bot)	& = \mu(j\bot) + \mu(\top) \\
+										& = \inc(j \bot) + 1.
+				\end{split}
+			\end{align}
+			When applied to any rational $q$, the right-hand side is clearly $j$-closed, hence so is the left-hand side. But since a sum of lower reals is $j$-closed if and only if each summand is, it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
+		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
+
+			The proof is simple: since $R$ implies $\mu(R) = 1$, clearly also $jR$ implies $j(\mu(R) = 1)$. But then also $j\mu(R) = j1$.
+	\end{itemize}
+
+	Getting to the proof of the main claim, we apply the modularity law to a very similar pair of opens as in the first item, namely $P$ and $P \Rightarrow j\bot$ (where the difference is that $P$ need not be $j$-closed). This gives
 	\[
-		\mu(jP) + \mu(P \Rightarrow j\bot) = \mu(j\bot) + \mu(jP \lor (P \Rightarrow j\bot)).
+		\mu(P) + \mu(P \Rightarrow j\bot) = \mu(P \land (P \Rightarrow j\bot)) + \mu(P \lor (P \Rightarrow j\bot)).
 	\]
+	We now evaluate the second to fourth expressions in this equation with $j$ applied. The argument of the second is already $j$-closed, and therefore $\mu(P \Rightarrow j\bot)$ is also $j$-closed as per the first item above. For the third expression, we consider
+	\[
+		j \mu(\bot) \le j \mu(P \land (P \Rightarrow j\bot)) \le j \mu(j\bot),
+	\]
+	and it follows that $j \mu(P \land (P \Rightarrow j\bot)) =  j \inc(\bot)$. Finally, we have $j \mu(P \lor (P \Rightarrow j\bot)) = j 1$ by the second item above, since $j(P \lor (P \Rightarrow j\bot))$ clearly holds if $jP$ and also if $P \Rightarrow j\bot$. Overall, we therefore get
+	\[
+		j \mu(P) + \mu(P \Rightarrow j\bot) = j \inc(\bot) + j 1.
+	\]
+	Since $P \Rightarrow j\bot$ is equivalent to $jP \Rightarrow j\bot$ and the right-hand side is independent of $j$, applying this equation with $jP$ in place of $P$ and cancelling $\mu(P \Rightarrow j\bot)$ results in $j \mu(P) = j \mu(jP)$. But since also $j \mu(jP) = \mu(jP)$ by the first item above, we therefore obtain the overall $\mu(jP) = j \mu(P)$.
 \end{proof}
 
 \chapter{Main theorem}
