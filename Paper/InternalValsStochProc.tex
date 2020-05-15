@@ -476,32 +476,48 @@ Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $p
 p\imp (1_p+r=1+r).
 \end{equation}
 
-We want to show order cancellativity, \cref{prop.order_cancel}. To do so we follow a proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
-\begin{lemma}
+We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
+
+\begin{lemma}\label{lemma.order_cancel_props}
 For any $p:\prop$ and $r_1,r_2:\tlrr$, if $1_p+r_1\leq 1_p+r_2$ then $r_1\leq r_2$.
 \end{lemma}
 \begin{proof}
 Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<1_p+r_1$ so by assumption $q_1<1_p+r_2$. By \cref{def.sum_lr}, there exist $q<1_p$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge p$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $p$ so by \cref{eqn.indicator,prop.cancel_rationals}, $1_p+r_1\leq 1_p+r_2$ directly implies $r_1\leq r_2$.
 \end{proof}
 
-\begin{proposition}[Order cancellativity, \cite{Henry}]\label{prop.order_cancel}
-Suppose $r,r_1,r_2:\trr$ are lower reals and that $r$ is bounded in the sense that $r\leq N$ for some $N:\tnn$. If $r+r_1\leq r+r_2$ then $r_1\leq r_2$.
+\begin{proposition}[Cancellative bounds, \cite{Henry}]\label{prop.cancellative_bounds}
+Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\geq 1$, there exists $r_n:\tlrr$ satisfying the following
+\begin{enumerate}
+	\item $r_n\leq r\leq r_n+1/n$; and
+	\item for any $a,b:\tlrr$ if $r_n+a\leq r_n+b$ then $a\leq b$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-For positive integer $n$, define $h_n:\tlrr$ to be the following linear combination of indicator functions:
-\[
-h_n\coloneqq \frac{1}{n}\cdot\sum_{i=1}^{n\cdot N}1_{(i/n)<r}
-\]
-We first claim that $h_n\leq r$, so take $q<h_n$; we will show $q<r$. By \cref{def.Q_action,def.sum_lr}, we have $nq=q_1+\cdots+q_{nN}$ with $q_i<0$ or $(q_i<1)\wedge (i/n<r)$ for each $i$. Let $i_r$ be the largest $i$ with $0<q_i$. Then $i_r/n<r$ and hence for all $i\leq i_r$ we have $i/n<r$, so $q_i<1$, and for all $i>i_r$ we have $q_i<0$. It follows that $nq<i_r$, i.e.\ that $q<i_r/n<r$, as desired.
+Define $r_n:\tlrr$ to be the following linear combination of indicator functions:
+\begin{equation}\label{eqn.cancellative_bounds}
+r_n\coloneqq \frac{1}{n}\cdot\sum_{i=1}^{n\cdot N}1_{(i/n)<r}.
+\end{equation}
+For the claim that $r_n\leq r$, take $q<r_n$; we will show $q<r$. By \cref{def.Q_action,def.sum_lr}, we have $nq=q_1+\cdots+q_{nN}$ with $q_i<0$ or $(q_i<1)\wedge (i/n<r)$ for each $i$. Let $i_r$ be the largest $i$ with $0<q_i$. Then $i_r/n<r$ and hence for all $i\leq i_r$ we have $i/n<r$, so $q_i<1$, and for all $i>i_r$ we have $q_i<0$. It follows that $nq<i_r$, i.e.\ that $q<i_r/n<r$, as desired.
 
-We next claim that $r\leq h_n+1$, so take $q<r$; we will show $q<h_n+1$. Let $n_0\coloneqq\floor{nq}$ be the largest integer with $n_0\leq nq$.**Finish**
+For the claim that $r\leq r_n+1/n$, take $q<r$; we will show $q<r_n+1/n$ or equivalently $nq<nr_n+1$. Let $n_0\coloneqq\floor{nq}$ be the largest integer with $n_0\leq nq$. Then $nq<n_0+1$ and it suffices to show that $n_0\leq nr_n=\sum_{i=1}^{nN}1_{(i/n)<r}$. Since $q<r$ we have $i/n<r$, and hence $1_{(i/n)<r}=1$ for all integers $1\leq i\leq n_0$. This gives $n_0\leq nr_n$ as desired.
+
+Finally, suppose $r_n+a\leq r_n+b$. Then $nr_n+na\leq nr_n+nb$ and it follows by induction on $Nn$ using \cref{lemma.order_cancel_props} that $na\leq nb$. Hence $a\leq b$.
+\end{proof}
+
+\begin{corollary}[Order cancellativity, \cite{Henry}]\label{cor.order_cancel}
+Suppose $r,s,s':\trr$ are lower reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
+\end{corollary}
+\begin{proof}
+Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{prop.cancellative_bounds}, we have 
+\[r_n+s\leq r+s\leq r+s'\leq r_n+s'+1/n,\]
+and moreover we can conclude $s\leq s'+1/n$. But then $q+1/n<q'<s\leq s'+1/n$ and the result follows from \cref{prop.cancel_rationals}.
 \end{proof}
 
 \begin{corollary}
 For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'$ and $r_2\leq r_2'$ then $r_1=r_1'$ and $r_2=r_2'$.
 \end{corollary}
 \begin{proof}
-If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{prop.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
+If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{cor.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
 \end{proof}
 
 % ==== Section ====%
