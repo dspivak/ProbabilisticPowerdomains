@@ -106,6 +106,7 @@ pdfencoding=unicode]{hyperref}
 \DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\subtype}{[}{]}
 \DeclarePairedDelimiter{\classify}{\ulcorner}{\urcorner}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
@@ -352,6 +353,25 @@ Define the \emph{type of lower nonnegative reals}, denoted $\tlrr$, to be
 We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
 \end{definition}
 
+\begin{definition}[$\tqq_{\geq0}$-action on lower reals]\label{def.Q_action}
+For any $r:\tlrr$ and $q\in\tqq$ with $0\leq q$, define $q\cdot r:\tqq\to\prop$ by cases.
+\[
+(q\cdot r)_>q'\coloneqq
+\begin{cases}
+	0>q'&\tn{ if }q=0\\
+	r>q'/q&\tn{ if }q>0.
+\end{cases}
+\]
+We show that $q\cdot r$ is a lower real in \cref{prop.Q_action_lower_real}.
+\end{definition}
+
+\begin{proposition}\label{prop.Q_action_lower_real}
+For any $r:\tlrr$ and $q\in\tqq$ with $0\leq q$, the predicate $q\cdot r$ from \cref{def.Q_action} is a lower real.
+\end{proposition}
+\begin{proof}
+If $q=0$ then $(q\cdot r)>q'$ iff $0>q'$, so $q\cdot r$ is clearly nonnegative, down-closed, and rounded. Suppose $q>0$. If $0>q'$ then $0>q'/q$ so $r>q'/q$ and $r>q'$; hence it is nonnegative. Proving down-closure and roundedness are similarly straightforward.
+\end{proof}
+
 We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
 
 \begin{definition}[Order on lower reals]
@@ -406,6 +426,8 @@ For any $q:\tqq$ and $r,r':\tlrr$, if $q<r$ then $q<r+r'$.
 Take $q<r$ and use roundedness to produce $q<q'<r$. Then $q-q'<0<r'$ so $q=q'+(q-q')<r+r'$ as desired.
 \end{proof}
 
+
+
 \begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
 Let $\tqq_{\geq0}\coloneqq\{q:\tqq\mid q\geq0\}$. There is a function $\tqq_{\geq0}\to\tlrr$ sending $q$ to the predicate $q_>\colon\tqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
 \footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
@@ -454,7 +476,7 @@ Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $p
 p\imp (1_p+r=1+r).
 \end{equation}
 
-We want to show order cancellativity, \cref{prop.order_cancel}. To do so we follow the proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
+We want to show order cancellativity, \cref{prop.order_cancel}. To do so we follow a proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
 \begin{lemma}
 For any $p:\prop$ and $r_1,r_2:\tlrr$, if $1_p+r_1\leq 1_p+r_2$ then $r_1\leq r_2$.
 \end{lemma}
@@ -462,14 +484,25 @@ For any $p:\prop$ and $r_1,r_2:\tlrr$, if $1_p+r_1\leq 1_p+r_2$ then $r_1\leq r_
 Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<1_p+r_1$ so by assumption $q_1<1_p+r_2$. By \cref{def.sum_lr}, there exist $q<1_p$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge p$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $p$ so by \cref{eqn.indicator,prop.cancel_rationals}, $1_p+r_1\leq 1_p+r_2$ directly implies $r_1\leq r_2$.
 \end{proof}
 
-\begin{proposition}[Order cancellativity]\label{prop.order_cancel}
-Suppose $r_0,r_1,r_2:\trr$ are lower reals and that $r_0$ is bounded in the sense that $r_0\leq q_0\geq r_0$ for some $q_0:\tqq$. If $r_0+r_1\geq r_0+r_2$ then $r_1\geq r_2$.
+\begin{proposition}[Order cancellativity, \cite{Henry}]\label{prop.order_cancel}
+Suppose $r,r_1,r_2:\trr$ are lower reals and that $r$ is bounded in the sense that $r\leq N$ for some $N:\tnn$. If $r+r_1\leq r+r_2$ then $r_1\leq r_2$.
 \end{proposition}
 \begin{proof}
+For positive integer $n$, define $h_n:\tlrr$ to be the following linear combination of indicator functions:
+\[
+h_n\coloneqq \frac{1}{n}\cdot\sum_{i=1}^{n\cdot N}1_{(i/n)<r}
+\]
+We first claim that $h_n\leq r$, so take $q<h_n$; we will show $q<r$. By \cref{def.Q_action,def.sum_lr}, we have $nq=q_1+\cdots+q_{nN}$ with $q_i<0$ or $(q_i<1)\wedge (i/n<r)$ for each $i$. Let $i_r$ be the largest $i$ with $0<q_i$. Then $i_r/n<r$ and hence for all $i\leq i_r$ we have $i/n<r$, so $q_i<1$, and for all $i>i_r$ we have $q_i<0$. It follows that $nq<i_r$, i.e.\ that $q<i_r/n<r$, as desired.
 
+We next claim that $r\leq h_n+1$, so take $q<r$; we will show $q<h_n+1$. Let $n_0\coloneqq\floor{nq}$ be the largest integer with $n_0\leq nq$.**Finish**
 \end{proof}
 
-
+\begin{corollary}
+For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'$ and $r_2\leq r_2'$ then $r_1=r_1'$ and $r_2=r_2'$.
+\end{corollary}
+\begin{proof}
+If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{prop.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
+\end{proof}
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
