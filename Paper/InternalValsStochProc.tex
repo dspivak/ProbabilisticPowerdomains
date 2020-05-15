@@ -106,6 +106,7 @@ pdfencoding=unicode]{hyperref}
 \DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\subtype}{[}{]}
 \DeclarePairedDelimiter{\classify}{\ulcorner}{\urcorner}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
@@ -147,7 +148,8 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
 \newcommand{\subsing}[1]{\mathrm{subsing}(#1)}	% subsingleton predicate
 \newcommand{\conn}[1]{\mathrm{conn}(#1)}	% connectedness predicate
-\newcommand{\inc}{i}				% inclusion of Prop in lower reals
+\newcommand{\ind}[1]{1_{#1}}
+\newcommand{\inc}{\ind{-}}				% inclusion of Prop in lower reals
 
 \newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
 \renewcommand{\sec}{\sheaf{Sec}}
@@ -204,6 +206,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Poset}{\Cat{Poset}}
 \renewcommand{\Top}{\Cat{Top}}
 \newcommand{\Op}{\Set{Op}}
+\newcommand{\Open}{\Set{Open}}
 \renewcommand{\C}{\Cat{C}}
 \newcommand{\Sub}{\Set{Sub}}
 \newcommand{\lsc}{\Fun{LsC}}
@@ -339,7 +342,7 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 % ==== Section ====%
 \section{Lower nonnegative reals}
 
-\begin{definition}[Lower nonnegative reals]
+\begin{definition}[Lower nonnegative reals]\label{def.lower_nn_reals}
 We define a \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
 \footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as a set of rational ``lower bounds''.}
 \begin{enumerate}
@@ -352,6 +355,25 @@ Define the \emph{type of lower nonnegative reals}, denoted $\tlrr$, to be
 \]
 We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
 \end{definition}
+
+\begin{definition}[$\tqq_{\geq0}$-action on lower reals]\label{def.Q_action}
+For any $r:\tlrr$ and $q\in\tqq$ with $0\leq q$, define $q\cdot r:\tqq\to\prop$ by cases.
+\[
+(q\cdot r)_>q'\coloneqq
+\begin{cases}
+	0>q'&\tn{ if }q=0\\
+	r>q'/q&\tn{ if }q>0.
+\end{cases}
+\]
+We show that $q\cdot r$ is a lower real in \cref{prop.Q_action_lower_real}.
+\end{definition}
+
+\begin{proposition}\label{prop.Q_action_lower_real}
+For any $r:\tlrr$ and $q\in\tqq$ with $0\leq q$, the predicate $q\cdot r$ from \cref{def.Q_action} is a lower real.
+\end{proposition}
+\begin{proof}
+If $q=0$ then $(q\cdot r)>q'$ iff $0>q'$, so $q\cdot r$ is clearly nonnegative, down-closed, and rounded. Suppose $q>0$. If $0>q'$ then $0>q'/q$ so $r>q'/q$ and $r>q'$; hence it is nonnegative. Proving down-closure and roundedness are similarly straightforward.
+\end{proof}
 
 We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
 
@@ -407,6 +429,8 @@ For any $q:\tqq$ and $r,r':\tlrr$, if $q<r$ then $q<r+r'$.
 Take $q<r$ and use roundedness to produce $q<q'<r$. Then $q-q'<0<r'$ so $q=q'+(q-q')<r+r'$ as desired.
 \end{proof}
 
+
+
 \begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
 Let $\tqq_{\geq0}\coloneqq\{q:\tqq\mid q\geq0\}$. There is a function $\tqq_{\geq0}\to\tlrr$ sending $q$ to the predicate $q_>\colon\tqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
 \footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
@@ -445,85 +469,150 @@ Take $q_1<r_1$; we want to show $q_1<r_2$. Use roundedness to produce $q_1<q_1'<
 \end{proof}
 
 \begin{definition}[Indicator functions as lower reals]\label{def.props_are_reals}
-There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $1_p\colon\tqq\to\prop$ given by:%
-\footnote{We leave it to the reader to check that $1_p$ is indeed a lower nonnegative real.}
-\[1_p(q)\coloneqq(q<0)\vee ((q<1)\wedge p).\]
+There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\colon\tqq\to\prop$ given by:%
+\footnote{We leave it to the reader to check that $\ind{P}$ is indeed a lower nonnegative real.}
+\[\ind{P}(q)\coloneqq(q<0)\vee ((q<1)\wedge P).\]
 \end{definition}
 
-Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $p:\prop$ and $r:\tlrr$
+The following is straightforward.
+\begin{lemma}\label{lemma.ind_monotonic}
+We have $\ind{\false}=0$, $\ind{\true}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
+\end{lemma}
+
+Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
 \begin{equation}\label{eqn.indicator}
-p\imp (1_p+r=1+r).
+P\imp (\ind{P}+r=1+r).
 \end{equation}
 
-We want to show order cancellativity, \cref{prop.order_cancel}. To do so we follow the proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
-\begin{lemma}
-For any $p:\prop$ and $r_1,r_2:\tlrr$, if $1_p+r_1\leq 1_p+r_2$ then $r_1\leq r_2$.
+We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
+
+\begin{lemma}\label{lemma.order_cancel_props}
+For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\leq \ind{P}+r_2$ then $r_1\leq r_2$.
 \end{lemma}
 \begin{proof}
-Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<1_p+r_1$ so by assumption $q_1<1_p+r_2$. By \cref{def.sum_lr}, there exist $q<1_p$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge p$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $p$ so by \cref{eqn.indicator,prop.cancel_rationals}, $1_p+r_1\leq 1_p+r_2$ directly implies $r_1\leq r_2$.
+Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<\ind{P}+r_1$ so by assumption $q_1<\ind{P}+r_2$. By \cref{def.sum_lr}, there exist $q<\ind{P}$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge P$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $P$ so by \cref{eqn.indicator,prop.cancel_rationals}, $\ind{P}+r_1\leq \ind{P}+r_2$ directly implies $r_1\leq r_2$.
 \end{proof}
 
-\begin{proposition}[Order cancellativity]\label{prop.order_cancel}
-Suppose $r_0,r_1,r_2:\trr$ are lower reals and that $r_0$ is bounded in the sense that $r_0\leq q_0\geq r_0$ for some $q_0:\tqq$. If $r_0+r_1\geq r_0+r_2$ then $r_1\geq r_2$.
+\begin{proposition}[Cancellative bounds, \cite{Henry}]\label{prop.cancellative_bounds}
+Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\geq 1$, there exists $r_n:\tlrr$ satisfying the following
+\begin{enumerate}
+	\item $r_n\leq r\leq r_n+1/n$; and
+	\item for any $a,b:\tlrr$ if $r_n+a\leq r_n+b$ then $a\leq b$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
+Define $r_n:\tlrr$ to be the following linear combination of indicator functions:
+\begin{equation}\label{eqn.cancellative_bounds}
+r_n\coloneqq \frac{1}{n}\cdot\sum_{i=1}^{n\cdot N}\ind{(i/n)<r}.
+\end{equation}
+For the claim that $r_n\leq r$, take $q<r_n$; we will show $q<r$. By \cref{def.Q_action,def.sum_lr}, we have $nq=q_1+\cdots+q_{nN}$ with $q_i<0$ or $(q_i<1)\wedge (i/n<r)$ for each $i$. Let $i_r$ be the largest $i$ with $0<q_i$. Then $i_r/n<r$ and hence for all $i\leq i_r$ we have $i/n<r$, so $q_i<1$, and for all $i>i_r$ we have $q_i<0$. It follows that $nq<i_r$, i.e.\ that $q<i_r/n<r$, as desired.
 
+For the claim that $r\leq r_n+1/n$, take $q<r$; we will show $q<r_n+1/n$ or equivalently $nq<nr_n+1$. Let $n_0\coloneqq\floor{nq}$ be the largest integer with $n_0\leq nq$. Then $nq<n_0+1$ and it suffices to show that $n_0\leq nr_n=\sum_{i=1}^{nN}\ind{(i/n)<r}$. Since $q<r$ we have $i/n<r$, and hence $\ind{(i/n)<r}=1$ for all integers $1\leq i\leq n_0$. This gives $n_0\leq nr_n$ as desired.
+
+Finally, suppose $r_n+a\leq r_n+b$. Then $nr_n+na\leq nr_n+nb$ and it follows by induction on $Nn$ using \cref{lemma.order_cancel_props} that $na\leq nb$. Hence $a\leq b$.
 \end{proof}
 
+\begin{corollary}[Order cancellativity, \cite{Henry}]\label{cor.order_cancel}
+Suppose $r,s,s':\trr$ are lower reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
+\end{corollary}
+\begin{proof}
+Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{prop.cancellative_bounds}, we have 
+\[r_n+s\leq r+s\leq r+s'\leq r_n+s'+1/n,\]
+and moreover we can conclude $s\leq s'+1/n$. But then $q+1/n<q'<s\leq s'+1/n$ and the result follows from \cref{prop.cancel_rationals}.
+\end{proof}
 
+\begin{corollary}
+For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'$ and $r_2\leq r_2'$ then $r_1=r_1'$ and $r_2=r_2'$.
+\end{corollary}
+\begin{proof}
+If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{cor.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
+\end{proof}
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
 
-If $(X,\Op_X)$ is a topological space, then the fact that $\Op_X$ is closed under joins means the following: if $S : \Op_X \to \prop$ specifies any subtype of $\Op_X$, then also its join
-\[
-	\exists P : \Op_X . S(P) \land P
-\]
-is open, i.e.~satisfies the predicate $\Op_X : (X \to \prop) \to \prop$. This is a powerful assumption with the following surprising consequences.
+
+Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be $\prop^X$. \cref{def.internal_space} returns the usual notion of topological space, when $\cat{E}=\smset$.
+
+\begin{definition}\label{def.internal_space}
+Let $X\in\cat{E}$ be an object, let $\Open_X\colon\pow(X)\to\prop$ be a predicate on $\pow(X)$, and write $\Op_X\coloneq\{U:\pow(X)\mid\Open_X(U)\}$. Then $(X,\Op_X)$ is an \emph{internal topological space in $\cat{E}$} whenever the following conditions hold:
+\begin{enumerate}
+	\item $\Open_X(\true)$,
+	\item $\Open_X(\false)$,
+	\item $(\Open_X(U)\wedge\Open_X(V))\imp \Open_X(U\wedge V)$ for any $U,V\in\pow(X)$, and
+	\item $\big(\forall(i:I).\Open_X(U_i)\big)\imp\Open_X\big(\exists(i:I).U_i\big)$ for any $I\in\cat{E}$ and $U\colon I\to\pow(X)$.
+\end{enumerate}
+The fourth condition can also be restated as follows:
+\begin{enumerate}[label=4'.]
+	\item $\Open(\exists(P:\Op_X).S(P)\wedge P)$ for any $S\colon\Op_X\to\prop$. 
+\end{enumerate}
+\begin{enumerate}[label=4''.]
+	\item $\Open(\exists(P:S).P)$ for any $S\ss\Op_X$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}
+In \cref{def.internal_space}, conditions 4, 4', and 4'' are equivalent.
+\end{proposition}
+\begin{proof}
+Clearly 4'$\iff$ 4''. We first show $4\imp 4'$. Given $S\colon\Op_X\to\prop$, define $I\coloneqq\{P:\Op_X\mid S(P)\}$ and $U\colon I\to\pow(X)$ by $U(P)\coloneqq P$. Then $\forall(i:I).\Open_X(U_i)$ holds, so by 4 we have $\Open_X(\exists(i:I).U_i)$, which is equivalent to $\Open_X(\exists(P:\Op_X).S(P)\wedge P)$, as desired.
+
+For $4'\imp 4$, take $I\in\cat{E}$ and $U\colon I\to\pow(X)$, and assume $\forall(i:I).\Open_X(U_i)$. Let $S\colon\Op_X\to\prop$ be given by $S(V)\coloneqq\exists(i:I).V=U_i$. By 4' we have that $\exists(P:\Op_X).S(P)\wedge P$, which is equivalent to $\exists(P:\Op_X)(i:I).(P=U_i)\wedge P$, which in turn is equivalent to $\exists(i:I).U_i$, is open as desired.
+\end{proof}
+
+The fourth condition is a powerful assumption with the following surprising consequences.
 
 \begin{lemma}
 	\label{props_open}
 	Let $(X,\Op_X)$ be a topological space. Then:
 	\begin{enumerate}
-		\item For every open $P : \Op_X$ and every modality $j$, also $jP$ is open.
+		\item For every open $U : \Op_X$ and every modality $j$, also $jU$ is open.
 		\item For every $P : \prop$, the constant predicate $x \mapsto P$ is open.
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
 	\begin{enumerate}
-		\item Consider the join of the predicate $S : \Op_X \to \prop$ given by
+		\item Consider the join $J$ of the predicate $S : \Op_X \to \prop$ given by
 			\[
-				S(Q) \: := \: j(Q \Rightarrow P).
+				S(Q) \: := \: j(Q \Rightarrow U).
 			\]
-			This join is
+			This join, which is open by 4', is given by
 			\[
-				\exists Q : \Op_X . j(Q \Rightarrow P) \land Q,
+				J\coloneqq\exists(Q : \Op_X) . j(Q \Rightarrow U) \land Q.
 			\]
-			which is easily seen to be equivalent to $j P$ (by taking $Q := \top$ in the reverse direction). Hence $jP$ is indeed open.
-		\item Apply the previous statement to the open $\bot$ and the closed modality $P \lor -$. \qedhere
+			It remains to show $J=jU$. The implication $J\imp jU$ follows easily from \cref{def.modality} (def.\ of modality); its converse $jU\imp J$ holds by taking $Q := \true$.
+		\item Apply the previous statement to the open $U\coloneqq\false$ and the closed modality $j\coloneqq P \lor -$. \qedhere
 	\end{enumerate}
 \end{proof}
+
+\begin{definition}[Directed poset]
+Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
+\begin{enumerate}
+	\item $\exists(p:P).\true$, and
+	\item $\forall(p,p':P).\exists(q:P).(p\vee p')\imp q$.
+\end{enumerate}
+\end{definition}
 
 % ==== Section ====%
 \section{Valuations}
 
+Recall the type $\tlrr$ of lower nonnegative reals from \cref{def.lower_nn_reals}. 
+
 \begin{definition}
-A \emph{valuation} $\mu$ on a topological space $(X,\Op_X)$ assigns a real number $\mu(U)\in\rr$ to each open $U\in\Op_X$ and satisfies the following conditions:
+Let $(X,\Op_X)$ be an internal topological space. A \emph{valuation} $\mu$ on $(X,\Op_X)$ is a function $\Op_X\to\tlrr$ satisfying the following conditions:
 \begin{enumerate}
-	\item $\mu(\varnothing)=0$;
-	\item If $U\ss V$ then $\mu(U)\leq\mu(V)$; and
+	\item $\mu(\false)=0$;
+	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 \end{enumerate}
 A valuation $\mu$ is called \emph{continuous} if
 \begin{enumerate}[resume]
-	\item for all directed sets $(U_i)_{i\in I}\ss\Op_X$,%
-	\footnote{A set $(U_i)_{i\in I}$ is directed if $I$ is nonempty and, for every $i_1,i_2\in I$ there is some $j\in I$ with $U_{i_1}\cup U_{i_2}\ss U_j$.}
-	 one has $\sup_{i\in I}\mu(U_i)=\mu(\bigcup_{i\in I}U_i)$.
+	\item If $D\ss\Op_X$ is a directed subposet, then $\sup_{U\in D}\mu(U)=\mu\big(\exists(U:D).U\big)$.
 \end{enumerate}
 A continuous valuation $\mu$ is called a \emph{probability valuation} if
 \begin{enumerate}[resume]
-	\item $\mu(X)=1$.
+	\item $\mu(\true)=1$.
 \end{enumerate}
 \end{definition}
 
@@ -533,32 +622,32 @@ Probability valuations coincide with probability measures....
 
 Internalize the definition.
 
+\begin{example}
+A valuation on the one-point topological space is a map $\prop\to\trr$....
+\end{example}
+
 % ======== Chapter ========%
 \chapter{Basic theory of internal valuations}
 
-Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the unit interval, given by $\inc(P)(q) := P$.
+Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the unit interval, given by $\ind{P}(q) := (q<0)\vee((q<1)\wedge P)$.
 
 \begin{proposition}
 	\label{vals_on1}
-	There is precisely one valuation on $1$, namely the inclusion $\inc : \prop \to [0,1]$.
+	There exists a valuation on the one-point space $1$, namely the inclusion $\inc : \prop \to [0,1]$.
 \end{proposition}
 
 \tob{Comment on the way in how the internal reasoning looks absurd at first look?}
 
 \begin{proof}
-	We first show that $\inc$ is indeed valuation. The normalization conditions are trivial, while monotonicity is as follows: if $P \Rightarrow Q$, then also $\inc(P) \le \inc(Q)$, since clearly
+	We first show that $\inc$ is indeed valuation. The normalization conditions and monotonicity follow directly from \cref{lemma.ind_monotonic}. 	Concerning modularity, for $P,Q : \prop$ we prove both inequality directions of the claimed equation
 	\[
-		\inc(P)(q) \: \Longrightarrow \: P \: \Longrightarrow \: Q \: \Longrightarrow \: \inc(Q)(q)
+		\ind{P \lor Q} + \ind{P \land Q} = \ind P + \ind Q.
 	\]
-	for all $q$. Concerning modularity, for $P,Q : \prop$ we prove both inequality directions of the claimed equation
+	Indeed $q < \ind{P \lor Q} + \ind{P \land Q}$ means that there are $q_\lor$ and $q_\land$ such that $q = q_\lor + q_\land$ and
 	\[
-		\inc(P \lor Q) + \inc(P \land Q) = \inc(P) + \inc(Q).
+		q_\lor < \ind{P \lor Q}, \qquad q_\land < \ind{P \land Q},
 	\]
-	Indeed $q < \inc(P \lor Q) + \inc(P \land Q)$ means that there are $q_\lor$ and $q_\land$ such that $q = q_\lor + q_\land$ and
-	\[
-		q_\lor < \inc(P \lor Q), \qquad q_\land < \inc(P \land Q),
-	\]
-	which means that $P \lor Q$ and $P \land Q$ both hold. But then clearly also $P$ and $Q$ hold, so that $q_\lor < \inc(P)$ and $q_\land < \inc(Q)$, which proves the desired $q < \inc(P) + \inc(Q)$. For the other direction, suppose that $q < \inc(P) + \inc(Q)$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \inc(P)$ and $q_Q < \inc(Q)$. But then both $P$ and $Q$ hold, and therefore so do $P \lor Q$ and $P \land Q$. This proves that $q_P < \inc(P \lor Q)$ and $q_Q < \inc(P \land Q)$.
+	which means that $P \lor Q$ and $P \land Q$ both hold.\dis{there are other cases to consider, e.g.\ $P\wedge Q=\bot$} But then clearly also $P$ and $Q$ hold, so that $q_\lor < \inc(P)$ and $q_\land < \inc(Q)$, which proves the desired $q < \inc(P) + \inc(Q)$. For the other direction, suppose that $q < \inc(P) + \inc(Q)$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \inc(P)$ and $q_Q < \inc(Q)$. But then both $P$ and $Q$ hold, and therefore so do $P \lor Q$ and $P \land Q$. This proves that $q_P < \inc(P \lor Q)$ and $q_Q < \inc(P \land Q)$.
 	\tob{The previous doesn't actually quite work if we assume that elements of $[0,1]$ or the nonnegative lower reals are defined as predicates on $\qq_+$. We still have to distinguish the case where one number vanishes separately. Fix this once we have definite definitions}
 
 	Concerning Scott continuity, suppose that $D : \prop \to \prop$ specifies a directed subtype. Then we need to prove that
@@ -566,8 +655,13 @@ Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the u
 		\inc\left( \exists P : \prop . D(P) \land P \right) = \sup_{P : \prop \:\mid\: D(p)} \inc(P),
 	\]
 	again by proving both inequalities. If $q < \inc\left( \exists P : \prop . D(P) \land P \right)$, then $\exists P : \prop . D(P) \land P$ holds. But then $q < \inc(P)$ as well, from which the claim follows. For the other inequality, if $q < \sup_{P : \prop \:\mid\: D(p)} \inc(P)$, then there must be $P : \prop$ such that $D(P)$ and $q < \inc(P)$, so that also $P$ holds. But then we have $\exists P : \prop . D(P) \land P$, and hence also $q < \inc\left( \exists P : \prop . D(P) \land P \right)$. This completes the first half, showing that $\inc : \prop \to [0,1]$ is indeed a valuation.
+\end{proof}
 
-	Now let $\mu : \prop \to [0,1]$ be any valuation on $1$. We will then want to prove that $\mu(P) = \inc(P)$ for all $P : \prop$. One direction is easy, namely
+\begin{proposition}
+	There is precisely one valuation on $1$, namely the inclusion $\inc : \prop \to [0,1]$.
+\end{proposition}
+\begin{proof}
+By \cref{vals_on1} it suffices to show that an arbitrary valuation $\mu : \prop \to [0,1]$ on $1$ satisfies $\mu(P) = \inc(P)$ for all $P : \prop$. One direction is easy, namely
 	\[
 		\inc(P) \le \mu(P).
 	\]
@@ -968,7 +1062,25 @@ By rule 11, we need that for every $V\ss X$ and every $p:\prop(V)$ it holds that
 Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ and $\varnothing$. If it is $X$ then $X\forces p$ by rule 1. So we may assume $p$ corresponds to $\varnothing$, in which case only $\varnothing\forces p$ by rule 1 and we have $X\forces\neg p$ by rule 9, completing the proof.
 \end{example}
 
-In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$.
+In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$. Similarly, we write $P\to Q\to R$ to mean the type $(R^Q)^P$.
+
+\begin{definition}[Internal poset]\label{def.internal_poset}
+An \emph{internal poset} in $\cat{E}$ consists of
+\begin{enumerate}
+	\item an object $P\in\cat{E}$ and
+	\item a morphism $(\leq)\colon P\to P\to\prop$
+\end{enumerate}
+satisfying the following conditions, written in the internal language:
+\begin{enumerate}[label=\alph*.]
+	\item $\forall (p:P).p\leq p$
+	\item $\forall (p,q,r:P).(p\leq q)\imp (q\leq r)\imp(p\leq r)$.
+	\item $\forall (p,q:P).(p\leq q)\imp(q\leq p)\imp (p=q).$
+\end{enumerate}
+\end{definition}
+
+\begin{example}
+We showed in \cref{eqn.prop_order} that $(\prop,\leq)$ is an internal poset.
+\end{example}
 
 % ==== Section ====%
 \section{Modalities on $\shv(X)$}\label{sec.modalities}sec.logic
