@@ -216,7 +216,8 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\inv}{^{-1}}
 
 \newcommand{\cpct}[1]{\Set{Cpct}_{#1}}
-\newcommand{\pt}[1]{\wh{#1}}
+\newcommand{\pt}{k}				% point indexing our At-modalities
+\newcommand{\Pts}{\mathcal{Pts}}		% internal type of points (for indexing the At-modalities)
 \newcommand{\bas}[1]{\wh{#1}}
 
 
@@ -613,13 +614,6 @@ Recall from \Cref{props_open} that for every $P : \prop$, the associated constan
 \tob{We generally may want some discussion of pushforward of valuations along continuous maps}
 
 % ======== Chapter ========%
-\chapter{Axioms for toposes with enough points}
-
-\tob{Introduce $\At{x}$ or $\At{K}$ here?}
-
-For each axiom, we also include a soundness proof.
-
-% ======== Chapter ========%
 \chapter{Interaction of valuations and modalities}
 
 \begin{theorem}
@@ -670,6 +664,33 @@ Note that $jP$ is again open by \Cref{props_open}, which is necessary in order f
 	\]
 	Since $P \Rightarrow j\bot$ is equivalent to $jP \Rightarrow j\bot$ and the right-hand side is independent of $j$, applying this equation with $jP$ in place of $P$ and cancelling $\mu(P \Rightarrow j\bot)$ results in $j \mu(P) = j \mu(jP)$. But since also $j \mu(jP) = \mu(jP)$ by the first item above, we therefore obtain the overall $\mu(jP) = j \mu(P)$.
 \end{proof}
+
+% ======== Chapter ========%
+\chapter{Axioms for toposes with enough points}
+
+In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ as indexing a family of modalities $\At{\pt} : \prop \to \prop$. (The reason behind our notation $k : \Pts$ will become clear when we consider hyperspaces, in which case $k$ represents a compact set.)
+
+Our primary intended semantics is that our topos is $\shv(X)$ for some topological space $X$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $X \setminus \overline{k}$. More precisely, the family of modalities is given by \ldots
+
+\tob{Describe the object $\Pts$ explicitly in this case, and write down the semantics of $\At{-} : \Pts \times \prop \to \prop$ exactly}
+
+The soundness proofs which follow refer to this intended semantics.
+
+\begin{axiom}
+	For all $\pt : \Pts$, the modality $\At{\pt}$ has the following properties, for all $P,Q : \prop$:
+	\begin{enumerate}
+		\item Decidability: $\At{\pt}P \: \lor \: (\At{\pt} P \Rightarrow \At{\pt} \bot)$.
+		\item Right exactness: $\At{\pt}(P \lor Q) = \At{\pt} P \lor \At{\pt} Q$.
+	\end{enumerate}
+\end{axiom}
+
+\tob{Is ``right exact'' the right term there?}
+
+Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At{\pt}$ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
+
+\begin{axiom}
+	
+\end{axiom}
 
 \chapter{Main theorem}
 
