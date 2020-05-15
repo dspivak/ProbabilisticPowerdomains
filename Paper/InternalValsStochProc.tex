@@ -630,8 +630,13 @@ For each axiom, we also include a soundness proof.
 	\]
 \end{proposition}
 
+Note that $jP$ is again open by \Cref{props_open}, which is necessary in order for $\mu$ to be applicable to $jP$.
+
 \begin{proof}
-	
+	Since $jP \land (P \Rightarrow j\bot)$ is equivalent to $j\bot$, applying the modularity law to $jP$ and $P \Rightarrow j\bot$ results in
+	\[
+		\mu(jP) + \mu(P \Rightarrow j\bot) = \mu(j\bot) + \mu(jP \lor (P \Rightarrow j\bot)).
+	\]
 \end{proof}
 
 \chapter{Main theorem}
