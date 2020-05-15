@@ -485,6 +485,7 @@ Internalize the definition.
 Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the unit interval, given by $\inc(P)(q) := P$.
 
 \begin{proposition}
+	\label{vals_on1}
 	There is precisely one valuation on $1$, namely the inclusion $\inc : \prop \to [0,1]$.
 \end{proposition}
 
@@ -512,10 +513,51 @@ Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the u
 	\]
 	again by proving both inequalities. If $q < \inc\left( \exists P : \prop . D(P) \land P \right)$, then $\exists P : \prop . D(P) \land P$ holds. But then $q < \inc(P)$ as well, from which the claim follows. For the other inequality, if $q < \sup_{P : \prop \:\mid\: D(p)} \inc(P)$, then there must be $P : \prop$ such that $D(P)$ and $q < \inc(P)$, so that also $P$ holds. But then we have $\exists P : \prop . D(P) \land P$, and hence also $q < \inc\left( \exists P : \prop . D(P) \land P \right)$. This completes the first half, showing that $\inc : \prop \to [0,1]$ is indeed a valuation.
 
-	Now let $\mu : \prop \to [0,1]$ be any valuation on $1$. 
+	Now let $\mu : \prop \to [0,1]$ be any valuation on $1$. We will then want to prove that $\mu(P) = \inc(P)$ for all $P : \prop$. One direction is easy, namely
+	\[
+		\inc(P) \le \mu(P).
+	\]
+	This follows because $q < \inc(P)$ for $q > 0$ implies $P$, and therefore $\mu(P) = \mu(\top) = 1$. The other inequality direction takes some more work. For fixed $P$, consider the predicate
+	\[
+		D(Q) := \left( \mu(Q) = \inc(Q) \right) \land (Q \Rightarrow P).
+	\]
+	We claim that $D$ defines a directed subtype of $\prop$. Indeed $D$ is inhabited by $\bot$. Now suppose that $D(Q_1)$ and $D(Q_2)$ for $Q_1, Q_2 : \prop$. We then claim that also $D(Q_1 \lor Q_2)$; since $Q_1 \Rightarrow P$ and $Q_2 \Rightarrow P$, the part $(Q_1 \lor Q_2) \Rightarrow P$ is clear, so the main problem is to show that also $\mu(Q_1 \lor Q_2) = \inc(Q_1 \lor Q_2)$. Using the assumed modularity equation, we have
+	\begin{align*}
+		\inc(Q_1 \lor Q_2) + \inc(Q_1 \land Q_2)	& \le \mu(Q_1 \lor Q_2) + \mu(Q_1 \land Q_2)	\\
+								& = \mu(Q_1) + \mu(Q_2) \\
+								& = \inc(Q_1) + \inc(Q_2),
+	\end{align*}
+	where the last step uses the assumptions $D(Q_1)$ and $D(Q_2)$. But since the left-hand side and the right-hand side of this chain of inequalities are equal as $\inc$ is a valuation, 
+	\tob{add ref to relevant cancellativity result}
+	implies that the inequality is actually an equality. Since the expressions are ordered pointwise, $\inc(Q_1 \lor Q_2) \le \mu(Q_1 \lor Q_2)$ and $\inc(Q_1 \land Q_2) \le \mu(Q_1 \land Q_2)$, the equality of their sum implies that both of these inequalities are actually equalities. Overall, we have therefore shown that $D(Q_1 \lor Q_2)$, making $D$ directed.
 
-
+	A straightforward logical argument shows that
+	\begin{equation}
+		\label{PfromDQ}
+		\exists Q : \prop . D(Q) \land Q \qquad \Longleftrightarrow \qquad P,
+	\end{equation}
+	where the implication from left to right combines the assumptions $Q$ and $Q \Rightarrow P$ to $P$, while the implication from right to left becomes trivial with $Q := \top$. Therefore the Scott continuity of $\mu$ yields
+	\[
+		\mu(P) = \mu\left( \exists Q : \prop . D(Q) \land Q \right) = \sup_{Q : \prop \: \mid \: D(Q)} \mu(Q).
+	\]
+	But now since $D(Q)$ implies $\mu(Q) = \inc(Q)$ by definition, the right-hand side further evaluates to
+	\[
+		\mu(P) = \sup_{Q : \prop \: \mid \: D(Q)} \inc(Q) = \inc(P),
+	\]
+	where the last step uses Scott continuity of $\inc$ together with~\eqref{PfromDQ}.
 \end{proof}
+
+Recall from \Cref{props_open} that for every $P : \prop$, the associated constant predicate $x \mapsto P$ is open in any topological space $(X,\Op_X)$. We also denote it by $P$ by abuse of notation.
+
+\begin{corollary}
+	Let $(X,\Op_X)$ be a topological space and $\mu : \Op_X \to [0,1]$ any valuation. Then $\mu(P) = \inc(P)$ for all $P : \prop$.
+\end{corollary}
+
+\begin{proof}
+	This follows from \Cref{vals_on1} upon pushing forward $\mu$ to the terminal space $(1,\prop)$.
+\end{proof}
+
+\tob{We generally may want some discussion of pushforward of valuations along continuous maps}
 
 % ======== Chapter ========%
 \chapter{Axioms for toposes with enough points}
@@ -862,6 +904,15 @@ This gave us a taste of how logical arguments can go. The fact is that anything 
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
+
+\begin{lemma}
+	Let $(X,\Op_X)$ be a topological space and $P : \prop$. Then the constant predicate $x \mapsto P$ is open.
+	\label{props_open}
+\end{lemma}
+
+\begin{proof}
+	
+\end{proof}
 
 % ==== Section ====%
 
