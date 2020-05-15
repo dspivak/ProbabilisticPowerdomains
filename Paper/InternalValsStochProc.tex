@@ -342,7 +342,7 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 We define a \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
 \footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as the set of nonnegative rationals that are lower bounds.}
 \begin{enumerate}
-	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$
+	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
 	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
 	\item (rounded) $\forall (q:\tqq).r_>q\imp\exists (q':\tqq).q'>q\wedge r_>q'$.
 \end{enumerate}
@@ -436,7 +436,7 @@ There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $\tqq\to\p
 \begin{proposition}
 Let $p,p':\prop$ be propositions, considered as lower reals. Then for any $r:\trr$ we have 
 \begin{enumerate}
-	\item $p'\leq p$ iff $p'\imp p$
+	\item $p'\leq p$ iff $p'\imp p$.
 	\item $p+r=p\vee r$.
 \end{enumerate}
 \end{proposition}
