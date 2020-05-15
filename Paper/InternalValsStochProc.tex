@@ -340,7 +340,7 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 
 \begin{definition}[Lower nonnegative reals]
 We define a \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
-\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as the set of nonnegative rationals that are lower bounds.}
+\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as a set of rational ``lower bounds''.}
 \begin{enumerate}
 	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
 	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
@@ -394,9 +394,16 @@ We need to show that $(r_1+r_2)_>$ is nonnegative, down-closed, and rounded.
 
 \noindent (Nonnegative): If $0>q$, take $q_1=q_2\coloneqq q/2$. Then $q_1+q_2=q$ and $r_1>q_1$ and $r_2>q_2$ by assumption, so $r_1+r_2>q$.
 
-\noindent(Down-closed): Choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\epsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\epsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
+\noindent(Down-closed): Choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\varepsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\varepsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
 
 \noindent(Rounded): Choose a rational $q$ and suppose $(r_1+r_2)>q$. By definition we have $q_1,q_2$ with $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$. By roundedness of $r_1$ and $r_2$, we have rationals $q_1',q_2'$ with $r_1>q_1'>q_1$ and $r_2>q_2'>q_2$. Then letting $q'=q_1'+q_2'$, we have $(r_1+r_2)>q'$ and $q'>q$, as desired.
+\end{proof}
+
+\begin{lemma}\label{lemma.sums_bigger}
+For any $q:\tqq$ and $r,r':\tlrr$, if $q<r$ then $q<r+r'$.
+\end{lemma}
+\begin{proof}
+Take $q<r$ and use roundedness to produce $q<q'<r$. Then $q-q'<0<r'$ so $q=q'+(q-q')<r+r'$ as desired.
 \end{proof}
 
 \begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
@@ -404,6 +411,7 @@ Let $\tqq_{\geq0}\coloneqq\{q:\tqq\mid q\geq0\}$. There is a function $\tqq_{\ge
 \footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
  We often write $q:\tlrr$ to denote this lower real.
 \end{definition}
+
 
 We leave the following to the reader.
 \begin{proposition}
@@ -421,32 +429,47 @@ The lower reals form a commutative monoid $(\tlrr,0,+)$.
 \noindent (Associativity): Both sides of associativity $(r_1+r_2)+r_3=^?r_1+(r_2+r_3)$ are directly seen to be equivalent to the formula $\exists(q_1,q_2,q_3:\tqq).(r_1>q_1)\wedge(r_2>q_2)\wedge(r_3>q_3)\wedge(q=q_1+q_2+q_3)$.
 \end{proof}
 
-\begin{proposition}[Order cancellativity]
-Suppose $r_0,r_1,r_2:\trr$ are lower reals and that $r_0$ is bounded in the sense that $q_0\geq r_0$ for some $q_0:\tqq$. If $r_0+r_1\geq r_0+r_2$ then $r_1\geq r_2$.
-\end{proposition}
+\begin{lemma}\label{lemma.rational_cancellativity}
+For all $q,q':\tqq$ and $r:\tlrr$, if $q'+q<q'+r$ then $q<r$.
+\end{lemma}
 \begin{proof}
-
+By \cref{def.sum_lr}, there exist rational $q'_0<q'$ and $q_0<r$ such that $q'_0+q_0=q'+q$. Thus we have $q<q+q'-q'_0=q_0<r$.
 \end{proof}
 
-\begin{definition}[Propositions ``are'' lower reals]\label{def.props_are_reals}
-There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $\tqq\to\prop$ given by $q\mapsto(q<0)\vee p$.%
-\footnote{We leave it to the reader to check that this is indeed a lower nonnegative real.}
+\begin{proposition}\label{prop.cancel_rationals}
+For all $q:\tqq$ and $r_1,r_2:\tlrr$, if $q+r_1\leq q+r_2$ then $r_1\leq r_2$.
+\end{proposition}
+\begin{proof}
+Take $q_1<r_1$; we want to show $q_1<r_2$. Use roundedness to produce $q_1<q_1'<r_1$, and let $q_0\coloneqq q+q_1-q_1'$. We have $q_0<q$ and hence $q+q_1=q_0+q_1'<q+r_1$, and the result follows from \cref{lemma.rational_cancellativity}
+\end{proof}
+
+\begin{definition}[Indicator functions as lower reals]\label{def.props_are_reals}
+There is a function $\prop\to\tlrr$ sending $p:\prop$ to the function $1_p\colon\tqq\to\prop$ given by:%
+\footnote{We leave it to the reader to check that $1_p$ is indeed a lower nonnegative real.}
+\[1_p(q)\coloneqq(q<0)\vee ((q<1)\wedge p).\]
 \end{definition}
 
-\begin{proposition}
-Let $p,p':\prop$ be propositions, considered as lower reals. Then for any $r:\trr$ we have 
-\begin{enumerate}
-	\item $p'\leq p$ iff $p'\imp p$.
-	\item $p+r=p\vee r$.
-\end{enumerate}
+Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $p:\prop$ and $r:\tlrr$
+\begin{equation}\label{eqn.indicator}
+p\imp (1_p+r=1+r).
+\end{equation}
+
+We want to show order cancellativity, \cref{prop.order_cancel}. To do so we follow the proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
+\begin{lemma}
+For any $p:\prop$ and $r_1,r_2:\tlrr$, if $1_p+r_1\leq 1_p+r_2$ then $r_1\leq r_2$.
+\end{lemma}
+\begin{proof}
+Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<1_p+r_1$ so by assumption $q_1<1_p+r_2$. By \cref{def.sum_lr}, there exist $q<1_p$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge p$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $p$ so by \cref{eqn.indicator,prop.cancel_rationals}, $1_p+r_1\leq 1_p+r_2$ directly implies $r_1\leq r_2$.
+\end{proof}
+
+\begin{proposition}[Order cancellativity]\label{prop.order_cancel}
+Suppose $r_0,r_1,r_2:\trr$ are lower reals and that $r_0$ is bounded in the sense that $r_0\leq q_0\geq r_0$ for some $q_0:\tqq$. If $r_0+r_1\geq r_0+r_2$ then $r_1\geq r_2$.
 \end{proposition}
 \begin{proof}
-If $p'\leq p$ then applying \eqref{eqn.real_order} with $q=1$ we have $p'\imp p$ as desired. The converse is similarly straightforward. The rest of the proof deals with the second claim; recall that $(p+r)>q$ means $\exists(q_p,q_r:\tqq).(0>q_p\vee p)\wedge(r>q_r)\wedge (q=q_p+q_r)$.
 
-We first show that $p\vee (r>q)$ implies $(p+r)>q$. If $p$ then taking $q_r=-1$ and $q_p=1+q$, we have $(p+r)>q$. If $r>q$ then by roundedness we can find $q_r:\tqq$ such $r>q_r>q$. Then with $q_p\coloneqq q-q_r$ we have $(p+r)>q$.
-
-Finally, we show $(p+r)>q$ implies $p\vee(r>q)$. Assuming $(p+r)>q$, we have either $p$ or $q_p,q_r:\tqq$ with $0>q_p$ and $r>q_r$ and $q=q_p+q_r$. In the first case we're done, and in the second, $r>q_r>q_r+q_p=q$.
 \end{proof}
+
+
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
