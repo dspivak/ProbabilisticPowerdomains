@@ -586,7 +586,7 @@ The fourth condition is a powerful assumption with the following surprising cons
 	\end{enumerate}
 \end{proof}
 
-\begin{definition}[Directed poset]
+\begin{definition}[Directed poset]\label{def.directed}
 Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
 \begin{enumerate}
 	\item $\exists(p:P).\true$, and
@@ -608,7 +608,8 @@ Let $(X,\Op_X)$ be an internal topological space. A \emph{valuation} $\mu$ on $(
 \end{enumerate}
 A valuation $\mu$ is called \emph{continuous} if
 \begin{enumerate}[resume]
-	\item If $D\ss\Op_X$ is a directed subposet, then $\sup_{U\in D}\mu(U)=\mu\big(\exists(U:D).U\big)$.
+	\item If $D\ss\Op_X$ is a directed subposet (\cref{def.directed}), then
+	\[\sup_{U\in D}\mu(U)=\mu\big(\exists(U:D).U\big).\]
 \end{enumerate}
 A continuous valuation $\mu$ is called a \emph{probability valuation} if
 \begin{enumerate}[resume]
