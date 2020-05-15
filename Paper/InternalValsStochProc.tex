@@ -451,6 +451,36 @@ Finally, we show $(p+r)>q$ implies $p\vee(r>q)$. Assuming $(p+r)>q$, we have eit
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
 
+If $(X,\Op_X)$ is a topological space, then the fact that $\Op_X$ is closed under joins means the following: if $S : \Op_X \to \prop$ specifies any subtype of $\Op_X$, then also its join
+\[
+	\exists P : \Op_X . S(P) \land P
+\]
+is open, i.e.~satisfies the predicate $\Op_X : (X \to \prop) \to \prop$. This is a powerful assumption with the following surprising consequences.
+
+\begin{lemma}
+	\label{props_open}
+	Let $(X,\Op_X)$ be a topological space. Then:
+	\begin{enumerate}
+		\item For every open $P : \Op_X$ and every modality $j$, also $jP$ is open.
+		\item For every $P : \prop$, the constant predicate $x \mapsto P$ is open.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Consider the join of the predicate $S : \Op_X \to \prop$ given by
+			\[
+				S(Q) \: := \: j(Q \Rightarrow P).
+			\]
+			This join is
+			\[
+				\exists Q : \Op_X . j(Q \Rightarrow P) \land Q,
+			\]
+			which is easily seen to be equivalent to $j P$ (by taking $Q := \top$ in the reverse direction). Hence $jP$ is indeed open.
+		\item Apply the previous statement to the open $\bot$ and the closed modality $P \lor -$. \qedhere
+	\end{enumerate}
+\end{proof}
+
 % ==== Section ====%
 \section{Valuations}
 
@@ -567,6 +597,20 @@ Recall from \Cref{props_open} that for every $P : \prop$, the associated constan
 For each axiom, we also include a soundness proof.
 
 % ======== Chapter ========%
+\chapter{Interaction of valuations and modalities}
+
+\begin{proposition}
+	\label{}
+	Let $j$ be a decidable modality and $\mu$ a valuation on an internal space $(X,\Op_X)$. Then for all $P : \Op_X$,
+	\[
+		\mu(jP) = j \mu(P).	
+	\]
+\end{proposition}
+
+\begin{proof}
+	
+\end{proof}
+
 \chapter{Main theorem}
 
 % ======== Chapter ========%
@@ -901,20 +945,6 @@ Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $
 This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
 
 
-
-% ==== Section ====%
-\section{Internal topological spaces and Moerdijk's theorem}
-
-\begin{lemma}
-	Let $(X,\Op_X)$ be a topological space and $P : \prop$. Then the constant predicate $x \mapsto P$ is open.
-	\label{props_open}
-\end{lemma}
-
-\begin{proof}
-	
-\end{proof}
-
-% ==== Section ====%
 
 % ======== Chapter ========%
 \chapter{Main theorem}
