@@ -553,6 +553,8 @@ The fourth condition can also be restated as follows:
 \begin{enumerate}[label=4''.]
 	\item $\Open(\exists(P:S).P)$ for any $S\ss\Op_X$.
 \end{enumerate}
+
+A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Open_Y(U)\imp\Open_X(f\inv(U))$ holds for any $U\ss X$.
 \end{definition}
 
 \begin{proposition}
@@ -594,7 +596,7 @@ The fourth condition is a powerful assumption with the following surprising cons
 There is precisely one topology on the terminal object $*\in\cat{E}$.
 \end{corollary}
 \begin{proof}
-We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ holds for every $P:\prop)$. It is unique by \cref{props_open} (2).
+We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2).
 \end{proof}
 
 % ==== Section ====%
@@ -630,6 +632,13 @@ A continuous valuation $\mu$ is called a \emph{probability valuation} if
 	\item $\mu(\true)=1$.
 \end{enumerate}
 \end{definition}
+
+\begin{proposition}[Push-forward valuation]\label{prop.pushforward}
+Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op_Y\to\lrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
+\end{proposition}
+\begin{proof}
+The pullback functor $f\inv$ preserves both limits and colimits. **Finish**
+\end{proof}
 
 \begin{theorem}
 Probability valuations coincide with probability measures....
@@ -720,10 +729,9 @@ Recall from \Cref{props_open} that for every $P : \prop$, the associated constan
 \end{corollary}
 
 \begin{proof}
-	This follows from \Cref{prop.existence_val_on_1} upon pushing forward $\mu$ to the terminal space $(1,\prop)$.
+	This follows from \Cref{prop.existence_val_on_1} upon pushing forward $\mu$ to the terminal space $(1,\prop)$. **Finish using \cref{prop.pushforward}**
 \end{proof}
 
-\tob{We generally may want some discussion of pushforward of valuations along continuous maps}
 
 % ======== Chapter ========%
 \chapter{Interaction of valuations and modalities}
