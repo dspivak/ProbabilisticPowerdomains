@@ -634,10 +634,10 @@ A continuous valuation $\mu$ is called a \emph{probability valuation} if
 \end{definition}
 
 \begin{proposition}[Push-forward valuation]\label{prop.pushforward}
-Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op_Y\to\lrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
+Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op_Y\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
 \end{proposition}
 \begin{proof}
-The pullback functor $f\inv$ preserves both limits and colimits. **Finish**
+The pullback functor $f\inv\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f\inv(U)\imp f\inv(V)$, and the result follows.
 \end{proof}
 
 \begin{theorem}
