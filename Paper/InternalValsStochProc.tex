@@ -480,7 +480,7 @@ There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\c
 
 The following is straightforward.
 \begin{lemma}\label{lemma.ind_monotonic}
-We have $\ind{\false}=0$, $\ind{\true}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
+We have $\ind{\bot}=0$, $\ind{\top}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
 \end{lemma}
 
 Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
@@ -520,7 +520,7 @@ Finally, suppose $r_n+a\leq r_n+b$. Then $nr_n+na\leq nr_n+nb$ and it follows by
 Suppose $r,s,s':\trr$ are lower reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
 \end{corollary}
 \begin{proof}
-Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{prop.cancellative_bounds}, we have 
+Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{lemma.cancellative_bounds}, we have 
 \[r_n+s\leq r+s\leq r+s'\leq r_n+s'+1/n,\]
 and moreover we can conclude $s\leq s'+1/n$. But then $q+1/n<q'<s\leq s'+1/n$ and the result follows from \cref{prop.cancel_rationals}.
 \end{proof}
@@ -533,6 +533,22 @@ If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \c
 \end{proof}
 
 % ==== Section ====%
+\section{$j$-local lower reals}
+
+\dis{Do we need this?}
+
+Let $j:\prop\to\prop$ be a modality and $\prop_j$ the type of $j$-closed propositions  (see \cref{def.modality,def.j_closed_props}). We follow \cite[Definition 4.21]{schultz2019temporal} in the following definition (see also loc.\ cit.\ Remark 4.9).
+
+\begin{definition}[$j$-local lower nonnegative reals]\label{def.j_loc_lower_reals}
+The \emph{$j$-local lower nonnegative reals}, denoted $\tlrr_j$, is the type of functions $r_>\colon\tqq\to\prop_j$ satisfying the following axioms:
+\begin{enumerate}
+	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
+	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
+	\item ($j$-rounded) $\forall (q:\tqq).r_>q\imp j\exists (q':\tqq).q'>q\wedge r_>q'$.
+\end{enumerate}
+\end{definition}
+
+% ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
 
 
@@ -541,8 +557,8 @@ Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be 
 \begin{definition}\label{def.internal_space}
 Let $X\in\cat{E}$ be an object, let $\Open_X\colon\pow(X)\to\prop$ be a predicate on $\pow(X)$, and write $\Op_X\coloneq\{U:\pow(X)\mid\Open_X(U)\}$. We say $(X,\Op_X)$ is an \emph{internal topological space in $\cat{E}$} (and $\Op_X$ is a \emph{topology on $X$}) whenever the following conditions hold:
 \begin{enumerate}
-	\item $\Open_X(\true)$,
-	\item $\Open_X(\false)$,
+	\item $\Open_X(\top)$,
+	\item $\Open_X(\bot)$,
 	\item $(\Open_X(U)\wedge\Open_X(V))\imp \Open_X(U\wedge V)$ for any $U,V\in\pow(X)$, and
 	\item $\big(\forall(i:I).\Open_X(U_i)\big)\imp\Open_X\big(\exists(i:I).U_i\big)$ for any $I\in\cat{E}$ and $U\colon I\to\pow(X)$.
 \end{enumerate}
@@ -554,7 +570,7 @@ The fourth condition can also be restated as follows:
 	\item $\Open(\exists(P:S).P)$ for any $S\ss\Op_X$.
 \end{enumerate}
 
-A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Open_Y(U)\imp\Open_X(f\inv(U))$ holds for any $U\ss X$.
+A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Open_Y(U)\imp\Open_X(f\inv(U))$ holds for any $U\ss X$. We denote the category of internal topological spaces as $\Top_\cat{E}$.
 \end{definition}
 
 \begin{proposition}
@@ -587,16 +603,16 @@ The fourth condition is a powerful assumption with the following surprising cons
 			\[
 				J\coloneqq\exists(Q : \Op_X) . j(Q \Rightarrow U) \land Q.
 			\]
-			It remains to show $J=jU$. The implication $J\imp jU$ follows easily from \cref{def.modality} (def.\ of modality); its converse $jU\imp J$ holds by taking $Q := \true$.
-		\item Apply the previous statement to the open $U\coloneqq\false$ and the closed modality $j\coloneqq P \lor -$. \qedhere
+			It remains to show $J=jU$. The implication $J\imp jU$ follows easily from \cref{def.modality} (def.\ of modality); its converse $jU\imp J$ holds by taking $Q := \top$.
+		\item Apply the previous statement to the open $U\coloneqq\bot$ and the closed modality $j\coloneqq P \lor -$. \qedhere
 	\end{enumerate}
 \end{proof}
 
 \begin{corollary}\label{cor.top_on_one}
-There is precisely one topology on the terminal object $*\in\cat{E}$.
+There is precisely one topology on the terminal object $*\in\cat{E}$, and $*$ is terminal in $\Top_\cat{E}$.
 \end{corollary}
 \begin{proof}
-We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2).
+We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2). There is a unique function $X\to *$ for every $X$ and it is continuous, so $*$ is terminal.
 \end{proof}
 
 % ==== Section ====%
@@ -605,7 +621,7 @@ We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ ho
 \begin{definition}[Directed poset]\label{def.directed}
 Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
 \begin{enumerate}
-	\item $\exists(p:P).\true$, and
+	\item $\exists(p:P).\top$, and
 	\item $\forall(p,p':P).\exists(q:P).(p\vee p')\imp q$.
 \end{enumerate}
 \end{definition}
@@ -616,7 +632,7 @@ Recall the type $\tlrr$ of lower nonnegative reals from \cref{def.lower_nn_reals
 \begin{definition}
 Let $(X,\Op_X)$ be an internal topological space. A \emph{valuation} on $(X,\Op_X)$ is a function $\mu\colon\Op_X\to\tlrr$ satisfying the following conditions:
 \begin{enumerate}
-	\item $\mu(\false)=0$;
+	\item $\mu(\bot)=0$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 \end{enumerate}
@@ -629,7 +645,7 @@ A valuation $\mu$ is called \emph{continuous} if
 \end{enumerate}
 A continuous valuation $\mu$ is called a \emph{probability valuation} if
 \begin{enumerate}[resume]
-	\item $\mu(\true)=1$.
+	\item $\mu(\top)=1$.
 \end{enumerate}
 \end{definition}
 
@@ -637,11 +653,11 @@ A continuous valuation $\mu$ is called a \emph{probability valuation} if
 Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op_Y\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
 \end{proposition}
 \begin{proof}
-The pullback functor $f\inv\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f\inv(U)\imp f\inv(V)$, and the result follows.
+The pullback functor $f\inv\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f\inv(U)\imp f\inv(V)$, so $\mu(f\inv(U))\leq\mu(f\inv(V))$, proving the result.
 \end{proof}
 
 \begin{theorem}
-Probability valuations coincide with probability measures....
+Probability valuations coincide with probability measures in XYZ cases....
 \end{theorem}
 
 Internalize the definition.
@@ -692,13 +708,13 @@ By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuatio
 	\begin{equation}\label{eqn.ind_less_val}
 		\ind{P} \le \mu(P).
 	\end{equation}
-	for all $P:\prop$. Indeed take $q<\ind{P}$. If $q<0$ then $q<\mu(P)$; otherwise $(q<1)\wedge P$, but then $\mu(P)=\mu(\true)=1$ because $P=\true$. 
+	for all $P:\prop$. Indeed take $q<\ind{P}$. If $q<0$ then $q<\mu(P)$; otherwise $(q<1)\wedge P$, but then $\mu(P)=\mu(\top)=1$ because $P=\top$. 
 	
 	The other inequality requires more work. For $P:\prop$, consider the predicate
 	\[
 		d_P(Q) := \left( \mu(Q) = \ind{Q} \right) \land (Q \Rightarrow P).
 	\]
-	We claim that $D_P\coloneqq\{Q:\prop\mid d_P(Q)\}$ defines a directed subtype of $\prop$. Since $d_P(\false)$ holds we have $\exists(Q:D_P).\true$. Now suppose that $d_P(Q_1)$ and $d_P(Q_2)$ for $Q_1, Q_2 : \prop$; we then claim that also $d_P(Q_1 \lor Q_2)$. Since $Q_1 \Rightarrow P$ and $Q_2 \Rightarrow P$, the part $(Q_1 \lor Q_2) \Rightarrow P$ is clear, so we need to show that also $\mu(Q_1 \lor Q_2) = \ind{Q_1 \lor Q_2}$. Using \eqref{eqn.ind_less_val} and the assumed modularity equation, we have
+	We claim that $D_P\coloneqq\{Q:\prop\mid d_P(Q)\}$ defines a directed subtype of $\prop$. Since $d_P(\bot)$ holds we have $\exists(Q:D_P).\top$. Now suppose that $d_P(Q_1)$ and $d_P(Q_2)$ for $Q_1, Q_2 : \prop$; we then claim that also $d_P(Q_1 \lor Q_2)$. Since $Q_1 \Rightarrow P$ and $Q_2 \Rightarrow P$, the part $(Q_1 \lor Q_2) \Rightarrow P$ is clear, so we need to show that also $\mu(Q_1 \lor Q_2) = \ind{Q_1 \lor Q_2}$. Using \eqref{eqn.ind_less_val} and the assumed modularity equation, we have
 	\begin{align*}
 		\ind{Q_1 \lor Q_2} + \ind{Q_1 \land Q_2}	& \le \mu(Q_1 \lor Q_2) + \mu(Q_1 \land Q_2)	\\
 								& = \mu(Q_1) + \mu(Q_2) \\
@@ -711,7 +727,7 @@ By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuatio
 		\label{PfromDQ}
 		\exists (Q : D_P). Q \qquad \Longleftrightarrow \qquad P,
 	\end{equation}
-	where the implication from left to right combines the assumptions $Q$ and $Q \Rightarrow P$ to $P$, while the implication from right to left becomes trivial with $Q := \true$. Since $\mu$ is Scott continuous \eqref{eqn.scott_continuity}, we have
+	where the implication from left to right combines the assumptions $Q$ and $Q \Rightarrow P$ to $P$, while the implication from right to left becomes trivial with $Q := \top$. Since $\mu$ is Scott continuous \eqref{eqn.scott_continuity}, we have
 	\[
 		\mu(P) = \mu\big( \exists (Q : D_P) . Q \big) = \sup_{Q : D_P} \mu(Q).
 	\]
@@ -722,20 +738,23 @@ By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuatio
 Now we can conclude using \eqref{PfromDQ} that $\mu(P)=\ind{P}$ as desired.
 \end{proof}
 
-Recall from \Cref{props_open} that for every $P : \prop$, the associated constant predicate $x \mapsto P$ is open in any topological space $(X,\Op_X)$. We also denote it by $P$ by abuse of notation.
+Recall from \Cref{props_open} that for every $P : \prop$, the associated constant predicate $\_ \mapsto P$ is open in any topological space $(X,\Op_X)$. 
 
 \begin{corollary}
-	Let $(X,\Op_X)$ be a topological space and $\mu : \Op_X \to [0,1]$ any valuation. Then $\mu(P) = \ind{P}$ for all $P : \prop$.
+	Let $(X,\Op_X)$ be a topological space and $\mu : \Op_X \to [0,1]$ any valuation. Then $\mu(\_\mapsto P) = \ind{P}$ for all $P : \prop$.
 \end{corollary}
 
 \begin{proof}
-	This follows from \Cref{prop.existence_val_on_1} upon pushing forward $\mu$ to the terminal space $(1,\prop)$. **Finish using \cref{prop.pushforward}**
+	By \cref{cor.top_on_one,prop.pushforward,prop.uniqueness_val_on_1}, we can take the pushforward of $\mu$ along the unique continuous map $!\colon X\to (*,\prop)$ and find $\mu(\_\mapsto P)=!_*\mu(P)=\ind{P}$.
 \end{proof}
+
+From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\mapsto P)\colon X\to\prop$ on any type $X$.
 
 
 % ======== Chapter ========%
 \chapter{Interaction of valuations and modalities}
 
+Recall modalities and decidable modalities from \cref{def.modality,def.decidable_modality}. 
 \begin{theorem}
 	\label{vals_vs_modalities}
 	Let $j$ be a decidable modality and $\mu$ a valuation on an internal space $(X,\Op_X)$. Then for all $P : \Op_X$,
@@ -744,7 +763,7 @@ Recall from \Cref{props_open} that for every $P : \prop$, the associated constan
 	\]
 \end{theorem}
 
-Note that $jP$ is again open by \Cref{props_open}, which is necessary in order for $\mu$ to be applicable to $jP$.
+Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessary in order for $\mu$ to be applicable to $jP$ above.
 
 \begin{proof}
 \dis{This uses commutation of $j$ with addition of lower reals, which follows from ``axiom 4''.}
@@ -765,7 +784,7 @@ Note that $jP$ is again open by \Cref{props_open}, which is necessary in order f
 										& = \ind{j \bot} + 1.
 				\end{split}
 			\end{align}
-			When applied to any rational $q$, the right-hand side is clearly $j$-closed, hence so is the left-hand side. But since a sum of lower reals is $j$-closed if and only if each summand is, it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
+			When applied to any rational $q$, the right-hand side is clearly $j$-closed, hence so is the left-hand side. But since a sum of lower reals is $j$-closed if and only if each summand is,\dis{Why does $a+b$ $j$-closed imply $a$ is $j$-closed?} it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
 		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
 
 			The proof is simple: since $R$ implies $\mu(R) = 1$, clearly also $jR$ implies $j(\mu(R) = 1)$. But then also $j\mu(R) = j1$.
@@ -797,18 +816,21 @@ Our primary intended semantics is that our topos is $\shv(X)$ for some topologic
 
 The soundness proofs which follow refer to this intended semantics.
 
-\begin{axiom}
-	For all $\pt : \Pts$, the modality $\At{\pt}$ has the following properties, for all $P,Q : \prop$:
-	\begin{enumerate}
-		\item Decidability: $\At{\pt}P \: \lor \: (\At{\pt} P \Rightarrow \At{\pt} \bot)$.
-		\item Right exactness: $\At{\pt}(P \lor Q) = \At{\pt} P \lor \At{\pt} Q$.
-	\end{enumerate}
+\begin{axiom}[Local decidability]\label{ax.decidability}
+	For all $\pt : \Pts$, the modality $\At{\pt}$ is \emph{locally decidable}. That is, for all $P : \prop$:
+	\[\At{\pt}P \: \lor \: (P \Rightarrow \At{\pt} \bot).\]
 \end{axiom}
 
-\tob{Is ``right exact'' the right term there?}
 
 Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At{\pt}$ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
 
+\begin{proposition}[$\At{\pt}$ commutes with $\vee$]
+For all $\pt:\Pts$ and $P,Q:\prop$ we have
+\[\At{\pt}(P \lor Q) = \At{\pt} P \lor \At{\pt} Q.\]
+\end{proposition}
+\begin{proof}
+The direction $(\At{\pt} P \lor \At{\pt} Q)\imp \At{\pt}(P \lor Q)$ is straightforward. For the converse, assume $\At{\pt}(P \lor Q)$. By \cref{ax.decidability} we may assume $P\imp\At{\pt}\bot$ and $Q\imp\At{\pt}\bot$. But then we have $\At{\pt}\bot$, which in turn proves $\At{\pt}P$.
+\end{proof}
 \begin{axiom}
 	
 \end{axiom}
@@ -1113,6 +1135,7 @@ We showed in \cref{eqn.prop_order} that $(\prop,\leq)$ is an internal poset.
 \section{Modalities on $\shv(X)$}\label{sec.modalities}sec.logic
 
 Modalities operate on propositions to give new propositions that hold more generally. More precisely, we have the following definition. 
+
 \begin{definition}[Modality]\label{def.modality}
 A \emph{modality} on a topos $\cat{E}$ is a morphism $j\colon\prop\to\prop$ satisfying the following three axioms for $p,q:\prop$:
 \begin{enumerate}
@@ -1166,6 +1189,15 @@ Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $
 
 This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
 
+\begin{definition}\label{def.decidable_modality}
+We say that a modality $j$ is \emph{decidable} if 
+\[jP\vee (P\imp j\false)\]
+holds for all $P:\prop$.
+\end{definition}
+
+\begin{definition}[$j$-closed propositions]\label{def.j_closed_props}
+A proposition $P:\prop$ is called \emph{$j$-closed} if $P=jP$. The type of $j$-closed propositions is denoted $\prop_j$.
+\end{definition}
 
 
 % ======== Chapter ========%
@@ -1218,6 +1250,8 @@ This gave us a taste of how logical arguments can go. The fact is that anything 
 
 \section*{Acknowledgements}
 David Spivak acknowledges the support from Honeywell and from AFOSR grants FA9550-17-1-0058 and FA9550-19-1-0113.
+
+We also benefited very much from conversations with Nelson Niu; in particular he developed an early form of \cref{vals_vs_modalities}.
 
 \printbibliography
 
