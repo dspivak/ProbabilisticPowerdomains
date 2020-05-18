@@ -34,8 +34,8 @@ pdfencoding=unicode]{hyperref}
 %%%% draft stuff
 \usepackage[color=white]{todonotes}
 \usepackage{showkeys}
-\newcommand{\tob}[1]{\todo[color=blue!40,inline]{\textbf{T:} #1}}
-\newcommand{\dis}[1]{\todo[color=red!40,inline]{\textbf{D:} #1}}
+\newcommand{\tob}[1]{\todo[color=blue!40,inline]{\textbf{T:} #1}\noindent}
+\newcommand{\dis}[1]{\todo[color=red!40,inline]{\textbf{D:} #1}\noindent}
 
 
 
@@ -809,7 +809,8 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 										& = \ind{j \bot} + 1.
 				\end{split}
 			\end{align}
-			When applied to any rational $q$, the right-hand side is clearly $j$-closed, hence so is the left-hand side. But by \cref{cor.closed_sum}, a sum of lower reals is $j$-closed if and only if each summand is, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
+			When applied to any rational $q$, the right-hand side is clearly $j$-closed, 
+			\dis{I don't see this unless for some reason we're allowed to only use test rationals in [0,1].}hence so is the left-hand side. But by \cref{cor.closed_sum}, a sum of lower reals is $j$-closed if and only if each summand is, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
 		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
 
 			The proof is simple: since $R$ implies $\mu(R) = 1$, clearly also $jR$ implies $j(\mu(R) = 1)$. But then also $j\mu(R) = j1$.
@@ -823,7 +824,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 	\[
 		j \mu(\bot) \le j \mu(P \land (P \Rightarrow j\bot)) \le j \mu(j\bot),
 	\]
-	and it follows that $j \mu(P \land (P \Rightarrow j\bot)) =  j \ind{\bot}$. Finally, we have $j \mu(P \lor (P \Rightarrow j\bot)) = j 1$ by the second item above, since $j(P \lor (P \Rightarrow j\bot))$ clearly holds if $jP$ and also if $P \Rightarrow j\bot$. Overall, we therefore get
+	and it follows that $j \mu(P \land (P \Rightarrow j\bot)) =  j \ind{\bot}$.\dis{Why?} Finally, we have $j \mu(P \lor (P \Rightarrow j\bot)) = j 1$ by the second item above, since $j$ is decidable; indeed, we have $jP\vee(P\imp j\bot)$ and $j(P \lor (P \Rightarrow j\bot))$ clearly holds in either case. Overall, we therefore get
 	\[
 		j \mu(P) + \mu(P \Rightarrow j\bot) = j \ind{\bot} + j 1.
 	\]
