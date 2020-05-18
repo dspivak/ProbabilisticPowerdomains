@@ -478,15 +478,22 @@ There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\c
 \[\ind{P}(q)\coloneqq(q<0)\vee ((q<1)\wedge P).\]
 \end{definition}
 
+Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
+\begin{equation}\label{eqn.indicator}
+P\imp (\ind{P}+r=1+r).
+\end{equation}
+
 The following is straightforward.
 \begin{lemma}\label{lemma.ind_monotonic}
 We have $\ind{\bot}=0$, $\ind{\top}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
 \end{lemma}
 
-Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
-\begin{equation}\label{eqn.indicator}
-P\imp (\ind{P}+r=1+r).
-\end{equation}
+\begin{lemma}\label{lemma.j_indicator}
+Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
+\end{lemma}
+\begin{proof}
+Clearly $j\ind{P}\leq j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
+\end{proof}
 
 We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
 
@@ -530,6 +537,30 @@ For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'
 \end{corollary}
 \begin{proof}
 If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{cor.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
+\end{proof}
+
+\begin{proposition}\label{prop.commute_exists_commute_addition}
+Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then $j$ commutes with addition of lower reals
+\[
+	jr_1+jr_2=j(r_1+r_2).
+\]
+\end{proposition}
+\begin{proof}
+More precisely, we need to show that for all $q:\tqq$ we have
+\begin{multline*}
+	\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)\iff\\
+	j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2)).
+\end{multline*}
+For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).jP(x)\imp j\exists(x:X).P(x)$. The $\imp$ implication follows immediately.
+
+For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2))$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
+\end{proof}
+
+\begin{corollary}\label{cor.closed_sum}
+Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, the sum $r_1+r_2$ is $j$-closed iff $r_1$ and $r_2$ are.
+\end{corollary}
+\begin{proof}
+Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\leq jr_1$ and $r_2\leq jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
 \end{proof}
 
 
@@ -741,7 +772,7 @@ Now we can conclude using \eqref{PfromDQ} that $\mu(P)=\ind{P}$ as desired.
 
 Recall from \Cref{props_open} that for every $P : \prop$, the associated constant predicate $\_ \mapsto P$ is open in any topological space $(X,\Op_X)$. 
 
-\begin{corollary}
+\begin{corollary}\label{cor.val_const_indicator}
 	Let $(X,\Op_X)$ be a topological space and $\mu : \Op_X \to [0,1]$ any valuation. Then $\mu(\,\_\mapsto P) = \ind{P}$ for all $P : \prop$.
 \end{corollary}
 
@@ -751,33 +782,9 @@ Recall from \Cref{props_open} that for every $P : \prop$, the associated constan
 
 From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\mapsto P)\colon X\to\prop$ on any type $X$.
 
-
 % ======== Chapter ========%
 \chapter{Interaction of valuations and modalities}
 
-\begin{proposition}\label{prop.commute_exists_commute_addition}
-Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then $j$ commutes with addition of lower reals
-\[
-	jr_1+jr_2=j(r_1+r_2).
-\]
-\end{proposition}
-\begin{proof}
-More precisely, we need to show that for all $q:\tqq$ we have
-\begin{multline*}
-	\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)\iff\\
-	j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2)).
-\end{multline*}
-For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).jP(x)\imp j\exists(x:X).P(x)$. The $\imp$ implication follows immediately.
-
-For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2))$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
-\end{proof}
-
-\begin{corollary}\label{cor.closed_sum}
-Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, the sum $r_1+r_2$ is $j$-closed iff $r_1$ and $r_2$ are.
-\end{corollary}
-\begin{proof}
-Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\leq jr_1$ and $r_2\leq jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
-\end{proof}
 
 Recall modalities and decidable modalities from \cref{def.modality,def.decidable_modality}. 
 \begin{theorem}
@@ -806,10 +813,11 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 				\label{j_modularity}
 				\begin{split}
 					\mu(Q) + \mu(Q \Rightarrow j\bot)	& = \mu(j\bot) + \mu(\top) \\
-										& = \ind{j \bot} + 1.
+										& = \ind{j \bot} + 1,
 				\end{split}
 			\end{align}
-			When applied to any rational $q$, the right-hand side is clearly $j$-closed, 
+			where the second equality is by \cref{cor.val_const_indicator}.
+			When applied to any rational $q$, the right-hand side of \eqref{j_modularity} is clearly $j$-closed, 
 			\dis{I don't see this unless for some reason we're allowed to only use test rationals in [0,1].}hence so is the left-hand side. But by \cref{cor.closed_sum}, a sum of lower reals is $j$-closed if and only if each summand is, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
 		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
 
@@ -822,9 +830,9 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 	\]
 	We now evaluate the second to fourth expressions in this equation with $j$ applied. The argument of the second is already $j$-closed, and therefore $\mu(P \Rightarrow j\bot)$ is also $j$-closed as per the first item above. For the third expression, we consider
 	\[
-		j \mu(\bot) \le j \mu(P \land (P \Rightarrow j\bot)) \le j \mu(j\bot),
+		j \mu(\bot) \le j \mu(P \land (P \Rightarrow j\bot)) \le j \mu(j\bot).
 	\]
-	and it follows that $j \mu(P \land (P \Rightarrow j\bot)) =  j \ind{\bot}$.\dis{Why?} Finally, we have $j \mu(P \lor (P \Rightarrow j\bot)) = j 1$ by the second item above, since $j$ is decidable; indeed, we have $jP\vee(P\imp j\bot)$ and $j(P \lor (P \Rightarrow j\bot))$ clearly holds in either case. Overall, we therefore get
+	By \cref{lemma.j_indicator,cor.val_const_indicator} we have $j \ind{\bot}=j \mu(\bot)=j\mu(j\bot)$ and thus $j \mu(P \land (P \Rightarrow j\bot)) =  j \ind{\bot}$. Finally, we have $j \mu(P \lor (P \Rightarrow j\bot)) = j 1$ by the second item above, since $j$ is decidable; indeed, we have $jP\vee(P\imp j\bot)$ and $j(P \lor (P \Rightarrow j\bot))$ clearly holds in either case. Overall, we therefore get
 	\[
 		j \mu(P) + \mu(P \Rightarrow j\bot) = j \ind{\bot} + j 1.
 	\]
