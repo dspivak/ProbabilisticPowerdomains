@@ -237,7 +237,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\AtSymbol}{{@}}
 \newcommand{\SeeSymbol}{{\down}}  % Old: \xi
 \newcommand{\InSymbol}{{\upclose}}% Old: \iota
-\newcommand{\At}[2][]{\AtSymbol^{#1}_{#2}}
+\newcommand{\At}[1][\pt]{\AtSymbol_{#1}}
 \newcommand{\See}[2][]{\SeeSymbol^{#1}_{#2}}
 \newcommand{\In}[2][]{\InSymbol^{#1}_{#2}}
 \newcommand{\AtInline}[1]{@{#1}}
@@ -255,8 +255,8 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\imp}{\Rightarrow}
 \renewcommand{\iff}{\Leftrightarrow}
-\newcommand{\true}{\const{true}}
-\newcommand{\false}{\const{false}}
+\newcommand{\true}{\top}
+\newcommand{\false}{\bot}
 \newcommand{\Bool}{\Set{Bool}}
 \newcommand{\ev}{\fun{ev}}
 
@@ -532,6 +532,7 @@ For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'
 If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{cor.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
 \end{proof}
 
+
 % ==== Section ====%
 \section{$j$-local lower reals}
 
@@ -754,6 +755,30 @@ From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\m
 % ======== Chapter ========%
 \chapter{Interaction of valuations and modalities}
 
+\begin{proposition}\label{prop.commute_exists_commute_addition}
+Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then $j$ commutes with addition of lower reals
+\[
+	jr_1+jr_2=j(r_1+r_2).
+\]
+\end{proposition}
+\begin{proof}
+More precisely, we need to show that for all $q:\tqq$ we have
+\begin{multline*}
+	\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)\iff\\
+	j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2)).
+\end{multline*}
+For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).jP(x)\imp j\exists(x:X).P(x)$. The $\imp$ implication follows immediately.
+
+For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2))$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
+\end{proof}
+
+\begin{corollary}
+Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, if $r_1+r_2$ is $j$-closed then so is $r_1$.
+\end{corollary}
+\begin{proof}
+Clearly $r_1\leq jr_1$ and $r_2\leq jr_2$. By \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
+\end{proof}
+
 Recall modalities and decidable modalities from \cref{def.modality,def.decidable_modality}. 
 \begin{theorem}
 	\label{vals_vs_modalities}
@@ -808,7 +833,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 % ======== Chapter ========%
 \chapter{Axioms for toposes with enough points}
 
-In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ as indexing a family of modalities $\At{\pt} : \prop \to \prop$. (The reason behind our notation $k : \Pts$ will become clear when we consider hyperspaces, in which case $k$ represents a compact set.)
+In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ as indexing a family of modalities $\At : \prop \to \prop$. (The reason behind our notation $k : \Pts$ will become clear when we consider hyperspaces, in which case $k$ represents a compact set.)
 
 Our primary intended semantics is that our topos is $\shv(X)$ for some topological space $X$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $X \setminus \overline{k}$. More precisely, the family of modalities is given by \ldots
 
@@ -817,20 +842,38 @@ Our primary intended semantics is that our topos is $\shv(X)$ for some topologic
 The soundness proofs which follow refer to this intended semantics.
 
 \begin{axiom}[Local decidability]\label{ax.decidability}
-	For all $\pt : \Pts$, the modality $\At{\pt}$ is \emph{locally decidable}. That is, for all $P : \prop$:
-	\[\At{\pt}P \: \lor \: (P \Rightarrow \At{\pt} \bot).\]
+	For all $\pt : \Pts$, the modality $\At $ is \emph{locally decidable}. That is, for all $P : \prop$:
+	\[\At P \: \lor \: (P \Rightarrow \At \bot).\]
 \end{axiom}
 
 
-Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At{\pt}$ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
+Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
 
-\begin{proposition}[$\At{\pt}$ commutes with $\vee$]
+\begin{proposition}[$\At $ commutes with $\vee$]
 For all $\pt:\Pts$ and $P,Q:\prop$ we have
-\[\At{\pt}(P \lor Q) = \At{\pt} P \lor \At{\pt} Q.\]
+\[\At (P \lor Q) = \At P \lor \At Q.\]
 \end{proposition}
 \begin{proof}
-The direction $(\At{\pt} P \lor \At{\pt} Q)\imp \At{\pt}(P \lor Q)$ is straightforward. For the converse, assume $\At{\pt}(P \lor Q)$. By \cref{ax.decidability} we may assume $P\imp\At{\pt}\bot$ and $Q\imp\At{\pt}\bot$. But then we have $\At{\pt}\bot$, which in turn proves $\At{\pt}P$.
+The direction $(\At P \lor \At Q)\imp \At (P \lor Q)$ is straightforward. For the converse, assume $\At (P \lor Q)$. By \cref{ax.decidability} we may assume $P\imp\At \bot$ and $Q\imp\At \bot$. But then we have $\At \bot$, which in turn proves $\At P$.
 \end{proof}
+
+\begin{proposition}[$\At \bot$ is prime]
+For any $\pt:\Pts$ and $P,Q:\prop$, we have
+\[\big((P\wedge Q)\imp\At \false\big)\imp\big((P\imp\At \false)\vee(Q\imp\At \false)\big)\]
+\end{proposition}
+\begin{proof}
+Assume $(P\wedge Q)\imp\At \false$. By \cref{ax.decidability} we may assume also that $\At P$ and $\At Q$, hence $\At (P\wedge Q)$ and finally $\At\bot$.
+\end{proof}
+
+\begin{proposition}[$\At$ is quasi-closed]
+For any $\pt:\Pts$ and $P:\prop$ we have
+\[\At P=\big((P\imp \At\bot)\imp\At\bot\big).\]
+\end{proposition}
+\begin{proof}
+The forward direction would hold for any modality $j$ in place of $\At$, and the backward direction follows directly from \cref{ax.decidability}.
+\end{proof}
+
+
 \begin{axiom}
 	
 \end{axiom}
