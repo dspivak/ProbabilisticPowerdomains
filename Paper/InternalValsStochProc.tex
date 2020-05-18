@@ -742,7 +742,7 @@ Now we can conclude using \eqref{PfromDQ} that $\mu(P)=\ind{P}$ as desired.
 Recall from \Cref{props_open} that for every $P : \prop$, the associated constant predicate $\_ \mapsto P$ is open in any topological space $(X,\Op_X)$. 
 
 \begin{corollary}
-	Let $(X,\Op_X)$ be a topological space and $\mu : \Op_X \to [0,1]$ any valuation. Then $\mu(\_\mapsto P) = \ind{P}$ for all $P : \prop$.
+	Let $(X,\Op_X)$ be a topological space and $\mu : \Op_X \to [0,1]$ any valuation. Then $\mu(\,\_\mapsto P) = \ind{P}$ for all $P : \prop$.
 \end{corollary}
 
 \begin{proof}
@@ -772,11 +772,11 @@ For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).
 For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2))$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
 \end{proof}
 
-\begin{corollary}
-Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, if $r_1+r_2$ is $j$-closed then so is $r_1$.
+\begin{corollary}\label{cor.closed_sum}
+Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, the sum $r_1+r_2$ is $j$-closed iff $r_1$ and $r_2$ are.
 \end{corollary}
 \begin{proof}
-Clearly $r_1\leq jr_1$ and $r_2\leq jr_2$. By \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
+Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\leq jr_1$ and $r_2\leq jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
 \end{proof}
 
 Recall modalities and decidable modalities from \cref{def.modality,def.decidable_modality}. 
@@ -809,7 +809,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 										& = \ind{j \bot} + 1.
 				\end{split}
 			\end{align}
-			When applied to any rational $q$, the right-hand side is clearly $j$-closed, hence so is the left-hand side. But since a sum of lower reals is $j$-closed if and only if each summand is,\dis{Why does $a+b$ $j$-closed imply $a$ is $j$-closed?} it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
+			When applied to any rational $q$, the right-hand side is clearly $j$-closed, hence so is the left-hand side. But by \cref{cor.closed_sum}, a sum of lower reals is $j$-closed if and only if each summand is, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
 		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
 
 			The proof is simple: since $R$ implies $\mu(R) = 1$, clearly also $jR$ implies $j(\mu(R) = 1)$. But then also $j\mu(R) = j1$.
@@ -835,7 +835,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 
 In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ as indexing a family of modalities $\At : \prop \to \prop$. (The reason behind our notation $k : \Pts$ will become clear when we consider hyperspaces, in which case $k$ represents a compact set.)
 
-Our primary intended semantics is that our topos is $\shv(X)$ for some topological space $X$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $X \setminus \overline{k}$. More precisely, the family of modalities is given by \ldots
+Our primary intended semantics is that our topos is $\shv(X)$ for some topological space $X$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $X \setminus \overline{k}$. More precisely, consider the underlying set $X$ of the space, and consider the associated constant presheaf on $(X,\Op_X)$, which assigns the set $X$ to each open $U\in\Op_X$. We take $\Pts$ to be the sheafification of this presheaf.
 
 \tob{Describe the object $\Pts$ explicitly in this case, and write down the semantics of $\At{-} : \Pts \times \prop \to \prop$ exactly}
 
