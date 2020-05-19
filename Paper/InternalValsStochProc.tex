@@ -840,20 +840,15 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 \end{proof}
 
 % ======== Chapter ========%
-\chapter{Axioms for toposes with enough points}
+\chapter{Decidable modalities}
 
-In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ as indexing a family of modalities $\At : \prop \to \prop$. (The reason behind our notation $k : \Pts$ will become clear when we consider hyperspaces, in which case $k$ represents a compact set.)
+\tob{The following now only presents the definition of decidable modality and then consequences of it. So I think that this merits a separate treatment in its own section on decidable modalities. We still need to adjust the notation}
 
-Our primary intended semantics is that our topos is $\shv(X)$ for some topological space $X$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $X \setminus \overline{k}$. More precisely, consider the underlying set $X$ of the space, and consider the associated constant presheaf on $(X,\Op_X)$, which assigns the set $X$ to each open $U\in\Op_X$. We take $\Pts$ to be the sheafification of this presheaf.
-
-\tob{Describe the object $\Pts$ explicitly in this case, and write down the semantics of $\At{-} : \Pts \times \prop \to \prop$ exactly}
-
-The soundness proofs which follow refer to this intended semantics.
-
-\begin{axiom}[Local decidability]\label{ax.decidability}
+\begin{definition}[Decidable modality]
+	\tob{rephrase this}
 	For all $\pt : \Pts$, the modality $\At $ is \emph{locally decidable}. That is, for all $P : \prop$:
 	\[\At P \: \lor \: (P \Rightarrow \At \bot).\]
-\end{axiom}
+\end{definition}
 
 
 Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
@@ -882,10 +877,32 @@ For any $\pt:\Pts$ and $P:\prop$ we have
 The forward direction would hold for any modality $j$ in place of $\At$, and the backward direction follows directly from \cref{ax.decidability}.
 \end{proof}
 
+We now turn to the treatment of the existential quantifier.
 
-\begin{axiom}
-	
-\end{axiom}
+\begin{lemma}[The $j$-existential quantifier as a double $j$-negation]
+	Let $j$ be a decidable modality, $X$ any type and $P : X \to \prop$ a predicate. Then
+	\[
+		j \left( \exists x : X . P(x) \right) \quad \Longleftrightarrow \quad \left( \forall x : X. P(x) \imp j \bot \right) \imp j \bot.
+	\]
+\end{lemma}
+
+\begin{proof}
+	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
+
+	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. P(x) \imp j\bot$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
+\end{proof}
+
+% ======== Chapter ========%
+\chapter{Axioms and soundness proofs}
+
+In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ as indexing a family of modalities $\At : \prop \to \prop$. (The reason behind our notation $k : \Pts$ will become clear when we consider hyperspaces, in which case $k$ represents a compact set.)
+
+Our primary intended semantics is that our topos is $\shv(X)$ for some topological space $X$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $X \setminus \overline{k}$. More precisely, consider the underlying set $X$ of the space, and consider the associated constant presheaf on $(X,\Op_X)$, which assigns the set $X$ to each open $U\in\Op_X$. We take $\Pts$ to be the sheafification of this presheaf.
+
+\tob{Describe the object $\Pts$ explicitly in this case, and write down the semantics of $\At{-} : \Pts \times \prop \to \prop$ exactly}
+
+The soundness proofs which follow refer to this intended semantics.
+
 
 \chapter{Main theorem}
 
