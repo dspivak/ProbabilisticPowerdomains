@@ -495,7 +495,7 @@ Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
 Clearly $j\ind{P}\leq j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
 \end{proof}
 
-We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry \cite{Henry}.%\url{https://mathoverflow.net/questions/108029/simplification-in-semi-continuous-real?rq=1}
+We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry \cite{henry2012simplification}.
 
 \begin{lemma}\label{lemma.order_cancel_props}
 For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\leq \ind{P}+r_2$ then $r_1\leq r_2$.
@@ -504,7 +504,7 @@ For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\leq \ind{P}+r_2$ then $r_
 Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<\ind{P}+r_1$ so by assumption $q_1<\ind{P}+r_2$. By \cref{def.sum_lr}, there exist $q<\ind{P}$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge P$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $P$ so by \cref{eqn.indicator,prop.cancel_rationals}, $\ind{P}+r_1\leq \ind{P}+r_2$ directly implies $r_1\leq r_2$.
 \end{proof}
 
-\begin{lemma}[\cite{Henry}]\label{lemma.cancellative_bounds}
+\begin{lemma}[\cite{henry2012simplification}]\label{lemma.cancellative_bounds}
 Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\geq 1$, there exists $r_n:\tlrr$ satisfying the following
 \begin{enumerate}
 	\item $r_n\leq r\leq r_n+1/n$; and
@@ -523,7 +523,7 @@ For the claim that $r\leq r_n+1/n$, take $q<r$; we will show $q<r_n+1/n$ or equi
 Finally, suppose $r_n+a\leq r_n+b$. Then $nr_n+na\leq nr_n+nb$ and it follows by induction on $Nn$ using \cref{lemma.order_cancel_props} that $na\leq nb$. Hence $a\leq b$.
 \end{proof}
 
-\begin{corollary}[Order cancellativity, \cite{Henry}]\label{cor.order_cancel}
+\begin{corollary}[Order cancellativity, \cite{henry2012simplification}]\label{cor.order_cancel}
 Suppose $r,s,s':\trr$ are lower reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
 \end{corollary}
 \begin{proof}
@@ -618,7 +618,7 @@ The fourth condition is a powerful assumption with the following surprising cons
 
 \begin{lemma}
 	\label{props_open}
-	Let $(X,\Op_X)$ be a topological space. Then:
+	Let $(X,\Op_X)$ be an internal topological space. Then:
 	\begin{enumerate}
 		\item For every open $U : \Op_X$ and every modality $j$, also $jU$ is open.
 		\item For every $P : \prop$, the constant predicate $x \mapsto P$ is open.
@@ -646,6 +646,20 @@ There is precisely one topology on the terminal object $*\in\cat{E}$, and $*$ is
 \begin{proof}
 We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2). There is a unique function $X\to *$ for every $X$ and it is continuous, so $*$ is terminal.
 \end{proof}
+
+Recall from \cref{prop.local_homeo} that there is an equivalence between the category $\shv(T)$ of sheaves on a topological space $T$ and that of local homeomorphisms over $T$.
+
+\begin{theorem}[{\cite[Theorem 1.5]{moerdijk1984spaced}}]
+Let $T$ be a topological space, $X\in\shv(T)$ a sheaf on it, and $p\colon E_X\to T$ the corresponding local homeomorphism. Then there is a one-to-one correspondence between internal topologies $\Op$ on $X$ and diagrams of topological spaces
+\[
+\begin{tikzcd}
+	E_X\ar[dr, "p"']\ar[rr, "c"]&&
+	E_X'\ar[dl, "p'"]\\&
+	T
+\end{tikzcd}
+\]
+for which the map $c$ is identity on points.
+\end{theorem}
 
 % ==== Section ====%
 \section{Valuations}
@@ -798,7 +812,6 @@ Recall modalities and decidable modalities from \cref{def.modality,def.decidable
 Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessary in order for $\mu$ to be applicable to $jP$ above.
 
 \begin{proof}
-\dis{This uses commutation of $j$ with addition of lower reals, which follows from ``axiom 4''.}
 	We first prove two auxiliary statements, both of which are special cases of the overall result.
 	\begin{itemize}
 		\item If $Q$ is any $j$-closed open, then $\mu(Q)$ is a $j$-closed lower real.
@@ -879,17 +892,17 @@ The forward direction would hold for any modality $j$ in place of $\At$, and the
 
 We now turn to the treatment of the existential quantifier.
 
-\begin{lemma}[The $j$-existential quantifier as a double $j$-negation]
-	Let $j$ be a decidable modality, $X$ any type and $P : X \to \prop$ a predicate. Then
+\begin{lemma}%[The $j$-existential quantifier as a double $j$-negation]--It's not really a double negation, right?
+	Let $j$ be a decidable modality, $X$ any type, and $P : X \to \prop$ a predicate. Then
 	\[
-		j \left( \exists x : X . P(x) \right) \quad \Longleftrightarrow \quad \left( \forall x : X. P(x) \imp j \bot \right) \imp j \bot.
+		j \exists (x : X) . P(x) \quad \Longleftrightarrow \quad \left( \forall (x : X). (P(x) \imp j \bot) \right) \imp j \bot.
 	\]
 \end{lemma}
 
 \begin{proof}
 	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
 
-	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. P(x) \imp j\bot$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
+	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. (P(x) \imp j\bot)$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
 \end{proof}
 
 % ======== Chapter ========%
@@ -1000,13 +1013,15 @@ That is, $\sheaf{F}_x$ is the set $\{(U,f)\mid U\in\Op_X, x\in U, f\in \sheaf{F}
 
 The following is well-known, but we recall it here to fix ideas and notation.
 
-\begin{proposition}
-For every sheaf $\sheaf{F}$ on $X$, there exists a topological space $E_\sheaf{F}$ and a local homeomorphism $\pi\colon E_\sheaf{F}\to X$ such that $\sec_\pi\cong\sheaf{F}$.
+\begin{proposition}\label{prop.local_homeo}
+For every sheaf $\sheaf{F}$ on $X$, there exists a topological space $E_\sheaf{F}$ and a local homeomorphism $\pi\colon E_\sheaf{F}\to X$ such that $\sec_\pi\cong\sheaf{F}$. This construction gives an equivalence of categories between $\shv(X)$ and the local homeomorphisms over $X$.
 \end{proposition}
 \begin{proof}
 Consider the set $E_\sheaf{F}\coloneqq\bigsqcup_{x\in X}\sheaf{F}_x$ given by the disjoint union of all stalks of $\sheaf{F}$; it comes with an obvious function $\pi\colon E_\sheaf{F}\to X$ sending $(x,[U,f])\mapsto x$. We define a topology on $E_\sheaf{F}$ by giving a basis; namely for every open $U\ss X$ and element $f\in\sheaf{F}(U)$, the set $(U,f)\coloneqq\{(x,[U,f])\mid x\in U\}$ is a basic open. Now we see that $\pi$ is a local homeomorphism because for any $x$, the image of a basic open is $\pi(U,f)=U$ and one can check that the bijection $(U,f)\to U$ sending $(x,[U,f])\mapsto x$, and its inverse, are both continuous.
 
 Given an open $U$ and a section $f\in\sheaf{F}(U)$, we obtain a local section $U\to E_\sheaf{F}$ of $\pi$ by sending $x\mapsto (x,[U,f])$. Going the other way, an arbitrary local section $g\colon U\to E_\sheaf{F}$ assigns to each $x\in U$ some $(x,[V_x,g_x])\in E_\sheaf{F}$. Fix $u\in U$. We may assume $(V_u,g_u)$ is a basic open without changing the section $g$. Because \eqref{eqn.sections} commutes and $\pi$ is a local homeomorphism, $g\inv(V_u,g_u)=U\cap V_u$, which implies that for all $x\in U\cap V_u$ we have $g_{x}=g_u$ on $V_x\cap V_u$. Thus we may assume $V_x=V_u$ and $g_x=g_u$ for all $x\in V_u$. Repeating this for all $u$, we obtain a cover $\{V_u\}_{u\in U}$ of $U$ and a compatible family of sections $g_u$, which we can glue to obtain the desired section of $\sheaf{F}(U)$.
+
+We leave the proof of the equivalence of categories to the reader, or see \cite[Corollary 2.6.3]{MacLane.Moerdijk:1992a}.
 \end{proof}
 
 Together, the space $E_\sheaf{F}$ and local homeomorphism $\pi\colon E_\sheaf{F}\to X$ are called the \emph{\'etal\'e space associated to $\sheaf{F}$}. Note that one can compute stalks of $\sheaf{F}$ using only basic opens, and also compute $E_\sheaf{F}$ using only basic opens throughout the definition.
