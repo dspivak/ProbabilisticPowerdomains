@@ -262,6 +262,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\false}{\bot}
 \newcommand{\Bool}{\Set{Bool}}
 \newcommand{\ev}{\fun{ev}}
+\newcommand{\decmod}{\Set{DMod}}
 
 \newcommand{\Span}{\Cat{Span}}
 \newcommand{\set}{\text{--}\smset}
@@ -876,7 +877,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 \begin{proof}
 	We first prove two auxiliary statements, both of which are special cases of the overall result.
 	\begin{itemize}
-		\item If $Q$ is any $j$-closed open, then $\mu(Q)$ is a $j$-closed lower real.
+		\item If $Q$ is any $j$-closed open, then $\mu(Q):\tii$ is $j$-closed.
 			
 			To begin the proof, we have the equivalences
 			\begin{align*}
@@ -892,7 +893,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 				\end{split}
 			\end{align}
 			where the second equality is by \cref{cor.val_const_indicator}.
-			By \cref{cor.closed_sum},\dis{Need $j$ to commute with $\exists (q:\tqq)$ for this ($j$ decidable is not enough).} a sum of lower reals is $j$-closed if and only if each summand is. Since $j\bot$ and $\top$ are $j$-closed, so are the associated constant predicates $\ind{j\bot}$ and $1=\ind{\top}$, and hence the right-hand side of \eqref{j_modularity} is $j$-closed. Hence the left-hand side is too, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
+			By \cref{cor.closed_sum},\dis{Need $j$ to commute with $\exists (q:\tqq)$ for this ($j$ decidable is not enough).} a sum of lower reals is $j$-closed if and only if each summand is. Since $j\bot$ and $\top$ are $j$-closed, the associated constant predicates $\ind{j\bot}$ and $1=\ind{\top}$ are too, and hence the right-hand side of \eqref{j_modularity} is $j$-closed. Hence the left-hand side is too, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
 		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
 
 			The proof is simple: since $R$ implies $\mu(R) = 1$, clearly also $jR$ implies $j(\mu(R) = 1)$. But then also $j\mu(R) = j1$.
@@ -913,58 +914,6 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 	Since $P \Rightarrow j\bot$ is equivalent to $jP \Rightarrow j\bot$ and the right-hand side is independent of $j$, applying this equation with $jP$ in place of $P$ and cancelling $\mu(P \Rightarrow j\bot)$ results in $j \mu(P) = j \mu(jP)$. But since also $j \mu(jP) = \mu(jP)$ by the first item above, we therefore obtain the overall $\mu(jP) = j \mu(P)$.
 \end{proof}
 
-% ======== Chapter ========%
-\chapter{Decidable modalities}
-
-\tob{The following now only presents the definition of decidable modality and then consequences of it. So I think that this merits a separate treatment in its own section on decidable modalities. We still need to adjust the notation}
-
-\begin{definition}[Decidable modality]
-	\tob{rephrase this}
-	For all $\pt : \Pts$, the modality $\At $ is \emph{locally decidable}. That is, for all $P : \prop$:
-	\[\At P \: \lor \: (P \Rightarrow \At \bot).\]
-\end{definition}
-
-
-Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
-
-\begin{proposition}[$\At $ commutes with $\vee$]
-For all $\pt:\Pts$ and $P,Q:\prop$ we have
-\[\At (P \lor Q) = \At P \lor \At Q.\]
-\end{proposition}
-\begin{proof}
-The direction $(\At P \lor \At Q)\imp \At (P \lor Q)$ is straightforward. For the converse, assume $\At (P \lor Q)$. By \cref{ax.decidability} we may assume $P\imp\At \bot$ and $Q\imp\At \bot$. But then we have $\At \bot$, which in turn proves $\At P$.
-\end{proof}
-
-\begin{proposition}[$\At \bot$ is prime]
-For any $\pt:\Pts$ and $P,Q:\prop$, we have
-\[\big((P\wedge Q)\imp\At \false\big)\imp\big((P\imp\At \false)\vee(Q\imp\At \false)\big)\]
-\end{proposition}
-\begin{proof}
-Assume $(P\wedge Q)\imp\At \false$. By \cref{ax.decidability} we may assume also that $\At P$ and $\At Q$, hence $\At (P\wedge Q)$ and finally $\At\bot$.
-\end{proof}
-
-\begin{proposition}[$\At$ is quasi-closed]
-For any $\pt:\Pts$ and $P:\prop$ we have
-\[\At P=\big((P\imp \At\bot)\imp\At\bot\big).\]
-\end{proposition}
-\begin{proof}
-The forward direction would hold for any modality $j$ in place of $\At$, and the backward direction follows directly from \cref{ax.decidability}.
-\end{proof}
-
-We now turn to the treatment of the existential quantifier.
-
-\begin{lemma}%[The $j$-existential quantifier as a double $j$-negation]--It's not really a double negation, right?
-	Let $j$ be a decidable modality, $X$ any type, and $P : X \to \prop$ a predicate. Then
-	\[
-		j \exists (x : X) . P(x) \quad \Longleftrightarrow \quad \left( \forall (x : X). (P(x) \imp j \bot) \right) \imp j \bot.
-	\]
-\end{lemma}
-
-\begin{proof}
-	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
-
-	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. (P(x) \imp j\bot)$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
-\end{proof}
 
 % ======== Chapter ========%
 \chapter{Axioms and soundness proofs}
@@ -976,6 +925,11 @@ Our primary intended semantics is that our topos is $\shv(X)$ for some topologic
 \tob{Describe the object $\Pts$ explicitly in this case, and write down the semantics of $\At{-} : \Pts \times \prop \to \prop$ exactly}
 
 The soundness proofs which follow refer to this intended semantics.
+
+
+
+Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
+
 
 
 \chapter{Main theorem}
@@ -1334,15 +1288,63 @@ Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $
 
 This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
 
-\begin{definition}\label{def.decidable_modality}
-We say that a modality $j$ is \emph{decidable} if 
-\[jP\vee (P\imp j\false)\]
-holds for all $P:\prop$.
-\end{definition}
+
 
 \begin{definition}[$j$-closed propositions]\label{def.j_closed_props}
 A proposition $P:\prop$ is called \emph{$j$-closed} if $P=jP$. The type of $j$-closed propositions is denoted $\prop_j$.
 \end{definition}
+
+% ==== Section ====%
+\section{Decidable modalities}
+
+\begin{definition}\label{def.decidable_modality}
+We say that a modality $j$ is \emph{decidable} if 
+\[jP\vee (P\imp j\false)\]
+holds for all $P:\prop$. Define the type $\decmod$ of decidable modalities by
+\[
+\decmod\coloneqq\{j\colon\prop\to\prop\mid j\tn{ is a modality and } \forall(P:\prop).jP\vee P\imp j\bot\}.
+\]
+\end{definition}
+
+\begin{proposition}[Decidable modalities commute with $\vee$]
+Suppose $j$ is decidable. Then for all $P,Q:\prop$ we have
+\[j (P \lor Q) = j P \lor j Q.\]
+\end{proposition}
+\begin{proof}
+The direction $(j P \lor j Q)\imp j (P \lor Q)$ is straightforward. For the converse, assume $j (P \lor Q)$. By decidability we may assume $P\imp j \bot$ and $Q\imp j \bot$. But then we have $j \bot$, which in turn proves $j P$.
+\end{proof}
+
+\begin{proposition}[$j \bot$ is prime for decidable $j$]
+Suppose $j$ is decidable. Then for all $P,Q:\prop$, we have
+\[\big((P\wedge Q)\imp j \false\big)\imp\big((P\imp j \false)\vee(Q\imp j \false)\big)\]
+\end{proposition}
+\begin{proof}
+Assume $(P\wedge Q)\imp j \false$. By \cref{ax.decidability} we may assume also that $j P$ and $j Q$, hence $j (P\wedge Q)$ and finally $j \bot$.
+\end{proof}
+
+\begin{proposition}[$\At$ is quasi-closed]
+Suppose $j$ is decidable. Then for all $P:\prop$ we have
+\[j P=\big((P\imp j\bot)\imp j\bot\big).\]
+\end{proposition}
+\begin{proof}
+The forward direction would hold for any modality, and the backward direction follows directly from decidability.
+\end{proof}
+
+We now turn to the treatment of the existential quantifier.
+
+\begin{lemma}%[The $j$-existential quantifier as a double $j$-negation]--It's not really a double negation, right?
+	Let $j$ be a decidable modality, $X$ any type, and $P : X \to \prop$ a predicate. Then
+	\[
+		j \exists (x : X) . P(x) \quad \Longleftrightarrow \quad \left( \forall (x : X). (P(x) \imp j \bot) \right) \imp j \bot.
+	\]
+\end{lemma}
+
+\begin{proof}
+	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
+
+	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. (P(x) \imp j\bot)$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
+\end{proof}
+
 
 
 % ======== Chapter ========%
