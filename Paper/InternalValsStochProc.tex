@@ -921,7 +921,9 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ and a function $\At[]\colon\Pts\to\decmod$, where $\decmod$ is the type of decidable modalities; see \cref{def.decidable_modality}. 
 
 Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $T \setminus \overline{k}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $(T,\Op_T)$, which assigns the set $T$ to each open $U\in\Op_T$. We take $\church{\Pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
-\[\church{\At[]}\colon\church{\Pts}\to\church{\decmod}.\]
+\begin{equation}\label{eqn.at_semantics}
+	\church{\At[]}\colon\church{\Pts}\to\church{\decmod}.
+\end{equation}
 Since sheafification is left adjoint to the underlying presheaf functor, and since the inclusion of constant presheaves is left adjoint to the global sections functor, the sheaf morphism $\At[]$ can be identified with a single function $j\colon T\to\church{\decmod}(T)$. So fix a point $t\in T$; to define an element $j_t\in\church{\decmod}(T)$ is to give a sheaf morphism $j_t\colon\Op_T\to\Op_T$ satisfying the following properties for all $U,V\in\Op_T$:
 \begin{enumerate}
 	\item $U\ss j_t(U)$;
@@ -937,7 +939,7 @@ where $^c$ is complement and $^\circ$ is interior. We define $j_t\colon\Op_T\to\
 		T&\tn{ if } t\in U
 	\end{cases}
 \end{equation}
-If $t\in U$ then $j_t(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. Supposing now that $t\not\in U$ then $U\ss \{t\}^c$ and hence $U\ss j_t(U)$, giving condition 1. Since $t\not\in(\{t\}^c)^\circ=j_t(U)$, we also have condition 2. Since $U\ss j_t(\varnothing)$, we have $T=U^c\cup U\ss (U^c\cup j_t(\varnothing))$ so we also have condition 4. For condition 3, if $t\in U\cap V$ then both sides are $T$; if $t\not\in U\cap V$ then $t\not\in U$ or $t\not\in V$ in which case both sides are $(\{t\}^c)^\circ$. Thus \eqref{eqn.j_t} satisfies the necessary conditions.
+If $t\in U$ then $j_t(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. Supposing now that $t\not\in U$ then $U\ss \{t\}^c$ and hence $U\ss j_t(U)$, giving condition 1. Since $t\not\in(\{t\}^c)^\circ=j_t(U)$, we also have condition 2. Since $U\ss j_t(\varnothing)$, we have $T=U^c\cup U\ss (U^c\cup j_t(\varnothing))$ so we also have condition 4. For condition 3, if $t\in U\cap V$ then both sides are $T$; if $t\not\in U\cap V$ then $t\not\in U$ or $t\not\in V$ in which case both sides are $(\{t\}^c)^\circ$. Thus \eqref{eqn.j_t} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\At[]}$ from \eqref{eqn.at_semantics}.
 
 
 \vspace{1in}
