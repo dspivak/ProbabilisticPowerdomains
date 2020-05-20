@@ -606,18 +606,30 @@ a(r)>q\iff r>q
 that form a retraction: $a(\cast(r'))=r'$ for any $r'\in\tii$. In the other direction, $\cast(a(r))=\min(r,1)$.
 \end{proposition}
 
-\begin{definition}
+\begin{definition}\label{def.sup_unit_interval}
 For any $I\in\shv(E)$ and $r\colon I\to\tii$, define $\sup_{i:I}r_i$ to be the predicate $\tqqint\to\prop$ given by
 \[
 q<\sup_{i:I}r_i\iff \exists(i:I).(q<r_i).
 \]
 \end{definition}
 
-The following is straightforward.
+The proofs of \cref{prop.cast_sups,prop.inc_const} are straightforward.
 \begin{proposition}\label{prop.cast_sups}
-For any $I\in\shv(E)$ and $r\colon I\to\tii$,
-\[\cast(\sup_{i:I}r_i)=\sup_{i:I}\cast(r_i).\]
+For any $I\in\shv(E)$ and $r\colon I\to\tii$, we have $\cast(\sup_{i:I}r_i)=\sup_{i:I}\cast(r_i).$
 \end{proposition}
+
+\begin{proposition}\label{prop.inc_const}
+The morphism $\inc\colon\prop\to\tlrr$ factors as
+\[
+\begin{tikzcd}
+	\prop\ar[r, "\textit{const}\ P"]&[5pt]
+	\tii\ar[r, "\cast"]&
+	\tlrr
+\end{tikzcd}
+\]
+where $(\textit{const}\ P)\colon\tqqint\to\prop$ is the constant at $P$.
+\end{proposition}
+We denote $\textit{const}\ P$ simply by $\ind{P}\colon\tqqint\to\prop$.
 
 
 % ==== Section ====%
@@ -718,7 +730,7 @@ for which the map $c$ is identity on points.
 \end{theorem}
 
 % ==== Section ====%
-\section{Valuations}
+\section{Valuations}\label{sec.valuations}
 
 \begin{definition}[Directed poset]\label{def.directed}
 Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
@@ -744,7 +756,6 @@ Let $(X,\Op_X)$ be an internal topological space. A \emph{probability valuation}
 \end{enumerate}
 \end{definition}
 
-\dis{Go through and update valuation arguments given the new definition.}
 
 \begin{proposition}[Push-forward valuation]\label{prop.pushforward}
 Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op_Y\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
@@ -766,11 +777,11 @@ A valuation on the one-point topological space is a map $\prop\to\trr$....
 % ======== Chapter ========%
 \chapter{Basic theory of internal valuations}
 
-Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the unit interval, given by $\ind{P}(q) := (q<0)\vee((q<1)\wedge P)$. Recall also from \cref{cor.top_on_one} that $\prop$ is the unique topology on the one-point space $\{*\}$.
+Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the inclusion $\inc : \prop \to \tii$, given by the constant function $\ind{P}(q)\coloneqq P$. When we discuss the modularity condition, we will implicitly use $\cast\colon\tii\to\tlrr$, sending $r\mapsto (q<0)\vee ((q<1)\wedge (q<r))$ as discussed in \cref{sec.valuations}. Recall also from \cref{cor.top_on_one} that $\prop$ is the unique topology on the one-point space $\{*\}$.
 
 \begin{proposition}
 	\label{prop.existence_val_on_1}
-	There exists a valuation on the one-point space $\{*\}$, namely the indicator function $\inc : \prop \to [0,1]$.
+	There exists a valuation on the one-point space $\{*\}$, namely the indicator function $\inc : \prop \to \tii$.
 \end{proposition}
 
 \tob{Comment on the way in how the internal reasoning looks absurd at first look?}
@@ -790,22 +801,22 @@ Recall that $\inc : \prop \to [0,1]$ is the inclusion of propositions into the u
 	
 	
 
-	Concerning Scott continuity \eqref{eqn.scott_continuity}, suppose that $D \ss \prop$ specifies a directed subtype (\cref{def.directed}). Then we need to prove that
+	Concerning Scott continuity \eqref{eqn.scott_continuity}, for any subtype $D \ss \prop$, directed or otherwise, both sides of the desired continuity equation
 	\[
 		\sup_{P : D} \ind{P} = \ind{\exists (P:D) P},
 	\]
-	again by proving both inequalities. If $q<\sup_{P : D}. \ind{P}$ then by \cref{def.sup}, $\exists(P:D).q<\ind{P}$, meaning either $q<0$ or $(q<1)\wedge P$; either way $q<\ind{\exists (P:D) P}$ follows easily. Conversely, if $q<\ind{\exists (P:D) P}$ then either $q<0$, in which case $q<\sup_{P : D} \ind{P}$, or $(q<1)\wedge\exists (P:D) P$. So take $P:D$ such that $P$, and we have $q<\ind{P}<\sup_{P:D}\ind P$. Thus $\inc : \prop \to [0,1]$ is indeed a valuation.
+	are identical; both sides are the constant predicate $\exists(P:D).P$ (see \cref{def.sup_unit_interval,prop.inc_const,prop.cast_sups}). Thus $\inc : \prop \to \tii$ is indeed a valuation.
 \end{proof}
 
 \begin{proposition}\label{prop.uniqueness_val_on_1}
-	There is precisely one valuation on $\{*\}$, namely the indicator function $\inc : \prop \to [0,1]$.
+	There is precisely one valuation on $\{*\}$, namely the indicator function $\inc : \prop \to \tii$.
 \end{proposition}
 \begin{proof}
-By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuation $\mu : \prop \to [0,1]$ on $\{*\}$ satisfies $\mu(P) = \ind{P}$ for all $P : \prop$. One direction is easy, namely
+By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuation $\mu : \prop \to \tii$ on $\{*\}$ satisfies $\mu(P) = \ind{P}$ for all $P : \prop$. One direction is easy, namely
 	\begin{equation}\label{eqn.ind_less_val}
 		\ind{P} \le \mu(P).
 	\end{equation}
-	for all $P:\prop$. Indeed take $q<\ind{P}$. If $q<0$ then $q<\mu(P)$; otherwise $(q<1)\wedge P$, but then $\mu(P)=\mu(\top)=1$ because $P=\top$. 
+	for all $P:\prop$. Indeed if $q<\ind{P}$ for some $0\leq q<1$ then $P$, in which case $\mu(P)=\mu(\top)=1$. 
 	
 	The other inequality requires more work. For $P:\prop$, consider the predicate
 	\[
@@ -881,8 +892,7 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 				\end{split}
 			\end{align}
 			where the second equality is by \cref{cor.val_const_indicator}.
-			When applied to any rational $q$, the right-hand side of \eqref{j_modularity} is clearly $j$-closed, 
-			\dis{I don't see this unless for some reason we're allowed to only use test rationals in [0,1].}hence so is the left-hand side. But by \cref{cor.closed_sum}, a sum of lower reals is $j$-closed if and only if each summand is, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
+			By \cref{cor.closed_sum},\dis{Need $j$ to commute with $\exists (q:\tqq)$ for this ($j$ decidable is not enough).} a sum of lower reals is $j$-closed if and only if each summand is. Since $j\bot$ and $\top$ are $j$-closed, so are the associated constant predicates $\ind{j\bot}$ and $1=\ind{\top}$, and hence the right-hand side of \eqref{j_modularity} is $j$-closed. Hence the left-hand side is too, and it follows that $\mu(Q) = j \mu(Q)$, as was to be shown.
 		\item If $R$ is any open with $jR$, then $j\mu(R) = j1$.
 
 			The proof is simple: since $R$ implies $\mu(R) = 1$, clearly also $jR$ implies $j(\mu(R) = 1)$. But then also $j\mu(R) = j1$.
