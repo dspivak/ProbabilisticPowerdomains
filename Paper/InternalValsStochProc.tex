@@ -8,7 +8,6 @@
 \checkandfixthelayout
 
 
-
 \usepackage{mathtools}
 \usepackage{amsthm}
 \usepackage{amssymb}
@@ -169,18 +168,22 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\tnn}{\internal{N}\hs}
 \newcommand{\tqq}{\internal{Q}\hs}
+\newcommand{\tqqint}{\internal{Q}\hs_{[0,1)}}
 \newcommand{\tQQp}{\tQQ_{+}}
 \newcommand{\tZZ}{\internal{Z}\hs}
 \newcommand{\tQQub}{\QQ^\infty}
 \newcommand{\trr}{\internal{R}\hs}
 \newcommand{\tIR}{\internal{I\hs R}\hs}
-\newcommand{\tII}{\bar{\ubar{\trr}}\hs}
+\newcommand{\tii}{\ubar{\internal{I\hs\hs}}\!\hs}
 \newcommand{\tlrr}{\ubar{\trr}\hs}
 \newcommand{\trrub}{\trr^\infty}
 \newcommand{\tIRub}{\internal{I\hs R}^\infty}
 \newcommand{\tLRub}{\ubar{\trr}^{\infty}}
 \newcommand{\tURub}{\bar{\trr}^{\infty}}
 \newcommand{\tIIub}{\bar{\ubar{\trr}}^{\infty}}
+
+
+\newcommand{\cast}{\textit{cast}}
 
 \newcommand{\trrat}[1]{\trr_{\SeeInline{#1}}}
 
@@ -262,6 +265,9 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\Span}{\Cat{Span}}
 \newcommand{\set}{\text{--}\smset}
+
+\newcommand{\qand}{\quad\tn{and}\quad}
+\newcommand{\qqand}{\qquad\tn{and}\qquad}
 
 \newcommand{\adj}[5][30pt]{%[size] Cat L, Left, Right, Cat R.
 \begin{tikzcd}[ampersand replacement=\&, column sep=#1]
@@ -429,10 +435,23 @@ For any $q:\tqq$ and $r,r':\tlrr$, if $q<r$ then $q<r+r'$.
 Take $q<r$ and use roundedness to produce $q<q'<r$. Then $q-q'<0<r'$ so $q=q'+(q-q')<r+r'$ as desired.
 \end{proof}
 
-\begin{definition}\label{def.sup}
+
+\begin{definition}[Pairwise minima, arbitrary suprema]\label{def.min_sup}
+Let $r,r':\tlrr$. We define their \emph{minimum}, denoted $\min(r,r')$ by
+\[q<\min(r,r') \iff (q<r)\wedge(q<r').\]
+
 Let $I\in\cat{E}$ be an object and $r:I\to\tlrr$ be an $I$-indexed family of lower reals. Its \emph{supremum}, denoted $\sup_{i:I}r_i:\tlrr$ is the lower real defined  by 
 \[q<\sup_{i:I}r_i\iff (q<0)\vee\exists(i:I).(q<r_i).\]
 \end{definition}
+
+\begin{proposition}
+Pairwise minima and arbitrary suprema of lower reals are indeed lower reals.
+\end{proposition}
+\begin{proof}
+We leave the first claim to the reader. If $r$ is an $I$-indexed family of lower reals, then $r\coloneqq\sup_{i:I}r_i$ is nonnegative by construction. To see that it is down-closed and rounded, suppose $q<r$ and $q_0<q$. There exists $i:I$ with $q<r_i$. But since $r_i:\tlrr$, it is down-closed and rounded so we have $q_0<r_i$, and there exists some $q'<r_i$ with $q<q'$. It follows that $q_0<r$ and $q'<r$ as required.
+\end{proof}
+
+It is easy to check that $\min(r,r')$ as defined in \cref{def.min_sup} is indeed a minimum (greatest lower bound) of $r,r'$ and that $\sup_{i:I}r_i$ is indeed a supremum (least upper bound) of $(r_i)_{i\in I}$. That is, $\forall(j:I).(r_j\leq\sup_{i:I}r_i)$ and if $\forall(i:I).r_i\leq r$ then $\sup_{i:I}r_i\leq r$.
 
 
 \begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
@@ -553,7 +572,7 @@ More precisely, we need to show that for all $q:\tqq$ we have
 \end{multline*}
 For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).jP(x)\imp j\exists(x:X).P(x)$. The $\imp$ implication follows immediately.
 
-For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2))$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
+For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
 \end{proof}
 
 \begin{corollary}\label{cor.closed_sum}
@@ -562,6 +581,43 @@ Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tq
 \begin{proof}
 Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\leq jr_1$ and $r_2\leq jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
 \end{proof}
+
+% ==== Section ====%
+\section{The lower unit interval $[0,1]$}
+
+We will work extensively with elements of the unit interval, and it will be convenient to give it a special definition. Let $\tqqint\coloneqq\{q:\tqq\mid 0\leq q< 1\}$.
+
+\begin{definition}\label{def.unit_interval}
+The \emph{unit interval}, denoted $\tii$ is defined to be the type of functions $r_>\colon\tqqint\to\prop$ satisfying
+\begin{equation}\label{eqn.down_closed_rounded_for_interval}
+	\forall(q:\tqqint).r_>q\iff\exists(q':\tqqint).(r_>q')\wedge (q'>q).
+\end{equation}
+As usual we write $q<r$ or $r>q$ to denote the proposition $r_>q$.
+\end{definition}
+
+The following is straightforward to prove.
+\begin{proposition}\label{prop.unit_interval_cast}
+There is a pair of maps $a\colon\tlrr\to\tii$ and $\cast\colon\tii\to\tlrr$ given by
+\[
+a(r)>q\iff r>q
+\qqand
+\cast(r')>q\iff (q<0)\vee\big((q<1)\wedge q<r'\big)
+\]
+that form a retraction: $a(\cast(r'))=r'$ for any $r'\in\tii$. In the other direction, $\cast(a(r))=\min(r,1)$.
+\end{proposition}
+
+\begin{definition}
+For any $I\in\shv(E)$ and $r\colon I\to\tii$, define $\sup_{i:I}r_i$ to be the predicate $\tqqint\to\prop$ given by
+\[
+q<\sup_{i:I}r_i\iff \exists(i:I).(q<r_i).
+\]
+\end{definition}
+
+The following is straightforward.
+\begin{proposition}\label{prop.cast_sups}
+For any $I\in\shv(E)$ and $r\colon I\to\tii$,
+\[\cast(\sup_{i:I}r_i)=\sup_{i:I}\cast(r_i).\]
+\end{proposition}
 
 
 % ==== Section ====%
@@ -673,27 +729,22 @@ Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It
 \end{definition}
 
 
-Recall the type $\tlrr$ of lower nonnegative reals from \cref{def.lower_nn_reals}. 
+Recall the lower unit interval type $\tii$ from \cref{def.unit_interval}. We may implicitly cast $r:\tii$ as a lower real using the function $\cast\colon\tii\to\tlrr$ from \cref{prop.unit_interval_cast}. For example in the modular condition (3) below, the expression $r+r'$ on either side of the equation is shorthand $\cast(r)+\cast(r')$. However condition (3) is the only place where we need to invoke $\cast$; e.g.\ in the continuity condition (4), recall from \cref{prop.cast_sups} that the $\sup$ can be computed in $\tii$.
 
-\begin{definition}
-Let $(X,\Op_X)$ be an internal topological space. A \emph{valuation} on $(X,\Op_X)$ is a function $\mu\colon\Op_X\to\tlrr$ satisfying the following conditions:
+\begin{definition}[Probability valuation]
+Let $(X,\Op_X)$ be an internal topological space. A \emph{probability valuation} on $(X,\Op_X)$ is a function $\mu\colon\Op_X\to\tii$ satisfying the following conditions:
 \begin{enumerate}
-	\item $\mu(\bot)=0$;
+	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-\end{enumerate}
-A valuation $\mu$ is called \emph{continuous} if
-\begin{enumerate}[resume]
 	\item If $D\ss\Op_X$ is a directed subposet (\cref{def.directed}), then
 	\begin{equation}\label{eqn.scott_continuity}
 	\sup_{U: D}\mu(U)=\mu\big(\exists(U:D).U\big).
 	\end{equation}
 \end{enumerate}
-A continuous valuation $\mu$ is called a \emph{probability valuation} if
-\begin{enumerate}[resume]
-	\item $\mu(\top)=1$.
-\end{enumerate}
 \end{definition}
+
+\dis{Go through and update valuation arguments given the new definition.}
 
 \begin{proposition}[Push-forward valuation]\label{prop.pushforward}
 Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op_Y\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
