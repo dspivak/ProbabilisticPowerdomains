@@ -722,13 +722,15 @@ Recall from \cref{prop.local_homeo} that there is an equivalence between the cat
 Let $T$ be a topological space, $X\in\shv(T)$ a sheaf on it, and $p\colon E_X\to T$ the corresponding local homeomorphism. Then there is a one-to-one correspondence between internal topologies $\Op$ on $X$ and diagrams of topological spaces
 \[
 \begin{tikzcd}
-	E_X\ar[dr, "p"']\ar[rr, "c"]&&
-	E_X'\ar[dl, "p'"]\\&
+	E_X\ar[dr, "p"']\ar[rr, "c^{\Op}"]&&
+	E_X^{\Op}\ar[dl, "p^{\Op}"]\\&
 	T
 \end{tikzcd}
 \]
 for which the map $c$ is identity on points.
 \end{theorem}
+
+We do not give the proof here, but explain a bit how internal topologies
 
 % ==== Section ====%
 \section{Valuations}\label{sec.valuations}
