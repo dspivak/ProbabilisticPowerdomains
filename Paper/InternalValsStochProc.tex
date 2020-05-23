@@ -637,6 +637,7 @@ We denote $\textit{const}\ P$ simply by $\ind{P}\colon\tqqint\to\prop$.
 \section{$j$-local lower reals}
 
 \dis{Do we need this?}
+\tob{yes, this is essential!}
 
 Let $j:\prop\to\prop$ be a modality and $\prop_j$ the type of $j$-closed propositions  (see \cref{def.modality,def.j_closed_props}). We follow \cite[Definition 4.21]{schultz2019temporal} in the following definition (see also loc.\ cit.\ Remark 4.9).
 
@@ -648,6 +649,12 @@ The \emph{$j$-local lower nonnegative reals}, denoted $\tlrr_j$, is the type of 
 	\item ($j$-rounded) $\forall (q:\tqq).r_>q\imp j\exists (q':\tqq).q'>q\wedge r_>q'$.
 \end{enumerate}
 \end{definition}
+
+Note that, using decidability of the order on $\tqq$, it follows that the nonnegativity and down-closure properties are automatically $j$-closed. A similarly simple argument shows that also the $j$-roundedness condition is $j$-closed.
+
+Moreover, if $j$ commutes with existential quantification over $\tqq$, then the $j$ can be left out of the roundedness condition entirely; in this case, a $j$-local real is simply a lower real which is $j$-closed as a predicate on the rationals.
+
+\tob{I've been sloppy by ignoring the nonnegativity condition (for now), but fortunately it's also automatically $j$-closed}
 
 % ==== Section ====%
 \section{Internal topological spaces and Moerdijk's theorem}
@@ -943,15 +950,86 @@ where $^c$ is complement and $^\circ$ is interior. We define $j_t\colon\Op_T\to\
 \end{equation}
 If $t\in U$ then $j_t(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. Supposing now that $t\not\in U$ then $U\ss \{t\}^c$ and hence $U\ss j_t(U)$, giving condition 1. Since $t\not\in(\{t\}^c)^\circ=j_t(U)$, we also have condition 2. Since $U\ss j_t(\varnothing)$, we have $T=U^c\cup U\ss (U^c\cup j_t(\varnothing))$ so we also have condition 4. For condition 3, if $t\in U\cap V$ then both sides are $T$; if $t\not\in U\cap V$ then $t\not\in U$ or $t\not\in V$ in which case both sides are $(\{t\}^c)^\circ$. Thus \eqref{eqn.j_t} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\At[]}$ from \eqref{eqn.at_semantics}.
 
+\medskip
 
-\vspace{1in}
+Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). 
 
+\begin{axiom}
+	\label{ax:N_flabby}
+	For all $\pt : \Pts$ and predicates $P : \tnn \to \prop$,
+	\[
+		\At \exists n : \tnn . P(n) \quad \Longrightarrow \quad \exists n : \tnn . \At P(n).
+	\]
+\end{axiom}
 
-Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). Then the above axiom is analogous to ``prime filter'', still missing the ``completely''. This is what we turn to next; similar to how preservation of $\lor$ is analogous to primality, it is a suitably type of commutation with $\exists$ which is analogous to complete primality.
+\tob{add soundness proof, or derive this from another axiom (it is arguably not provable from the other axioms, but we don't have the relevant counterexample either)}
 
+Since $\tnn$ and $\tqq$ are internally bijective, it follows that the commutation of $\At[]$ and $\exists$ holds likewise for predicates on $\qq$.
 
-
+% ======== Chapter ========%
 \chapter{Main theorem}
+
+We now want to consider the relation between valuations and an internal space and families $\At[]$-locally defined valuations.
+
+We start by considering an analogous question for lower reals. For any $r : \tlrr$ and any $\pt : \Pts$, we get the $\At$-lower real $r_\pt := \At r$. Thus overall we have the family $(r_\pt)_{\pt \in \Pts}$. We now show which families arise in this way, and at the same time how a lower real can be pieced together from a family of $\At[]$-lower reals.
+
+\begin{definition}
+	A family $(r_\pt)_{\pt : \Pts}$ with $r_\pt \in \At \tlrr$ for every $\pt$ is \emph{lower semicontinuous} if for all $q : \tqq$ there is $U : \prop$ such that for all $\pt : \Pts$,
+	\[
+		r_\pt(q) \Leftrightarrow \At U.
+	\]
+\end{definition}
+
+A lower semicontinuous family automatically satisfies the following monotonicity condition: for all $\pt,\pt' : \Pts$, we have
+\begin{equation}
+	\label{r_pt_monotone}
+	r_\pt \le \At r_{\pt'},
+\end{equation}
+since similarly $\At U \imp \At \At{\pt'} U$.
+
+\begin{proposition}[{$\At[]$-Locality of lower reals}]
+	\label{prop:LR_locality}
+	The map $r \mapsto (r_k)$ establishes a bijection between $\tlrr$ and families of $\At[]$-lower reals $(r_\pt)_{\pt \in \Pts}$ which are lower semicontinuous.
+\end{proposition}
+
+\begin{proof}
+	We first show that for every $r : \tlrr$, the resulting family $(\At r)_{\pt \in \Pts}$ satisfies lower semicontinuity. For given $q : \tqq$ we take $U := r(q)$. Then since $r_\pt = \At r$, the equivalences
+	\[
+		r_\pt(q) \Leftrightarrow \At r(q) \Leftrightarrow \At U
+	\]
+	holds by definition.
+
+	We next construct a map from lower semicontinuous families $(r_\pt)$ back to lower reals by putting
+	\begin{equation}
+		\label{lr_from_family}
+		r(q) := \forall \pt : \Pts . r_\pt(q).
+	\end{equation}
+	We first show that $\At r = r_\pt$ for every $\pt$, or equivalently
+	\[
+		\At \forall \pt' . r_{\pt'}(q) \quad \Longleftrightarrow \quad r_\pt(q)
+	\]
+	for every $q$. Then consider $U$ as in the definition of lower semicontinuity, which reduces the problem to proving that
+	\[
+		\At \forall \pt' . \At[\pt'] U \quad \Longleftrightarrow \quad \At U,
+	\]
+	which is now obvious since $\forall \pt' . \At[\pt'] U$ is equivalent to $U$.
+
+	We still need to show that \eqref{lr_from_family} indeed defines a nonnegative lower real. $r(q)$ for $q < 0$ clearly follows from the enough points condition and $r_k(q)$. Downward closure is also obvious, since the downward closure property of an $\At[]$-lower real is exactly the usual one which then transfers to $r$. Thus it remains to prove roundedness, which by the enough points property amounts to showing that if $r(q)$, then 
+	\[
+		\At \exists q' > q . r(q)
+	\]
+	for any $\pt : \Pts$. But then by \Cref{ax:N_flabby}, this is equivalent to $\exists q' > q. \At r(q)$, and the claim now follows by $\At r(q) = r_\pt(q)$.
+
+	Finally, we prove that the above two constructions are inverses. Starting with $r \in \tlrr$, we need to prove that
+	\[
+		r(q) = \forall \pt : \Pts . \At r(q),
+	\]
+	which is an instance of the enough points condition. Starting with a lower semicontinuous family $(r_\pt)$, the relevant property is the equation
+	\[
+		r_\pt(q) = \At \forall \pt' : \Pts . \At[\pt'] r_{\pt'}(q)
+	\]
+	proven above.
+\end{proof}
 
 % ======== Chapter ========%
 \chapter{Open questions}
