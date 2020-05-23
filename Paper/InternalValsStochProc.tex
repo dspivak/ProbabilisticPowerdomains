@@ -636,9 +636,6 @@ We denote $\textit{const}\ P$ simply by $\ind{P}\colon\tqqint\to\prop$.
 % ==== Section ====%
 \section{$j$-local lower reals}
 
-\dis{Do we need this?}
-\tob{yes, this is essential!}
-
 Let $j:\prop\to\prop$ be a modality and $\prop_j$ the type of $j$-closed propositions  (see \cref{def.modality,def.j_closed_props}). We follow \cite[Definition 4.21]{schultz2019temporal} in the following definition (see also loc.\ cit.\ Remark 4.9).
 
 \begin{definition}[$j$-local lower nonnegative reals]\label{def.j_loc_lower_reals}
@@ -974,10 +971,11 @@ We now want to consider the relation between valuations and an internal space an
 We start by considering an analogous question for lower reals. For any $r : \tlrr$ and any $\pt : \Pts$, we get the $\At$-lower real $r_\pt := \At r$. Thus overall we have the family $(r_\pt)_{\pt \in \Pts}$. We now show which families arise in this way, and at the same time how a lower real can be pieced together from a family of $\At[]$-lower reals.
 
 \begin{definition}
-	A family $(r_\pt)_{\pt : \Pts}$ with $r_\pt \in \At \tlrr$ for every $\pt$ is \emph{lower semicontinuous} if for all $q : \tqq$ there is $U : \prop$ such that for all $\pt : \Pts$,
-	\[
-		r_\pt(q) \Leftrightarrow \At U.
-	\]
+	A family $(r_\pt)_{\pt : \Pts}$ with $r_\pt \in \tlrr_{\At}$ for every $\pt$ is \emph{lower semicontinuous} if there exists a function $U\colon\tqq\to\prop$ such that for all $q : \tqq$ and $\pt : \Pts$,
+	\begin{equation}\label{eqn.witness}
+		r_\pt(q) \Leftrightarrow \At U(q).
+	\end{equation}
+	We call $U$ the \emph{witnessing cut}.
 \end{definition}
 
 A lower semicontinuous family automatically satisfies the following monotonicity condition: for all $\pt,\pt' : \Pts$, we have
@@ -985,50 +983,46 @@ A lower semicontinuous family automatically satisfies the following monotonicity
 	\label{r_pt_monotone}
 	r_\pt \le \At r_{\pt'},
 \end{equation}
-since similarly $\At U \imp \At \At{\pt'} U$.
+since $\At U(q) \imp \At \At[\pt'] U(q)$ for any $q:\tqq$.
 
 \begin{proposition}[{$\At[]$-Locality of lower reals}]
 	\label{prop:LR_locality}
-	The map $r \mapsto (r_k)$ establishes a bijection between $\tlrr$ and families of $\At[]$-lower reals $(r_\pt)_{\pt \in \Pts}$ which are lower semicontinuous.
+	The map $r \mapsto (\At r)_{k\in\Pts}$ establishes a bijection between $\tlrr$ and lower semicontinuous families of $\At[]$-lower reals.
 \end{proposition}
 
 \begin{proof}
-	We first show that for every $r : \tlrr$, the resulting family $(\At r)_{\pt \in \Pts}$ satisfies lower semicontinuity. For given $q : \tqq$ we take $U := r(q)$. Then since $r_\pt = \At r$, the equivalences
-	\[
-		r_\pt(q) \Leftrightarrow \At r(q) \Leftrightarrow \At U
-	\]
-	holds by definition.
+	For every $r : \tlrr$, the family with $r_k\coloneqq \At r$ for each $k\in\Pts$ satisfies lower semicontinuity; indeed taking $U\coloneqq r:\tqq\to\prop$ itself as the witnessing cut, \eqref{eqn.witness} holds by definition.
 
-	We next construct a map from lower semicontinuous families $(r_\pt)$ back to lower reals by putting
+	We next construct a map from lower semicontinuous families $(r_\pt)_{\pt\in\Pts}$ back to lower reals by putting
 	\begin{equation}
 		\label{lr_from_family}
-		r(q) := \forall \pt : \Pts . r_\pt(q).
+		r(q) := \forall (\pt : \Pts) . r_\pt(q).
 	\end{equation}
 	We first show that $\At r = r_\pt$ for every $\pt$, or equivalently
 	\[
 		\At \forall \pt' . r_{\pt'}(q) \quad \Longleftrightarrow \quad r_\pt(q)
 	\]
-	for every $q$. Then consider $U$ as in the definition of lower semicontinuity, which reduces the problem to proving that
-	\[
-		\At \forall \pt' . \At[\pt'] U \quad \Longleftrightarrow \quad \At U,
-	\]
+	for every $q$. Taking $U$ as the witnessing cut for $(r_\pt)$, we reduce the problem to proving that for all $q:\tqq$,
+	\begin{equation}\label{eqn.round_trip}
+		\At \forall (\pt':\Pts) . \At[\pt'] U(q) \quad \Longleftrightarrow \quad \At U(q),
+	\end{equation}
 	which is now obvious since $\forall \pt' . \At[\pt'] U$ is equivalent to $U$.
 
-	We still need to show that \eqref{lr_from_family} indeed defines a nonnegative lower real. $r(q)$ for $q < 0$ clearly follows from the enough points condition and $r_k(q)$. Downward closure is also obvious, since the downward closure property of an $\At[]$-lower real is exactly the usual one which then transfers to $r$. Thus it remains to prove roundedness, which by the enough points property amounts to showing that if $r(q)$, then 
+	We still need to show that \eqref{lr_from_family} indeed defines a nonnegative lower real. $r(q)$ for $q < 0$ clearly follows from the enough points condition \cref{enough_points} and $r_k(q)$. Downward closure is also obvious, since the downward closure property of an $\At[]$-lower real is exactly the usual one which then transfers to $r$ (see \cref{def.j_loc_lower_reals}). Thus it remains to prove roundedness, which by the enough points property amounts to showing that if $r(q)$, then 
 	\[
-		\At \exists q' > q . r(q)
+		\At \exists q'. (q' > q) \wedge r(q')
 	\]
-	for any $\pt : \Pts$. But then by \Cref{ax:N_flabby}, this is equivalent to $\exists q' > q. \At r(q)$, and the claim now follows by $\At r(q) = r_\pt(q)$.
+	for any $\pt : \Pts$. But then by \Cref{ax:N_flabby}, this is equivalent to $\exists q'. (q' > q)\wedge \At r(q')$, and the claim now follows by $\At r(q') = r_\pt(q')$.
 
 	Finally, we prove that the above two constructions are inverses. Starting with $r \in \tlrr$, we need to prove that
 	\[
-		r(q) = \forall \pt : \Pts . \At r(q),
+		r(q) = \forall (\pt : \Pts) . \At r(q),
 	\]
 	which is an instance of the enough points condition. Starting with a lower semicontinuous family $(r_\pt)$, the relevant property is the equation
 	\[
-		r_\pt(q) = \At \forall \pt' : \Pts . \At[\pt'] r_{\pt'}(q)
+		\At \forall (\pt' : \Pts) . \At[\pt'] r_{\pt'}(q) = r_\pt(q),
 	\]
-	proven above.
+	i.e.\ \eqref{eqn.round_trip}, which was proven above.
 \end{proof}
 
 % ======== Chapter ========%
