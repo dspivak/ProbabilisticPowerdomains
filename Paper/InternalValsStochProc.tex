@@ -964,16 +964,18 @@ Recall from \Cref{space_localize} that the object of $j$-closed opens, $j \Op_X$
 
 \begin{corollary}
 	\label{val_localize}
-	Let $j$ be a decidable modality and $\mu : \Op_X \to \tlrr$ a valuation. Then
+	Let $j$ be a decidable modality and $\mu : \Op_X \to \tlrr$ a valuation. Then the restriction of $\mu$ to the $j$-closed opens,
 	\[
-		j \Op_X \longrightarrow j \tlrr, \qquad P \longmapsto j \mu(P)
+		j \Op_X \longrightarrow j \tlrr, \qquad P \longmapsto \mu(P)
 	\]
-	produces a $j$-local valuations.
+	produces a $j$-local valuation.
 \end{corollary}
 
+Note that this lands indeed in $j \tlrr$ because of \Cref{vals_vs_modalities}.
+
 \begin{proof}
-	The normalization conditions and monotonicity are obvious. The modularity equation holds because $j$ commutes with addition of lower reals.
-	\tob{Again assuming that $j$ commutes with $\exists q : \tqq$}
+	The normalization conditions and monotonicity are obvious. The modularity equation holds because $j$ commutes with both $\land$ and $\lor$.
+
 	Now let $D : j \Op_X \longrightarrow j \prop$ be $j$-locally directed. We want to prove that
 	\[
 		j \mu\left( j \exists P : j \Op_X . D(P) \land P \right) = j \exists P : j \Op_X . D(P) \land j \mu(P).
@@ -1109,7 +1111,7 @@ Recall that an \emph{$\At$-valuation} on an internal space $(X,\Op_X)$ is define
 
 In order to understand this condition, let us consider the cases $\At[\pt'] \At \bot$ and $\At \bot \imp \At[\pt'] \bot$ separately. In the first case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P$, so that the left-hand side is $1$. But since $\mu_\pt$ takes values in $\At$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At \bot \imp \At[\pt'] \bot$.
 
-
+Recall from \Cref{val_localize} that if $\mu : \Op_X \to \tlrr$ is a valuation, then the restriction 
 
 \chapter{Open questions}
 
