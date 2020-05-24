@@ -960,16 +960,38 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 	Since $P \Rightarrow j\bot$ is equivalent to $jP \Rightarrow j\bot$ and the right-hand side is independent of $j$, applying this equation with $jP$ in place of $P$ and cancelling $\mu(P \Rightarrow j\bot)$ results in $j \mu(P) = j \mu(jP)$. But since also $j \mu(jP) = \mu(jP)$ by the first item above, we therefore obtain the overall $\mu(jP) = j \mu(P)$.
 \end{proof}
 
+Recall from \Cref{space_localize} that the object of $j$-closed opens, $j \Op_X$, is a $j$-local internal space.
+
 \begin{corollary}
 	Let $\mu : \Op_X \to \tlrr$ be a valuation. Then
 	\[
-		\At \Op_X \longrightarrow \At \tlrr, \qquad P \longmapsto \At \mu(P)
+		j \Op_X \longrightarrow j \tlrr, \qquad P \longmapsto j \mu(P)
 	\]
-	produces a compatible family of $\At[]$-valuations.
+	produces a $j$-local valuations.
 \end{corollary}
 
 \begin{proof}
-	The normalization conditions and monotonicity are obvious. The modularity equation holds because $\At$ commutes with addition.
+	The normalization conditions and monotonicity are obvious. The modularity equation holds because $j$ commutes with addition of lower reals.
+	\tob{Again assuming that $j$ commutes with $\exists q : \tqq$}
+	Now let $D : j \Op_X \longrightarrow j \prop$ be $j$-locally directed. We want to prove that
+	\[
+		j \mu\left( j \exists P : j \Op_X . D(P) \land P \right) = j \exists P : j \Op_X . D(P) \land j \mu(P).
+	\]
+	The predicate $\exists P : j \Op_X . D(P) \land P$ is again open, and we can thus apply \Cref{vals_vs_modalities} to remove the inner $j$ on the left-hand side. Furthermore replacing the existential quantification by an equivalent one, it is hence enough to prove
+	\[
+		j \mu\left( \exists Q : \Op_X . D'(Q) \land Q \right) = j \exists Q : \Op_X . D'(Q) \land j \mu(Q).
+	\]
+	with the predicate
+	\[
+		D' \: : \: \Op_X \longrightarrow \prop, \qquad Q \longmapsto D(j Q) \land (j Q \imp Q).
+	\]
+	If $D'$ is directed, then Scott continuity of $\mu$ gives
+	\[
+		\mu\left( \exists Q : \Op_X . D'(Q) \land Q \right) = \exists Q : \Op_X . D'(Q) \land \mu(Q).	
+	\]
+	Since every $Q$ with $D'(Q)$ is $j$-closed, we may as well use $j \mu(Q)$ on the right-hand side by \Cref{vals_vs_modalities}. This proves the claim by an application of $j$. It thus remains to be argued that $D'$ is directed.
+
+	Inhabitedness of $D'$ clearly follows from inhabitedness of $D$. If $D'(Q_1)$ and $D'(Q_2)$, then in particular both $Q_1$ and $Q_2$ are $j$-closed and satisfy $D(Q_1)$ and $D(Q_2)$. Therefore by directedness of $D$ there is $j$-closed $Q$ with $Q_1 \imp Q$ and $Q_2 \imp Q$ as well as $D(Q)$. But then also $D'(Q)$, as was to be shown.
 \end{proof}
 
 % ======== Chapter ========%
