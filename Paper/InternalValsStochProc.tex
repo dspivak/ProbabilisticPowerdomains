@@ -1002,7 +1002,7 @@ Note that this lands indeed in $j \tlrr$ because of \Cref{vals_vs_modalities}.
 
 In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ and a function $\At[]\colon\Pts\to\decmod$, where $\decmod$ is the type of decidable modalities; see \cref{def.decidable_modality}. 
 
-Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\At{k}$ is the quasi-closed modality associated to the open set $T \setminus \overline{k}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $(T,\Op_T)$, which assigns the set $T$ to each open $U\in\Op_T$. We take $\church{\Pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
+Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\At$ is the quasi-closed modality associated to the open set $T \setminus \overline{k}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $(T,\Op_T)$, which assigns the set $T$ to each open $U\in\Op_T$. We take $\church{\Pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
 \begin{equation}\label{eqn.at_semantics}
 	\church{\At[]}\colon\church{\Pts}\to\church{\decmod}.
 \end{equation}
@@ -1026,6 +1026,22 @@ If $t\in U$ then $j_t(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. 
 \medskip
 
 Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). 
+
+To summarize, we assume:
+
+\begin{axiom}[{$\At[]$-Local decidability}]
+	For all $\pt : \Pts$ and $P : \prop$,
+	\[
+		\At P \: \lor \: (P \imp \At \bot).
+	\]
+\end{axiom}
+
+\begin{axiom}[Enough points]
+	For all $P : \prop$,
+	\[
+		\left[ \forall \pt : \Pts . \At P \right] \: \Rightarrow \: P.
+	\]
+\end{axiom}
 
 \begin{axiom}
 	\label{ax:N_flabby}
@@ -1100,10 +1116,10 @@ since $\At U \imp \At \At[\pt'] U$.
 	i.e.\ \eqref{eqn.round_trip}, which was proven above.
 \end{proof}
 
-Recall that an \emph{$\At$-valuation} on an internal space $(X,\Op_X)$ is defined to be a map $\At \Op_X \to \At \tlrr$ satisfying the $\At$-local versions of the conditions in the definition of valuation. We now consider families of valuations $(\mu_\pt)_{\pt : \Pts}$.
+Recall that an \emph{$\At$-local valuation} on an internal space $(X,\Op_X)$ is defined to be a map $\At \Op_X \to \At \tlrr$ satisfying the $\At$-local versions of the conditions in the definition of valuation. We now consider families of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$.
 
 \begin{definition}
-	A family of valuations $(\mu_\pt)_{\pt : \Pts}$ is \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At \Op_X$,
+	A family of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$ is \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At \Op_X$,
 	\[
 		\mu_{\pt'}(\At[\pt'] P) = \At[\pt'] \mu_\pt(P).
 	\]
@@ -1111,7 +1127,20 @@ Recall that an \emph{$\At$-valuation} on an internal space $(X,\Op_X)$ is define
 
 In order to understand this condition, let us consider the cases $\At[\pt'] \At \bot$ and $\At \bot \imp \At[\pt'] \bot$ separately. In the first case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P$, so that the left-hand side is $1$. But since $\mu_\pt$ takes values in $\At$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At \bot \imp \At[\pt'] \bot$.
 
-Recall from \Cref{val_localize} that if $\mu : \Op_X \to \tlrr$ is a valuation, then the restriction 
+Recall from \Cref{val_localize} that if $\mu : \Op_X \to \tlrr$ is a valuation, then for every $\pt$ the restriction of $\mu$ to $\At \Op_X$ is an $\At$-local valuation. 
+
+\begin{lemma}
+	Let $\mu : \Op_X \to \tlrr$ be a valuation. Then the family $\left( \mu|_{\At \Op_X} \right)_{\pt : \Pts}$ is a compatible family of $\At$-local valuations.
+\end{lemma}
+
+\begin{proof}
+	We need to show that if $P : \At \Op_X$, then
+	\[
+		\mu( \At[\pt'] P ) = \At[\pt'] \mu(P).
+	\]
+	But this is exactly \Cref{vals_vs_modalities}.
+	\tob{Or rather the special case of \Cref{vals_vs_modalities} where $P$ is $\At$-closed. This may be relevant if we try to eliminate appeal to \Cref{ax:N_flabby}}
+\end{proof}
 
 \chapter{Open questions}
 
