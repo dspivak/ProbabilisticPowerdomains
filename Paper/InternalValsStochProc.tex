@@ -980,21 +980,29 @@ Note that this lands indeed in $j \tlrr$ because of \Cref{vals_vs_modalities}.
 	\[
 		j \mu\left( j \exists P : j \Op_X . D(P) \land P \right) = j \exists P : j \Op_X . D(P) \land j \mu(P).
 	\]
-	The predicate $\exists P : j \Op_X . D(P) \land P$ is again open, and we can thus apply \Cref{vals_vs_modalities} to remove the inner $j$ on the left-hand side. Furthermore replacing the existential quantification by an equivalent one, it is hence enough to prove
+	It is enough to prove the inequality direction $\le$ since the other one is trivial. To see this, consider the predicate
 	\[
-		j \mu\left( \exists Q : \Op_X . D'(Q) \land Q \right) = j \exists Q : \Op_X . D'(Q) \land j \mu(Q).
+		D' \: : \: \Op_X \longrightarrow \prop, \qquad Q \longmapsto j \exists P : j \Op_X . D(P) \land (Q \imp P).
 	\]
-	with the predicate
-	\[
-		D' \: : \: \Op_X \longrightarrow \prop, \qquad Q \longmapsto D(j Q) \land (j Q \imp Q).
-	\]
-	If $D'$ is directed, then Scott continuity of $\mu$ gives
-	\[
-		\mu\left( \exists Q : \Op_X . D'(Q) \land Q \right) = \exists Q : \Op_X . D'(Q) \land \mu(Q).	
-	\]
-	Since every $Q$ with $D'(Q)$ is $j$-closed, we may as well use $j \mu(Q)$ on the right-hand side by \Cref{vals_vs_modalities}. This proves the claim by an application of $j$. It thus remains to be argued that $D'$ is directed.
+	We claim that $D'$ is directed. Inhabitedness follows with $Q := \bot$ from $j$-local inhabitedness of $D$. Now suppose that $D(Q_1)$ and $D(Q_2)$. Then a straightforward argument using the $j$-local directedness of $D$ implies $D'(Q_1 \lor Q_2)$. Hence $D'$ is indeed directed.
 
-	Inhabitedness of $D'$ clearly follows from inhabitedness of $D$. If $D'(Q_1)$ and $D'(Q_2)$, then in particular both $Q_1$ and $Q_2$ are $j$-closed and satisfy $D(Q_1)$ and $D(Q_2)$. Therefore by directedness of $D$ there is $j$-closed $Q$ with $Q_1 \imp Q$ and $Q_2 \imp Q$ as well as $D(Q)$. But then also $D'(Q)$, as was to be shown.
+	The assumed Scott continuity of $\mu$ thus gives
+	\[
+		\mu\left( \exists Q : \Op_X . D'(Q) \land Q \right) = \exists Q : \Op_X . D'(Q) \land \mu(Q).
+	\]
+	Furthermore, we have
+	\[
+		j \exists P : j \Op_X . D(P) \land P \quad \Longrightarrow \quad \exists Q : \Op_X . D'(Q) \land Q
+	\]
+	by taking $Q := \top$, as well as
+	\[
+		\exists Q : \Op_X . D'(Q) \land \mu(Q) \quad \Longrightarrow \quad j \exists P : j \Op_X . D(P) \land \mu(P)
+	\]
+	by unfolding the definition of $D'$ and using monotonicity of $\mu$. Applying $\mu$ to the former implication and combining both with the Scott continuity equation for $D'$ thus proves
+	\[
+		\mu\left( j \exists P : j \Op_X . D(P) \land P \right) \: \le \: j \exists P : j \Op_X . D(P) \land \mu(P),
+	\]
+	which can be strengthened to the desired inequality by applying $j$.
 \end{proof}
 
 % ======== Chapter ========%
@@ -1155,6 +1163,89 @@ Recall from \Cref{val_localize} that if $\mu : \Op_X \to \tlrr$ is a valuation, 
 	But then again by \Cref{vals_vs_modalities}, this holds with $U := \mu(P)(q)$.
 \end{proof}
 
+We now consider the inverse problem of stitching together a compatible lower semicontinuous family of $\At[]$-local valuations to a valuation on $X$. This works as follows.
+
+\begin{lemma}
+	Let $(\mu_\pt)_{\pt : \Pts}$ be a compatible and lower semicontinuous family of $\At[]$-local valuations. Then putting
+	\begin{equation}
+		\label{mu_stitched}
+		\mu(P) := \forall \pt : \Pts . \mu_\pt(\At P)
+	\end{equation}
+	for $P : \Op_X$ defines a valuation.
+\end{lemma}
+
+\begin{proof}
+	First of all, \eqref{mu_stitched} is indeed a lower real thanks to \Cref{prop:LR_locality}. For verifying the conditions required of a valuation, it is enough to prove that they hold $\At$-locally, thanks to the enough points condition. To do so, we first prove that for every $P : \Op_X$,
+	\begin{equation}
+		\label{stitching_reproduces}
+		\At \mu(P) = \mu_\pt(\At P).
+	\end{equation}
+	By definition of $\mu$, this is equivalent to showing that $\mu_\pt(\At P) \le \At \mu_{\pt'}(\At[\pt'] P)$ for all $\pt' : \Pts$. But this holds because of
+	\[
+		\At \mu_{\pt'}(\At[\pt'] P) = \mu_\pt(\At \At[\pt'] P),
+	\]
+	which is an instance of the compatibility assumption.
+
+	Using \eqref{stitching_reproduces}, the normalization and monotonicity properties of $\mu$ are straightforward to see, as is the modularity. For Scott continuity, let $D : \Op_X \to \prop$ be directed. It is then enough to show that for every $\pt$,
+	\begin{equation}
+		\label{goal_continuous}
+		\mu_\pt(\At \exists P : \Op_X . D(P) \land P) \: \le \: \At \exists P : \Op_X . D(P) \land \mu_k(\At P),
+	\end{equation}
+	since the inequality $\mu(\exists P . D(P) \land P) \ge \exists P . D(P) \land \mu(P)$ is trivial. To start, consider the predicate
+	\[
+		D' \: : \: \At \Op_X \longrightarrow \At \prop, \qquad Q \longmapsto \At \exists P : \Op_X . (Q \imp \At P) \land \At D(P).
+	\]
+	We claim that $D'$ is $\At$-locally directed.
+	\tob{under construction}
+\end{proof}
+
+\begin{theorem}
+	\label{main_internal}
+	Let $(X,\Op_X)$ be an internal space. Then restricting a valuation on $X$ to a family of $\At[]$-local valuations implements a bijection between:
+	\begin{enumerate}
+		\item valuations on $X$, and
+		\item those families of $\At[]$-local valuations which are compatible and lower semicontinuous.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	We now only need to argue that the two constructions above are inverse. Starting with a lower semicontinuous compatible family, we need to show that for $P : \At \Op_X$, we have
+	\[
+		\mu_\pt(P) = \forall \pt' : \Pts . \mu_{\pt'}( \At[\pt'] P).
+	\]
+	But then using the compatibility assumption, the right-hand side evaluates to $\forall \pt' . \At[\pt'] \mu_\pt(P)$, and hence indeed equals the left-hand side by the enough points property.
+
+	Starting with a valuation $\mu$, we need to prove that for every $P : \Op_X$,
+	\[
+		\mu(P) = \forall \pt : \Pts . \mu(\At P).
+	\]
+	But then again applying \Cref{vals_vs_modalities} turns this into an instance of the enough points axiom.
+\end{proof}
+
+% ======== Chapter ========%
+\chapter{Consequences for the semantics of internal valuations}
+
+\begin{theorem}
+	\label{main_external}
+	Let $p : E \to B$ be a continuous map between topological spaces. Then there is a bijection between:
+	\begin{enumerate}
+		\item Internal valuations in $\shv(B)$ on the internal space associated to $p$.
+		\item ???
+			\tob{Something like: families of valuations on the stalks of sections of $p$, subject to suitable conditions}
+	\end{enumerate}
+	Moreover, this bijection is natural in $p$ for fixed $B$ (meaning a natural transformation between functors $\Cat{Top}/B \to \Cat{Set}$).
+\end{theorem}
+
+\begin{proof}
+	
+\end{proof}
+
+% ======== Chapter ========%
+\chapter{Stochastic processes as internal valuations}
+
+We now apply the results of the previous two sections to hyperspaces.
+
+% ======== Chapter ========%
 \chapter{Open questions}
 
 
