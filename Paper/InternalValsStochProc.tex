@@ -1119,27 +1119,40 @@ since $\At U \imp \At \At[\pt'] U$.
 Recall that an \emph{$\At$-local valuation} on an internal space $(X,\Op_X)$ is defined to be a map $\At \Op_X \to \At \tlrr$ satisfying the $\At$-local versions of the conditions in the definition of valuation. We now consider families of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$.
 
 \begin{definition}
-	A family of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$ is \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At \Op_X$,
-	\[
-		\mu_{\pt'}(\At[\pt'] P) = \At[\pt'] \mu_\pt(P).
-	\]
+	A family of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$ is
+	\begin{enumerate}
+		\item \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At \Op_X$,
+			\[
+				\mu_{\pt'}(\At[\pt'] P) = \At[\pt'] \mu_\pt(P).
+			\]
+		\item \emph{lower semicontinuous} if for every $P : \Op_X$, the family of $\At[]$-lower reals
+			\[
+				\left( \mu_\pt(\At P) \right)
+			\]
+			is lower semicontinuous.
+	\end{enumerate}
 \end{definition}
 
-In order to understand this condition, let us consider the cases $\At[\pt'] \At \bot$ and $\At \bot \imp \At[\pt'] \bot$ separately. In the first case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P$, so that the left-hand side is $1$. But since $\mu_\pt$ takes values in $\At$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At \bot \imp \At[\pt'] \bot$.
+In order to understand the compatibility condition, let us consider the cases $\At[\pt'] \At \bot$ and $\At \bot \imp \At[\pt'] \bot$ separately. In the first case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P$, so that the left-hand side is $1$. But since $\mu_\pt$ takes values in $\At$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At \bot \imp \At[\pt'] \bot$.
 
 Recall from \Cref{val_localize} that if $\mu : \Op_X \to \tlrr$ is a valuation, then for every $\pt$ the restriction of $\mu$ to $\At \Op_X$ is an $\At$-local valuation. 
 
 \begin{lemma}
-	Let $\mu : \Op_X \to \tlrr$ be a valuation. Then the family $\left( \mu|_{\At \Op_X} \right)_{\pt : \Pts}$ is a compatible family of $\At$-local valuations.
+	Let $\mu : \Op_X \to \tlrr$ be a valuation. Then the family $\left( \mu|_{\At \Op_X} \right)_{\pt : \Pts}$ is a compatible and lower semicontinuous family of $\At$-local valuations.
 \end{lemma}
 
 \begin{proof}
-	We need to show that if $P : \At \Op_X$, then
+	For compatibility, we need to show that if $P : \At \Op_X$, then
 	\[
 		\mu( \At[\pt'] P ) = \At[\pt'] \mu(P).
 	\]
 	But this is exactly \Cref{vals_vs_modalities}.
-	\tob{Or rather the special case of \Cref{vals_vs_modalities} where $P$ is $\At$-closed. This may be relevant if we try to eliminate appeal to \Cref{ax:N_flabby}}
+
+	For lower semicontinuity, we need to find $U : \prop$ such that for all $\pt : \Pts$,
+	\[
+		\mu(\At P)(q) \: \Leftrightarrow \: \At U.
+	\]
+	But then again by \Cref{vals_vs_modalities}, this holds with $U := \mu(P)(q)$.
 \end{proof}
 
 \chapter{Open questions}
