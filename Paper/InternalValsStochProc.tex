@@ -758,13 +758,22 @@ More concretely, this means that a $j$-local internal space consists of an objec
 	\[
 		j \Open_X \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Op_X(P)
 	\]
-	produces a $j$-local internal space $(X,j \Op_X)$.
+	produces a $j$-local internal space $(X,j \Op_X)$. Moreover, the closure under unions holds even for global unions: if $S : \Op_X^j \to \prop_j$, then already
+	\begin{equation}
+		\label{global_sup}
+		\exists P : \Op_X^j . S(P) \land P
+	\end{equation}
+	is $j$-locally open.
 \end{lemma}
 
 \begin{proof}
 	$j\bot$ is $j$-locally open since any constant predicate is open already in the original space.	The $j$-opens are (automatically $j$-locally) closed under binary intersections since the original opens are and $j$ commutes with intersections. 
 
-	For the $j$-local openness of suprema condition, note that $\exists Q : \Op_X . S(jQ) \land jQ$ is open in the original topology. But since this is equal to $\exists P : j \Op_X . S(P) \land P$, we obtain that also the latter is open, and thus so is the predicate under consideration. But then in particular it is $j$-locally open as well.
+	For the $j$-local openness of \eqref{global_sup}, note that this predicate is equivalent to
+	\[
+		\exists Q : \Op_X . \left[ S(Q) \land (jQ \imp  Q) \right] \land Q,
+	\]
+	which is open in the original topology. But then in particular it is $j$-locally open as well. Also $j$ applied to \eqref{global_sup} is open, and in particular $j$-locally open, as was to be shown for the $j$-local closure under $j$-local suprema.
 \end{proof}
 
 % ==== Section ====%
@@ -951,6 +960,17 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 	Since $P \Rightarrow j\bot$ is equivalent to $jP \Rightarrow j\bot$ and the right-hand side is independent of $j$, applying this equation with $jP$ in place of $P$ and cancelling $\mu(P \Rightarrow j\bot)$ results in $j \mu(P) = j \mu(jP)$. But since also $j \mu(jP) = \mu(jP)$ by the first item above, we therefore obtain the overall $\mu(jP) = j \mu(P)$.
 \end{proof}
 
+\begin{corollary}
+	Let $\mu : \Op_X \to \tlrr$ be a valuation. Then
+	\[
+		\At \Op_X \longrightarrow \At \tlrr, \qquad P \longmapsto \At \mu(P)
+	\]
+	produces a compatible family of $\At[]$-valuations.
+\end{corollary}
+
+\begin{proof}
+	The normalization conditions and monotonicity are obvious. The modularity equation holds because $\At$ commutes with addition.
+\end{proof}
 
 % ======== Chapter ========%
 \chapter{Axioms and soundness proofs}
@@ -1065,18 +1085,6 @@ Recall that an \emph{$\At$-valuation} on an internal space $(X,\Op_X)$ is define
 \end{definition}
 
 In order to understand this condition, let us consider the cases $\At[\pt'] \At \bot$ and $\At \bot \imp \At[\pt'] \bot$ separately. In the first case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P$, so that the left-hand side is $1$. But since $\mu_\pt$ takes values in $\At$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At \bot \imp \At[\pt'] \bot$.
-
-\begin{lemma}
-	Let $\mu : \Op_X \to \tlrr$ be a valuation. Then
-	\[
-		\At \Op_X \longrightarrow \At \tlrr, \qquad P \longmapsto \At \mu(P)
-	\]
-	produces a compatible family of $\At[]$-valuations.
-\end{lemma}
-
-\begin{proof}
-	
-\end{proof}
 
 \chapter{Open questions}
 
