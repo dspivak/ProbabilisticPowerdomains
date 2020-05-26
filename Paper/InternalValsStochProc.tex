@@ -833,12 +833,13 @@ The pullback functor $f\inv\colon\pow(Y)\to\pow(X)$ preserves limits and colimit
 Probability valuations coincide with probability measures on Polish spaces.
 \end{theorem}
 
+\dis{Explain somewhere how to get $j$-local version of anything; explain $j$-logic.}
 
 \begin{definition}[$j$-local probability valuation]\label{def.at_prob_val}
-\dis{Check this}
+\dis{Explain what's going on in terms of $j$'s and the interval $\mathbb{I}$.}
 Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probability valuation} on $(X,\Op[X])$ is a function $\mu\colon j\Op[X]\to j\tii$ satisfying the following conditions:
 \begin{enumerate}
-	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
+	\item $\mu(j\bot)=0$ and $\mu(\top)=1$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 	\item If $D\ss j\Op[X]$ is a directed $j$-closed subposet then
@@ -1245,9 +1246,8 @@ We now consider the inverse problem of stitching together a compatible lower sem
 	We have now established \eqref{stitching_reproduces}, and from there $\mu$ is easily seen to satisfy the normalization, monotonicity, and modularity conditions of \cref{def.prob_valuation}. For Scott continuity \eqref{eqn.scott_continuity}, let $D \ss \Op[X]$ be directed. It is then enough to show that for every $\pt$,
 	\begin{equation}
 		\label{goal_continuous}
-		\mu_\pt(\At \exists (P : D) . P) \: \le \: \At \exists (P : D). \mu_\pt(\At P).
+		\mu_\pt(\At \exists (P : D) . P) \: \le \: \At \exists (P : D). \mu(P)
 	\end{equation}
-\dis{Why is \eqref{goal_continuous} enough? I would think we need\\$\mu_\pt(\At \exists (P : D) . P) \: \le \: \At \exists (P : D). \forall\pt'.\mu_{\pt'}(\At[\pt'] P)$.}
 
 To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 	\[
@@ -1260,9 +1260,10 @@ To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 	Take $Q_1, Q_2 : \At \Op[X]$ with $d_\pt(Q_1)$ and $d_\pt(Q_2)$ to be given. In order to then prove the $\At$-existence of $Q$ with the desired properties, we can unfold the definition of $d_\pt$ and drop the $\At$'s from the hypotheses. This gives $P_1$ and $P_2$ with $Q_i \imp P_i$ and $d(P_i)$. But, noting that $Q_1\lor Q_2$ is in $\At\Op[X]$ by \cref{prop.dec_mod_or}, it follows by directedness of $d$ that $d_\pt(Q_1 \lor Q_2)$.
 
 	Having established that $d_k$ is indeed $\At$-locally directed, we apply $\At$-local Scott continuity of $\mu_\pt$ to it and obtain
-	\begin{equation}\label{eqn.my_scott2}
-		\mu_\pt\left( \At \exists (Q : D_\pt). Q \right) = \At \exists (Q : D_\pt) . \mu_\pt(Q).
-\end{equation}
+\[
+		\mu_\pt\left( \At \exists (Q : D_\pt). Q \right) = 
+		\At \exists (Q : D_\pt) . \mu_\pt(Q).
+\]
 	Similar to the proof of \Cref{val_localize}, we have an implication
 	\[
 		\At \exists (P : D). P \quad \Longrightarrow \quad \At \exists (Q : D_\pt) . Q
@@ -1271,7 +1272,16 @@ To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 	\[
 		\At \exists (Q : D_\pt) . \mu_\pt(Q) \quad \Longrightarrow \quad \At \exists (P : D) . \mu_\pt(\At P)
 	\]
-	obtained by removing the outer $\At$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Combining these inequalities with \eqref{eqn.my_scott2}, we obtain the desired \eqref{goal_continuous} and therefore Scott continuity of $\mu$.
+	obtained by removing the outer $\At$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Applying $\mu$ and combining the above with \eqref{stitching_reproduces}, we obtain
+	\begin{align*}
+			\mu_\pt(\At \exists (P : D) . P) &\le
+			\mu_\pt(\At \exists (Q : D_k). Q)\\&=
+			\At \exists (Q : D_\pt).\mu_\pt(Q)\\&\leq
+			\At \exists (P : D). \mu_\pt(\At P)\\&=
+			\At \exists (P : D). \At\mu(P)\\&=
+			\At \exists (P : D). \mu(P),
+  \end{align*}
+which was the desired inequality \eqref{goal_continuous}. This establishes the Scott continuity of $\mu$.
 \end{proof}
 
 \begin{theorem}
