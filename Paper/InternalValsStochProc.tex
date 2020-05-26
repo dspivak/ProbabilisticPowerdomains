@@ -771,12 +771,7 @@ More concretely, this means that a $j$-local internal space consists of an objec
 	\[
 		j \Open_X \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Open_X(P)
 	\]
-	produces a $j$-local internal space that we denote $(X,j \Op[X])$. Moreover, the closure under unions holds even for global unions: for any $j$-closed subobject $S \ss j\Op[X]$, the predicate
-	\begin{equation}
-		\label{global_sup}
-		\exists (P : S) . P
-	\end{equation}
-	is $j$-locally open.
+	produces a $j$-local internal space that we denote $(X,j \Op[X])$. 
 \end{lemma}
 
 \begin{proof}
@@ -786,8 +781,7 @@ More concretely, this means that a $j$-local internal space consists of an objec
 	\[
 		\exists (Q : \Op[X]) . \left[ S(jQ) \land (jQ \imp  Q) \right] \land Q,
 	\]
-	which is open in the original topology. But then in particular it is $j$-locally open as well.
-	\dis{Aren't we done now? What's the remainder saying?} Also $j$ applied to \eqref{global_sup} is open, and in particular $j$-locally open, as was to be shown for the $j$-local closure under $j$-local suprema.
+	which is open in the original topology. But then applying $j$ to it produces a $j$-local open, in the sense that it satisfies $j \Open_X$.
 \end{proof}
 
 % ==== Section ====%
