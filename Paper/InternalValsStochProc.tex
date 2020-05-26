@@ -803,18 +803,22 @@ Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It
 
 Recall the lower unit interval type $\tii$ from \cref{def.unit_interval}. We may implicitly cast $r:\tii$ as a lower real using the function $\cast\colon\tii\to\tlrr$ from \cref{prop.unit_interval_cast}. For example in the modular condition (3) below, the expression $r+r'$ on either side of the equation is shorthand $\cast(r)+\cast(r')$. However condition (3) is the only place where we need to invoke $\cast$; e.g.\ in the continuity condition (4), recall from \cref{prop.cast_sups} that the $\sup$ can be computed in $\tii$.
 
-\begin{definition}[Probability valuation]
+\begin{definition}[Probability valuation]\label{def.prob_valuation}
 Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation} on $(X,\Op[X])$ is a function $\mu\colon\Op[X]\to\tii$ satisfying the following conditions:
 \begin{enumerate}
 	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 	\item If $D\ss\Op[X]$ is a directed subposet (\cref{def.directed}), then
-	\begin{equation}\label{eqn.scott_continuity}
-	\sup_{U: D}\mu(U)=\mu\big(\exists(U:D).U\big).
-	\end{equation}
+\[
+	\mu\big(\exists(U:D).U\big)= \sup_{U: D}\mu(U).
+\]
 \end{enumerate}
 \end{definition}
+Note that the inequality $\sup_{U: D}\mu(U)\leq\mu\big(\exists(U:D).U\big)$ is purely formal, so Scott continuity is equivalent to
+\begin{equation}\label{eqn.scott_continuity}
+	\mu\big(\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
+\end{equation}
 
 
 \begin{proposition}[Push-forward valuation]\label{prop.pushforward}
@@ -1135,7 +1139,7 @@ since $\At U \imp \At \At[\pt'] U$.
 
 \begin{proposition}[{$\At[]$-Locality of lower reals}]
 	\label{prop:LR_locality}
-	The map $r \mapsto (\At r)_{k\in\Pts}$ establishes a bijection between $\tlrr$ and lower semicontinuous families of $\At[]$-lower reals.
+	The maps $r \mapsto (\At r)_{\pt\in\Pts}$ and $(r_\pt)_{\pt\in\Pts}\mapsto \forall(\pt:\Pts).r_k$ establish a bijection between $\tlrr$ and lower semicontinuous families of $\At[]$-lower reals.
 \end{proposition}
 
 \begin{proof}
@@ -1173,7 +1177,7 @@ since $\At U \imp \At \At[\pt'] U$.
 	i.e.\ \eqref{eqn.round_trip}, which was proven above.
 \end{proof}
 
-Recall from \cref{def.at_prob_val} that an \emph{$\At$-local valuation} on an internal space $(X,\Op[X])$ is defined to be a map $\At \Op[X] \to \At \tlrr$ satisfying the $\At$-local versions of the conditions in the definition of valuation. We now consider families of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$.
+Recall from \cref{def.at_prob_val} that an \emph{$\At$-local valuation} on an internal space $(X,\Op[X])$ is defined to be a map $\At \Op[X] \to \At \tlrr$ satisfying the $\At$-local versions of the conditions in the definition of valuation. To be clear, when we speak of families of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$, we mean that $\mu_\pt$ is $\At[\pt]$-local.
 
 \begin{definition}\label{def.valuations_compatible_lowersemi}
 	A family of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$ is
@@ -1226,46 +1230,47 @@ We now consider the inverse problem of stitching together a compatible lower sem
 \end{lemma}
 
 \begin{proof}
-	First of all, \eqref{mu_stitched} is indeed a lower real thanks to \cref{vals_vs_modalities,prop:LR_locality}. For verifying the conditions required of a valuation, it is enough to prove that they hold $\At$-locally, thanks to \cref{ax.enough_pts}. To do so, we first prove that for every $P : \Op[X]$,
+	Let $\mu$ be as in \eqref{mu_stitched}; then $\mu(P)$ is indeed a lower real for any $P:\Op[X]$ thanks to \cref{vals_vs_modalities,prop:LR_locality}. To verify the conditions required of a valuation, it is enough to prove that each one holds $\At$-locally, thanks to \cref{ax.enough_pts}. To do so, we first prove that for every $P : \Op[X]$ and $\pt\in\Pts$,
 	\begin{equation}
 		\label{stitching_reproduces}
 		\At \mu(P) = \mu_\pt(\At P).
 	\end{equation}
-	By definition of $\mu$, this is equivalent to showing that $\mu_\pt(\At P) \le \At \mu_{\pt'}(\At[\pt'] P)$ for all $\pt' : \Pts$. But this holds because of
+	By definition of $\mu$ and the fact that $\mu_\pt$ is $\At$-closed the inequality $\At \mu(P) \le \mu_\pt(\At P)$ is clear, so we just need to show that $\mu_\pt(\At P) \le \At \mu_{\pt'}(\At[\pt'] P)$ for all $\pt' : \Pts$. But this holds by monotonicity, $\mu_\pt(\At P)\leq\mu_\pt(\At\At[\pt']P)$ and the fact that
 	\[
-		\At \mu_{\pt'}(\At[\pt'] P) = \mu_\pt(\At \At[\pt'] P),
+		\mu_\pt(\At \At[\pt'] P) = \At \mu_{\pt'}(\At[\pt'] P),
 	\]
-	which is an instance of the compatibility assumption.
+	which is itself an instance of the compatibility assumption.
 
-	Using \eqref{stitching_reproduces}, the normalization and monotonicity properties of $\mu$ are straightforward to see, as is the modularity. For Scott continuity, let $D : \Op[X] \to \prop$ be directed. It is then enough to show that for every $\pt$,
+	We have now established \eqref{stitching_reproduces}, and from there $\mu$ is easily seen to satisfy the normalization, monotonicity, and modularity conditions of \cref{def.prob_valuation}. For Scott continuity \eqref{eqn.scott_continuity}, let $D \ss \Op[X]$ be directed. It is then enough to show that for every $\pt$,
 	\begin{equation}
 		\label{goal_continuous}
-		\mu_\pt(\At \exists P : \Op[X] . D(P) \land P) \: \le \: \At \exists P : \Op[X] . D(P) \land \mu_\pt(\At P),
+		\mu_\pt(\At \exists (P : D) . P) \: \le \: \At \exists (P : D). \mu_\pt(\At P).
 	\end{equation}
-	since the inequality $\mu(\exists P . D(P) \land P) \ge \exists P . D(P) \land \mu(P)$ is trivial. To start, consider the predicate
-	\[
-		D' \: : \: \At \Op[X] \longrightarrow \At \prop, \qquad Q \longmapsto \At \exists P : \Op[X] . (Q \imp \At P) \land \At D(P).
-	\]
-	We claim that $D'$ is $\At$-locally directed. $\At$-Local inhabitedness is clear since $D'(\bot)$ by inhabitedness of $D$. Thus we need to prove that
-	\begin{align*}
-		\At \forall Q_1, Q_2 : \At \Op[X] . \: ( & D'(Q_1) \land D'(Q_2))					\\
-			& \Longrightarrow \quad \At \exists Q : \At \Op[X] . (Q_1 \imp Q) \land (Q_2 \imp Q) \land D'(Q).
-	\end{align*}
-	In fact, we claim that this holds even without the outermost $\At$, meaning that we can assume $Q_1, Q_2 : \At \Op[X]$ with $D'(Q_1)$ and $D'(Q_2)$ to be given. In order to then prove the $\At$-existence of $Q$ with the desired properties, we can unfold the definition of $D'$ even without the $\At$, so that we have $P_1$ and $P_2$ with $Q_i \imp P_i$ and $D(P_i)$. But then $D'(Q_1 \lor Q_2)$ follows by directedness of $D$.
+\dis{Why is \eqref{goal_continuous} enough? I would think we need\\$\mu_\pt(\At \exists (P : D) . P) \: \le \: \At \exists (P : D). \forall\pt'.\mu_{\pt'}(\At[\pt'] P)$.}
 
-	We therefore obtain, by $\At$-local Scott continuity of $\mu_\pt$,
+To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 	\[
-		\mu_\pt\left( \At \exists Q : \At \Op[X] . D'(Q) \land Q \right) = \At \exists Q : \At \Op[X] . D'(Q) \land \mu_\pt(Q).
+		d_\pt \: : \: \At \Op[X] \longrightarrow \At \prop, \qquad Q \longmapsto \At \exists (P : \Op[X]) . (Q \imp \At P) \land \At d(P).
 	\]
+	Let $D_\pt\ss\At\Op[X]$ be the subtype corresponding to $d_\pt$; we claim that $D_\pt$ is $\At$-locally directed. Since $D$ is inhabited, one immediately checks that $d_\pt(\At\bot)$ holds; thus $D_\pt$ is $\At$-locally inhabited. Thus we need to prove that
+\[
+		\forall(Q_1, Q_2 : D_\pt ) .\At \exists (Q : D_\pt) .(Q_1 \vee Q_2)  \imp Q.
+\]
+	Take $Q_1, Q_2 : \At \Op[X]$ with $d_\pt(Q_1)$ and $d_\pt(Q_2)$ to be given. In order to then prove the $\At$-existence of $Q$ with the desired properties, we can unfold the definition of $d_\pt$ and drop the $\At$'s from the hypotheses. This gives $P_1$ and $P_2$ with $Q_i \imp P_i$ and $d(P_i)$. But then $d_\pt(Q_1 \lor Q_2)$ follows by directedness of $d$.\dis{Do we know that $\At$ commutes with $\lor$? If not, apply $\At$ to $Q_1\lor Q_2$ to put it in $\At\Op[X]$.}
+
+	Having established that $d_k$ is indeed $\At$-locally directed, we apply $\At$-local Scott continuity of $\mu_\pt$ to it and obtain
+	\begin{equation}\label{eqn.my_scott1}
+		\mu_\pt\left( \At \exists (Q : D_\pt). Q \right) = \At \exists (Q : D_\pt) . \mu_\pt(Q).
+\end{equation}
 	Similar to the proof of \Cref{val_localize}, we have an implication
 	\[
-		\At \exists P : \Op[X] . D(P) \land P \quad \Longrightarrow \quad \At \exists Q : \At \Op[X] . D'(Q) \land Q
+		\At \exists (P : D). P \quad \Longrightarrow \quad \At \exists (Q : D_\pt) . Q
 	\]
 	proven by taking $Q := \top$, and an implication
 	\[
-		\At \exists Q : \At \Op[X] . D'(Q) \land \mu_\pt(Q) \quad \Longrightarrow \quad \At \exists P : \Op[X] . D(P) \land \mu_\pt(\At P)
+		\At \exists (Q : D_\pt) . \mu_\pt(Q) \quad \Longrightarrow \quad \At \exists (P : D) . \mu_\pt(\At P)
 	\]
-	obtained by removing the outer $\At$ on the left, unfolding $D'(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Combining these inequalities with the Scott continuity equation involving $D'$, we obtain the desired \eqref{goal_continuous} and therefore Scott continuity of $\mu$.
+	obtained by removing the outer $\At$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Combining these inequalities with \eqref{eqn.my_scott1}, we obtain the desired \eqref{goal_continuous} and therefore Scott continuity of $\mu$.
 \end{proof}
 
 \begin{theorem}
