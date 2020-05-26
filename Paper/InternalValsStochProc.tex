@@ -756,37 +756,38 @@ Similar to the $j$-local lower reals, also the definition of internal space loca
 
 \tob{At the moment this allows the frame of opens to live on any object, not just a $j$-sheaf. We may or may not want to change that}
 
-More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Open_X^j : \prop_j^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs needs to satisfy the obvious $j$-versions of the conditions above. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
+More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Open_X^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\ss(\prop_j)^X$ denote the $j$-closed subobject classified by $\Open^X_j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
 
 \begin{enumerate}
 	\item $\Open_X^j(\top)$,
 	\item $\Open_X^j(j\bot)$,
 	\item $(\Open_X^j(U)\wedge\Open_X^j(V))\imp \Open_X^j(U\wedge V)$ for any $U,V\in\pow_j(X)$, and
-	\item $\Open_X^j(j\exists(P:\Op[X]^j).S(P)\wedge P)$ for any $S\colon\Op[X]^j\to\prop_j$. 
+	\item $\Open_X^j(j\exists(P:S). P)$ for any $j$-closed subobject $S\ss\Op[X]^j$. 
 \end{enumerate}
 
 \begin{lemma}
 	\label{space_localize}
 	For any internal space $(X,\Open_X)$, the predicate
 	\[
-		j \Open_X \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Op[X](P)
+		j \Open_X \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Open_X(P)
 	\]
-	produces a $j$-local internal space $(X,j \Op[X])$. Moreover, the closure under unions holds even for global unions: if $S : \Op[X]^j \to \prop_j$, then already
+	produces a $j$-local internal space that we denote $(X,j \Op[X])$. Moreover, the closure under unions holds even for global unions: for any $j$-closed subobject $S \ss j\Op[X]$, the predicate
 	\begin{equation}
 		\label{global_sup}
-		\exists P : \Op[X]^j . S(P) \land P
+		\exists (P : S) . P
 	\end{equation}
 	is $j$-locally open.
 \end{lemma}
 
 \begin{proof}
-	$j\bot$ is $j$-locally open since any constant predicate is open already in the original space.	The $j$-opens are (automatically $j$-locally) closed under binary intersections since the original opens are and $j$ commutes with intersections. 
+	$j\bot$ is $j$-locally open since any constant predicate is open already in the original space.	The $j$-opens are (automatically $j$-locally) closed under finite intersections since the original opens are and $j$ commutes with intersections. 
 
-	For the $j$-local openness of \eqref{global_sup}, note that this predicate is equivalent to
+	For the $j$-local openness of \eqref{global_sup}, note that for any $S\ss j\Op[X]$, this predicate is equivalent to
 	\[
-		\exists Q : \Op[X] . \left[ S(Q) \land (jQ \imp  Q) \right] \land Q,
+		\exists (Q : \Op[X]) . \left[ S(jQ) \land (jQ \imp  Q) \right] \land Q,
 	\]
-	which is open in the original topology. But then in particular it is $j$-locally open as well. Also $j$ applied to \eqref{global_sup} is open, and in particular $j$-locally open, as was to be shown for the $j$-local closure under $j$-local suprema.
+	which is open in the original topology. But then in particular it is $j$-locally open as well.
+	\dis{Aren't we done now? What's the remainder saying?} Also $j$ applied to \eqref{global_sup} is open, and in particular $j$-locally open, as was to be shown for the $j$-local closure under $j$-local suprema.
 \end{proof}
 
 % ==== Section ====%
@@ -833,16 +834,16 @@ Probability valuations coincide with probability measures on Polish spaces.
 \end{theorem}
 
 
-\begin{definition}[$\At$-local probability valuation]\label{def.at_prob_val}
+\begin{definition}[$j$-local probability valuation]\label{def.at_prob_val}
 \dis{Check this}
-Let $(X,\Op[X])$ be an internal topological space. An \emph{$\At$-local probability valuation} on $(X,\Op[X])$ is a function $\mu\colon\At\Op[X]\to\At\tii$ satisfying the following conditions:
+Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probability valuation} on $(X,\Op[X])$ is a function $\mu\colon j\Op[X]\to j\tii$ satisfying the following conditions:
 \begin{enumerate}
 	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-	\item If $D\ss\At\Op[X]$ is a directed subposet then
-	\begin{equation}\label{eqn.scott_continuity}
-	\sup_{U: D}\mu(U)=\mu\big(\At\exists(U:D).U\big).
+	\item If $D\ss j\Op[X]$ is a directed $j$-closed subposet then
+	\begin{equation}\label{eqn.local_scott_continuity}
+	\mu\big(j\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
 	\end{equation}
 \end{enumerate}
 \end{definition}
@@ -989,11 +990,11 @@ Note that if $P$ is open then so is $jP$ by \Cref{props_open}, which is necessar
 	Since $P \Rightarrow j\bot$ is equivalent to $jP \Rightarrow j\bot$ and the right-hand side is independent of $j$, applying this equation with $jP$ in place of $P$ and cancelling $\mu(P \Rightarrow j\bot)$ results in $j \mu(P) = j \mu(jP)$. But since also $j \mu(jP) = \mu(jP)$ by the first item above, we therefore obtain the overall $\mu(jP) = j \mu(P)$.
 \end{proof}
 
-Recall from \Cref{space_localize} that the object of $j$-closed opens, $j \Op[X]$, is a $j$-local internal space.
+Recall from \Cref{space_localize} that the object of $j$-closed opens, $j \Op[X]$, is a $j$-local internal topological space.
 
 \begin{proposition}
 	\label{val_localize}
-	Let $j$ be a decidable modality and $\mu : \Op[X] \to \tlrr$ a valuation. Then the restriction of $\mu$ to the $j$-closed opens,
+	Suppose that $j$ is a decidable modality and that $\mu : \Op[X] \to \tlrr$ is a valuation. Then the restriction of $\mu$ to the $j$-closed opens,
 	\[
 		j \Op[X] \longrightarrow j \tlrr, \qquad P \longmapsto \mu(P)
 	\]
@@ -1003,35 +1004,35 @@ Recall from \Cref{space_localize} that the object of $j$-closed opens, $j \Op[X]
 Note that this lands indeed in $j \tlrr$ because of \Cref{vals_vs_modalities}.
 
 \begin{proof}
-	The normalization conditions and monotonicity are obvious. The modularity equation holds because $j$ commutes with both $\land$ and $\lor$.
+	The normalization conditions and monotonicity are obvious. The modularity equation holds because $j$ commutes with both $\land$ and $\lor$ (see \cref{prop.dec_mod_or}).
 
-	Now let $D : j \Op[X] \longrightarrow j \prop$ be $j$-locally directed. We want to prove that
+	Now let $D \ss j \Op[X]$ be a $j$-locally directed $j$-closed subposet. We want to prove that \eqref{eqn.local_scott_continuity} holds, i.e.\
 	\[
-		j \mu\left( j \exists P : j \Op[X] . D(P) \land P \right) = j \exists P : j \Op[X] . D(P) \land j \mu(P).
+		\mu\left( j \exists (P : D) . P \right) \leq j \exists (P : D). \mu(P).
 	\]
-	It is enough to prove the inequality direction $\le$ since the other one is trivial. To see this, consider the predicate
+To see this, consider the predicate
 	\[
-		D' \: : \: \Op[X] \longrightarrow \prop, \qquad Q \longmapsto j \exists P : j \Op[X] . D(P) \land (Q \imp P).
+		d' \: : \: \Op[X] \longrightarrow \prop, \qquad Q \longmapsto j \exists (P : D) . (Q \imp P)
 	\]
-	We claim that $D'$ is directed. Inhabitedness follows with $Q := \bot$ from $j$-local inhabitedness of $D$. Now suppose that $D(Q_1)$ and $D(Q_2)$. Then a straightforward argument using the $j$-local directedness of $D$ implies $D'(Q_1 \lor Q_2)$. Hence $D'$ is indeed directed.
+	and let $D'\ss\Op[X]$ be the corresponding subobject. We claim that $D'$ is directed. Inhabitedness follows with $Q \coloneqq\bot$ from $j$-local inhabitedness of $D$. Now suppose that $d'(Q_1)$ and $d'(Q_2)$. Then a straightforward argument using the $j$-local directedness of $D$ implies $d'(Q_1 \lor Q_2)$. Hence $D'$ is indeed directed.
 
-	The assumed Scott continuity of $\mu$ thus gives
-	\[
-		\mu\left( \exists Q : \Op[X] . D'(Q) \land Q \right) = \exists Q : \Op[X] . D'(Q) \land \mu(Q).
-	\]
+	The assumed Scott continuity of $\mu$ applied to $D'$ thus gives
+	\begin{equation}\label{eqn.my_scott1}
+		\mu\left( \exists (Q : D') . Q \right) = \exists (Q : D') . \mu(Q).
+	\end{equation}
 	Furthermore, we have
 	\[
-		j \exists P : j \Op[X] . D(P) \land P \quad \Longrightarrow \quad \exists Q : \Op[X] . D'(Q) \land Q
+		j \exists (P : D) . P \quad \Longrightarrow \quad \exists (Q : D') . Q
 	\]
-	by taking $Q := \top$, as well as
+	by taking $Q \coloneqq \top$, as well as
 	\[
-		\exists Q : \Op[X] . D'(Q) \land \mu(Q) \quad \Longrightarrow \quad j \exists P : j \Op[X] . D(P) \land \mu(P)
+		\exists (Q : D') . \mu(Q) \quad \Longrightarrow \quad j \exists (P : D) . \mu(P)
 	\]
-	by unfolding the definition of $D'$ and using monotonicity of $\mu$. Applying $\mu$ to the former implication and combining both with the Scott continuity equation for $D'$ thus proves
+	by unfolding the definition of $D'$ and using monotonicity of $\mu$. Applying $\mu$ to the both sides of the former implication and combining the result with \eqref{eqn.my_scott1} proves the desired
 	\[
-		\mu\left( j \exists P : j \Op[X] . D(P) \land P \right) \: \le \: j \exists P : j \Op[X] . D(P) \land \mu(P),
+		\mu\left( j \exists (P : D) . P \right) \: \le \: j \exists (P : D) . \mu(P).
+\qedhere
 	\]
-	which can be strengthened to the desired inequality by applying $j$.
 \end{proof}
 
 % ======== Chapter ========%
@@ -1256,10 +1257,10 @@ To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 \[
 		\forall(Q_1, Q_2 : D_\pt ) .\At \exists (Q : D_\pt) .(Q_1 \vee Q_2)  \imp Q.
 \]
-	Take $Q_1, Q_2 : \At \Op[X]$ with $d_\pt(Q_1)$ and $d_\pt(Q_2)$ to be given. In order to then prove the $\At$-existence of $Q$ with the desired properties, we can unfold the definition of $d_\pt$ and drop the $\At$'s from the hypotheses. This gives $P_1$ and $P_2$ with $Q_i \imp P_i$ and $d(P_i)$. But then $d_\pt(Q_1 \lor Q_2)$ follows by directedness of $d$.\dis{Do we know that $\At$ commutes with $\lor$? If not, apply $\At$ to $Q_1\lor Q_2$ to put it in $\At\Op[X]$.}
+	Take $Q_1, Q_2 : \At \Op[X]$ with $d_\pt(Q_1)$ and $d_\pt(Q_2)$ to be given. In order to then prove the $\At$-existence of $Q$ with the desired properties, we can unfold the definition of $d_\pt$ and drop the $\At$'s from the hypotheses. This gives $P_1$ and $P_2$ with $Q_i \imp P_i$ and $d(P_i)$. But, noting that $Q_1\lor Q_2$ is in $\At\Op[X]$ by \cref{prop.dec_mod_or}, it follows by directedness of $d$ that $d_\pt(Q_1 \lor Q_2)$.
 
 	Having established that $d_k$ is indeed $\At$-locally directed, we apply $\At$-local Scott continuity of $\mu_\pt$ to it and obtain
-	\begin{equation}\label{eqn.my_scott1}
+	\begin{equation}\label{eqn.my_scott2}
 		\mu_\pt\left( \At \exists (Q : D_\pt). Q \right) = \At \exists (Q : D_\pt) . \mu_\pt(Q).
 \end{equation}
 	Similar to the proof of \Cref{val_localize}, we have an implication
@@ -1270,7 +1271,7 @@ To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 	\[
 		\At \exists (Q : D_\pt) . \mu_\pt(Q) \quad \Longrightarrow \quad \At \exists (P : D) . \mu_\pt(\At P)
 	\]
-	obtained by removing the outer $\At$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Combining these inequalities with \eqref{eqn.my_scott1}, we obtain the desired \eqref{goal_continuous} and therefore Scott continuity of $\mu$.
+	obtained by removing the outer $\At$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Combining these inequalities with \eqref{eqn.my_scott2}, we obtain the desired \eqref{goal_continuous} and therefore Scott continuity of $\mu$.
 \end{proof}
 
 \begin{theorem}
@@ -1710,7 +1711,7 @@ holds for all $P:\prop$. Define the type $\decmod$ of decidable modalities by
 \]
 \end{definition}
 
-\begin{proposition}[Decidable modalities commute with $\vee$]
+\begin{proposition}[Decidable modalities commute with $\vee$]\label{prop.dec_mod_or}
 Suppose $j$ is decidable. Then for all $P,Q:\prop$ we have
 \[j (P \lor Q) = j P \lor j Q.\]
 \end{proposition}
