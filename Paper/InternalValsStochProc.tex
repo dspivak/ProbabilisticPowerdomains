@@ -1201,7 +1201,7 @@ In the second case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P
 
 Recall from \Cref{val_localize} that if $\mu : \Op[X] \to \tlrr$ is a valuation, then for every $\pt$ the restriction of $\mu$ to $\At \Op[X]$ is an $\At$-local valuation. 
 
-\begin{lemma}
+\begin{lemma}\label{lemma.val_rests_compat_lowersemi}
 	Let $\mu : \Op[X] \to \tlrr$ be a valuation. Then the family $\left( \rest{\mu}{\At \Op[X]} \right)_{\pt : \Pts}$ is a compatible and lower semicontinuous family of $\At$-local valuations.
 \end{lemma}
 
@@ -1221,7 +1221,7 @@ Recall from \Cref{val_localize} that if $\mu : \Op[X] \to \tlrr$ is a valuation,
 
 We now consider the inverse problem of stitching together a compatible lower semicontinuous family of $\At[]$-local valuations to a valuation on $X$. This works as follows.
 
-\begin{lemma}
+\begin{lemma}\label{lemma.compat_lowersemi_stitched}
 	Let $(\mu_\pt)_{\pt : \Pts}$ be a compatible and lower semicontinuous family of $\At[]$-local valuations. Then putting
 	\begin{equation}
 		\label{mu_stitched}
@@ -1284,17 +1284,17 @@ To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
 \end{theorem}
 
 \begin{proof}
-	We now only need to argue that the two constructions above are inverse. Starting with a lower semicontinuous compatible family, we need to show that for $P : \At \Op[X]$, we have
+	We only need to argue that the constructions from \cref{lemma.val_rests_compat_lowersemi,lemma.compat_lowersemi_stitched} are mutually inverse. Starting with a compatible and lower semicontinuous family, we need to show that for $P : \At \Op[X]$, we have
 	\[
-		\mu_\pt(P) = \forall \pt' : \Pts . \mu_{\pt'}( \At[\pt'] P).
+		\mu_\pt(P) = \forall (\pt' : \Pts) . \mu_{\pt'}( \At[\pt'] P).
 	\]
-	But then using the compatibility assumption, the right-hand side evaluates to $\forall \pt' . \At[\pt'] \mu_\pt(P)$, and hence indeed equals the left-hand side by the enough points property.
+	But then using the compatibility assumption, the right-hand side evaluates to $\forall \pt' . \At[\pt'] \mu_\pt(P)$, and hence indeed equals the left-hand side by the enough points axiom \ref{ax.enough_pts}.
 
 	Starting with a valuation $\mu$, we need to prove that for every $P : \Op[X]$,
 	\[
-		\mu(P) = \forall \pt : \Pts . \mu(\At P).
+		\mu(P) = \forall (\pt : \Pts) . \mu(\At P).
 	\]
-	But then again applying \Cref{vals_vs_modalities} turns this into an instance of the enough points axiom.
+	Applying \Cref{vals_vs_modalities} again turns this into an instance of the enough points axiom.
 \end{proof}
 
 % ======== Chapter ========%
