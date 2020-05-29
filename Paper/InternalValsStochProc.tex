@@ -1035,7 +1035,7 @@ To see this, consider the predicate
 
 In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ and a function $\At[]\colon\Pts\to\decmod$, where $\decmod$ is the type of decidable modalities; see \cref{def.decidable_modality}. 
 
-Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\At$ is the quasi-closed modality associated to the open set $T \setminus \overline{\pt}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $(T,\Op[T])$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\Pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
+Our primary intended semantics is that our topos is $\shv(T)$ for some locally connected topological space $T$, and that every modality $\At$ is the quasi-closed modality associated to the open set $T \setminus \overline{\pt}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $(T,\Op[T])$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\Pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
 \begin{equation}\label{eqn.at_semantics}
 	\church{\At[]}\colon\church{\Pts}\to\church{\decmod}.
 \end{equation}
@@ -1098,16 +1098,18 @@ This is simply the fact that $\church{\At}$ satisfies condition 4, as shown abov
 Take $U\ss T$ and suppose $U\forces\forall (\pt : \Pts). \At P$. For each point $\pt\in T$, we have $U\forces\At P$ iff either $\pt\in P$ or $U\ss\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\ss P$ which gives $U\forces P$ as desired.
 \end{soundproof}
 
+We have assumed that $T$ is locally connected, meaning that for every point $\pt\in\Pts$ and open neighborhood $U\ni\pt$, there exists a connected open neighborhood $U'\ni\pt$ with $U'\ss U$. This is what we need for the soundness of \cref{ax.N_flabby}.
+
 \begin{axiom}
-	\label{ax:N_flabby}
+	\label{ax.N_flabby}
 	For all $\pt : \Pts$ and predicates $P : \tnn \to \prop$,
 	\[
-		\At \exists n : \tnn . P(n) \quad \Longrightarrow \quad \exists n : \tnn . \At P(n).
+		\At \exists (n : \tnn) . P(n) \quad \Longrightarrow \quad \exists (n : \tnn) . \At P(n).
 	\]
 \end{axiom}
 
 \begin{soundproof}
-\tob{add soundness proof, or derive this from another axiom (it is arguably not provable from the other axioms, but we don't have the relevant counterexample either)}
+Suppose $T\forces\At (\exists n) : \tnn . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\forces(\exists n) : \tnn . P(n)$, so take $n\in\tnn(U)$. By local connectedness, we may assume $U$ is connected, in which case $n=\rest{n'}{U}$ is the restriction of some global section $n'\in\tnn(T)$, proving the result.
 \end{soundproof}
 
 Since $\tnn$ and $\tqq$ are internally bijective \cite{**}, it follows that the commutation of $\At[]$ and $\exists$ holds likewise for predicates on $\qq$.
@@ -1160,7 +1162,7 @@ since $\At U \imp \At \At[\pt'] U$.
 	\[
 		\At \exists q'. (q' > q) \wedge r(q')
 	\]
-	for any $\pt : \Pts$. But then by \Cref{ax:N_flabby}, this is equivalent to $\exists q'. (q' > q)\wedge \At r(q')$, and the claim now follows by $\At r(q') = r_\pt(q')$.
+	for any $\pt : \Pts$. But then by \Cref{ax.N_flabby}, this is equivalent to $\exists q'. (q' > q)\wedge \At r(q')$, and the claim now follows by $\At r(q') = r_\pt(q')$.
 
 	Finally, we prove that the above two constructions are inverses. Starting with $r \in \tlrr$, we need to prove that
 	\[
