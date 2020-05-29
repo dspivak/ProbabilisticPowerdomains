@@ -1109,7 +1109,7 @@ We have assumed that $T$ is locally connected, meaning that for every point $\pt
 \end{axiom}
 
 \begin{soundproof}
-Suppose $T\forces\At (\exists n) : \tnn . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\forces(\exists n) : \tnn . P(n)$, so take $n\in\tnn(U)$. By local connectedness, we may assume $U$ is connected, in which case $n=\rest{n'}{U}$ is the restriction of some global section $n'\in\tnn(T)$, proving the result.
+Suppose $T\forces\At (\exists n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\forces(\exists n : \tnn) . P(n)$, so take $n\in\tnn(U)$. By local connectedness, we may assume $U$ is connected, in which case $n=\rest{n'}{U}$ is the restriction of some global section $n'\in\tnn(T)$, proving the result.
 \end{soundproof}
 
 Since $\tnn$ and $\tqq$ are internally bijective \cite{**}, it follows that the commutation of $\At[]$ and $\exists$ holds likewise for predicates on $\qq$.
