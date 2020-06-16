@@ -1227,9 +1227,9 @@ Recall from \cref{def.at_prob_val} that an \emph{$\At$-local valuation} on an in
 	\begin{enumerate}
 		\item \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At \Op[X]$,
 			\[
-				\mu_{\pt'}(\At[\pt'] P) = \At[\pt'] \mu_\pt(P).
+				\mu_{\pt}(\At[\pt] P) = \At[\pt] \mu_{\pt'}(P).
 			\]
-			\dis{This is the same as $\At[\pt'] \mu_{\pt'}(P) = \At[\pt'] \mu_\pt(P)$, correct? Somehow I find this expression easier to think about because $P$ is not changing. It's more symmetric between $k$ and $k'$. I think it would simplify some proofs below, though I haven't checked carefully.}
+			\dis{This is the same as $\At[\pt] \mu_{\pt}(P) = \At[\pt] \mu_{\pt'}(P)$, correct? Somehow I find this expression easier to think about because $P$ is not changing. It's more symmetric between $k$ and $k'$. I think it would simplify some proofs below, though I haven't checked carefully.}
 		\item \emph{lower semicontinuous} if for every $P : \Op[X]$, the family of $\At[]$-lower reals
 			\[
 				\left( \mu_\pt(\At P) \right)_{k\in\Pts}
@@ -1238,9 +1238,9 @@ Recall from \cref{def.at_prob_val} that an \emph{$\At$-local valuation} on an in
 	\end{enumerate}
 \end{definition}
 
-By \cref{ax.local_dec,prop.specialization}, for any two points $\pt,\pt'\in\Pts$ either $\At\false\imp\At[\pt']\false$ or $\At[\pt']\At\false$, correspond to whether or not $\pt'\leq\pt$. In order to understand the compatibility condition of \cref{def.valuations_compatible_lowersemi}, we consider these cases separately. 
+By \cref{ax.local_dec,prop.specialization}, for any two points $\pt,\pt'\in\Pts$ either $\At[\pt']\false\imp\At[\pt]\false$ or $\At[\pt]\At[\pt']\false$, corresponding to whether or not $\pt\leq\pt'$. In order to understand the compatibility condition of \cref{def.valuations_compatible_lowersemi}, we consider these cases separately. 
 
-In the second case, the assumption that $P$ is $\At$-closed implies $\At[\pt'] P$, so that the left-hand side is $1$. But since $\mu_\pt$ takes values in $\At$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At \bot \imp \At[\pt'] \bot$.
+In the second case, the assumption that $P$ is $\At[\pt']$-closed implies $\At[\pt] P$, so that the left-hand side is $1$. But since $\mu_{\pt'}$ takes values in $\At[\pt']$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At[\pt'] \bot \imp \At[\pt] \bot$.
 
 Recall from \Cref{val_localize} that if $\mu : \Op[X] \to \tlrr$ is a valuation, then for every $\pt$ the restriction of $\mu$ to $\At \Op[X]$ is an $\At$-local valuation. 
 
@@ -1408,7 +1408,7 @@ Note that every stalk of the sheaf of sections of $p$ carries a canonical (exter
 
 It is natural to ask what the internal valuations on the internal space $E_p$ are.
 
-Recall that $x \le x'$ in the specialization preorder means that every neighborhood of $x$ is also a neighborhood of $x'$. This implies that there is a restriction map $\germs{E}{x} \to \germs{E}{x'}$, which is easily seen to be continuous. If $\mu_x$ is a valuation on $\germs{E}{x}$, then we denote its pushforward to $\germs{E}{x'}$ by $\mu_x|_{x'}$. Its value on an open $U \subseteq \germs{E}{x'}$ is given by the value of $\mu_x$ on the preimage of $U$ in $\germs{E}{x}$.  
+Recall that $x \le x'$ in the specialization preorder means that every neighborhood of $x$ is also a neighborhood of $x'$. This implies that there is a restriction map $\germs{E}{x} \to \germs{E}{x'}$, which is easily seen to be continuous. If $\mu_x$ is a valuation on $\germs{E}{x}$, then we denote its pushforward to $\germs{E}{x'}$ by $\mu_x|_{x'}$. To be clear, its value on an open $U \subseteq \germs{E}{x'}$ is given by the value of $\mu_x$ on the preimage of $U$ in $\germs{E}{x}$.  
 \begin{theorem}
 	\label{main_external}
 	Let $p : E \to B$ be a continuous open map between topological spaces. Then there is a bijection between:
@@ -1420,6 +1420,7 @@ Recall that $x \le x'$ in the specialization preorder means that every neighborh
 					\[
 						\rest{\mu_x}{x'} = \mu_{x'}.
 					\]
+					\dis{I'm a little confused because here with $x\le x'$ we restrict $\mu_x$ to $\mu_{x'}$. But in \cref{def.valuations_compatible_lowersemi} with $k\leq k'$ we restrict $\mu_{k'}$ to $\mu_k$. Am I getting something wrong?}
 				\item Lower semicontinuity: for any open $U \subseteq \germs{E}{}$, the map
 					\[
 						B \longrightarrow \rr, \qquad x \longmapsto \mu_x(U \cap \germs{E}{x})
