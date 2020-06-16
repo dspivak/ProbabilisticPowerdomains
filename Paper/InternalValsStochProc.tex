@@ -1225,11 +1225,10 @@ Recall from \cref{def.at_prob_val} that an \emph{$\At$-local valuation} on an in
 \begin{definition}\label{def.valuations_compatible_lowersemi}
 	A family of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$ is
 	\begin{enumerate}
-		\item \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At \Op[X]$,
+		\item \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At[\pt'] \Op[X]$,
 			\[
 				\mu_{\pt}(\At[\pt] P) = \At[\pt] \mu_{\pt'}(P).
 			\]
-			\dis{This is the same as $\At[\pt] \mu_{\pt}(P) = \At[\pt] \mu_{\pt'}(P)$, correct? Somehow I find this expression easier to think about because $P$ is not changing. It's more symmetric between $k$ and $k'$. I think it would simplify some proofs below, though I haven't checked carefully.}
 		\item \emph{lower semicontinuous} if for every $P : \Op[X]$, the family of $\At[]$-lower reals
 			\[
 				\left( \mu_\pt(\At P) \right)_{k\in\Pts}
@@ -1420,7 +1419,6 @@ Recall that $x \le x'$ in the specialization preorder means that every neighborh
 					\[
 						\rest{\mu_x}{x'} = \mu_{x'}.
 					\]
-					\dis{I'm a little confused because here with $x\le x'$ we restrict $\mu_x$ to $\mu_{x'}$. But in \cref{def.valuations_compatible_lowersemi} with $k\leq k'$ we restrict $\mu_{k'}$ to $\mu_k$. Am I getting something wrong?}
 				\item Lower semicontinuity: for any open $U \subseteq \germs{E}{}$, the map
 					\[
 						B \longrightarrow \rr, \qquad x \longmapsto \mu_x(U \cap \germs{E}{x})
