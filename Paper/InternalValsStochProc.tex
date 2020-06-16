@@ -82,7 +82,7 @@ pdfencoding=unicode]{hyperref}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{construction}[theorem]{Construction}
 \newtheorem{notation}[theorem]{Notation}
-\newtheorem{axiom}{Axiom}
+\newtheorem{axiom}{Axiom}\Crefname{axiom}{Axiom}{Axioms}
 \newtheorem{assumption}{Assumption}
 \newtheorem*{axiom*}{Axiom}
 
@@ -1116,6 +1116,24 @@ Suppose $T\forces\At \exists (n : \tnn) . P(n)$; then there is a neighborhood $U
 Since $\tnn$ and $\tqq$ are internally bijective \cite{**}, it follows that the commutation of $\At[]$ and $\exists$ holds likewise for predicates on $\qq$.
 
 \dis{Show that Axiom 1 and 2 do not imply axiom 3. Use Tobias's Stone-Cech compactification of $\nn$ proof.}
+
+We now show that these axioms are independent.
+
+\begin{proposition}
+	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos which does not satisfy the axiom while satisfying the other two.
+\end{proposition}
+
+\begin{proof}
+	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\Cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
+
+	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
+	\begin{itemize}
+		\item $B$ is compact and extremally disconnected.
+		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
+		\item $\nn \subseteq B$ is dense.
+	\end{itemize}
+	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\Pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\At[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds trivially. The proof is complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. However, if $B \forces \exists n . \lnot\lnot P(n)$ held as well, then there would have to be a covering of $B$ by opens $(U_n)_{n \in \nn}$ such that $U_n \forces \lnot\lnot P(n)$. But then finitely many of those are enough by compactness. But since every $n \in \nn$ is an isolated point of $B$, the concrete form of $P$ shows that we can have $m \in U_n$ only if $m = n$. Therefore finitely many $U_n$ cannot cover $B$, contradiction.
+\end{proof}
 
 \tob{Move the following to where it belongs. Technically those statements aren't quite right yet, since $\pt$ on the left is internal while it's external on the right. But for now I'll pretend that something like this makes sense, and similarly further down in Sec 7}
 
