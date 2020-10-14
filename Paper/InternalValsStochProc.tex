@@ -29,7 +29,7 @@ pdfencoding=unicode]{hyperref}
 \usepackage[capitalize]{cleveref}
   \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
 \usepackage[backend=biber,style = alphabetic]{biblatex}
-  \addbibresource{Library20200511.bib}
+\addbibresource{InternalValsStochProc.bib}
 
 %%%% draft stuff
 \usepackage[color=white]{todonotes}
@@ -210,7 +210,7 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\Poset}{\Cat{Poset}}
 \renewcommand{\Top}{\Cat{Top}}
 \newcommand{\Op}[1][undef]{\ifthenelse{\equal{#1}{undef}}{\mathcal{O}}{\mathcal{O}(#1)}}
-\newcommand{\Open}{\Set{Open}}
+\newcommand{\Open}{\mathcal{O}}
 \renewcommand{\C}{\Cat{C}}
 \newcommand{\Sub}{\Set{Sub}}
 \newcommand{\lsc}{\Fun{LsC}}
@@ -332,8 +332,9 @@ The authors were led to this subject by considering the same guiding question---
 
 In attempting to answer that question, we found it helpful to generalize the statement, in particular the spaces on which it holds. 
 
-
 \dis{In Bas Spitters' paper, but also in Topos quantum theory and AQFT, there is a common idea. Roughly speaking, one looks within a complicated space and finds those contexts at which things simplify. Then one makes those contexts the \emph{points} of a new space, and topologizes around them so that the poset of contexts becomes the specialization order on points (or its opposite). Now, all geometric implications can be checked pointwise, meaning at precisely those contexts where things simplify. This allows one to actually get to work, but without being reductionist. In our case, the ``contexts at which things simplify'' are taken to be the compacts, but that's perhaps not essential.}
+
+It is known that (continuous) valuations from a construction in geometric logic~\cite[Proposition~5]{vickers_integrals}. This implies that they behave well with respect to pullback along geometric morphisms. In terms of \Cref{main_external}, this means that every internal valuation defines a family of external valuations $(\mu_\pt)_{\pt \in \Pts}$, and it may be possible to argue from geometricity alone that these satisfy the compatibility and lower semicontinuity conditions of \Cref{main_external}. However, as far as we know, currently available methods in geometric logic do not give us a purely abstract way of getting from the family $(\mu_\pt)_{\pt \in \Pts}$ to the internal valuation $\mu$~\cite[Section~5]{vickers_geometric_logic}.
 
 % ==== Section ====%
 \section{Plan of the paper}
@@ -354,7 +355,7 @@ For background on sheaves, toposes, internal logic, and modalities, see \cref{se
 \section{Lower nonnegative reals}
 
 \begin{definition}[Lower nonnegative reals]\label{def.lower_nn_reals}
-We define a \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
+A \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
 \footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as a set of rational ``lower bounds''.}
 \begin{enumerate}
 	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
@@ -398,7 +399,7 @@ we say that $r$ \emph{is above} $r'$ and write $r\geq r'$ to denote the followin
 \begin{equation}\label{eqn.real_order}
 	r\geq r'\coloneqq\forall(q:\tqq).r'>q\imp r>q.
 \end{equation}
-We may write $r'\leq r$ to denote $r\geq r'$.
+We also write $r'\leq r$ to denote $r\geq r'$.
 \end{definition}
 
 The following is straightforward when working in the internal logic; for more on this see \cref{sec.logic,sec.internal_language,sec.modalities}.
@@ -420,9 +421,9 @@ Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum}, denoted $(r_1+r_2)_
 We show it is indeed a lower real in \cref{prop.sum_lr}.
 \end{definition}
 
-\begin{proposition}\label{prop.sum_lr}
+\begin{lemma}\label{lem.sum_lr}
 The predicate $(r_1+r_2)_>$ defined in \cref{def.sum_lr} is a lower real.
-\end{proposition}
+\end{lemma}
 \begin{proof}
 We need to show that $(r_1+r_2)_>$ is nonnegative, down-closed, and rounded.
 
@@ -496,30 +497,7 @@ For all $q:\tqq$ and $r_1,r_2:\tlrr$, if $q+r_1\leq q+r_2$ then $r_1\leq r_2$.
 Take $q_1<r_1$; we want to show $q_1<r_2$. Use roundedness to produce $q_1<q_1'<r_1$, and let $q_0\coloneqq q+q_1-q_1'$. We have $q_0<q$ and hence $q+q_1=q_0+q_1'<q+r_1$, and the result follows from \cref{lemma.rational_cancellativity}
 \end{proof}
 
-\begin{definition}[Indicator functions as lower reals]\label{def.props_are_reals}
-There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\colon\tqq\to\prop$ given by:%
-\footnote{We leave it to the reader to check that $\ind{P}$ is indeed a lower nonnegative real.}
-\[\ind{P}(q)\coloneqq(q<0)\vee ((q<1)\wedge P).\]
-\end{definition}
-
-Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
-\begin{equation}\label{eqn.indicator}
-P\imp (\ind{P}+r=1+r).
-\end{equation}
-
-The following is straightforward.
-\begin{lemma}\label{lemma.ind_monotonic}
-We have $\ind{\bot}=0$, $\ind{\top}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
-\end{lemma}
-
-\begin{lemma}\label{lemma.j_indicator}
-Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
-\end{lemma}
-\begin{proof}
-Clearly $j\ind{P}\leq j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
-\end{proof}
-
-We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry \cite{henry2012simplification}.
+We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry~\cite{henry2012simplification}.
 
 \begin{lemma}\label{lemma.order_cancel_props}
 For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\leq \ind{P}+r_2$ then $r_1\leq r_2$.
@@ -587,13 +565,36 @@ Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tq
 Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\leq jr_1$ and $r_2\leq jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
 \end{proof}
 
+\begin{definition}[Indicator functions as lower reals]\label{def.props_are_reals}
+There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\colon\tqq\to\prop$ given by:%
+\footnote{We leave it to the reader to check that $\ind{P}$ is indeed a lower nonnegative real.}
+\[\ind{P}(q)\coloneqq(q<0)\vee ((q<1)\wedge P).\]
+\end{definition}
+
+Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
+\begin{equation}\label{eqn.indicator}
+P\imp (\ind{P}+r=1+r).
+\end{equation}
+
+The following is straightforward.
+\begin{lemma}\label{lemma.ind_monotonic}
+We have $\ind{\bot}=0$, $\ind{\top}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
+\end{lemma}
+
+\begin{lemma}\label{lemma.j_indicator}
+Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
+\end{lemma}
+\begin{proof}
+Clearly $j\ind{P}\leq j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
+\end{proof}
+
 % ==== Section ====%
 \section{The lower unit interval $[0,1]$}
 
 We will work extensively with elements of the unit interval, and it will be convenient to give it a special definition. Let $\tqqint\coloneqq\{q:\tqq\mid 0\leq q< 1\}$.
 
 \begin{definition}\label{def.unit_interval}
-The \emph{unit interval}, denoted $\tii$ is defined to be the type of functions $r_>\colon\tqqint\to\prop$ satisfying
+The \emph{unit interval}, denoted $\tii$, is defined to be the type of functions $r_>\colon\tqqint\to\prop$ satisfying
 \begin{equation}\label{eqn.down_closed_rounded_for_interval}
 	\forall(q:\tqqint).r_>q\iff\exists(q':\tqqint).(r_>q')\wedge (q'>q).
 \end{equation}
@@ -612,7 +613,7 @@ that form a retraction: $a(\cast(r'))=r'$ for any $r'\in\tii$. In the other dire
 \end{proposition}
 
 \begin{definition}\label{def.sup_unit_interval}
-For any $I\in\shv(E)$ and $r\colon I\to\tii$, define $\sup_{i:I}r_i$ to be the predicate $\tqqint\to\prop$ given by
+For any $I\in\cat{E}$ and $r\colon I\to\tii$, define $\sup_{i:I}r_i$ to be the predicate $\tqqint\to\prop$ given by
 \[
 q<\sup_{i:I}r_i\iff \exists(i:I).(q<r_i).
 \]
@@ -620,7 +621,7 @@ q<\sup_{i:I}r_i\iff \exists(i:I).(q<r_i).
 
 The proofs of \cref{prop.cast_sups,prop.inc_const} are straightforward.
 \begin{proposition}\label{prop.cast_sups}
-For any $I\in\shv(E)$ and $r\colon I\to\tii$, we have $\cast(\sup_{i:I}r_i)=\sup_{i:I}\cast(r_i).$
+For any $I\in\cat{E}$ and $r\colon I\to\tii$, we have $\cast(\sup_{i:I}r_i)=\sup_{i:I}\cast(r_i).$
 \end{proposition}
 
 \begin{proposition}\label{prop.inc_const}
@@ -750,8 +751,6 @@ Let $T$ be a topological space, $X\in\shv(T)$ a sheaf on it, and $p\colon E_X\to
 for which the map $c$ is identity on points.
 \end{theorem}
 
-We do not give the proof here, but explain a bit how internal topologies
-
 % ==== Section ====%
 \section{$j$-local internal topological spaces}
 
@@ -759,7 +758,7 @@ Similar to the $j$-local lower reals, also the definition of internal space loca
 
 \tob{At the moment this allows the frame of opens to live on any object, not just a $j$-sheaf. We may or may not want to change that}
 
-More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Open_X^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\ss(\prop_j)^X$ denote the $j$-closed subobject classified by $\Open^X_j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
+More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Open_X^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\ss(\prop_j)^X$ denote the $j$-closed subobject classified by $\Open^X_j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
 
 \begin{enumerate}
 	\item $\Open_X^j(\top)$,
@@ -870,7 +869,12 @@ Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the i
 	\[
 		q_\lor < \ind{P \lor Q}, \qquad q_\land < \ind{P \land Q}.
 	\]
-	There are three cases. (1) If $q_\vee<0$ and $q_\wedge<0$ then $q=q_\vee+q_\wedge<0<\ind P + \ind Q$. (2) If  $(q_\vee<1)\wedge(P\vee Q)$ and $q_\wedge<0$, then we have two similar subcases, either $P$ or $Q$. Assuming $P$ we have $q_\vee<\ind P$ and $q_\wedge<\ind Q$, so $q<\ind P+\ind Q$. (3) If $(q_\wedge<1)\wedge(P\wedge Q)$, then both $P$ and $Q$ (and also $q_\vee<1$), so $q_\vee<\ind P$ and $q_\wedge<\ind Q$, and thus $q<\ind P + \ind Q$.
+	There are three cases.
+	\begin{enumerate}[label=(\arabic*)]
+		\item If $q_\vee<0$ and $q_\wedge<0$ then $q=q_\vee+q_\wedge<0<\ind P + \ind Q$.
+		\item If  $(q_\vee<1)\wedge(P\vee Q)$ and $q_\wedge<0$, then we have two similar subcases, either $P$ or $Q$. Assuming $P$ we have $q_\vee<\ind P$ and $q_\wedge<\ind Q$, so $q<\ind P+\ind Q$.
+		\item If $(q_\wedge<1)\wedge(P\wedge Q)$, then both $P$ and $Q$ (and also $q_\vee<1$), so $q_\vee<\ind P$ and $q_\wedge<\ind Q$, and thus $q<\ind P + \ind Q$.
+	\end{enumerate}
 	
 	For the other direction, assume $q < \ind{P} + \ind{Q}$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \ind{P}$ and $q_Q < \ind{Q}$. Again we have cases. (1) If $q_P<0$ and $q_Q<0$ then $q=q_P + q_Q<0<\ind{P \lor Q} + \ind{P \land Q}$. (2) If $q_P<0$ and $(q_Q<1)\wedge Q$ then $q_Q<\ind{P\vee Q}$ and $q_P<\ind{P\wedge Q}$; similarly if $q_Q<0$ and $(q_P<1)\wedge P$. (3) If $(q_P<1)\wedge P$ and $(q_Q<1)\wedge Q$ then $q_P<\ind{P\vee Q}$ and $q_Q<\ind{P\wedge Q}$.
 	
@@ -891,7 +895,7 @@ By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuatio
 	\begin{equation}\label{eqn.ind_less_val}
 		\ind{P} \le \mu(P).
 	\end{equation}
-	for all $P:\prop$. Indeed if $q<\ind{P}$ for some $0\leq q<1$ then $P$, in which case $\mu(P)=\mu(\top)=1$. 
+	for all $P:\prop$. Indeed if $q<\ind{P}$ for some $0 \leq q<1$ then $P$, in which case $\mu(P)=\mu(\top)=1$. 
 	
 	The other inequality requires more work. For $P:\prop$, consider the predicate
 	\[
@@ -1916,53 +1920,6 @@ We now turn to the treatment of the existential quantifier.
 
 
 
-% ======== Chapter ========%
-\chapter{Main theorem}
-
-% ======== Chapter ========%
-\chapter{Open questions}
-
-\begin{enumerate}
-	\item Stochastic processes
-  \begin{enumerate}
-  	\item Origin
-		\item Examples and importance
-		\item Sheaf-theoretic definition from email (points)
-		\item Kolmogorov extension theorem (The functor of Radon measures on a suitable category of spaces (completely regular Hausdorff) commutes with cofiltered limits.
-%https://www.sciencedirect.com/science/article/pii/S1571066115000778		
-		)
-	\end{enumerate}	
-	\item Temporal type theory
-  \begin{enumerate}
-  	\item Another approach to behaviors in time
-		\item Toposes, logic
-		\item Motivation: formulate stochastic processes internally
-		\item Internal valuations = stochastic processes?
-	\end{enumerate}	
-	\item Generalization: Vietoris hyperspaces
-  \begin{enumerate}
-  	\item Some regularity condition (locally compact, Hausdorff)
-		\item Use hyperspace for that
-		\item Or even more generally: "a topos with enough points"
-		\item Topos of sheaves on any space?
-	\end{enumerate}	
-		
-	\item Plan
-  \begin{enumerate}
-  	\item Background
-	  \begin{enumerate}
-	  	\item Toposes
-			\item Internal language
-			\item Modalities, quasi-closed
-			\item Internal spaces -- Moerdijk's theorem
-			\item Valuations
-		\end{enumerate}
-		\item Axioms and soundness
-		\item Development of theory
-		\item Main theorem
-		\item Open questions
-	\end{enumerate}	
-\end{enumerate}
 
 \section*{Acknowledgements}
 David Spivak acknowledges the support from Honeywell and from AFOSR grants FA9550-17-1-0058 and FA9550-19-1-0113.
