@@ -224,6 +224,7 @@ pdfencoding=unicode]{hyperref}
 
 \newcommand{\cpct}[1]{\Set{Cpct}_{#1}}
 \newcommand{\pt}{k}				% point indexing our At-modalities
+\newcommand{\pointwise}{\mathrm{ptw}}		% subscript indicating ``pointwise''
 \newcommand{\Pts}{\mathcal{Pts}}		% internal type of points (for indexing the At-modalities)
 \newcommand{\decmod}{\mathcal{DMod}}
 \newcommand{\bas}[1]{\wh{#1}}
@@ -335,6 +336,8 @@ In attempting to answer that question, we found it helpful to generalize the sta
 \dis{In Bas Spitters' paper, but also in Topos quantum theory and AQFT, there is a common idea. Roughly speaking, one looks within a complicated space and finds those contexts at which things simplify. Then one makes those contexts the \emph{points} of a new space, and topologizes around them so that the poset of contexts becomes the specialization order on points (or its opposite). Now, all geometric implications can be checked pointwise, meaning at precisely those contexts where things simplify. This allows one to actually get to work, but without being reductionist. In our case, the ``contexts at which things simplify'' are taken to be the compacts, but that's perhaps not essential.}
 
 It is known that (continuous) valuations from a construction in geometric logic~\cite[Proposition~5]{vickers_integrals}. This implies that they behave well with respect to pullback along geometric morphisms. In terms of \Cref{main_external}, this means that every internal valuation defines a family of external valuations $(\mu_\pt)_{\pt \in \Pts}$, and it may be possible to argue from geometricity alone that these satisfy the compatibility and lower semicontinuity conditions of \Cref{main_external}. However, as far as we know, currently available methods in geometric logic do not give us a purely abstract way of getting from the family $(\mu_\pt)_{\pt \in \Pts}$ to the internal valuation $\mu$~\cite[Section~5]{vickers_geometric_logic}.
+
+\tob{Still make use of the fact that geometric formulas (with external infinities only!) can be checked pointwise}
 
 % ==== Section ====%
 \section{Plan of the paper}
@@ -1038,8 +1041,10 @@ To see this, consider the predicate
 \end{proof}
 
 % ======== Chapter ========%
-\chapter{Axioms and soundness proofs}
+\chapter{Axioms for toposes with enough points}
 \label{axioms_soundness}
+
+\tob{mention comparison with Garner's ionads}
 
 In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ and a function $\At[]\colon\Pts\to\decmod$, where $\decmod$ is the type of decidable modalities; see \cref{def.decidable_modality}. 
 
@@ -1497,6 +1502,11 @@ Recall that $x \le x'$ in the specialization preorder means that every neighborh
 
 \begin{proof}
 	\tob{Relevant steps: determine the semantics of objects $\At[]$-closed predicates}
+	By \Cref{main_internal}, we can identify internal valuations on $E$ with the morphisms
+	\[
+		\mu_{\pointwise} : \Pts \times \Open(E) \longrightarrow \tlrr
+	\]
+	such that every $\mu_{\pointwise}(\pt,-) : \Open(E) \to \tlrr$ is an $\At[\pt]$-local valuation, and such that the compatibility and lower semicontinuity conditions hold as $\pt$ varies.
 	\tob{in progress}
 \end{proof}
 
