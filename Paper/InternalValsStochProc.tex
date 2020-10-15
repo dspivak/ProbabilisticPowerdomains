@@ -156,21 +156,15 @@ urlcolor=myurlcolor}
 \newcommand{\lr}{\ul{\mathbb{R}}}
 
 \newcommand{\hs}{\hspace{1.5pt}}
-\newcommand{\tnn}{\internal{n}\hs}
-\newcommand{\tqq}{\internal{q}\hs}
-\newcommand{\tqqint}{\internal{q}\hs_{[0,1)}}
+\newcommand{\tnn}{\internal{N}\hs}
+\newcommand{\tqq}{\internal{Q}\hs}
+\newcommand{\tqqint}{\internal{Q}\hs_{[0,1)}}
 \newcommand{\tqqp}{\tqq_{+}}
-\newcommand{\tzz}{\internal{z}\hs}
+\newcommand{\tzz}{\internal{Z}\hs}
 \newcommand{\tqqub}{\qq^\infty}
-\newcommand{\trr}{\internal{r}\hs}
-\newcommand{\tir}{\internal{i\hs r}\hs}
-\newcommand{\tii}{\ubar{\internal{i\hs\hs}}\!\hs}
+\newcommand{\trr}{\internal{R}}
+\newcommand{\tii}{\ubar{\internal{I\hs\hs}}\!\hs}
 \newcommand{\tlrr}{\ubar{\trr}_+\hs}
-\newcommand{\trrub}{\trr^\infty}
-\newcommand{\tirub}{\internal{i\hs r}^\infty}
-\newcommand{\tlrub}{\ubar{\trr}^{\infty}}
-\newcommand{\turub}{\bar{\trr}^{\infty}}
-\newcommand{\tiiub}{\bar{\ubar{\trr}}^{\infty}}
 
 \newcommand{\cast}{\textit{cast}}
 \newcommand{\germs}[2]{\mathsf{germs}_{#2}({#1})}
@@ -182,8 +176,6 @@ urlcolor=myurlcolor}
 
 \newcommand{\tconst}{\mathtt{C}}
 \newcommand{\shfun}[1]{\mathrm{fn}(#1)}
-
-\newcommand{\forces}{\vdash}
 
 \newcommand{\psh}{\cat{Psh}}
 \newcommand{\shv}{\cat{Shv}}
@@ -203,7 +195,8 @@ urlcolor=myurlcolor}
 \newcommand{\cpct}[1]{\set{cpct}_{#1}}
 \newcommand{\pointwise}{\mathrm{ptw}}		% subscript indicating ``pointwise''
 \newcommand{\pts}{\mathtt{Pts}}		% internal type of points (for indexing the at-modalities)
-\newcommand{\decmod}{\mathtt{DecMod}}
+\newcommand{\modts}{\mathtt{Mod}}		% internal type of modalities
+\newcommand{\decmod}{\mathtt{DecMod}}	% internal type of decidable modalities
 \newcommand{\bas}[1]{\wh{#1}}
 
 
@@ -244,6 +237,17 @@ urlcolor=myurlcolor}
 \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
 \renewcommand{\right}{\aftergroup\egroup\originalright}
 
+% vertical spacing in multiline equations
+\setlength{\jot}{6pt}
+
+% enumerate and itemize
+\usepackage{enumitem}
+\setlist[enumerate]{label=(\alph*),itemsep=5pt,topsep=8pt}
+\setlist[itemize]{label=$\triangleright$,itemsep=5pt,topsep=6pt}
+\renewcommand{\labelenumi}{(\alph{enumi})}
+\renewcommand{\theenumi}{(\alph{enumi})}
+\Crefformat{enumi}{#2#1#3}
+
 % roman numerals for parts and large font for heading
 \usepackage[explicit]{titlesec}
 \renewcommand{\thepart}{\Roman{part}}
@@ -266,6 +270,8 @@ urlcolor=myurlcolor}
 	{}
 	{\titlerule*[.75em]{}\contentspage}
 
+% numbering depth
+\numberwithin{equation}{section}
 \setcounter{tocdepth}{1}
 \setcounter{secnumdepth}{1}
 
@@ -319,6 +325,15 @@ It is known that (continuous) valuations form a construction in geometric logic~
 
 In \cref{chap.background}
 
+\subsection{Notation}
+
+We try to consistently use different kinds of font for different purposes:
+
+\begin{itemize}
+	\item We use \texttt{\textbackslash{}mathtt} font to denote fixed ``structure'' objects in a topos, such as the subobject classifier $\prop$.
+	\item We use \texttt{\textbackslash{}mathsf} font to denote categories, such as the category of sheaves $\shv(T)$ on a topological space $T$.
+\end{itemize}
+
 \subsection{Acknowledgements}
 
 David Spivak acknowledges the support from Honeywell and from AFOSR grants FA9550-17-1-0058 and FA9550-19-1-0113.
@@ -339,10 +354,10 @@ Our primary intended semantics is that our topos is $\shv(T)$ for some topologic
 Since sheafification is left adjoint to the underlying presheaf functor, and since the inclusion of constant presheaves is left adjoint to the global sections functor, the sheaf morphism $\at[]$ can be identified with a single function $j\colon T\to\church{\decmod}(T)$. So fix a point $\pt\in T$;
 to define an element $j_\pt\in\church{\decmod}(T)$ is to give a sheaf morphism $j_\pt\colon\Op[T]\to\Op[T]$ satisfying the following properties for all $U,V\in\Op[T]$:
 \begin{enumerate}
-	\item $U\subseteq j_\pt(U)$;
-	\item $j_\pt j_\pt(U)=j_\pt(U)$;
-	\item $j_\pt(U\cap V)=j_\pt(U)\cap j_\pt(V)$; and
-	\item $j_\pt(U)\cup (U^c\cup j_\pt(\varnothing))^\circ=T$.
+	\item\label{j_increasing} $U\subseteq j_\pt(U)$;
+	\item\label{j_idempotent} $j_\pt j_\pt(U)=j_\pt(U)$;
+	\item\label{j_meets} $j_\pt(U\cap V)=j_\pt(U)\cap j_\pt(V)$; and
+	\item\label{j_decidable} $j_\pt(U)\cup (U^c\cup j_\pt(\varnothing))^\circ=T$.
 \end{enumerate}
 where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\to\Op[T]$ by
 \begin{equation}\label{eqn.j_k}
@@ -352,17 +367,17 @@ where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\
 		T&\tn{ if } \pt\in U
 	\end{cases}
 \end{equation}
-If $\pt\in U$ then $j_\pt(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\subseteq \{\pt\}^c$ and hence $U\subseteq j_\pt(U)$, giving condition 1. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition 2. Since $U\subseteq j_\pt(\varnothing)$, we have $T=U^c\cup U\subseteq (U^c\cup j_\pt(\varnothing))$ so we also have condition 4. For condition 3, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\at[]}$ from \eqref{eqn.at_semantics}.
+If $\pt\in U$ then $j_\pt(U)=T$ and conditions \ref{j_increasing}, \ref{j_idempotent}, and \ref{j_decidable} are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\subseteq \{\pt\}^c$ and hence $U\subseteq j_\pt(U)$, giving condition \ref{j_increasing}. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition \ref{j_idempotent}. Since $U\subseteq j_\pt(\varnothing)$, we have $T=U^c\cup U\subseteq (U^c\cup j_\pt(\varnothing))$ so we also have condition \ref{j_decidable}. For condition \ref{j_meets}, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\at[]}$ from \eqref{eqn.at_semantics}.
 
 \begin{definition}[Specialization order]\label{def.specialization}
-For points $\pt,\pt'$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\leq\pt$ if every open set containing $\pt'$ also contains $\pt$.
+For points $\pt,\pt' \in T$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\leq\pt$ if every open set containing $\pt'$ also contains $\pt$.
 \end{definition}
 
-\begin{proposition}\label{prop.specialization}
-For points $\pt,\pt'\in\pts$, we have $\pt'\leq\pt$ iff $T\forces\at\false\imp\at[\pt']\false$.
-\end{proposition}
+\begin{lemma}\label{prop.specialization}
+For points $\pt,\pt'\in T$, we have $\pt'\leq\pt$ iff $T\models\at\false\imp\at[\pt']\false$ holds in $\shv(T)$.
+\end{lemma}
 \begin{proof}
-We have $T\forces\at\false\imp\at[\pt']\false$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\leq\pt$ as in \cref{def.specialization}.
+We have $T\models\at\false\imp\at[\pt']\false$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\leq\pt$ as in \cref{def.specialization}.
 \end{proof}
 
 
@@ -380,7 +395,7 @@ To summarize, we assume:
 \end{axiom}
 
 \begin{soundproof}
-This is simply the fact that $\church{\at}$ satisfies condition 4, as shown above.
+	This is simply the fact that $\church{\at}$ satisfies condition \ref{j_decidable}, as shown above.
 \end{soundproof}
 
 \begin{axiom}[Enough points]\label{ax.enough_pts}
@@ -391,7 +406,7 @@ This is simply the fact that $\church{\at}$ satisfies condition 4, as shown abov
 \end{axiom}
 
 \begin{soundproof}
-Take $U\subseteq T$ and suppose $U\forces\forall (\pt : \pts). \at P$. For each point $\pt\in T$, we have $U\forces\at P$ iff either $\pt\in P$ or $U\subseteq\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\subseteq P$ which gives $U\forces P$ as desired.
+Take $U\subseteq T$ and suppose $U\models\forall (\pt : \pts). \at P$. For each point $\pt\in T$, we have $U\models\at P$ iff either $\pt\in P$ or $U\subseteq\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\subseteq P$ which gives $U\models P$ as desired.
 \end{soundproof}
 
 \begin{axiom}
@@ -403,31 +418,31 @@ Take $U\subseteq T$ and suppose $U\forces\forall (\pt : \pts). \at P$. For each 
 \end{axiom}
 
 \begin{soundproof}
-Suppose $T\forces\at \exists (n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\forces\exists (n : \tnn) . P(n)$, so take $n\in\tnn(U)$ and suppose $P(n)$. Since $\tnn$ is the sheafification of the constant presheaf $V\mapsto\nn$, a section of it on $U$ can be identified with a cover $U=\bigcup_{i\in I}V_i$ and a natural number $n_i\in\nn$ with $\rest{P}{V_i}(n_i)$ for each $i$. We have $k\in V_i$ for at least one such $V_i$. Thus we can take $n_i\in\tnn(U)$, and and prove $U\forces\exists(n:\tnn).\at P(n)$.
+Suppose $T\models\at \exists (n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\models\exists (n : \tnn) . P(n)$, so take $n\in\tnn(U)$ and suppose $P(n)$. Since $\tnn$ is the sheafification of the constant presheaf $V\mapsto\nn$, a section of it on $U$ can be identified with a cover $U=\bigcup_{i\in I}V_i$ and a natural number $n_i\in\nn$ with $\rest{P}{V_i}(n_i)$ for each $i$. We have $k\in V_i$ for at least one such $V_i$. Thus we can take $n_i\in\tnn(U)$, and and prove $U\models\exists(n:\tnn).\at P(n)$.
 \end{soundproof}
 
-Since $\tnn$ and $\tqq$ are internally bijective \cite{**}, it follows that the commutation of $\at[]$ and $\exists$ holds likewise for predicates on $\qq$.
+Since $\tnn$ and $\tqq$ are internally bijective, it follows that the commutation of $\at[]$ and $\exists$ holds likewise for predicates on $\tqq$.
 
 We now show that these axioms are independent.
 
 \begin{proposition}
-	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos which does not satisfy the axiom while satisfying the other two.
+	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos together with an object $\pts$ and a morphism $\at[] \colon \pts \to \modts$ which does not satisfy that axiom while satisfying the other two.
 \end{proposition}
 
 \begin{proof}
-	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
+	For \Cref{ax.local_dec}, consider any non-Boolean topos with only the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with only the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
 
-	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
+	Let the space $T := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
 	\begin{itemize}
-		\item $B$ is compact and extremally disconnected.
+		\item $T$ is compact and extremally disconnected.
 		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
-		\item $\nn \subseteq B$ is dense.
+		\item $\nn \subseteq T$ is dense.
 	\end{itemize}
-	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
+	The extremal disconnectedness implies that $\shv(T)$ is a de Morgan topos~\cite[D4.6]{elephant2}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $T$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (since by the soundness proof above, it already held without adding $\neg\neg$). 
 	
-	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
+	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \models \exists n. P(n)$, and therefore $B \models \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
 	
-	For contradiction, suppose $B \forces \exists n . \lnot\lnot P(n)$ were to hold as well. Then there  is some cover $(U_i)$ of $B$ and external naturals $(n_i)$ such that $U_i\forces\neg\neg P(n_i)$. By compactness, we may assume $I$ is finite. Since each $\{n\}$ is open, the only natural number in the open set $\church{\neg\neg P(n_i)}$ is $n_i$, and the finiteness of $I$ and the fact that $U_i\subseteq \church{\neg\neg P(n_i)}$ present the anticipated contradiction.
+	For contradiction, suppose $B \models \exists n . \lnot\lnot P(n)$ were to hold as well. Then there  is some cover $(U_i)$ of $B$ and external naturals $(n_i)$ such that $U_i\models\neg\neg P(n_i)$. By compactness, we may assume $I$ is finite. Since each $\{n\}$ is open, the only natural number in the open set $\church{\neg\neg P(n_i)}$ is $n_i$, and the finiteness of $I$ and the fact that $U_i\subseteq \church{\neg\neg P(n_i)}$ present the anticipated contradiction.
 
 %	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
 %
@@ -440,9 +455,9 @@ We now show that these axioms are independent.
 	
 %	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
 	
-%	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
+%	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \models \exists n. P(n)$, and therefore $B \models \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
 %
-%However, if $B \forces \exists n . \lnot\lnot P(n)$ were to hold as well, then there would need to be a covering of $B$ by opens $(U_n)_{n \in \nn}$ such that $U_n \forces \lnot\lnot P(n)$. Then finitely many of those are enough by compactness. But since every $n \in \nn$ is an isolated point of $B$, the concrete form of $P$ shows that we can have $m \in U_n$ only if $m = n$. Therefore finitely many $U_n$ cannot cover $B$, contradiction.
+%However, if $B \models \exists n . \lnot\lnot P(n)$ were to hold as well, then there would need to be a covering of $B$ by opens $(U_n)_{n \in \nn}$ such that $U_n \models \lnot\lnot P(n)$. Then finitely many of those are enough by compactness. But since every $n \in \nn$ is an isolated point of $B$, the concrete form of $P$ shows that we can have $m \in U_n$ only if $m = n$. Therefore finitely many $U_n$ cannot cover $B$, contradiction.
 	
 \end{proof}
 
@@ -655,7 +670,7 @@ Finally, suppose $r_n+a\leq r_n+b$. Then $nr_n+na\leq nr_n+nb$ and it follows by
 \end{proof}
 
 \begin{corollary}[Order cancellativity, \cite{henry2012simplification}]\label{cor.order_cancel}
-Suppose $r,s,s':\trr$ are lower reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
+Suppose $r,s,s':\tlrr$ are lower nonnegative reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
 \end{corollary}
 \begin{proof}
 Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{lemma.cancellative_bounds}, we have 
@@ -1715,36 +1730,36 @@ In the comprehension syntax $\{x:X\mid\varphi(x)\}$, the right-hand part is a lo
 \end{tikzcd}
 \]
 
-The Kripke-Joyal semantics invites us not to give the largest open set throughout which a proposition $\varphi$ is true, but instead to simply know whether it is true throughout a given open $U\in\Op[X]$. The notation for this is $U\forces\varphi$ and pronounced \emph{$U$ forces $\varphi$}.%
+The Kripke-Joyal semantics invites us not to give the largest open set throughout which a proposition $\varphi$ is true, but instead to simply know whether it is true throughout a given open $U\in\Op[X]$. The notation for this is $U\models\varphi$ and pronounced \emph{$U$ forces $\varphi$}.%
 \footnote{The terminology ``forcing'' comes from Cohen's proof of the independence of the continuum hypothesis.}
 We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.prop_order}.
 
-Here is a list of rules for $\forces$,%
+Here is a list of rules for $\models$,%
 \footnote{The list is not minimal: many of the rules shown follow from others. In fact rule 1 is complete! The other rules simply remind us of the semantics of the logical symbols.
 }
 where $I$ denotes any set, $U, U_i, V$ denote any opens, and $\varphi,\varphi_i,\psi$ denote any predicates:
 \begin{enumerate}
-	\item Suppose that the open set corresponding to $\varphi\in\prop$ is $U\in\Op[X]$. Then $V\forces\varphi$ iff $V\subseteq U$.
-  \item If $\varphi\leq\psi$ in $\prop$ and $U\forces\varphi$ then $U\forces\psi$.
-  \item $U_i\forces\varphi$ for each $i\in I$ implies $\left(\bigcup_{i\in I}U_i\right)\forces\varphi$.
-  \item $U\forces\true$ for every $U$.
-  \item $U\forces\false$ iff $U=\varnothing$.
-  \item $U\forces\varphi\wedge\psi$ iff $U\forces\varphi$ and $U\forces\psi$.
-  \item $U\forces\varphi_1\vee\varphi_2$ iff there exist $U_1,U_2$ with $U=U_1\cup U_2$ and $U_1\forces\varphi_1$ and $U_2\forces\varphi_2$.
-  \item $U\forces \varphi\imp\psi$ iff whenever $V\forces\varphi$ holds for $V\subseteq U$, then also $V\forces\psi$ holds.
-  \item $U\forces\neg\varphi$ iff whenever $V\forces\varphi$ holds for $V\subseteq U$, then $V=\varnothing$.
-  \item $U\forces\exists (a:A).\varphi(a)$ iff there exists $(U_i)_{i\in I}$ and $a_i\in A(U_i)$ for each $i\in I$, with $U=\bigcup_iU_i$ and $U_i\forces\varphi(a_i)$.
-  \item $U\forces\forall (a:A).\varphi(a)$ iff for every $V\subseteq U$ and $a\in A(V)$ it holds that $V\forces \varphi(a)$.
+	\item Suppose that the open set corresponding to $\varphi\in\prop$ is $U\in\Op[X]$. Then $V\models\varphi$ iff $V\subseteq U$.
+  \item If $\varphi\leq\psi$ in $\prop$ and $U\models\varphi$ then $U\models\psi$.
+  \item $U_i\models\varphi$ for each $i\in I$ implies $\left(\bigcup_{i\in I}U_i\right)\models\varphi$.
+  \item $U\models\true$ for every $U$.
+  \item $U\models\false$ iff $U=\varnothing$.
+  \item $U\models\varphi\wedge\psi$ iff $U\models\varphi$ and $U\models\psi$.
+  \item $U\models\varphi_1\vee\varphi_2$ iff there exist $U_1,U_2$ with $U=U_1\cup U_2$ and $U_1\models\varphi_1$ and $U_2\models\varphi_2$.
+  \item $U\models \varphi\imp\psi$ iff whenever $V\models\varphi$ holds for $V\subseteq U$, then also $V\models\psi$ holds.
+  \item $U\models\neg\varphi$ iff whenever $V\models\varphi$ holds for $V\subseteq U$, then $V=\varnothing$.
+  \item $U\models\exists (a:A).\varphi(a)$ iff there exists $(U_i)_{i\in I}$ and $a_i\in A(U_i)$ for each $i\in I$, with $U=\bigcup_iU_i$ and $U_i\models\varphi(a_i)$.
+  \item $U\models\forall (a:A).\varphi(a)$ iff for every $V\subseteq U$ and $a\in A(V)$ it holds that $V\models \varphi(a)$.
 \end{enumerate}
-We say that $\varphi$ holds in the topos $\shv(X)$ when $X\forces\varphi$.
+We say that $\varphi$ holds in the topos $\shv(X)$ when $X\models\varphi$.
 
 
 \begin{example}
-Let $X=\{*\}$. We will show that the formula $\varphi\coloneqq\forall (p:\prop).p\vee\neg p$ holds using the Kripke-Joyal semantics, i.e.\ that $X\forces\varphi$. The proof goes as follows:
+Let $X=\{*\}$. We will show that the formula $\varphi\coloneqq\forall (p:\prop).p\vee\neg p$ holds using the Kripke-Joyal semantics, i.e.\ that $X\models\varphi$. The proof goes as follows:
 
-By rule 11, we need that for every $V\subseteq X$ and every $p:\prop(V)$ it holds that $V\forces p\vee\neg p$. But $V$ is either $\varnothing$ or $X$ and in the first case $V$ forces everything by rule 1, so we may assume $V=X$. By rule 7, it suffices to show that $X\forces p$ and $\varnothing\forces\neg p$ or that $X\forces\neg p$ and $\varnothing\forces p$. Again by rule 1 this reduces to showing either that $X\forces p$ or $X\forces\neg p$.
+By rule 11, we need that for every $V\subseteq X$ and every $p:\prop(V)$ it holds that $V\models p\vee\neg p$. But $V$ is either $\varnothing$ or $X$ and in the first case $V$ forces everything by rule 1, so we may assume $V=X$. By rule 7, it suffices to show that $X\models p$ and $\varnothing\models\neg p$ or that $X\models\neg p$ and $\varnothing\models p$. Again by rule 1 this reduces to showing either that $X\models p$ or $X\models\neg p$.
 
-Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ and $\varnothing$. If it is $X$ then $X\forces p$ by rule 1. So we may assume $p$ corresponds to $\varnothing$, in which case only $\varnothing\forces p$ by rule 1 and we have $X\forces\neg p$ by rule 9, completing the proof.
+Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ and $\varnothing$. If it is $X$ then $X\models p$ by rule 1. So we may assume $p$ corresponds to $\varnothing$, in which case only $\varnothing\models p$ by rule 1 and we have $X\models\neg p$ by rule 9, completing the proof.
 \end{example}
 
 In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$. Similarly, we write $P\to Q\to R$ to mean the type $(R^Q)^P$.
