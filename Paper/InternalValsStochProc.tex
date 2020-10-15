@@ -1,41 +1,38 @@
-\documentclass[11pt, oneside, article]{memoir} 
-\settrims{0pt}{0pt} % page and stock same size
-\settypeblocksize{*}{35pc}{*} % {height}{width}{ratio}
-\setlrmargins{*}{*}{1} % {spine}{edge}{ratio}
-\setulmarginsandblock{1in}{1in}{*} % height of typeblock computed
-\setheadfoot{\onelineskip}{2\onelineskip} % {headheight}{footskip}
-\setheaderspaces{*}{1.5\onelineskip}{*} % {headdrop}{headsep}{ratio}
-\checkandfixthelayout
-
-
-\usepackage{mathtools}
-\usepackage{amsthm}
+\documentclass[reqno,11pt]{amsproc}
 \usepackage{amssymb}
-\usepackage{stmaryrd}
-\usepackage{bbm}
-\usepackage{accents}
-\usepackage{newpxtext}
-\usepackage{dutchcal}
-\usepackage[utf8]{inputenc}
-\usepackage[varg,bigdelims]{newpxmath}
-\usepackage{ifthen}
-\usepackage[usenames,dvipsnames]{xcolor}
-\usepackage{tikz}
-\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{microtype}
+\usepackage[canadian]{babel}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{tikz-cd}
 \usepackage{enumitem}
-\usepackage{mathpartir}
-\usepackage[bookmarks=true, colorlinks=true, linkcolor=blue!50!red, citecolor=orange,
-pdfencoding=unicode]{hyperref}
-\usepackage[capitalize]{cleveref}
-  \newcommand{\creflastconjunction}{, and\nobreakspace}%Make cleveref use serial comma
-\usepackage[backend=biber,style = alphabetic]{biblatex}
-\addbibresource{InternalValsStochProc.bib}
+\usepackage{hyphenat}
+\usepackage{mathtools}	% provides \declarepaireddelimiter
+\usepackage{bbm}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}  
+\usepackage{accents}
 
 %%%% draft stuff
-\usepackage[color=white]{todonotes}
+\usepackage{todonotes}
 \usepackage{showkeys}
 \newcommand{\tob}[1]{\todo[color=blue!40,inline]{\tn{\textbf{T:} #1}}\noindent}
 \newcommand{\dis}[1]{\todo[color=red!40,inline]{\tn{\textbf{D:} #1}}\noindent}
+
+% color of links
+\definecolor{myurlcolor}{rgb}{0,0,0.3}
+\definecolor{mycitecolor}{rgb}{0,0.3,0}
+\definecolor{myrefcolor}{rgb}{0.3,0,0}
+\usepackage[pagebackref,draft=false]{hyperref}
+\hypersetup{colorlinks,
+linkcolor=myrefcolor,
+citecolor=mycitecolor,
+urlcolor=myurlcolor}
+\renewcommand*{\backref}[1]{$\uparrow$\,#1}
+\usepackage[capitalize]{cleveref}
+
 
 
 
@@ -69,73 +66,68 @@ pdfencoding=unicode]{hyperref}
   }
 }
 
-\crefalias{chapter}{section}
+% adjunction notation
+\newcommand{\adj}[5][30pt]{%[size] Cat L, Left, Right, Cat R.
+\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
+  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Rightarrow" yshift=-.4pt]\&
+  #5\ar[l, shift left=5pt, "{#4}"]
+\end{tikzcd}
+}
 
+\swapnumbers
 \theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[chapter] %change [] to chapter if we want to change global numbering
+\newtheorem{dummy}{Dummy}[section]
+\newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{conjecture}[theorem]{Conjecture}
-
-\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
-\newtheorem{construction}[theorem]{Construction}
 \newtheorem{notation}[theorem]{Notation}
-\newtheorem{axiom}{Axiom}\Crefname{axiom}{Axiom}{Axioms}
-\newtheorem{assumption}{Assumption}
-\newtheorem*{axiom*}{Axiom}
-
-\theoremstyle{remark}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{warning}[theorem]{Warning}
+\newtheorem{axiom}[theorem]{Axiom}\crefname{axiom}{Axiom}{Axioms}
+\newtheorem{assumption}[theorem]{Assumption}
 \newtheorem{question}[theorem]{Question}
 
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
 % environment for soundness proofs
-\newenvironment{soundproof}{\begin{proof}[Soundness proof]}{\end{proof}}
+\newenvironment{soundproof}{\begin{proof}[soundness proof]}{\end{proof}}
 
-\setcounter{axiom}{0}
-
-% Renewed commands
-
-\renewcommand{\ss}{\subseteq}
-
-% Macros %
+% custom paired delimiter
 \DeclarePairedDelimiter{\church}{\llbracket}{\rrbracket}
-\DeclarePairedDelimiter{\Church}{\llbracket}{\rrbracket}
-\DeclarePairedDelimiter{\subtype}{[}{]}
 \DeclarePairedDelimiter{\classify}{\ulcorner}{\urcorner}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
+% custom operators
 \DeclareMathOperator{\id}{id}
-\DeclareMathOperator{\Hom}{Hom}
-\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator{\mor}{mor}
 \DeclareMathOperator*{\colim}{colim}
 \DeclareMathOperator{\im}{im}
-\DeclareMathOperator{\Ob}{Ob}
+\DeclareMathOperator{\ob}{ob}
 \DeclareMathOperator{\interior}{int}
 
-\newcommand{\const}[1]{\mathtt{#1}}
-\newcommand{\Set}[1]{\mathrm{#1}}
-\newcommand{\cat}[1]{\mathcal{#1}}
-\newcommand{\Cat}[1]{\mathbf{#1}}
-\newcommand{\fun}[1]{\mathcal{#1}}
-\newcommand{\Fun}[1]{\mathsf{#1}}
+\newcommand{\Const}[1]{\mathtt{#1}}
+\newcommand{\set}[1]{\mathrm{#1}}
+\newcommand{\cat}[1]{\mathsf{#1}}
+\newcommand{\fun}[1]{\mathsf{#1}}
 \newcommand{\sheaf}[1]{\fun{#1}}
+\newcommand{\op}{^\mathrm{op}}
 
-\newcommand{\smset}{\Cat{Set}}
-
+% categories
+\newcommand{\Set}{\cat{Set}}
+\newcommand{\Poset}{\cat{Poset}}
+\newcommand{\Top}{\cat{Top}}
 
 \newcommand{\tickar}{\begin{tikzcd}[baseline=-0.5ex,cramped,sep=small,ampersand replacement=\&]{}\ar[r,tick]\&{}\end{tikzcd}}
 \newcommand{\xtickar}[1]{\stackrel{#1}{\tickar}}
 \newcommand{\cocolon}{:\!}
 \newcommand{\iso}{\cong}
-\newcommand{\To}[1]{\xrightarrow{#1}}
-\newcommand{\Too}[1]{\xrightarrow{\;\;#1\;\;}}
-\newcommand{\from}{\leftarrow}
-\newcommand{\From}[1]{\xleftarrow{#1}}
-\newcommand{\Fromm}[1]{\xleftarrow{\;\;#1\;\;}}
+\renewcommand{\to}[1][]{\xrightarrow{#1}}
+\newcommand{\too}[1]{\xrightarrow{\;\;#1\;\;}}
+\newcommand{\from}[1]{\xleftarrow{#1}}
+\newcommand{\fromm}[1]{\xleftarrow{\;\;#1\;\;}}
 \newcommand{\surj}{\twoheadrightarrow}
 \newcommand{\inj}{\hookrightarrow}
 \newcommand{\wavyto}{\rightsquigarrow}
@@ -148,107 +140,87 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
 \newcommand{\subsing}[1]{\mathrm{subsing}(#1)}	% subsingleton predicate
 \newcommand{\conn}[1]{\mathrm{conn}(#1)}	% connectedness predicate
-\newcommand{\ind}[1]{1_{#1}}
-\newcommand{\inc}{\ind{-}}				% inclusion of Prop in lower reals
+\newcommand{\ind}[1]{1_{#1}}			% indicator function
+\newcommand{\inc}{\ind{-}}			% inclusion of prop in lower reals
 
 \newcommand{\internal}[1]{\raisebox{-.03ex}{$\mathbbmtt{#1}$}}
-\renewcommand{\sec}{\sheaf{Sec}}
-
-\newcommand{\hs}{\hspace{1.1pt}}
 
 
-\newcommand{\EE}{\mathbb{E}} % expectation value
-\newcommand{\II}{\mathbb{II}} % interval domain
-\newcommand{\IR}{\mathbb{IR}} % interval domain
+\newcommand{\ee}{\mathbb{E}} % expectation value
+\newcommand{\ii}{\mathbb{II}} % interval domain
+\newcommand{\ir}{\mathbb{IR}} % interval domain
 \newcommand{\nn}{\mathbb{N}}
 \newcommand{\qq}{\mathbb{Q}}
 \newcommand{\rr}{\mathbb{R}}
 \newcommand{\zz}{\mathbb{Z}}
-\newcommand{\LR}{\ul{\mathbb{R}}}
+\newcommand{\lr}{\ul{\mathbb{R}}}
 
-\newcommand{\tnn}{\internal{N}\hs}
-\newcommand{\tqq}{\internal{Q}\hs}
-\newcommand{\tqqint}{\internal{Q}\hs_{[0,1)}}
-\newcommand{\tQQp}{\tQQ_{+}}
-\newcommand{\tZZ}{\internal{Z}\hs}
-\newcommand{\tQQub}{\QQ^\infty}
-\newcommand{\trr}{\internal{R}\hs}
-\newcommand{\tIR}{\internal{I\hs R}\hs}
-\newcommand{\tii}{\ubar{\internal{I\hs\hs}}\!\hs}
-\newcommand{\tlrr}{\ubar{\trr}\hs}
+\newcommand{\hs}{\hspace{1.5pt}}
+\newcommand{\tnn}{\internal{n}\hs}
+\newcommand{\tqq}{\internal{q}\hs}
+\newcommand{\tqqint}{\internal{q}\hs_{[0,1)}}
+\newcommand{\tqqp}{\tqq_{+}}
+\newcommand{\tzz}{\internal{z}\hs}
+\newcommand{\tqqub}{\qq^\infty}
+\newcommand{\trr}{\internal{r}\hs}
+\newcommand{\tir}{\internal{i\hs r}\hs}
+\newcommand{\tii}{\ubar{\internal{i\hs\hs}}\!\hs}
+\newcommand{\tlrr}{\ubar{\trr}_+\hs}
 \newcommand{\trrub}{\trr^\infty}
-\newcommand{\tIRub}{\internal{I\hs R}^\infty}
-\newcommand{\tLRub}{\ubar{\trr}^{\infty}}
-\newcommand{\tURub}{\bar{\trr}^{\infty}}
-\newcommand{\tIIub}{\bar{\ubar{\trr}}^{\infty}}
+\newcommand{\tirub}{\internal{i\hs r}^\infty}
+\newcommand{\tlrub}{\ubar{\trr}^{\infty}}
+\newcommand{\turub}{\bar{\trr}^{\infty}}
+\newcommand{\tiiub}{\bar{\ubar{\trr}}^{\infty}}
 
 \newcommand{\cast}{\textit{cast}}
 \newcommand{\germs}[2]{\mathsf{germs}_{#2}({#1})}
-\newcommand{\Vals}{\mathscr{V}}	% type of valuations
+\newcommand{\vals}{\mathcal{V}}	% type of valuations
 
-\newcommand{\trrat}[1]{\trr_{\SeeInline{#1}}}
+\newcommand{\trrat}[1]{\trr_{\seeinline{#1}}}
 
 \newcommand{\pow}{\mathcal{P}}
 
-\newcommand{\tConst}{\mathtt{C}}
-\newcommand{\ShFun}[1]{\mathrm{Fn}(#1)}
+\newcommand{\tconst}{\mathtt{C}}
+\newcommand{\shfun}[1]{\mathrm{fn}(#1)}
 
-\newcommand{\forces}{\Vdash}
+\newcommand{\forces}{\vdash}
 
-\newcommand{\Ind}[1]{\Fun{Ind}\tn{-}#1}
-\newcommand{\psh}{\Fun{Psh}}
-\newcommand{\shv}{\Fun{Shv}}
-\newcommand{\cont}{\Fun{Cont}}
-\newcommand{\Idl}{\Set{Idl}}
-\newcommand{\yoneda}{\Fun{y}}
+\newcommand{\psh}{\cat{Psh}}
+\newcommand{\shv}{\cat{Shv}}
 
-\newcommand{\prop}{\const{Prop}}
-\newcommand{\Time}{\const{Time}}
-\newcommand{\Pt}{\const{Pt}}
-\newcommand{\cc}{\const{cc}}
-\newcommand{\unit}{\const{1}}
-\newcommand{\Poset}{\Cat{Poset}}
-\renewcommand{\Top}{\Cat{Top}}
+\newcommand{\prop}{\Const{Prop}}
+\newcommand{\pt}{x}
+\newcommand{\cc}{\Const{cc}}
+\newcommand{\unit}{\Const{1}}
 \newcommand{\Op}[1][undef]{\ifthenelse{\equal{#1}{undef}}{\mathcal{O}}{\mathcal{O}(#1)}}
-\newcommand{\Open}{\mathcal{O}}
-\renewcommand{\C}{\Cat{C}}
-\newcommand{\Sub}{\Set{Sub}}
-\newcommand{\lsc}{\Fun{LsC}}
+\newcommand{\sub}{\set{sub}}
+\newcommand{\lsc}{\fun{lsc}}
 
-\newcommand{\op}{^\tn{op}}
 \newcommand{\el}[1]{\tn{el}#1}
-\newcommand{\asSh}{\Fun{Sh}} % sheafified object
-\newcommand{\toSh}{\Fun{sh}} % sheafification map from object to sheafified object
+\newcommand{\assh}{\fun{Sh}} % sheafified object
+\newcommand{\tosh}{\fun{sh}} % sheafification map from object to sheafified object
 
-\newcommand{\inv}{^{-1}}
-
-\newcommand{\cpct}[1]{\Set{Cpct}_{#1}}
-\newcommand{\pt}{k}				% point indexing our At-modalities
+\newcommand{\cpct}[1]{\set{cpct}_{#1}}
 \newcommand{\pointwise}{\mathrm{ptw}}		% subscript indicating ``pointwise''
-\newcommand{\Pts}{\mathcal{Pts}}		% internal type of points (for indexing the At-modalities)
-\newcommand{\decmod}{\mathcal{DMod}}
+\newcommand{\pts}{\mathtt{Pts}}		% internal type of points (for indexing the at-modalities)
+\newcommand{\decmod}{\mathtt{DecMod}}
 \newcommand{\bas}[1]{\wh{#1}}
 
 
 \newcommand{\apart}{\,\#\,}
 \newcommand{\rest}[2]{#1\big|\hspace{0in}_{#2}}
 \newcommand{\restsm}[2]{#1|\hspace{0in}_{#2}}
-\newcommand{\BaseTopos}{\mathcal{B}}
-\newcommand{\BaseSpace}{B}
-\newcommand{\CB}{C\BaseSpace}
-\newcommand{\Const}{\Fun{Const}}
-\newcommand{\sky}{\Fun{Sky}}
+\newcommand{\basetopos}{\cat{T}}
+\newcommand{\basespace}{B}
+\newcommand{\cb}{c\basespace}
+\newcommand{\const}{\fun{const}}
+\newcommand{\sky}{\fun{sky}}
 
-\newcommand{\Pointwise}{\pi}
-\newcommand{\AtSymbol}{{@}}
-\newcommand{\SeeSymbol}{{\down}}  % Old: \xi
-\newcommand{\InSymbol}{{\upclose}}% Old: \iota
-\newcommand{\At}[1][\pt]{\AtSymbol_{#1}}
-\newcommand{\See}[2][]{\SeeSymbol^{#1}_{#2}}
-\newcommand{\In}[2][]{\InSymbol^{#1}_{#2}}
-\newcommand{\AtInline}[1]{@{#1}}
-\newcommand{\SeeInline}[1]{\SeeSymbol{#1}}
-\newcommand{\InInline}[1]{\InSymbol{#1}}
+\newcommand{\atsymbol}{{@}}
+\newcommand{\at}[1][\pt]{\atsymbol_{#1}}
+\newcommand{\atinline}[1]{@{#1}}
+\newcommand{\seeinline}[1]{\seesymbol{#1}}
+\newcommand{\ininline}[1]{\insymbol{#1}}
 
 
 \newcommand{\sqss}{\sqsubseteq}
@@ -259,72 +231,73 @@ pdfencoding=unicode]{hyperref}
 \newcommand{\down}{\mathord{\downarrow}}
 \newcommand{\up}{\mathord{\uparrow}}
 
-\newcommand{\imp}{\Rightarrow}
-\renewcommand{\iff}{\Leftrightarrow}
+\newcommand{\imp}{\rightarrow}
+\renewcommand{\iff}{\leftrightarrow}
 \newcommand{\true}{\top}
 \newcommand{\false}{\bot}
-\newcommand{\Bool}{\Set{Bool}}
+\newcommand{\bool}{\set{bool}}
 \newcommand{\ev}{\fun{ev}}
 
-\newcommand{\Span}{\Cat{Span}}
-\newcommand{\set}{\text{--}\smset}
+% fix the usual spacing issues with \left and \right
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
 
-\newcommand{\qand}{\quad\tn{and}\quad}
-\newcommand{\qqand}{\qquad\tn{and}\qquad}
+% roman numerals for parts and large font for heading
+\usepackage[explicit]{titlesec}
+\renewcommand{\thepart}{\Roman{part}}
+\titleformat{\part}[block]{\bfseries\huge\filcenter}{\underline{Part \thepart{}} \\[5pt]}{0pt}{#1}
+\titlespacing{\part}{0pt}{0pt}{3pc}
+\titleformat{\section}[block]{\bfseries\large\filcenter}{\thesection.}{6pt}{#1}
+\titlespacing{\section}{0pt}{18pt}{12pt}
+\titleformat{\subsection}[runin]{\bfseries}{\noindent}{0.4em}{#1.}
 
-\newcommand{\adj}[5][30pt]{%[size] Cat L, Left, Right, Cat R.
-\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
-  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Rightarrow" yshift=-.4pt]\&
-  #5\ar[l, shift left=5pt, "{#4}"]
-\end{tikzcd}
-}
+% table of contents entries style
+\usepackage{titletoc}
+\titlecontents{part}[0em]
+	{\vspace{1pc}}
+        {\bfseries\normalsize\contentslabel[\thecontentslabel]{2em}}
+	{\bfseries\underline}
+	{}
+\titlecontents{section}[2em]
+	{\vspace{0pt}}
+        {\normalfont\normalsize\contentslabel[\thecontentslabel]{2em}}
+	{}
+	{\titlerule*[.75em]{}\contentspage}
 
-\newcommand{\adjr}[5][30pt]{%[size] Cat R, Right, Left, Cat L.
-\begin{tikzcd}[ampersand replacement=\&, column sep=#1]
-  #2\ar[r, shift left=5pt, "{#3}"]\ar[r, phantom, "\Leftarrow" yshift=-.6pt]\&
-  #5\ar[l, shift left=5pt, "{#4}"]
-\end{tikzcd}
-}
-
-
-\newcommand{\erase}[1]{}
-
-\linespread{1.2}
-\setsecnumdepth{subsection}
-\settocdepth{section}
-\setlength{\parindent}{15pt}
-
-% ================ Document ================%
-\begin{document}
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{1}
 
 \title{Stochastic Processes as Internal Probability Valuations}
 \author{Tobias Fritz and David I.\ Spivak}
-\date{\vspace{-.3in}}
+
+\begin{document}
+
+\begin{abstract}
+	topos
+\end{abstract}
 
 \maketitle
 
-% ======== Abstract ========%
-\begin{abstract}
+\tableofcontents
 
-\end{abstract}
+\newpage
 
-%\tableofcontents*
-
-
-% ======== Chapter ========%
-\chapter{Introduction}
+\section{Introduction}
 
 Entities we observe---either casually or as scientists---exhibit time-varying behavior that we may wish to model. We may be able to monitor the entity with respect to a collection of variables whose values change as the entity performs various actions. The variables we monitor for a weather system are quite different than those we monitor for a mouse, but in each case we notice that the variables take on certain characteristic patterns as they change through time. The better we can understand and model the entity's behavior patterns, the better we are able to predict and have some degree of control when we interact with the entity.
 
 The characteristic patterns of an entity can be formalized using a stochastic process \cite{doob1934stochastic}. For example Brownian motion as developed by Albert Einstein to model the random movement of pollen particles in water \cite{einstein1956investigations}, was later formalized by Norbert Weiner as a stochastic process. Given a measurable space $S$ (the \emph{state space}) and a set $T$ (the \emph{time line}), a stochastic process can be defined as a probability distribution $p$ on $S^T$, the measurable space of functions $s\colon T\to S$. Each such $s$ is a behavior, and the stochastic process tells us the probability that any given measurable set of behaviors will occur.
 
-A version of the Kolmogorov extension theorem (KET) roughly says that we can reconstruct such a stochastic process $p$ from its finite marginals. That is, for each finite subset $F\ss T$ there is a measurable function $\pi^{T\from F}\colon S^T\to S^F$, and we can push forward $p$ to a probability measure $\pi^{T\from F}_*(p)$ on $S^F$. Given $F'\ss F$, we of course have compatibility $\pi^{T\from F'}_*(p)=\pi^{T\from F}_*\circ\pi^{F\from F'}_*(p)$. The KET says that if we instead have a compatible family of probability measures $p_F$ on $S^F$ for all finite $F\ss T$, then there is a unique probability measure $p$ on $S^T$ such that $p_F=\pi^{T\from F}_*(p)$. Here is a more category-theoretic version.
+A version of the Kolmogorov extension theorem (KET) roughly says that we can reconstruct such a stochastic process $p$ from its finite marginals. That is, for each finite subset $F\subseteq T$ there is a measurable function $\pi^{T\from F}\colon S^T\to S^F$, and we can push forward $p$ to a probability measure $\pi^{T\from F}_*(p)$ on $S^F$. Given $F'\subseteq F$, we of course have compatibility $\pi^{T\from F'}_*(p)=\pi^{T\from F}_*\circ\pi^{F\from F'}_*(p)$. The KET says that if we instead have a compatible family of probability measures $p_F$ on $S^F$ for all finite $F\subseteq T$, then there is a unique probability measure $p$ on $S^T$ such that $p_F=\pi^{T\from F}_*(p)$. Here is a more category-theoretic version.
 
 \begin{theorem}[Kolmogorov extension theorem]
 The functor of Radon measures on a suitable category of spaces (completely regular Hausdorff) commutes with cofiltered limits.
 \end{theorem}
 \begin{proof}
 \cite[Theorem 2.5]{danos2015dirichlet}
+\tob{this should go back much further to Schwartz's book}
 \end{proof}
 
 
@@ -333,96 +306,249 @@ The authors were led to this subject by considering the same guiding question---
 
 In attempting to answer that question, we found it helpful to generalize the statement, in particular the spaces on which it holds. 
 
+
+\subsection{Relation to existing work}
+
 \dis{In Bas Spitters' paper, but also in Topos quantum theory and AQFT, there is a common idea. Roughly speaking, one looks within a complicated space and finds those contexts at which things simplify. Then one makes those contexts the \emph{points} of a new space, and topologizes around them so that the poset of contexts becomes the specialization order on points (or its opposite). Now, all geometric implications can be checked pointwise, meaning at precisely those contexts where things simplify. This allows one to actually get to work, but without being reductionist. In our case, the ``contexts at which things simplify'' are taken to be the compacts, but that's perhaps not essential.}
 
-It is known that (continuous) valuations from a construction in geometric logic~\cite[Proposition~5]{vickers_integrals}. This implies that they behave well with respect to pullback along geometric morphisms. In terms of \Cref{main_external}, this means that every internal valuation defines a family of external valuations $(\mu_\pt)_{\pt \in \Pts}$, and it may be possible to argue from geometricity alone that these satisfy the compatibility and lower semicontinuity conditions of \Cref{main_external}. However, as far as we know, currently available methods in geometric logic do not give us a purely abstract way of getting from the family $(\mu_\pt)_{\pt \in \Pts}$ to the internal valuation $\mu$~\cite[Section~5]{vickers_geometric_logic}.
+It is known that (continuous) valuations form a construction in geometric logic~\cite[Proposition~5]{vickers_integrals}. This implies that they behave well with respect to pullback along geometric morphisms. In terms of \cref{main_external}, this means that every internal valuation defines a family of external valuations $(\mu_\pt)_{\pt \in \pts}$, and it may (or may not) be possible to argue from geometricity alone that these satisfy the compatibility and lower semicontinuity conditions of \cref{main_external}. However, as far as we know, currently available methods in geometric logic do not give us a purely abstract way of getting from the family $(\mu_\pt)_{\pt \in \pts}$ to the internal valuation $\mu$~\cite[Section~5]{vickers_geometric_logic}.
 
-\tob{Still make use of the fact that geometric formulas (with external infinities only!) can be checked pointwise}
+\tob{still make use of the fact that geometric formulas (with external infinities only!) can be checked pointwise}
 
-% ==== Section ====%
-\section{Plan of the paper}
+\subsection{Plan of the paper}
+
 In \cref{chap.background}
 
+\subsection{Acknowledgements}
 
-\section*{Acknowledgements}
 David Spivak acknowledges the support from Honeywell and from AFOSR grants FA9550-17-1-0058 and FA9550-19-1-0113.
 
+We thank Bas Spitters for pointing out the relevance of geometric logic to us. 
+We also benefited very much from conversations with Nelson Niu; in particular he developed an early form of \cref{vals_vs_modalities}.
+
+\section{Axioms for toposes with enough points}
+\label{axioms_soundness}
+
+In this section, we introduce a collection of modalities which express the idea that a given topos has enough points internally. To this end, we fix a type $\pts$ and a function $\at[]\colon\pts\to\decmod$, where $\decmod$ is the object of decidable modalities; see \cref{def.decidable_modality}. The idea is that $\pts$ is an object which (internally) indexes the points, and for every $\pt \in \pts$, the modality $\at : \prop \to \prop$ checks whether a given proposition holds at $\pt$. 
+while this type of setup is conceptually reminiscent of Garner's \emph{ionads}~\cite{garner2012ionads}, we currently do not know what the technical relation is.
+
+Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\at$ is the quasi-closed modality associated to the open set $T \setminus \overline{\{\pt\}}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $T$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
+\begin{equation}\label{eqn.at_semantics}
+	\church{\at[]}\colon\church{\pts}\to\church{\decmod}.
+\end{equation}
+Since sheafification is left adjoint to the underlying presheaf functor, and since the inclusion of constant presheaves is left adjoint to the global sections functor, the sheaf morphism $\at[]$ can be identified with a single function $j\colon T\to\church{\decmod}(T)$. So fix a point $\pt\in T$;
+to define an element $j_\pt\in\church{\decmod}(T)$ is to give a sheaf morphism $j_\pt\colon\Op[T]\to\Op[T]$ satisfying the following properties for all $U,V\in\Op[T]$:
+\begin{enumerate}
+	\item $U\subseteq j_\pt(U)$;
+	\item $j_\pt j_\pt(U)=j_\pt(U)$;
+	\item $j_\pt(U\cap V)=j_\pt(U)\cap j_\pt(V)$; and
+	\item $j_\pt(U)\cup (U^c\cup j_\pt(\varnothing))^\circ=T$.
+\end{enumerate}
+where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\to\Op[T]$ by
+\begin{equation}\label{eqn.j_k}
+	j_\pt(U)\coloneqq
+	\begin{cases}
+		(\{\pt\}^c)^\circ&\tn{ if }\pt\not\in U\\
+		T&\tn{ if } \pt\in U
+	\end{cases}
+\end{equation}
+If $\pt\in U$ then $j_\pt(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\subseteq \{\pt\}^c$ and hence $U\subseteq j_\pt(U)$, giving condition 1. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition 2. Since $U\subseteq j_\pt(\varnothing)$, we have $T=U^c\cup U\subseteq (U^c\cup j_\pt(\varnothing))$ so we also have condition 4. For condition 3, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\at[]}$ from \eqref{eqn.at_semantics}.
+
+\begin{definition}[Specialization order]\label{def.specialization}
+For points $\pt,\pt'$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\leq\pt$ if every open set containing $\pt'$ also contains $\pt$.
+\end{definition}
+
+\begin{proposition}\label{prop.specialization}
+For points $\pt,\pt'\in\pts$, we have $\pt'\leq\pt$ iff $T\forces\at\false\imp\at[\pt']\false$.
+\end{proposition}
+\begin{proof}
+We have $T\forces\at\false\imp\at[\pt']\false$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\leq\pt$ as in \cref{def.specialization}.
+\end{proof}
 
 
-% ======== Chapter ========%
-\chapter{Background}\label{chap.background}
+\medskip
 
-For background on sheaves, toposes, internal logic, and modalities, see \cref{sec.topos_background}.
+Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\at $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\cat{Set}$). 
 
-% ==== Section ====%
-\section{Lower nonnegative reals}
+To summarize, we assume:
+
+\begin{axiom}[{$\at[]$-Local decidability}]\label{ax.local_dec}
+	For all $\pt : \pts$ and $P : \prop$,
+	\[
+		\at P \: \lor \: (P \imp \at \bot).
+	\]
+\end{axiom}
+
+\begin{soundproof}
+This is simply the fact that $\church{\at}$ satisfies condition 4, as shown above.
+\end{soundproof}
+
+\begin{axiom}[Enough points]\label{ax.enough_pts}
+	For all $P : \prop$,
+	\[
+		\big( \forall (\pt : \pts). \at P \big) \: \Rightarrow \: P.
+	\]
+\end{axiom}
+
+\begin{soundproof}
+Take $U\subseteq T$ and suppose $U\forces\forall (\pt : \pts). \at P$. For each point $\pt\in T$, we have $U\forces\at P$ iff either $\pt\in P$ or $U\subseteq\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\subseteq P$ which gives $U\forces P$ as desired.
+\end{soundproof}
+
+\begin{axiom}
+	\label{ax.N_flabby}
+	For all $\pt : \pts$ and predicates $P : \tnn \to \prop$,
+	\[
+		\at \exists (n : \tnn) . P(n) \quad \Longrightarrow \quad \exists (n : \tnn) . \at P(n).
+	\]
+\end{axiom}
+
+\begin{soundproof}
+Suppose $T\forces\at \exists (n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\forces\exists (n : \tnn) . P(n)$, so take $n\in\tnn(U)$ and suppose $P(n)$. Since $\tnn$ is the sheafification of the constant presheaf $V\mapsto\nn$, a section of it on $U$ can be identified with a cover $U=\bigcup_{i\in I}V_i$ and a natural number $n_i\in\nn$ with $\rest{P}{V_i}(n_i)$ for each $i$. We have $k\in V_i$ for at least one such $V_i$. Thus we can take $n_i\in\tnn(U)$, and and prove $U\forces\exists(n:\tnn).\at P(n)$.
+\end{soundproof}
+
+Since $\tnn$ and $\tqq$ are internally bijective \cite{**}, it follows that the commutation of $\at[]$ and $\exists$ holds likewise for predicates on $\qq$.
+
+We now show that these axioms are independent.
+
+\begin{proposition}
+	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos which does not satisfy the axiom while satisfying the other two.
+\end{proposition}
+
+\begin{proof}
+	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
+
+	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
+	\begin{itemize}
+		\item $B$ is compact and extremally disconnected.
+		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
+		\item $\nn \subseteq B$ is dense.
+	\end{itemize}
+	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
+	
+	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
+	
+	For contradiction, suppose $B \forces \exists n . \lnot\lnot P(n)$ were to hold as well. Then there  is some cover $(U_i)$ of $B$ and external naturals $(n_i)$ such that $U_i\forces\neg\neg P(n_i)$. By compactness, we may assume $I$ is finite. Since each $\{n\}$ is open, the only natural number in the open set $\church{\neg\neg P(n_i)}$ is $n_i$, and the finiteness of $I$ and the fact that $U_i\subseteq \church{\neg\neg P(n_i)}$ present the anticipated contradiction.
+
+%	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
+%
+%	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
+%	\begin{itemize}
+%		\item $B$ is compact and extremally disconnected.
+%		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
+%		\item $\nn \subseteq B$ is dense.
+%	\end{itemize}
+	
+%	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
+	
+%	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
+%
+%However, if $B \forces \exists n . \lnot\lnot P(n)$ were to hold as well, then there would need to be a covering of $B$ by opens $(U_n)_{n \in \nn}$ such that $U_n \forces \lnot\lnot P(n)$. Then finitely many of those are enough by compactness. But since every $n \in \nn$ is an isolated point of $B$, the concrete form of $P$ shows that we can have $m \in U_n$ only if $m = n$. Therefore finitely many $U_n$ cannot cover $B$, contradiction.
+	
+\end{proof}
+
+\tob{Move the following to where it belongs. Technically those statements aren't quite right yet, since $\pt$ on the left is internal while it's external on the right. But for now I'll pretend that something like this makes sense, and similarly further down in Sec 7}
+
+Consider the geometric morphism
+\[
+	\adj{\shv(B)}{-_\pt}{\sky_\pt}{\Set}
+\]
+corresponding to the inclusion of the point $\pt\in B$. The type of $\at$-closed propositions has the following semantics. Here $X_\pt$ is called the \emph{stalk} of sheaf $X$ at $\pt$ and $\sky_\pt(S)$ is called the skyscraper sheaf of set $S$ at $\pt$. In particular,
+\[
+\sky_\pt(S)(U)=
+\begin{cases}
+	S&\tn{ if }\pt\in U\\
+	1&\tn{ if } \pt\not\in U
+\end{cases}
+\]
+
+\begin{lemma}
+	\label{at_props_semantics}
+	In the intended semantics on $\shv(B)$, we have 
+	\[
+		\church{\at \prop} \cong \sky_\pt(\{\bot,\top\}).
+	\]
+\end{lemma}
+
+\begin{proof}
+By \eqref{eqn.j_k}we have the following for any open $U$:
+\[
+	\church{\at\prop}(U)=\{V\subseteq U\mid V=(\{\pt\}^c)^\circ \text{ or }V=U\}.
+\]
+This set has two elements when $\pt\in U$ and one element when $\pt\not\in U$.
+\end{proof}
+
+More generally, the semantics of types of $\at$-closed predicates is as follows.
+
+\begin{lemma}
+	\label{at_preds_semantics}
+	For any type $X$,
+	\[
+		\church{\at \prop^X} \cong \sky_\pt(\church{X}_\pt),
+	\]
+	\dis{This be $\church{\at \prop^X} \cong \sky_\pt(\{\bot,\top\}^{\church{X}_\pt})$, correct?}
+	where $\church{X}_\pt$ denotes the stalk.
+\end{lemma}
+
+\begin{proof}
+	Upon noting that $\at \prop^X$ is isomorphic to the function type $X \to \at \prop$,
+	\dis{Minor point, but isn't $\at\prop^X$ \emph{equal} to the function type $X \to \at \prop$?}
+	this follows from the previous lemma and a straightforward application of the standard semantics of function types.
+\end{proof}
+
+
+
+\part{Constructive theory of valuations}
+
+
+\section{Background on lower nonnegative reals}
+
+We assume familiarity with sheaves, toposes, their internal logic, modalities and basics of geometric logic.
+
+\tob{See \cref{sec.topos_background} for some of this background?}
+
+We spell out some additional more specific background in this section and the following section.
+
+\subsection{Definition and basic properties}
+
+The number system in which valuations land is the lower nonnegative reals. We therefore introduce them here and discuss their relevant properties.
 
 \begin{definition}[Lower nonnegative reals]\label{def.lower_nn_reals}
-A \emph{lower nonnegative real} to be a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
+A \emph{lower nonnegative real} is a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
 \footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as a set of rational ``lower bounds''.}
 \begin{enumerate}
 	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
 	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
 	\item (rounded) $\forall (q:\tqq).r_>q\imp\exists (q':\tqq).q'>q\wedge r_>q'$.
 \end{enumerate}
-Define the \emph{type of lower nonnegative reals}, denoted $\tlrr$, to be
-\[\tlrr\coloneqq\{r_>\colon\tqq\to\prop\mid r_>\tn{ nonnegative, down-closed, rounded}\}.
-\]
-We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
-\end{definition}
-
-\begin{definition}[$\tqq_{\geq0}$-action on lower reals]\label{def.Q_action}
-For any $r:\tlrr$ and $q\in\tqq$ with $0\leq q$, define $q\cdot r:\tqq\to\prop$ by cases.
+Accordingly, the type of lower nonnegative reals, denoted $\tlrr$, is
 \[
-(q\cdot r)_>q'\coloneqq
-\begin{cases}
-	0>q'&\tn{ if }q=0\\
-	r>q'/q&\tn{ if }q>0.
-\end{cases}
+	\tlrr\coloneqq\{r_>\colon\tqq\to\prop\mid r_>\tn{ nonnegative, down-closed, rounded}\}.
 \]
-We show that $q\cdot r$ is a lower real in \cref{prop.Q_action_lower_real}.
 \end{definition}
 
-\begin{proposition}\label{prop.Q_action_lower_real}
-For any $r:\tlrr$ and $q\in\tqq$ with $0\leq q$, the predicate $q\cdot r$ from \cref{def.Q_action} is a lower real.
-\end{proposition}
-\begin{proof}
-If $q=0$ then $(q\cdot r)>q'$ iff $0>q'$, so $q\cdot r$ is clearly nonnegative, down-closed, and rounded. Suppose $q>0$. If $0>q'$ then $0>q'/q$ so $r>q'/q$ and $r>q'$; hence it is nonnegative. Proving down-closure and roundedness are similarly straightforward.
-\end{proof}
+We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
 
-We now want to define order and addition of lower reals, as well as the inclusion of rational numbers and propositions as special lower reals.
+We now want to define order and some algebraic structure on $\tlrr$, as well as the inclusion of rational numbers and propositions as special lower nonnegative reals.
 
-\begin{definition}[Order on lower reals]
+\begin{definition}[Order on lower nonnegative reals]
 Given lower reals $r,r'$,
-%we say that $r$ \emph{is greater than} $r'$ and write $r>r'$ to denote the following proposition:
-%\[
-%	r>r'\coloneqq\exists (q:\tqq).r>q\wedge\forall(q'.\tqq).r'>q'\imp q>q'.
-%\]
 we say that $r$ \emph{is above} $r'$ and write $r\geq r'$ to denote the following proposition:
 \begin{equation}\label{eqn.real_order}
-	r\geq r'\coloneqq\forall(q:\tqq).r'>q\imp r>q.
+	r\geq r' \:\coloneqq\: \forall(q:\tqq).r'>q\imp r>q.
 \end{equation}
 We also write $r'\leq r$ to denote $r\geq r'$.
 \end{definition}
 
-The following is straightforward when working in the internal logic; for more on this see \cref{sec.logic,sec.internal_language,sec.modalities}.
+It is straightforward to show that $\geq$ is indeed a partial order relation on $\tlrr$ (in the internal logic). We therefore consider $\tlrr$ as a partially ordered object from now on.
 
-\begin{proposition}[$\geq$ is a partial order]
-For all lower reals $r,r',r'':\tlrr$, we have
-\begin{enumerate}
-	\item $r\geq r$
-	\item $(r\geq r')\imp(r'\geq r'')\imp(r\geq r'')$
-	\item $(r\geq r')\imp(r'\geq r)\imp r=r'$
-\end{enumerate}
-\end{proposition}
-
-\begin{definition}[Addition of lower reals]\label{def.sum_lr}
-Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tqq\to\prop$ to be the predicate
+\begin{definition}[Addition of lower nonnegative reals]\label{def.sum_lr}
+Let $r_1,r_2:\tlrr$ be lower nonnegative reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tqq\to\prop$ to be the predicate
 \begin{equation}\label{eqn.sum_lr}
 (r_1+r_2)_>q\coloneqq\exists (q_1,q_2:\tqq).(r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).
 \end{equation}
-We show it is indeed a lower real in \cref{prop.sum_lr}.
 \end{definition}
+
+Again, 
 
 \begin{lemma}\label{lem.sum_lr}
 The predicate $(r_1+r_2)_>$ defined in \cref{def.sum_lr} is a lower real.
@@ -591,8 +717,22 @@ Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
 Clearly $j\ind{P}\leq j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
 \end{proof}
 
-% ==== Section ====%
-\section{The lower unit interval $[0,1]$}
+\subsection{Multiplicative structure}
+
+\begin{definition}[$\tqq_+$-action on lower reals]\label{def.Q_action}
+For any $r:\tlrr$ and $q\in\tqq$ with $q\geq 0$, define $q r:\tqq\to\prop$ by cases.
+\[
+(q r)_>(q')\coloneqq
+\begin{cases}
+	0>q'&\tn{ if }q=0\\
+	r>q'/q&\tn{ if }q>0.
+\end{cases}
+\]
+\end{definition}
+
+A simple case distinction with respect to $q = 0$ or $q > 0$ easily shows that $q r$ is indeed again a lower nonnegative real.
+
+\subsection{The lower unit interval $[0,1]$}
 
 We will work extensively with elements of the unit interval, and it will be convenient to give it a special definition. Let $\tqqint\coloneqq\{q:\tqq\mid 0\leq q< 1\}$.
 
@@ -609,7 +749,7 @@ The following is straightforward to prove.
 There is a pair of maps $a\colon\tlrr\to\tii$ and $\cast\colon\tii\to\tlrr$ given by
 \[
 a(r)>q\iff r>q
-\qqand
+\qquad\textrm{and}\qquad
 \cast(r')>q\iff (q<0)\vee\big((q<1)\wedge q<r'\big)
 \]
 that form a retraction: $a(\cast(r'))=r'$ for any $r'\in\tii$. In the other direction, $\cast(a(r))=\min(r,1)$.
@@ -640,9 +780,7 @@ where $(\textit{const}\ P)\colon\tqqint\to\prop$ is the constant at $P$.
 \end{proposition}
 We denote $\textit{const}\ P$ simply by $\ind{P}\colon\tqqint\to\prop$.
 
-
-% ==== Section ====%
-\section{$j$-local lower reals}
+\subsection{$j$-local lower nonnegative reals}
 
 We follow \cite[Definition 4.21]{schultz2019temporal} in the following definition (see also loc.\ cit.\ Remark 4.9).
 
@@ -672,38 +810,37 @@ The nonnegativity and down-closedness conditions are identical. Given a lower re
 Supposing $j$ commutes with $\exists(q':\tqq)$, the $j$-rounded assumption on $r$ says that if $r_>q$ then there exists $q'_0$ with $j(q'_0>q)\wedge j(r_>q'_0)$. Since the order on $\tqq$ is decidable, either $q'_0>q$ or $\neg(q'_0>q)$. In the first case since $r_>$ is $j$-closed, we can prove $\exists (q':\tqq).q'>q\wedge r_>q'$. In the second case, we immediately obtain $j\bot$ and hence $j(r_>q')$ for any $q'$, e.g.\ $q'\coloneqq q+1$. Again since $r_>$ is $j$-closed, we can prove $\exists (q':\tqq).q'>q\wedge r_>q'$.
 \end{proof}
 
-% ==== Section ====%
-\section{Internal topological spaces and Moerdijk's theorem}
+\section{Background on internal spaces and Moerdijk's theorem}
 
 
-Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be $\prop^X$. \cref{def.internal_space} returns the usual notion of topological space, when $\cat{E}=\smset$.
+Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be $\prop^X$. \cref{def.internal_space} returns the usual notion of topological space, when $\cat{E}=\Set$.
 
 \begin{definition}\label{def.internal_space}
-Let $X\in\cat{E}$ be an object, let $\Open_X\colon\pow(X)\to\prop$ be a predicate on $\pow(X)$, and write $\Op[X]\coloneq\{U:\pow(X)\mid\Open_X(U)\}$. We say $(X,\Op[X])$ is an \emph{internal topological space in $\cat{E}$} (and $\Op[X]$ is a \emph{topology on $X$}) whenever the following conditions hold:
+	Let $X\in\cat{E}$ be an object, let $\Op[X]\colon\pow(X)\to\prop$ be a predicate on $\pow(X)$, and write $\Op[X]\coloneq\{U:\pow(X)\mid\Op[X](U)\}$. We say $(X,\Op[X])$ is an \emph{internal topological space in $\cat{E}$} (and $\Op[X]$ is a \emph{topology on $X$}) whenever the following conditions hold:
 \begin{enumerate}
-	\item $\Open_X(\top)$,
-	\item $\Open_X(\bot)$,
-	\item $(\Open_X(U)\wedge\Open_X(V))\imp \Open_X(U\wedge V)$ for any $U,V\in\pow(X)$, and
-	\item $\big(\forall(i:I).\Open_X(U_i)\big)\imp\Open_X\big(\exists(i:I).U_i\big)$ for any $I\in\cat{E}$ and $U\colon I\to\pow(X)$.
+	\item $\Op[X](\top)$,
+	\item $\Op[X](\bot)$,
+	\item $(\Op[X](U)\wedge\Op[X](V))\imp \Op[X](U\wedge V)$ for any $U,V\in\pow(X)$, and
+	\item $\big(\forall(i:I).\Op[X](U_i)\big)\imp\Op[X]\big(\exists(i:I).U_i\big)$ for any $I\in\cat{E}$ and $U\colon I\to\pow(X)$.
 \end{enumerate}
 The fourth condition can also be restated as follows:
 \begin{enumerate}[label=4'.]
-	\item $\Open_X(\exists(P:\Op[X]).S(P)\wedge P)$ for any $S\colon\Op[X]\to\prop$. 
+	\item $\Op[X](\exists(P:\Op[X]).S(P)\wedge P)$ for any $S\colon\Op[X]\to\prop$. 
 \end{enumerate}
 \begin{enumerate}[label=4''.]
-	\item $\Open_X(\exists(P:S).P)$ for any $S\ss\Op[X]$.
+	\item $\Op[X](\exists(P:S).P)$ for any $S\subseteq\Op[X]$.
 \end{enumerate}
 
-A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Open_Y(U)\imp\Open_X(f\inv(U))$ holds for any $U\ss X$. We denote the category of internal topological spaces as $\Top_\cat{E}$.
+A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Op[Y](U)\imp\Op[X](f^{-1}(U))$ holds for any $U\subseteq X$. We denote the category of internal topological spaces as $\Top_\cat{E}$.
 \end{definition}
 
 \begin{proposition}
 In \cref{def.internal_space}, conditions 4, 4', and 4'' are equivalent.
 \end{proposition}
 \begin{proof}
-Clearly 4'$\iff$ 4''. We first show $4\imp 4'$. Given $S\colon\Op[X]\to\prop$, define $I\coloneqq\{P:\Op[X]\mid S(P)\}$ and $U\colon I\to\pow(X)$ by $U(P)\coloneqq P$. Then $\forall(i:I).\Open_X(U_i)$ holds, so by 4 we have $\Open_X(\exists(i:I).U_i)$, which is equivalent to $\Open_X(\exists(P:\Op[X]).S(P)\wedge P)$, as desired.
+Clearly 4'$\iff$ 4''. We first show $4\imp 4'$. Given $S\colon\Op[X]\to\prop$, define $I\coloneqq\{P:\Op[X]\mid S(P)\}$ and $U\colon I\to\pow(X)$ by $U(P)\coloneqq P$. Then $\forall(i:I).\Op[X](U_i)$ holds, so by 4 we have $\Op[X](\exists(i:I).U_i)$, which is equivalent to $\Op[X](\exists(P:\Op[X]).S(P)\wedge P)$, as desired.
 
-For $4'\imp 4$, take $I\in\cat{E}$ and $U\colon I\to\pow(X)$, and assume $\forall(i:I).\Open_X(U_i)$. Let $S\colon\Op[X]\to\prop$ be given by $S(V)\coloneqq\exists(i:I).V=U_i$. By 4' we have that $\exists(P:\Op[X]).S(P)\wedge P$, which is equivalent to $\exists(P:\Op[X])(i:I).(P=U_i)\wedge P$, which in turn is equivalent to $\exists(i:I).U_i$, is open as desired.
+For $4'\imp 4$, take $I\in\cat{E}$ and $U\colon I\to\pow(X)$, and assume $\forall(i:I).\Op[X](U_i)$. Let $S\colon\Op[X]\to\prop$ be given by $S(V)\coloneqq\exists(i:I).V=U_i$. By 4' we have that $\exists(P:\Op[X]).S(P)\wedge P$, which is equivalent to $\exists(P:\Op[X])(i:I).(P=U_i)\wedge P$, which in turn is equivalent to $\exists(i:I).U_i$, is open as desired.
 \end{proof}
 
 The fourth condition is a powerful assumption with the following surprising consequences.
@@ -736,7 +873,7 @@ The fourth condition is a powerful assumption with the following surprising cons
 There is precisely one topology on the terminal object $*\in\cat{E}$, and $*$ is terminal in $\Top_\cat{E}$.
 \end{corollary}
 \begin{proof}
-We have $\pow(*)=\prop$ and it is a topology because by definition $\Open(P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2). There is a unique function $X\to *$ for every $X$ and it is continuous, so $*$ is terminal.
+We have $\pow(*)=\prop$ and it is a topology because by definition $\Op[P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2]. There is a unique function $X\to *$ for every $X$ and it is continuous, so $*$ is terminal.
 \end{proof}
 
 Recall from \cref{prop.local_homeo} that there is an equivalence between the category $\shv(T)$ of sheaves on a topological space $T$ and that of local homeomorphisms over $T$.
@@ -746,8 +883,8 @@ Recall from \cref{prop.local_homeo} that there is an equivalence between the cat
 Let $T$ be a topological space, $X\in\shv(T)$ a sheaf on it, and $p\colon E_X\to T$ the corresponding local homeomorphism. Then there is a one-to-one correspondence between internal topologies $\Op$ on $X$ and diagrams of topological spaces
 \[
 \begin{tikzcd}
-	E_X\ar[dr, "p"']\ar[rr, "c^{\Op}"]&&
-	E_X^{\Op}\ar[dl, "p^{\Op}"]\\&
+	E_X\ar[dr, "p"']\ar[rr, "c^{\Op{X}}"]&&
+	E_X^{\Op{X}}\ar[dl, "p^{\Op{X}}"]\\&
 	T
 \end{tikzcd}
 \]
@@ -755,26 +892,26 @@ for which the map $c$ is identity on points.
 \end{theorem}
 
 % ==== Section ====%
-\section{$j$-local internal topological spaces}
+\subsection{$j$-local internal spaces}
 
 Similar to the $j$-local lower reals, also the definition of internal space localizes with respect to a modality $j$.
 
 \tob{At the moment this allows the frame of opens to live on any object, not just a $j$-sheaf. We may or may not want to change that}
 
-More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Open_X^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\ss(\prop_j)^X$ denote the $j$-closed subobject classified by $\Open^X_j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
+More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Op[X]^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\subseteq(\prop_j)^X$ denote the $j$-closed subobject classified by $\Op(X)j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
 
 \begin{enumerate}
-	\item $\Open_X^j(\top)$,
-	\item $\Open_X^j(j\bot)$,
-	\item $(\Open_X^j(U)\wedge\Open_X^j(V))\imp \Open_X^j(U\wedge V)$ for any $U,V\in\pow_j(X)$, and
-	\item $\Open_X^j(j\exists(P:S). P)$ for any $j$-closed subobject $S\ss\Op[X]^j$. 
+	\item $\Op[X]^j(\top)$,
+	\item $\Op[X]^j(j\bot)$,
+	\item $(\Op[X]^j(U)\wedge\Op[X]^j(V))\imp \Op[X]^j(U\wedge V)$ for any $U,V\in\pow_j(X)$, and
+	\item $\Op[X]^j(j\exists(P:S). P)$ for any $j$-closed subobject $S\subseteq\Op[X]^j$. 
 \end{enumerate}
 
 \begin{lemma}
 	\label{space_localize}
-	For any internal space $(X,\Open_X)$, the predicate
+	For any internal space $(X,\Op[X])$, the predicate
 	\[
-		j \Open_X \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Open_X(P)
+		j \Op[X] \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Op[X](P)
 	\]
 	produces a $j$-local internal space that we denote $(X,j \Op[X])$. 
 \end{lemma}
@@ -782,15 +919,15 @@ More concretely, this means that a $j$-local internal space consists of an objec
 \begin{proof}
 	$j\bot$ is $j$-locally open since any constant predicate is open already in the original space.	The $j$-opens are (automatically $j$-locally) closed under finite intersections since the original opens are and $j$ commutes with intersections. 
 
-	For the $j$-local openness of \eqref{global_sup}, note that for any $S\ss j\Op[X]$, this predicate is equivalent to
+	For the $j$-local openness of \eqref{global_sup}, note that for any $S\subseteq j\Op[X]$, this predicate is equivalent to
 	\[
 		\exists (Q : \Op[X]) . \left[ S(jQ) \land (jQ \imp  Q) \right] \land Q,
 	\]
-	which is open in the original topology. But then applying $j$ to it produces a $j$-local open, in the sense that it satisfies $j \Open_X$.
+	which is open in the original topology. But then applying $j$ to it produces a $j$-local open, in the sense that it satisfies $j \Op[X]$.
 \end{proof}
 
 % ==== Section ====%
-\section{Valuations}\label{sec.valuations}
+\subsection{Valuations}\label{sec.valuations}
 
 \begin{definition}[Directed poset]\label{def.directed}
 Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
@@ -809,7 +946,7 @@ Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation
 	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-	\item If $D\ss\Op[X]$ is a directed subposet (\cref{def.directed}), then
+	\item If $D\subseteq\Op[X]$ is a directed subposet (\cref{def.directed}), then
 \[
 	\mu\big(\exists(U:D).U\big)= \sup_{U: D}\mu(U).
 \]
@@ -822,10 +959,10 @@ Note that the inequality $\sup_{U: D}\mu(U)\leq\mu\big(\exists(U:D).U\big)$ is p
 
 
 \begin{proposition}[Push-forward valuation]\label{prop.pushforward}
-Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op[Y]\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f\inv(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
+	Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op[Y]\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f^{-1}(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
 \end{proposition}
 \begin{proof}
-The pullback functor $f\inv\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f\inv(U)\imp f\inv(V)$, so $\mu(f\inv(U))\leq\mu(f\inv(V))$, proving the result.
+	The pullback functor $f^{-1}\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f^{-1}(U)\imp f^{-1}(V)$, so $\mu(f^{-1}(U))\leq\mu(f^{-1}(V))$, proving the result.
 \end{proof}
 
 \begin{theorem}
@@ -841,7 +978,7 @@ Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probabilit
 	\item $\mu(j\bot)=0$ and $\mu(\top)=1$;
 	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-	\item If $D\ss j\Op[X]$ is a directed $j$-closed subposet then
+	\item If $D\subseteq j\Op[X]$ is a directed $j$-closed subposet then
 	\begin{equation}\label{eqn.local_scott_continuity}
 	\mu\big(j\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
 	\end{equation}
@@ -852,7 +989,7 @@ Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probabilit
 
 
 % ======== Chapter ========%
-\chapter{Basic theory of internal valuations}
+\section{Basic theory of valuations}
 
 Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the inclusion $\inc : \prop \to \tii$, given by the constant function $\ind{P}(q)\coloneqq P$. When we discuss the modularity condition, we will implicitly use $\cast\colon\tii\to\tlrr$, sending $r\mapsto (q<0)\vee ((q<1)\wedge (q<r))$ as discussed in \cref{sec.valuations}. Recall also from \cref{cor.top_on_one} that $\prop$ is the unique topology on the one-point space $\{*\}$.
 
@@ -883,7 +1020,7 @@ Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the i
 	
 	
 
-	Concerning Scott continuity \eqref{eqn.scott_continuity}, for any subtype $D \ss \prop$, directed or otherwise, both sides of the desired continuity equation
+	Concerning Scott continuity \eqref{eqn.scott_continuity}, for any subtype $D \subseteq \prop$, directed or otherwise, both sides of the desired continuity equation
 	\[
 		\sup_{P : D} \ind{P} = \ind{\exists (P:D) P},
 	\]
@@ -940,8 +1077,7 @@ Recall from \Cref{props_open} that for every $P : \prop$, the associated constan
 
 From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\mapsto P)\colon X\to\prop$ on any type $X$.
 
-% ======== Chapter ========%
-\chapter{Interaction of valuations and modalities}
+\section{Interaction of valuations and modalities}
 
 
 Recall modalities and decidable modalities from \cref{def.modality,def.decidable_modality}. 
@@ -1011,7 +1147,7 @@ Note that this lands indeed in $j \tlrr$ because of \Cref{vals_vs_modalities}.
 \begin{proof}
 	The normalization conditions and monotonicity are obvious. The modularity equation holds because $j$ commutes with both $\land$ and $\lor$ (see \cref{prop.dec_mod_or}).
 
-	Now let $D \ss j \Op[X]$ be a $j$-locally directed $j$-closed subposet. We want to prove that \eqref{eqn.local_scott_continuity} holds, i.e.\
+	Now let $D \subseteq j \Op[X]$ be a $j$-locally directed $j$-closed subposet. We want to prove that \eqref{eqn.local_scott_continuity} holds, i.e.\
 	\[
 		\mu\left( j \exists (P : D) . P \right) \leq j \exists (P : D). \mu(P).
 	\]
@@ -1019,7 +1155,7 @@ To see this, consider the predicate
 	\[
 		d' \: : \: \Op[X] \longrightarrow \prop, \qquad Q \longmapsto j \exists (P : D) . (Q \imp P)
 	\]
-	and let $D'\ss\Op[X]$ be the corresponding subobject. We claim that $D'$ is directed. Inhabitedness follows with $Q \coloneqq\bot$ from $j$-local inhabitedness of $D$. Now suppose that $d'(Q_1)$ and $d'(Q_2)$. Then a straightforward argument using the $j$-local directedness of $D$ implies $d'(Q_1 \lor Q_2)$. Hence $D'$ is indeed directed.
+	and let $D'\subseteq\Op[X]$ be the corresponding subobject. We claim that $D'$ is directed. Inhabitedness follows with $Q \coloneqq\bot$ from $j$-local inhabitedness of $D$. Now suppose that $d'(Q_1)$ and $d'(Q_2)$. Then a straightforward argument using the $j$-local directedness of $D$ implies $d'(Q_1 \lor Q_2)$. Hence $D'$ is indeed directed.
 
 	The assumed Scott continuity of $\mu$ applied to $D'$ thus gives
 	\begin{equation}\label{eqn.my_scott1}
@@ -1040,371 +1176,206 @@ To see this, consider the predicate
 	\]
 \end{proof}
 
-% ======== Chapter ========%
-\chapter{Axioms for toposes with enough points}
-\label{axioms_soundness}
 
-\tob{mention comparison with Garner's ionads}
+\section{Main theorem}
 
-In this section, we introduce a collection of modalities which internally express the idea that our topos has enough points. We fix a type $\Pts$ and a function $\At[]\colon\Pts\to\decmod$, where $\decmod$ is the type of decidable modalities; see \cref{def.decidable_modality}. 
+We now want to consider the relation between valuations and an internal space and families of $\at[]$-locally defined valuations.
 
-Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\At$ is the quasi-closed modality associated to the open set $T \setminus \overline{\pt}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $(T,\Op[T])$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\Pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
-\begin{equation}\label{eqn.at_semantics}
-	\church{\At[]}\colon\church{\Pts}\to\church{\decmod}.
-\end{equation}
-Since sheafification is left adjoint to the underlying presheaf functor, and since the inclusion of constant presheaves is left adjoint to the global sections functor, the sheaf morphism $\At[]$ can be identified with a single function $j\colon T\to\church{\decmod}(T)$. So fix a point $\pt\in T$;%
-\footnote{Our reason for denoting the point $\pt$ will become clear when we move to hyperspaces (spaces of compacts) in \cref{**}.} 
-to define an element $j_\pt\in\church{\decmod}(T)$ is to give a sheaf morphism $j_\pt\colon\Op[T]\to\Op[T]$ satisfying the following properties for all $U,V\in\Op[T]$:
-\begin{enumerate}
-	\item $U\ss j_\pt(U)$;
-	\item $j_\pt j_\pt(U)=j_\pt(U)$;
-	\item $j_\pt(U\cap V)=j_\pt(U)\cap j_\pt(V)$; and
-	\item $j_\pt(U)\cup (U^c\cup j_\pt(\varnothing))^\circ=T$.
-\end{enumerate}
-where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\to\Op[T]$ by
-\begin{equation}\label{eqn.j_k}
-	j_\pt(U)\coloneqq
-	\begin{cases}
-		(\{\pt\}^c)^\circ&\tn{ if }\pt\not\in U\\
-		T&\tn{ if } \pt\in U
-	\end{cases}
-\end{equation}
-If $\pt\in U$ then $j_\pt(U)=T$ and conditions 1, 2, and 4 are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\ss \{\pt\}^c$ and hence $U\ss j_\pt(U)$, giving condition 1. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition 2. Since $U\ss j_\pt(\varnothing)$, we have $T=U^c\cup U\ss (U^c\cup j_\pt(\varnothing))$ so we also have condition 4. For condition 3, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\At[]}$ from \eqref{eqn.at_semantics}.
-
-\begin{definition}[Specialization order]\label{def.specialization}
-For points $\pt,\pt'$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\leq\pt$ if every open set containing $\pt'$ also contains $\pt$.
-\end{definition}
-
-\begin{proposition}\label{prop.specialization}
-For points $\pt,\pt'\in\Pts$, we have $\pt'\leq\pt$ iff $T\forces\At\false\imp\At[\pt']\false$.
-\end{proposition}
-\begin{proof}
-We have $T\forces\At\false\imp\At[\pt']\false$ iff $(\{\pt\}^c)^\circ\ss(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\ss\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\ss\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\leq\pt$ as in \cref{def.specialization}.
-\end{proof}
-
-
-\medskip
-
-Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\At $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\Cat{Set}$). 
-
-To summarize, we assume:
-
-\begin{axiom}[{$\At[]$-Local decidability}]\label{ax.local_dec}
-	For all $\pt : \Pts$ and $P : \prop$,
-	\[
-		\At P \: \lor \: (P \imp \At \bot).
-	\]
-\end{axiom}
-
-\begin{soundproof}
-This is simply the fact that $\church{\At}$ satisfies condition 4, as shown above.
-\end{soundproof}
-
-\begin{axiom}[Enough points]\label{ax.enough_pts}
-	For all $P : \prop$,
-	\[
-		\big( \forall (\pt : \Pts). \At P \big) \: \Rightarrow \: P.
-	\]
-\end{axiom}
-
-\begin{soundproof}
-Take $U\ss T$ and suppose $U\forces\forall (\pt : \Pts). \At P$. For each point $\pt\in T$, we have $U\forces\At P$ iff either $\pt\in P$ or $U\ss\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\ss P$ which gives $U\forces P$ as desired.
-\end{soundproof}
-
-\begin{axiom}
-	\label{ax.N_flabby}
-	For all $\pt : \Pts$ and predicates $P : \tnn \to \prop$,
-	\[
-		\At \exists (n : \tnn) . P(n) \quad \Longrightarrow \quad \exists (n : \tnn) . \At P(n).
-	\]
-\end{axiom}
-
-\begin{soundproof}
-Suppose $T\forces\At \exists (n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\forces\exists (n : \tnn) . P(n)$, so take $n\in\tnn(U)$ and suppose $P(n)$. Since $\tnn$ is the sheafification of the constant presheaf $V\mapsto\nn$, a section of it on $U$ can be identified with a cover $U=\bigcup_{i\in I}V_i$ and a natural number $n_i\in\nn$ with $\rest{P}{V_i}(n_i)$ for each $i$. We have $k\in V_i$ for at least one such $V_i$. Thus we can take $n_i\in\tnn(U)$, and and prove $U\forces\exists(n:\tnn).\At P(n)$.
-\end{soundproof}
-
-Since $\tnn$ and $\tqq$ are internally bijective \cite{**}, it follows that the commutation of $\At[]$ and $\exists$ holds likewise for predicates on $\qq$.
-
-We now show that these axioms are independent.
-
-\begin{proposition}
-	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos which does not satisfy the axiom while satisfying the other two.
-\end{proposition}
-
-\begin{proof}
-	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\Cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
-
-	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
-	\begin{itemize}
-		\item $B$ is compact and extremally disconnected.
-		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
-		\item $\nn \subseteq B$ is dense.
-	\end{itemize}
-	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\Pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\At[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
-	
-	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
-	
-	For contradiction, suppose $B \forces \exists n . \lnot\lnot P(n)$ were to hold as well. Then there  is some cover $(U_i)$ of $B$ and external naturals $(n_i)$ such that $U_i\forces\neg\neg P(n_i)$. By compactness, we may assume $I$ is finite. Since each $\{n\}$ is open, the only natural number in the open set $\church{\neg\neg P(n_i)}$ is $n_i$, and the finiteness of $I$ and the fact that $U_i\ss \church{\neg\neg P(n_i)}$ present the anticipated contradiction.
-
-%	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\Cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
-%
-%	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
-%	\begin{itemize}
-%		\item $B$ is compact and extremally disconnected.
-%		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
-%		\item $\nn \subseteq B$ is dense.
-%	\end{itemize}
-	
-%	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\Pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\At[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
-	
-%	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \forces \exists n. P(n)$, and therefore $B \forces \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
-%
-%However, if $B \forces \exists n . \lnot\lnot P(n)$ were to hold as well, then there would need to be a covering of $B$ by opens $(U_n)_{n \in \nn}$ such that $U_n \forces \lnot\lnot P(n)$. Then finitely many of those are enough by compactness. But since every $n \in \nn$ is an isolated point of $B$, the concrete form of $P$ shows that we can have $m \in U_n$ only if $m = n$. Therefore finitely many $U_n$ cannot cover $B$, contradiction.
-	
-\end{proof}
-
-\tob{Move the following to where it belongs. Technically those statements aren't quite right yet, since $\pt$ on the left is internal while it's external on the right. But for now I'll pretend that something like this makes sense, and similarly further down in Sec 7}
-
-Consider the geometric morphism
-\[\adj{\shv(B)}{-_\pt}{\sky_\pt}{\smset}\]
-corresponding to the inclusion of the point $\pt\in B$. The type of $\At$-closed propositions has the following semantics. Here $X_\pt$ is called the \emph{stalk} of sheaf $X$ at $\pt$ and $\sky_\pt(S)$ is called the skyscraper sheaf of set $S$ at $\pt$. In particular,
-\[
-\sky_\pt(S)(U)=
-\begin{cases}
-	S&\tn{ if }\pt\in U\\
-	1&\tn{ if } \pt\not\in U
-\end{cases}
-\]
-
-\begin{lemma}
-	\label{at_props_semantics}
-	In the intended semantics on $\shv(B)$, we have 
-	\[
-		\church{\At \prop} \cong \sky_\pt(\{\bot,\top\}).
-	\]
-\end{lemma}
-
-\begin{proof}
-By \eqref{eqn.j_k}we have the following for any open $U$:
-\[
-	\church{\At\prop}(U)=\{V\ss U\mid V=(\{\pt\}^c)^\circ \text{ or }V=U\}.
-\]
-This set has two elements when $\pt\in U$ and one element when $\pt\not\in U$.
-\end{proof}
-
-More generally, the semantics of types of $\At$-closed predicates is as follows.
-
-\begin{lemma}
-	\label{at_preds_semantics}
-	For any type $X$,
-	\[
-		\church{\At \prop^X} \cong \sky_\pt(\church{X}_\pt),
-	\]
-	\dis{This be $\church{\At \prop^X} \cong \sky_\pt(\{\bot,\top\}^{\church{X}_\pt})$, correct?}
-	where $\church{X}_\pt$ denotes the stalk.
-\end{lemma}
-
-\begin{proof}
-	Upon noting that $\At \prop^X$ is isomorphic to the function type $X \to \At \prop$,\dis{Minor point, but isn't $\At\prop^X$ \emph{equal} to the function type $X \to \At \prop$?} this follows from the previous lemma and a straightforward application of the standard semantics of function types.
-\end{proof}
-
-% ======== Chapter ========%
-\chapter{Main theorem}
-
-We now want to consider the relation between valuations and an internal space and families of $\At[]$-locally defined valuations.
-
-We start by considering an analogous question for lower reals. For any $r : \tlrr$ and any $\pt : \Pts$, we get the $\At$-lower real $r_\pt := \At r$. Thus overall we have the family $(r_\pt)_{\pt \in \Pts}$. We now show which families arise in this way, and at the same time how a lower real can be pieced together from a family of $\At[]$-lower reals.
+We start by considering an analogous question for lower reals. For any $r : \tlrr$ and any $\pt : \pts$, we get the $\at$-lower real $r_\pt := \at r$. Thus overall we have the family $(r_\pt)_{\pt \in \pts}$. We now show which families arise in this way, and at the same time how a lower real can be pieced together from a family of $\at[]$-lower reals.
 
 \begin{definition}
-	A family $(r_\pt)_{\pt : \Pts}$ with $r_\pt \in \tlrr_{\At}$ for every $\pt$ is \emph{lower semicontinuous} if for every $q:\tqq$ there exists a $U:\prop$ such that for all $\pt : \Pts$,
+	A family $(r_\pt)_{\pt : \pts}$ with $r_\pt \in \tlrr_{\at}$ for every $\pt$ is \emph{lower semicontinuous} if for every $q:\tqq$ there exists a $U:\prop$ such that for all $\pt : \pts$,
 	\begin{equation}\label{eqn.witness}
-		r_\pt(q) \Leftrightarrow \At U.
+		r_\pt(q) \Leftrightarrow \at U.
 	\end{equation}
 \end{definition}
 
-A lower semicontinuous family automatically satisfies the following monotonicity condition: for all $\pt,\pt' : \Pts$, we have
+A lower semicontinuous family automatically satisfies the following monotonicity condition: for all $\pt,\pt' : \pts$, we have
 \begin{equation}
 	\label{r_pt_monotone}
-	r_\pt \le \At r_{\pt'},
+	r_\pt \le \at r_{\pt'},
 \end{equation}
-since $\At U \imp \At \At[\pt'] U$.
+since $\at U \imp \at \at[\pt'] U$.
 
-\begin{proposition}[{$\At[]$-Locality of lower reals}]
+\begin{proposition}[{$\at[]$-Locality of lower reals}]
 	\label{prop:LR_locality}
-	The maps $r \mapsto (\At r)_{\pt\in\Pts}$ and $(r_\pt)_{\pt\in\Pts}\mapsto \forall(\pt:\Pts).r_k$ establish a bijection between $\tlrr$ and lower semicontinuous families of $\At[]$-lower reals.
+	The maps $r \mapsto (\at r)_{\pt\in\pts}$ and $(r_\pt)_{\pt\in\pts}\mapsto \forall(\pt:\pts).r_k$ establish a bijection between $\tlrr$ and lower semicontinuous families of $\at[]$-lower reals.
 \end{proposition}
 
 \begin{proof}
-	For every $r : \tlrr$, the family with $r_\pt\coloneqq \At r$ for each $k\in\Pts$ satisfies lower semicontinuity; indeed for any $q$ we can take $U\coloneqq r(q)$ and \eqref{eqn.witness} holds by definition.
+	For every $r : \tlrr$, the family with $r_\pt\coloneqq \at r$ for each $k\in\pts$ satisfies lower semicontinuity; indeed for any $q$ we can take $U\coloneqq r(q)$ and \eqref{eqn.witness} holds by definition.
 
-	We next construct a map from lower semicontinuous families $(r_\pt)_{\pt\in\Pts}$ back to lower reals by putting
+	We next construct a map from lower semicontinuous families $(r_\pt)_{\pt\in\pts}$ back to lower reals by putting
 	\begin{equation}
 		\label{lr_from_family}
-		r(q) := \forall (\pt : \Pts) . r_\pt(q).
+		r(q) := \forall (\pt : \pts) . r_\pt(q).
 	\end{equation}
-	We first show that $\At r = r_\pt$ for every $\pt$, or equivalently
+	We first show that $\at r = r_\pt$ for every $\pt$, or equivalently
 	\[
-		\At \forall (\pt':\Pts) . r_{\pt'}(q) \quad \Longleftrightarrow \quad r_\pt(q)
+		\at \forall (\pt':\pts) . r_{\pt'}(q) \quad \Longleftrightarrow \quad r_\pt(q)
 	\]
 	for every $q$. So given $q$, take $U$ as in \eqref{eqn.witness} and the problem is reduced to showing that
 	\begin{equation}\label{eqn.round_trip}
-		\At \forall (\pt':\Pts) . \At[\pt'] U \quad \Longleftrightarrow \quad \At U,
+		\at \forall (\pt':\pts) . \at[\pt'] U \quad \Longleftrightarrow \quad \at U,
 	\end{equation}
-	which is now obvious since $\forall \pt' . \At[\pt'] U$ is equivalent to $U$.
+	which is now obvious since $\forall \pt' . \at[\pt'] U$ is equivalent to $U$.
 
-	We still need to show that \eqref{lr_from_family} indeed defines a nonnegative lower real. Nonnegativity $\forall q. q<0\imp r(q)$ clearly follows from the enough points condition \cref{enough_points} and the nonnegativity of $r_\pt$. Downward closure is also obvious, since the downward closure property of an $\At[]$-lower real is exactly the usual one which then transfers to $r$ (see \cref{def.j_loc_lower_reals}). Thus it remains to prove roundedness, which by the enough points property amounts to showing that if $r(q)$, then 
+	We still need to show that \eqref{lr_from_family} indeed defines a nonnegative lower real. Nonnegativity $\forall q. q<0\imp r(q)$ clearly follows from the enough points condition \cref{enough_points} and the nonnegativity of $r_\pt$. Downward closure is also obvious, since the downward closure property of an $\at[]$-lower real is exactly the usual one which then transfers to $r$ (see \cref{def.j_loc_lower_reals}). Thus it remains to prove roundedness, which by the enough points property amounts to showing that if $r(q)$, then 
 	\[
-		\At \exists q'. (q' > q) \wedge r(q')
+		\at \exists q'. (q' > q) \wedge r(q')
 	\]
-	for any $\pt : \Pts$. But then by \Cref{ax.N_flabby}, this is equivalent to $\exists q'. (q' > q)\wedge \At r(q')$, and the claim now follows by $\At r(q') = r_\pt(q')$.
+	for any $\pt : \pts$. But then by \Cref{ax.N_flabby}, this is equivalent to $\exists q'. (q' > q)\wedge \at r(q')$, and the claim now follows by $\at r(q') = r_\pt(q')$.
 
 	Finally, we prove that the above two constructions are inverses. Starting with $r \in \tlrr$, we need to prove that
 	\[
-		r(q) = \forall (\pt : \Pts) . \At r(q),
+		r(q) = \forall (\pt : \pts) . \at r(q),
 	\]
 	which is an instance of the enough points condition. Starting with a lower semicontinuous family $(r_\pt)$, the relevant property is the equation
 	\[
-		\At \forall (\pt' : \Pts) . \At[\pt'] r_{\pt'}(q) = r_\pt(q),
+		\at \forall (\pt' : \pts) . \at[\pt'] r_{\pt'}(q) = r_\pt(q),
 	\]
 	i.e.\ \eqref{eqn.round_trip}, which was proven above.
 \end{proof}
 
-Recall from \cref{def.at_prob_val} that an \emph{$\At$-local valuation} on an internal space $(X,\Op[X])$ is defined to be a map $\At \Op[X] \to \At \tlrr$ satisfying the $\At$-local versions of the conditions in the definition of valuation. To be clear, when we speak of families of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$, we mean that $\mu_\pt$ is $\At[\pt]$-local.
+Recall from \cref{def.at_prob_val} that an \emph{$\at$-local valuation} on an internal space $(X,\Op[X])$ is defined to be a map $\at \Op[X] \to \at \tlrr$ satisfying the $\at$-local versions of the conditions in the definition of valuation. To be clear, when we speak of families of $\at[]$-local valuations $(\mu_\pt)_{\pt : \pts}$, we mean that $\mu_\pt$ is $\at[\pt]$-local.
 
 \begin{definition}\label{def.valuations_compatible_lowersemi}
-	A family of $\At[]$-local valuations $(\mu_\pt)_{\pt : \Pts}$ is
+	A family of $\at[]$-local valuations $(\mu_\pt)_{\pt : \pts}$ is
 	\begin{enumerate}
-		\item \emph{compatible} if for all $\pt, \pt' : \Pts$ and $P : \At[\pt'] \Op[X]$,
+		\item \emph{compatible} if for all $\pt, \pt' : \pts$ and $P : \at[\pt'] \Op[X]$,
 			\[
-				\mu_{\pt}(\At[\pt] P) = \At[\pt] \mu_{\pt'}(P).
+				\mu_{\pt}(\at[\pt] P) = \at[\pt] \mu_{\pt'}(P).
 			\]
-		\item \emph{lower semicontinuous} if for every $P : \Op[X]$, the family of $\At[]$-lower reals
+		\item \emph{lower semicontinuous} if for every $P : \Op[X]$, the family of $\at[]$-lower reals
 			\[
-				\left( \mu_\pt(\At P) \right)_{k\in\Pts}
+				\left( \mu_\pt(\at P) \right)_{k\in\pts}
 			\]
 			is lower semicontinuous.
 	\end{enumerate}
 \end{definition}
 
-By \cref{ax.local_dec,prop.specialization}, for any two points $\pt,\pt'\in\Pts$ either $\At[\pt']\false\imp\At[\pt]\false$ or $\At[\pt]\At[\pt']\false$, corresponding to whether or not $\pt\leq\pt'$. In order to understand the compatibility condition of \cref{def.valuations_compatible_lowersemi}, we consider these cases separately. 
+By \cref{ax.local_dec,prop.specialization}, for any two points $\pt,\pt'\in\pts$ either $\at[\pt']\false\imp\at[\pt]\false$ or $\at[\pt]\at[\pt']\false$, corresponding to whether or not $\pt\leq\pt'$. In order to understand the compatibility condition of \cref{def.valuations_compatible_lowersemi}, we consider these cases separately. 
 
-In the second case, the assumption that $P$ is $\At[\pt']$-closed implies $\At[\pt] P$, so that the left-hand side is $1$. But since $\mu_{\pt'}$ takes values in $\At[\pt']$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\At[\pt'] \bot \imp \At[\pt] \bot$.
+In the second case, the assumption that $P$ is $\at[\pt']$-closed implies $\at[\pt] P$, so that the left-hand side is $1$. But since $\mu_{\pt'}$ takes values in $\at[\pt']$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\at[\pt'] \bot \imp \at[\pt] \bot$.
 
-Recall from \Cref{val_localize} that if $\mu : \Op[X] \to \tlrr$ is a valuation, then for every $\pt$ the restriction of $\mu$ to $\At \Op[X]$ is an $\At$-local valuation. 
+Recall from \Cref{val_localize} that if $\mu : \Op[X] \to \tlrr$ is a valuation, then for every $\pt$ the restriction of $\mu$ to $\at \Op[X]$ is an $\at$-local valuation. 
 
 \begin{lemma}\label{lemma.val_rests_compat_lowersemi}
-	Let $\mu : \Op[X] \to \tlrr$ be a valuation. Then the family $\left( \rest{\mu}{\At \Op[X]} \right)_{\pt : \Pts}$ is a compatible and lower semicontinuous family of $\At$-local valuations.
+	Let $\mu : \Op[X] \to \tlrr$ be a valuation. Then the family $\left( \rest{\mu}{\at \Op[X]} \right)_{\pt : \pts}$ is a compatible and lower semicontinuous family of $\at$-local valuations.
 \end{lemma}
 
 \begin{proof}
-	For compatibility, we need to show that if $P : \At \Op[X]$, then
+	For compatibility, we need to show that if $P : \at \Op[X]$, then
 	\[
-		\mu( \At[\pt'] P ) = \At[\pt'] \mu(P).
+		\mu( \at[\pt'] P ) = \at[\pt'] \mu(P).
 	\]
 	But this holds more generally for any $P:\Op[X]$ by \Cref{vals_vs_modalities}.
 
-	For lower semicontinuity, we need to find $U : \prop$ such that for all $\pt : \Pts$,
+	For lower semicontinuity, we need to find $U : \prop$ such that for all $\pt : \pts$,
 	\[
-		\mu(\At P)(q) \: \Leftrightarrow \: \At U.
+		\mu(\at P)(q) \: \Leftrightarrow \: \at U.
 	\]
 	But then again by \Cref{vals_vs_modalities}, this holds with $U := \mu(P)(q)$.
 \end{proof}
 
-We now consider the inverse problem of stitching together a compatible lower semicontinuous family of $\At[]$-local valuations to a valuation on $X$. This works as follows.
+We now consider the inverse problem of stitching together a compatible lower semicontinuous family of $\at[]$-local valuations to a valuation on $X$. This works as follows.
 
 \begin{lemma}\label{lemma.compat_lowersemi_stitched}
-	Let $(\mu_\pt)_{\pt : \Pts}$ be a compatible and lower semicontinuous family of $\At[]$-local valuations. Then putting
+	Let $(\mu_\pt)_{\pt : \pts}$ be a compatible and lower semicontinuous family of $\at[]$-local valuations. Then putting
 	\begin{equation}
 		\label{mu_stitched}
-		\mu(P) := \forall (\pt : \Pts) . \mu_\pt(\At P)
+		\mu(P) := \forall (\pt : \pts) . \mu_\pt(\at P)
 	\end{equation}
 	for $P : \Op[X]$ defines a valuation.
 \end{lemma}
 
 \begin{proof}
-	Let $\mu$ be as in \eqref{mu_stitched}; then $\mu(P)$ is indeed a lower real for any $P:\Op[X]$ thanks to \cref{vals_vs_modalities,prop:LR_locality}. To verify the conditions required of a valuation, it is enough to prove that each one holds $\At$-locally, thanks to \cref{ax.enough_pts}. To do so, we first prove that for every $P : \Op[X]$ and $\pt\in\Pts$,
+	Let $\mu$ be as in \eqref{mu_stitched}; then $\mu(P)$ is indeed a lower real for any $P:\Op[X]$ thanks to \cref{vals_vs_modalities,prop:LR_locality}. To verify the conditions required of a valuation, it is enough to prove that each one holds $\at$-locally, thanks to \cref{ax.enough_pts}. To do so, we first prove that for every $P : \Op[X]$ and $\pt\in\pts$,
 	\begin{equation}
 		\label{stitching_reproduces}
-		\At \mu(P) = \mu_\pt(\At P).
+		\at \mu(P) = \mu_\pt(\at P).
 	\end{equation}
-	By definition of $\mu$ and the fact that $\mu_\pt$ is $\At$-closed the inequality $\At \mu(P) \le \mu_\pt(\At P)$ is clear, so we just need to show that $\mu_\pt(\At P) \le \At \mu_{\pt'}(\At[\pt'] P)$ for all $\pt' : \Pts$. But this holds by monotonicity, $\mu_\pt(\At P)\leq\mu_\pt(\At\At[\pt']P)$ and the fact that
+	By definition of $\mu$ and the fact that $\mu_\pt$ is $\at$-closed the inequality $\at \mu(P) \le \mu_\pt(\at P)$ is clear, so we just need to show that $\mu_\pt(\at P) \le \at \mu_{\pt'}(\at[\pt'] P)$ for all $\pt' : \pts$. But this holds by monotonicity, $\mu_\pt(\at P)\leq\mu_\pt(\at\at[\pt']P)$ and the fact that
 	\[
-		\mu_\pt(\At \At[\pt'] P) = \At \mu_{\pt'}(\At[\pt'] P),
+		\mu_\pt(\at \at[\pt'] P) = \at \mu_{\pt'}(\at[\pt'] P),
 	\]
 	which is itself an instance of the compatibility assumption.
 
-	We have now established \eqref{stitching_reproduces}, and from there $\mu$ is easily seen to satisfy the normalization, monotonicity, and modularity conditions of \cref{def.prob_valuation}. For Scott continuity \eqref{eqn.scott_continuity}, let $D \ss \Op[X]$ be directed. It is then enough to show that for every $\pt$,
+	We have now established \eqref{stitching_reproduces}, and from there $\mu$ is easily seen to satisfy the normalization, monotonicity, and modularity conditions of \cref{def.prob_valuation}. For Scott continuity \eqref{eqn.scott_continuity}, let $D \subseteq \Op[X]$ be directed. It is then enough to show that for every $\pt$,
 	\begin{equation}
 		\label{goal_continuous}
-		\mu_\pt(\At \exists (P : D) . P) \: \le \: \At \exists (P : D). \mu(P)
+		\mu_\pt(\at \exists (P : D) . P) \: \le \: \at \exists (P : D). \mu(P)
 	\end{equation}
 
-To start, let $d\colon P\to\prop$ classify $D\ss P$, and consider the predicate
+To start, let $d\colon P\to\prop$ classify $D\subseteq P$, and consider the predicate
 	\[
-		d_\pt \: : \: \At \Op[X] \longrightarrow \At \prop, \qquad Q \longmapsto \At \exists (P : \Op[X]) . (Q \imp \At P) \land \At d(P).
+		d_\pt \: : \: \at \Op[X] \longrightarrow \at \prop, \qquad Q \longmapsto \at \exists (P : \Op[X]) . (Q \imp \at P) \land \at d(P).
 	\]
-	Let $D_\pt\ss\At\Op[X]$ be the subtype corresponding to $d_\pt$; we claim that $D_\pt$ is $\At$-locally directed. Since $D$ is inhabited, one immediately checks that $d_\pt(\At\bot)$ holds; thus $D_\pt$ is $\At$-locally inhabited. Thus we need to prove that
+	Let $D_\pt\subseteq\at\Op[X]$ be the subtype corresponding to $d_\pt$; we claim that $D_\pt$ is $\at$-locally directed. Since $D$ is inhabited, one immediately checks that $d_\pt(\at\bot)$ holds; thus $D_\pt$ is $\at$-locally inhabited. Thus we need to prove that
 \[
-		\forall(Q_1, Q_2 : D_\pt ) .\At \exists (Q : D_\pt) .(Q_1 \vee Q_2)  \imp Q.
+		\forall(Q_1, Q_2 : D_\pt ) .\at \exists (Q : D_\pt) .(Q_1 \vee Q_2)  \imp Q.
 \]
-	Take $Q_1, Q_2 : \At \Op[X]$ with $d_\pt(Q_1)$ and $d_\pt(Q_2)$ to be given. In order to then prove the $\At$-existence of $Q$ with the desired properties, we can unfold the definition of $d_\pt$ and drop the $\At$'s from the hypotheses. This gives $P_1$ and $P_2$ with $Q_i \imp P_i$ and $d(P_i)$. But, noting that $Q_1\lor Q_2$ is in $\At\Op[X]$ by \cref{prop.dec_mod_or}, it follows by directedness of $d$ that $d_\pt(Q_1 \lor Q_2)$.
+	Take $Q_1, Q_2 : \at \Op[X]$ with $d_\pt(Q_1)$ and $d_\pt(Q_2)$ to be given. In order to then prove the $\at$-existence of $Q$ with the desired properties, we can unfold the definition of $d_\pt$ and drop the $\at$'s from the hypotheses. This gives $P_1$ and $P_2$ with $Q_i \imp P_i$ and $d(P_i)$. But, noting that $Q_1\lor Q_2$ is in $\at\Op[X]$ by \cref{prop.dec_mod_or}, it follows by directedness of $d$ that $d_\pt(Q_1 \lor Q_2)$.
 
-	Having established that $d_k$ is indeed $\At$-locally directed, we apply $\At$-local Scott continuity of $\mu_\pt$ to it and obtain
+	Having established that $d_k$ is indeed $\at$-locally directed, we apply $\at$-local Scott continuity of $\mu_\pt$ to it and obtain
 \[
-		\mu_\pt\left( \At \exists (Q : D_\pt). Q \right) = 
-		\At \exists (Q : D_\pt) . \mu_\pt(Q).
+		\mu_\pt\left( \at \exists (Q : D_\pt). Q \right) = 
+		\at \exists (Q : D_\pt) . \mu_\pt(Q).
 \]
 	Similar to the proof of \Cref{val_localize}, we have an implication
 	\[
-		\At \exists (P : D). P \quad \Longrightarrow \quad \At \exists (Q : D_\pt) . Q
+		\at \exists (P : D). P \quad \Longrightarrow \quad \at \exists (Q : D_\pt) . Q
 	\]
 	proven by taking $Q := \top$, and an implication
 	\[
-		\At \exists (Q : D_\pt) . \mu_\pt(Q) \quad \Longrightarrow \quad \At \exists (P : D) . \mu_\pt(\At P)
+		\at \exists (Q : D_\pt) . \mu_\pt(Q) \quad \Longrightarrow \quad \at \exists (P : D) . \mu_\pt(\at P)
 	\]
-	obtained by removing the outer $\At$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \At P$. Applying $\mu$ and combining the above with \eqref{stitching_reproduces}, we obtain
+	obtained by removing the outer $\at$ on the left, unfolding $d_\pt(Q)$ and applying monotonicity of $\mu_\pt$ to the resulting $Q \imp \at P$. Applying $\mu$ and combining the above with \eqref{stitching_reproduces}, we obtain
 	\begin{align*}
-			\mu_\pt(\At \exists (P : D) . P) &\le
-			\mu_\pt(\At \exists (Q : D_k). Q)\\&=
-			\At \exists (Q : D_\pt).\mu_\pt(Q)\\&\leq
-			\At \exists (P : D). \mu_\pt(\At P)\\&=
-			\At \exists (P : D). \At\mu(P)\\&=
-			\At \exists (P : D). \mu(P),
+			\mu_\pt(\at \exists (P : D) . P) &\le
+			\mu_\pt(\at \exists (Q : D_k). Q)\\&=
+			\at \exists (Q : D_\pt).\mu_\pt(Q)\\&\leq
+			\at \exists (P : D). \mu_\pt(\at P)\\&=
+			\at \exists (P : D). \at\mu(P)\\&=
+			\at \exists (P : D). \mu(P),
   \end{align*}
 which was the desired inequality \eqref{goal_continuous}. This establishes the Scott continuity of $\mu$.
 \end{proof}
 
 \begin{theorem}
 	\label{main_internal}
-	Let $(X,\Op[X])$ be an internal space. Then restricting a valuation on $X$ to a family of $\At[]$-local valuations implements a bijection between:
+	Let $(X,\Op[X])$ be an internal space. Then restricting a valuation on $X$ to a family of $\at[]$-local valuations implements a bijection between:
 	\begin{enumerate}
 		\item valuations on $X$, and
-		\item those families of $\At[]$-local valuations which are compatible and lower semicontinuous.
+		\item those families of $\at[]$-local valuations which are compatible and lower semicontinuous.
 	\end{enumerate}
 \end{theorem}
 
 \begin{proof}
-	We only need to argue that the constructions from \cref{lemma.val_rests_compat_lowersemi,lemma.compat_lowersemi_stitched} are mutually inverse. Starting with a compatible and lower semicontinuous family, we need to show that for $P : \At \Op[X]$, we have
+	We only need to argue that the constructions from \cref{lemma.val_rests_compat_lowersemi,lemma.compat_lowersemi_stitched} are mutually inverse. Starting with a compatible and lower semicontinuous family, we need to show that for $P : \at \Op[X]$, we have
 	\[
-		\mu_\pt(P) = \forall (\pt' : \Pts) . \mu_{\pt'}( \At[\pt'] P).
+		\mu_\pt(P) = \forall (\pt' : \pts) . \mu_{\pt'}( \at[\pt'] P).
 	\]
-	But then using the compatibility assumption, the right-hand side evaluates to $\forall \pt' . \At[\pt'] \mu_\pt(P)$, and hence indeed equals the left-hand side by the enough points axiom \ref{ax.enough_pts}.
+	But then using the compatibility assumption, the right-hand side evaluates to $\forall \pt' . \at[\pt'] \mu_\pt(P)$, and hence indeed equals the left-hand side by the enough points axiom \ref{ax.enough_pts}.
 
 	Starting with a valuation $\mu$, we need to prove that for every $P : \Op[X]$,
 	\[
-		\mu(P) = \forall (\pt : \Pts) . \mu(\At P).
+		\mu(P) = \forall (\pt : \pts) . \mu(\at P).
 	\]
 	Applying \Cref{vals_vs_modalities} again turns this into an instance of the enough points axiom.
 \end{proof}
 
 % ======== Chapter ========%
-\chapter{Consequences for the semantics of internal valuations}
 
-The previous sections have dealt with statements in intuitionistic type theory equipped with a bunch of additional modalities. We now move on to consider semantics in the topos $\shv(B)$, based on interpreting the $\At$-modalities as points as in \Cref{axioms_soundness}.
+\part{Pointwise structure of internal valuations}
+
+\section{Consequences for the semantics of internal valuations}
+
+The previous sections have dealt with statements in intuitionistic type theory equipped with a bunch of additional modalities. We now move on to consider semantics in the topos $\shv(B)$, based on interpreting the $\at$-modalities as points as in \Cref{axioms_soundness}.
 
 We start with the semantics of internal spaces. If $p : E \to B$ is a continuous map between topological spaces, then this defines an internal space in $\shv(B)$. We now explain how this works, following Moerdijk's work on internal spaces~\cite{moerdijk1984spaced}.
 
-The sets of local sections of $p$ form a sheaf on $B$. Its \'etalification $\germs{E}{}$ is another space consisting of all the germs $(x,[f])$, where $[f]$ is the equivalence class of a local section $f\colon U\to E$ of $p$, for some open neighborhood $U\ni p$. We have the usual local homeomorphism $\germs{E}{} \to B$. But $\germs{E}{}$ carries another topology generated by choosing an open set $V\ss E$ and considering the set of germs $(x,[f])$ for which some representative $f\colon U\to E$ has $f(U)\ss V$.
+The sets of local sections of $p$ form a sheaf on $B$. Its \'etalification $\germs{E}{}$ is another space consisting of all the germs $(x,[f])$, where $[f]$ is the equivalence class of a local section $f\colon U\to E$ of $p$, for some open neighborhood $U\ni p$. We have the usual local homeomorphism $\germs{E}{} \to B$. But $\germs{E}{}$ carries another topology generated by choosing an open set $V\subseteq E$ and considering the set of germs $(x,[f])$ for which some representative $f\colon U\to E$ has $f(U)\subseteq V$.
 
 \begin{lemma}
 	This topology is (non-strictly) coarser than the \'etale topology, and the projection $\germs{E}{} \to B$ is continuous.
@@ -1437,18 +1408,18 @@ Note that every stalk of the sheaf of sections of $p$ carries a canonical (exter
 
 \begin{lemma}
 	\label{at_opens_semantics}
-	For $\pt \in \Pts$, the type $\At \Open(E_p)$ has the following semantics:
+	For $\pt \in \pts$, the type $\at \Op[E_p]$ has the following semantics:
 	\[
-		\church{\At \Open(E_p)} \cong \sky_\pt(\Open(\germs{E}{\pt})).
+		\church{\at \Op[E_p]} \cong \sky_\pt(\Op[\germs{E}{\pt}]).
 	\]
 \end{lemma}
 
 \begin{proof}
-	Recall that $\At \Open(E_p)$ is the subtype of $\Open(E_p)$ consisting of those opens which are $\At$-closed as predicates. In other words, we have a pullback diagram
+	Recall that $\at \Op{E_p}$ is the subtype of $\Op{E_p}$ consisting of those opens which are $\at$-closed as predicates. In other words, we have a pullback diagram
 	\[
 		\begin{tikzcd}
-			\At \Open(E_p) \ar{r} \ar{d}	& \Open(E_p) \ar{d}	\\
-			\At \prop^{E_p} \ar{r}		& \prop^{E_p}
+			\at \Op{E_p} \ar{r} \ar{d}	& \Op{E_p} \ar{d}	\\
+			\at \prop^{E_p} \ar{r}		& \prop^{E_p}
 		\end{tikzcd}
 	\]
 	The claim then follows upon combining \Cref{opens_semantics} with \Cref{at_preds_semantics}.
@@ -1456,9 +1427,9 @@ Note that every stalk of the sheaf of sections of $p$ carries a canonical (exter
 
 \begin{lemma}
 	\label{at_lowerreals_semantics}
-	For $\pt \in \Pts$, we have
+	For $\pt \in \pts$, we have
 	\[
-		\church{\At \tlrr} \cong \sky_\pt(\rr).
+		\church{\at \tlrr} \cong \sky_\pt(\rr).
 	\]
 \end{lemma}
 
@@ -1467,14 +1438,14 @@ Note that every stalk of the sheaf of sections of $p$ carries a canonical (exter
 \end{proof}
 
 \begin{lemma}
-	For $\pt \in \Pts$ and $E$ as above, we have
+	For $\pt \in \pts$ and $E$ as above, we have
 	\[
-		\Vals_{\At{\pt}}(E) = 
+		\vals_{\at{\pt}}(E) = 
 	\]
 	\tob{continue here}
 \end{lemma}
 
-\tob{more lemmas to come. In particular, describe the semantics of $\At$ for lower reals}
+\tob{more lemmas to come. In particular, describe the semantics of $\at$ for lower reals}
 
 It is natural to ask what the internal valuations on the internal space $E_p$ are.
 
@@ -1497,52 +1468,36 @@ Recall that $x \le x'$ in the specialization preorder means that every neighborh
 					is lower semicontinuous.
 			\end{itemize}
 	\end{enumerate}
-	Moreover, this bijection is natural in $p$ for fixed $B$ (meaning a natural transformation between functors $\Cat{Top}/B \to \Cat{Set}$).
+	Moreover, this bijection is natural in $p$ for fixed $B$ (meaning a natural transformation between functors $\cat{Top}/B \to \cat{Set}$).
 \end{theorem}
 
 \begin{proof}
-	\tob{Relevant steps: determine the semantics of objects $\At[]$-closed predicates}
+	\tob{Relevant steps: determine the semantics of objects $\at[]$-closed predicates}
 	By \Cref{main_internal}, we can identify internal valuations on $E$ with the morphisms
 	\[
-		\mu_{\pointwise} : \Pts \times \Open(E) \longrightarrow \tlrr
+		\mu_{\pointwise} : \pts \times \Op[E] \longrightarrow \tlrr
 	\]
-	such that every $\mu_{\pointwise}(\pt,-) : \Open(E) \to \tlrr$ is an $\At[\pt]$-local valuation, and such that the compatibility and lower semicontinuity conditions hold as $\pt$ varies.
+	such that every $\mu_{\pointwise}(\pt,-) : \Op[E] \to \tlrr$ is an $\at[\pt]$-local valuation, and such that the compatibility and lower semicontinuity conditions hold as $\pt$ varies.
 	\tob{in progress}
 \end{proof}
 
-% ======== Chapter ========%
-\chapter{Stochastic processes as internal valuations}
+\part{Application to stochastic processes and Euclidean QFTs}
+
+\section{Stochastic processes as internal valuations}
 
 We now apply the results of the previous two sections to hyperspaces.
-
-\ldots
-
-% ======== Chapter ========%
-\chapter{Open questions}
 
 
 \appendix
 
-% ======== Chapter ========%
-\chapter{Topos theoretic background}\label{sec.topos_background}
-%% ==== Section ====%
-%\section{Spaces of compacts}
-%
-%We often denote a topological space $(X,\Op[X])$ by its set of points $X$, leaving $\Op[X]$ implicit.
-%
-%For any topological space $X$, consider the set $\cpct{X}$ whose elements are the nonempty compact subsets $K\ss X$; as a point we denote it $\pt{K}\in\cpct{X}$. We can endow $\cpct{X}$ with the \emph{upper space} topology, which has the following basis. For every $U\ss X$ open, let $\bas{U}=\{\pt{K}\in\cpct{X}\mid K\ss U\}$.
-%
-%\begin{example}
-%Let $T$ be a set endowed with a discrete topology. Then a subset is compact iff it is finite. If $t\neq t'$ are distinct elements of $T$ then $\bas{\{t\}}$, $\bas{\{t'\}}$, and $\bas{\{t,t'\}}$ are all open, and the inequality $\bas{\{t\}}\cup\bas{\{t'\}}\subset\bas{\{t,t'\}}$ is strict, containing two and three points respectively.
-%\end{example}
-%
-% ==== Section ====%
+\part{Appendix: Topos-theoretic background}\label{sec.topos_background}
+
 \section{Sheaves on a topological space}
 
-For any topological space $(X,\Op[X])$, we consider $\Op[X]$ as a category whose objects are open subsets $U\in\Op[X]$ and for which there is a unique morphism $i_{V,U}\colon V\to U$ whenever $V\ss U$. We denote $i_{V,X}$ simply by $i_V$.
+For any topological space $(X,\Op[X])$, we consider $\Op[X]$ as a category whose objects are open subsets $U\in\Op[X]$ and for which there is a unique morphism $i_{V,U}\colon V\to U$ whenever $V\subseteq U$. We denote $i_{V,X}$ simply by $i_V$.
 
 \begin{definition}[Sheaf]\label{def.sheaf}
-Let $(X,\Op[X])$ be a topological space. A \emph{presheaf} on $X$ is a functor $\sheaf{F}\colon\Op[X]\op\to\smset$. For each open $U\in\Op[X]$ we refer to $\sheaf{F}(U)$ as the set of \emph{$\sheaf{F}$-sections on $U$}. Given an open subset $i_{V,U}\colon V\ss U$, we denote the function $\sheaf{F}(i_{V,U})$ by $\rest{-}{V}\colon\sheaf{F}(U)\to\sheaf{F}(V)$; for any $f\in\sheaf{F}(U)$, we refer to $\rest{f}{V}$ as the \emph{restriction of $f$ to $V$}.
+Let $(X,\Op[X])$ be a topological space. A \emph{presheaf} on $X$ is a functor $\sheaf{F}\colon\Op[X]\op\to\Set$. For each open $U\in\Op[X]$ we refer to $\sheaf{F}(U)$ as the set of \emph{$\sheaf{F}$-sections on $U$}. Given an open subset $i_{V,U}\colon V\subseteq U$, we denote the function $\sheaf{F}(i_{V,U})$ by $\rest{-}{V}\colon\sheaf{F}(U)\to\sheaf{F}(V)$; for any $f\in\sheaf{F}(U)$, we refer to $\rest{f}{V}$ as the \emph{restriction of $f$ to $V$}.
 
 Given a set $I$, collection of open sets $U\colon I\to\Op[X]$, and family of sections $f_i\in\sheaf{F}(U_i)$, one for each $i\in I$, we say that $(f_i)_{i\in I}$ is a \emph{compatible family} if for every $i,j\in I$ we have $\rest{f_i}{U_i\cap U_j}=\rest{f_j}{U_i\cap U_j}$. We say that $\sheaf{F}$ satisfies the \emph{sheaf condition} for the compatible family $(f_i)_{i\in I}$ if there exists a unique $f\in \sheaf{F}(\bigcup_{i\in I}U_i)$ such that $\rest{f}{U_i}=f_i$ for each $i\in I$. We say that $\sheaf{F}$ is a \emph{sheaf} if it satisfies the sheaf condition for every set $I$, $U$, and $(f_i)_{i\in I}$.
 
@@ -1550,21 +1505,21 @@ A \emph{morphism $\sheaf{F}\to\sheaf{G}$ of presheaves (resp.\ sheaves) on $X$} 
 \end{definition}
 
 \begin{remark}[Unique section on $\varnothing$]\label{rem.unique_sec_empty}
-When $I=\varnothing$ is empty then the unique $I$-indexed family of sections is compatible, so $\cat{F}\colon\Op[X]\op\to\smset$ satisfies the sheaf condition for this family iff $\sheaf{F}(\varnothing)\cong 1$ is a singleton set.
+When $I=\varnothing$ is empty then the unique $I$-indexed family of sections is compatible, so $\cat{F}\colon\Op[X]\op\to\Set$ satisfies the sheaf condition for this family iff $\sheaf{F}(\varnothing)\cong 1$ is a singleton set.
 \end{remark}
 
 \begin{remark}[Defining a sheaf on basic opens]
-If $(U_b)_{b\in B}$ is a basis for the topology on $X$, then a sheaf $\sheaf{F}$ on $X$ determines a set $\sheaf{F}(U_b)$ for each $U_b$, a function $\sheaf{F}(U_b)\to\sheaf{F}_{U_{b'}}$ for $U_b'\ss U_b$, and a sheaf condition for every compatible family of basic opens whose union is again a basic open. 
+If $(U_b)_{b\in B}$ is a basis for the topology on $X$, then a sheaf $\sheaf{F}$ on $X$ determines a set $\sheaf{F}(U_b)$ for each $U_b$, a function $\sheaf{F}(U_b)\to\sheaf{F}_{U_{b'}}$ for $U_b'\subseteq U_b$, and a sheaf condition for every compatible family of basic opens whose union is again a basic open. 
 
-Conversely, suppose we define $\sheaf{G}$ only on basic opens: give a set $\sheaf{G}(U_b)$ for each basic $U_b$ and a restriction map $\sheaf{G}(U_b)\to\sheaf{G}(U_{b'})$ whenever $U_{b'}\ss U_b$. Suppose further that for every covering $U=\bigcup_{i\in I}U_i$, with $U$ and each $U_i$ basic, and for each family $g_i\in\sheaf{G}(U_i)$ that are compatible (in the sense that on all basic opens $U'\ss U_i\cap U_j$ we have $\rest{g_i}{U'}=\rest{g_j}{U'}$), there exists a unique $g\in \sheaf{G}(U)$ with $\rest{g}{U_i}=g_i$. Then $\sheaf{G}$ extends uniquely to a sheaf on the whole space $X$.
+Conversely, suppose we define $\sheaf{G}$ only on basic opens: give a set $\sheaf{G}(U_b)$ for each basic $U_b$ and a restriction map $\sheaf{G}(U_b)\to\sheaf{G}(U_{b'})$ whenever $U_{b'}\subseteq U_b$. Suppose further that for every covering $U=\bigcup_{i\in I}U_i$, with $U$ and each $U_i$ basic, and for each family $g_i\in\sheaf{G}(U_i)$ that are compatible (in the sense that on all basic opens $U'\subseteq U_i\cap U_j$ we have $\rest{g_i}{U'}=\rest{g_j}{U'}$), there exists a unique $g\in \sheaf{G}(U)$ with $\rest{g}{U_i}=g_i$. Then $\sheaf{G}$ extends uniquely to a sheaf on the whole space $X$.
 \end{remark}
 
-\begin{example}[$\smset$ as a topos]\label{ex.set_topos}
-Let $\{*\}$ be the unique one-point topological space. It has two open sets $\varnothing\ss\{*\}$, so a presheaf $\sheaf{F}$ on $\{*\}$ consists of a function $\sheaf{F}(\{*\})\to\sheaf{F}(\varnothing)$. By \cref{rem.unique_sec_empty}, if $\sheaf{F}$ is to be a sheaf then $\sheaf{F}(\varnothing)\cong 1$. It follows that sheaves on a point are simply sets,
+\begin{example}[$\Set$ as a topos]\label{ex.set_topos}
+Let $\{*\}$ be the unique one-point topological space. It has two open sets $\varnothing\subseteq\{*\}$, so a presheaf $\sheaf{F}$ on $\{*\}$ consists of a function $\sheaf{F}(\{*\})\to\sheaf{F}(\varnothing)$. By \cref{rem.unique_sec_empty}, if $\sheaf{F}$ is to be a sheaf then $\sheaf{F}(\varnothing)\cong 1$. It follows that sheaves on a point are simply sets,
 \[
-\shv(\{*\})\cong\smset.
+\shv(\{*\})\cong\Set.
 \]
-Thus $\smset$ is an example of a topos, in some sense the primordial one.
+Thus $\Set$ is an example of a topos, in some sense the primordial one.
 \end{example}
 
 \begin{example}[Representables]\label{ex.representable_sheaf}
@@ -1572,21 +1527,21 @@ Let $X$ be a space. For every open $U\in\Op[X]$, there is a sheaf $y_U\in\shv(X)
 \[
 	y_U(V)=
 	\begin{cases}
-	\{*\}&\tn{ if }V\ss U\\
-	\varnothing&\tn{ if }V\not\ss U
+	\{*\}&\tn{ if }V\subseteq U\\
+	\varnothing&\tn{ if }V\not\subseteq U
 	\end{cases}
 \]
-For any sheaf $\sheaf{F}$, the product $\sheaf{F}_U\coloneqq y_U\times\sheaf{F}$ is isomorphic to $\sheaf{F}$ on opens $V\ss U$ and empty otherwise; we call it the \emph{restriction of $\sheaf{F}$ to $U$}. Thus by \cref{def.sheaf} we can restrict both sheaves and sections of sheaves to open subsets.
+For any sheaf $\sheaf{F}$, the product $\sheaf{F}_U\coloneqq y_U\times\sheaf{F}$ is isomorphic to $\sheaf{F}$ on opens $V\subseteq U$ and empty otherwise; we call it the \emph{restriction of $\sheaf{F}$ to $U$}. Thus by \cref{def.sheaf} we can restrict both sheaves and sections of sheaves to open subsets.
 \end{example}
 
 \begin{example}[Sheaf of opens, $\Omega$]\label{ex.subobject_classifier}
-Let $X$ be a space. For every open $U\in\Op[X]$, let $\Omega(U)\coloneqq\{V\in\Op[X]\mid V\ss U\}$. This defines a presheaf, where for any $U'\ss U$ and $V\ss U$ we define the restriction of $V$ to $U'$ by $\rest{V}{U'}\coloneqq V\cap U'$. It is a sheaf because for any $(U_i)_{i\in I}$ and choices of $V_i\ss U_i$, the element $\bigcup_iV_i\in\Omega(\bigcup_i U_i)$ is the unique element that restricts on each $U_i$ to the chosen section $V_i$.
+Let $X$ be a space. For every open $U\in\Op[X]$, let $\Omega(U)\coloneqq\{V\in\Op[X]\mid V\subseteq U\}$. This defines a presheaf, where for any $U'\subseteq U$ and $V\subseteq U$ we define the restriction of $V$ to $U'$ by $\rest{V}{U'}\coloneqq V\cap U'$. It is a sheaf because for any $(U_i)_{i\in I}$ and choices of $V_i\subseteq U_i$, the element $\bigcup_iV_i\in\Omega(\bigcup_i U_i)$ is the unique element that restricts on each $U_i$ to the chosen section $V_i$.
 
-Note that in $\smset=\shv(\{*\})$ the above description reduces to $\Omega(*)=\{V\ss\{*\}\}\cong\{\varnothing,\{*\}\}$. This two-element set can be fruitfully identified with the booleans $\{\true,\false\}$ as we will see in \cref{sec.logic}.
+Note that in $\Set=\shv(\{*\})$ the above description reduces to $\Omega(*)=\{V\subseteq\{*\}\}\cong\{\varnothing,\{*\}\}$. This two-element set can be fruitfully identified with the booleans $\{\true,\false\}$ as we will see in \cref{sec.logic}.
 \end{example}
 
 \begin{example}\label{ex.sections}
-Let $F\colon Y\to X$ be a morphism of topological spaces. The \emph{sheaf of local $F$-sections}, denoted $\sec_F$, is the sheaf defined on an open set $U\ss X$ as
+Let $F\colon Y\to X$ be a morphism of topological spaces. The \emph{sheaf of local $F$-sections}, denoted $\sec_F$, is the sheaf defined on an open set $U\subseteq X$ as
 \begin{equation}\label{eqn.sections}
 \sec_F(U)\coloneqq\{f\colon U\to Y\mid F\circ f=i_U\}
 \qquad
@@ -1596,9 +1551,9 @@ Let $F\colon Y\to X$ be a morphism of topological spaces. The \emph{sheaf of loc
 	X
 \end{tikzcd}
 \end{equation}
-with the restriction map for $V\ss U$ given by $\rest{f}{V}\coloneqq f\circ i_{V,U}$. It is a sheaf because, abstractly speaking, the union of open subsets is their colimit as topological spaces; or more concretely because any compatible family $(f_i\colon U_i\to Y)$ of local sections defines a unique function $f\colon \cup_iU_i\to Y$ on points, and one can check that $f$ is continuous.
+with the restriction map for $V\subseteq U$ given by $\rest{f}{V}\coloneqq f\circ i_{V,U}$. It is a sheaf because, abstractly speaking, the union of open subsets is their colimit as topological spaces; or more concretely because any compatible family $(f_i\colon U_i\to Y)$ of local sections defines a unique function $f\colon \cup_iU_i\to Y$ on points, and one can check that $f$ is continuous.
 
-In particular, given a space $R$, we can apply the above construction to the projection $\pi\colon R\times X\to X$. In this case $\sec_\pi$ sends $U\ss X$ to the set of all continuous maps $U\to R$. We denote this sheaf in typewriter font $\internal{R}$.
+In particular, given a space $R$, we can apply the above construction to the projection $\pi\colon R\times X\to X$. In this case $\sec_\pi$ sends $U\subseteq X$ to the set of all continuous maps $U\to R$. We denote this sheaf in typewriter font $\internal{R}$.
 
 We will have occasion to consider this construction in the case when $R=\rr$ is the usual topological space of real numbers; we call $\trr$ the \emph{sheaf of Dedekind real numbers on $X$}. We will also consider this construction for $R=\nn$; we call $\tnn$ the \emph{sheaf of natural numbers on $X$}. If $U$ is an open with $k$ connected components, we have $\tnn(U)\cong\nn^k$.
 \end{example}
@@ -1615,9 +1570,9 @@ The following is well-known, but we recall it here to fix ideas and notation.
 For every sheaf $\sheaf{F}$ on $X$, there exists a topological space $E_\sheaf{F}$ and a local homeomorphism $\pi\colon E_\sheaf{F}\to X$ such that $\sec_\pi\cong\sheaf{F}$. This construction gives an equivalence of categories between $\shv(X)$ and the local homeomorphisms over $X$.
 \end{proposition}
 \begin{proof}
-Consider the set $E_\sheaf{F}\coloneqq\bigsqcup_{x\in X}\sheaf{F}_x$ given by the disjoint union of all stalks of $\sheaf{F}$; it comes with an obvious function $\pi\colon E_\sheaf{F}\to X$ sending $(x,[U,f])\mapsto x$. We define a topology on $E_\sheaf{F}$ by giving a basis; namely for every open $U\ss X$ and element $f\in\sheaf{F}(U)$, the set $(U,f)\coloneqq\{(x,[U,f])\mid x\in U\}$ is a basic open. Now we see that $\pi$ is a local homeomorphism because for any $x$, the image of a basic open is $\pi(U,f)=U$ and one can check that the bijection $(U,f)\to U$ sending $(x,[U,f])\mapsto x$, and its inverse, are both continuous.
+Consider the set $E_\sheaf{F}\coloneqq\bigsqcup_{x\in X}\sheaf{F}_x$ given by the disjoint union of all stalks of $\sheaf{F}$; it comes with an obvious function $\pi\colon E_\sheaf{F}\to X$ sending $(x,[U,f])\mapsto x$. We define a topology on $E_\sheaf{F}$ by giving a basis; namely for every open $U\subseteq X$ and element $f\in\sheaf{F}(U)$, the set $(U,f)\coloneqq\{(x,[U,f])\mid x\in U\}$ is a basic open. Now we see that $\pi$ is a local homeomorphism because for any $x$, the image of a basic open is $\pi(U,f)=U$ and one can check that the bijection $(U,f)\to U$ sending $(x,[U,f])\mapsto x$, and its inverse, are both continuous.
 
-Given an open $U$ and a section $f\in\sheaf{F}(U)$, we obtain a local section $U\to E_\sheaf{F}$ of $\pi$ by sending $x\mapsto (x,[U,f])$. Going the other way, an arbitrary local section $g\colon U\to E_\sheaf{F}$ assigns to each $x\in U$ some $(x,[V_x,g_x])\in E_\sheaf{F}$. Fix $u\in U$. We may assume $(V_u,g_u)$ is a basic open without changing the section $g$. Because \eqref{eqn.sections} commutes and $\pi$ is a local homeomorphism, $g\inv(V_u,g_u)=U\cap V_u$, which implies that for all $x\in U\cap V_u$ we have $g_{x}=g_u$ on $V_x\cap V_u$. Thus we may assume $V_x=V_u$ and $g_x=g_u$ for all $x\in V_u$. Repeating this for all $u$, we obtain a cover $\{V_u\}_{u\in U}$ of $U$ and a compatible family of sections $g_u$, which we can glue to obtain the desired section of $\sheaf{F}(U)$.
+Given an open $U$ and a section $f\in\sheaf{F}(U)$, we obtain a local section $U\to E_\sheaf{F}$ of $\pi$ by sending $x\mapsto (x,[U,f])$. Going the other way, an arbitrary local section $g\colon U\to E_\sheaf{F}$ assigns to each $x\in U$ some $(x,[V_x,g_x])\in E_\sheaf{F}$. Fix $u\in U$. We may assume $(V_u,g_u)$ is a basic open without changing the section $g$. Because \eqref{eqn.sections} commutes and $\pi$ is a local homeomorphism, $g^{-1}(V_u,g_u)=U\cap V_u$, which implies that for all $x\in U\cap V_u$ we have $g_{x}=g_u$ on $V_x\cap V_u$. Thus we may assume $V_x=V_u$ and $g_x=g_u$ for all $x\in V_u$. Repeating this for all $u$, we obtain a cover $\{V_u\}_{u\in U}$ of $U$ and a compatible family of sections $g_u$, which we can glue to obtain the desired section of $\sheaf{F}(U)$.
 
 We leave the proof of the equivalence of categories to the reader, or see \cite[Corollary 2.6.3]{MacLane.Moerdijk:1992a}.
 \end{proof}
@@ -1642,10 +1597,9 @@ We will not give a proof here, but we will give the construction. To every presh
 \]
 
 
-% ==== Section ====%
 \section{The topos of sheaves on $X$}
 
-The category of sheaves on $X$ has excellent formal properties, quite similar to those of the category $\smset$. In particular it forms a Grothendieck topos. 
+The category of sheaves on $X$ has excellent formal properties, quite similar to those of the category $\Set$. In particular it forms a Grothendieck topos. 
 
 \begin{definition}[Grothendieck topos]\label{def.Grothendieck_topos}
 An \emph{Grothendieck topos} is a category $\cat{E}$ that 
@@ -1658,7 +1612,7 @@ An \emph{Grothendieck topos} is a category $\cat{E}$ that
 \end{definition}
 We assume the reader knows the definition of the first two, though we note that while limits are computed pointwise,
 \[\Big(\lim_{i\in I}\sheaf{F_i}\Big)(U)=\lim_{i\in I}\big(\sheaf{F_i}(U)\big),\]
-colimits are not: after taking the pointwise colimit, one must sheafify as in \cref{thm.sheafify}. We also note that the exponential $Y^X$ denotes the sheaf whose sections on $U\ss X$ is given by the set of sheaf homomorphisms $X_U\to Y_U$ between the restrictions of $X$ and $Y$ to $U$, as in \cref{ex.representable_sheaf}.
+colimits are not: after taking the pointwise colimit, one must sheafify as in \cref{thm.sheafify}. We also note that the exponential $Y^X$ denotes the sheaf whose sections on $U\subseteq X$ is given by the set of sheaf homomorphisms $X_U\to Y_U$ between the restrictions of $X$ and $Y$ to $U$, as in \cref{ex.representable_sheaf}.
 
  What it means for $\top\colon 1\to \Omega$ to be a \emph{subobject classifier} is that for any monomorphism $i\colon A\inj B$, there exists a unique morphism $\classify{i}\colon B\to\Omega$ such that the following square is a pullback
 \begin{equation}\label{eqn.subobject_classifier}
@@ -1678,10 +1632,10 @@ In this paper, we will only work with a special kind of Grothendieck topos, name
 \end{remark}
 
 \begin{remark}
-As one may guess, the subobject classifier for $\shv(X)$ is the sheaf $\Omega$ of opens from \cref{ex.subobject_classifier}. Given $i\colon A\inj B$, the sheaf morphism $\classify{i}\colon B\to\Omega$ is defined on $U\ss X$ by sending $b\in B(U)$ to the open set
+As one may guess, the subobject classifier for $\shv(X)$ is the sheaf $\Omega$ of opens from \cref{ex.subobject_classifier}. Given $i\colon A\inj B$, the sheaf morphism $\classify{i}\colon B\to\Omega$ is defined on $U\subseteq X$ by sending $b\in B(U)$ to the open set
 \[
 	\classify{i}(U)(b)\coloneqq
-	\bigcup\left\{V\ss U\;\middle|\;\exists a\in A(V) \tn{ such that } i(a)=\rest{b}{V}\right\}.
+	\bigcup\left\{V\subseteq U\;\middle|\;\exists a\in A(V) \tn{ such that } i(a)=\rest{b}{V}\right\}.
 \]
 \end{remark}
 
@@ -1704,32 +1658,32 @@ Every Grothendieck topos has a natural numbers object given by the coproduct $\t
 
 \section{Logic in a topos}\label{sec.logic}
 
-In any topos, one can interpret the logical constants $\true,\false$, the logical operations $\wedge,\vee,\imp,\neg$, and the logical quantifiers $\forall,\exists$ in terms of the subobject classifier $\Omega$. In the topos $\smset$, we saw in \cref{ex.subobject_classifier} that $\Omega$ can be identified with the booleans, and we are accustomed to thinking of the logic in terms of operations on booleans. The point is that this can be generalized.
+In any topos, one can interpret the logical constants $\true,\false$, the logical operations $\wedge,\vee,\imp,\neg$, and the logical quantifiers $\forall,\exists$ in terms of the subobject classifier $\Omega$. In the topos $\Set$, we saw in \cref{ex.subobject_classifier} that $\Omega$ can be identified with the booleans, and we are accustomed to thinking of the logic in terms of operations on booleans. The point is that this can be generalized.
 
-We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagine the sphere $S$ as the surface of the earth; by \cref{ex.subobject_classifier}, sections of the sheaf $\Omega$ are open subsets of $S$. In the topos $\shv(S)$, when one asks ``is it raining'', we can answer it with the largest open set $U\ss S$ throughout which it is raining. On the topos of sheaves on a single point, open sets are either everything or empty, recovering the notion of ``yes/no.''
+We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagine the sphere $S$ as the surface of the earth; by \cref{ex.subobject_classifier}, sections of the sheaf $\Omega$ are open subsets of $S$. In the topos $\shv(S)$, when one asks ``is it raining'', we can answer it with the largest open set $U\subseteq S$ throughout which it is raining. On the topos of sheaves on a single point, open sets are either everything or empty, recovering the notion of ``yes/no.''
 
-Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op[X]$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\ss U$ and write
+Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op[X]$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\subseteq U$ and write
 \begin{equation}\label{eqn.prop_order}
-V\leq V'\tn{ iff }V\ss V'.
+V\leq V'\tn{ iff }V\subseteq V'.
 \end{equation} 
 Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
 
-To interpret the logical constants, operations, and quantifiers in $\Omega$, or more specifically in the set $\Omega(U)$ for some open $U\ss X$, we need only think about their universal properties, and then define operations on open sets accordingly. For example $\true$ should be the maximal element, so we take $\true\in\Omega(U)$ to denote the open $U\ss U$; similarly $\false$ denotes the open $\varnothing\ss U$. For $V,V'\ss U$, the conjunction $V\wedge V'$ should be the maximal element under both $V$ and $V'$, so it denotes the open $V\cap V'$; similarly $V\vee V'$ denotes the open $V\cup V'$.
+To interpret the logical constants, operations, and quantifiers in $\Omega$, or more specifically in the set $\Omega(U)$ for some open $U\subseteq X$, we need only think about their universal properties, and then define operations on open sets accordingly. For example $\true$ should be the maximal element, so we take $\true\in\Omega(U)$ to denote the open $U\subseteq U$; similarly $\false$ denotes the open $\varnothing\subseteq U$. For $V,V'\subseteq U$, the conjunction $V\wedge V'$ should be the maximal element under both $V$ and $V'$, so it denotes the open $V\cap V'$; similarly $V\vee V'$ denotes the open $V\cup V'$.
 
 Implication and negation are only slightly more involved. Logically, we say that hypothesis $V$ is enough to prove $V_1\imp V_2$ when $V\wedge V_1$ is enough to prove $V_2$. Thus we define $V_1\imp V_2$ to be the open set
 \begin{equation}\label{eqn.implication}
-	(V_1\imp V_2)\coloneqq\bigcup\{V\ss U\mid (V\cap V_1)\ss V_2\}.
+	(V_1\imp V_2)\coloneqq\bigcup\{V\subseteq U\mid (V\cap V_1)\subseteq V_2\}.
 \end{equation}
  As a particular case, defining $\neg V\coloneqq (V\imp \false)$, we can identify $\neg V$ with the interior of the complement of $V$. For example, if $U=\rr$ and $V=\rr-\{0\}$, then $\neg V=\false$ and $\neg\neg V=\true$; in general there is an inequality $V\leq\neg\neg V$, which may be strict. Toposes for which $\neg\neg V=V$ are called \emph{boolean}, and correspond to topological spaces that are totally disconnected.
 
 To define $\exists$ and $\forall$, we need to discuss predicates. For any sheaf $A$, a \emph{predicate on $A$} is a sheaf morphism $p\colon A\to\Omega$. The quantifiers $\forall(a:A)$ and $\exists(a:A)$ take a predicate in two variables, say $q\colon A\times B\to\Omega$ and return a predicate $B\to\Omega$ in one variable. Namely, define $\exists(a:A).q(a)$ to be the sheaf morphism $B\to\Omega$ that on any $U\in\Op[X]$ assigns to a given $b\in B(U)$ the open set
 \[
-\big(\exists(a:A).q(a)\big)_U(b)\coloneqq\bigcup\left\{V\ss U\;\middle|\;\exists a\in A(V), q_V\big(a,\rest{b}{V}\big)=V\right\}\cong\bigcup_{V\ss U,a\in A(V)}q_V\big(a,\rest{b}{V}\big).
+\big(\exists(a:A).q(a)\big)_U(b)\coloneqq\bigcup\left\{V\subseteq U\;\middle|\;\exists a\in A(V), q_V\big(a,\rest{b}{V}\big)=V\right\}\cong\bigcup_{V\subseteq U,a\in A(V)}q_V\big(a,\rest{b}{V}\big).
 \]
 The universal quantifier is the most involved. Define $\forall(a:A).q(a)$ to be the sheaf morphism $B\to\Omega$ that on any $U\in\Op[X]$ assigns to a given $b\in B(U)$ the open set
 \[
-\big(\forall(a:A).q(a)\big)_U(b)\coloneqq\bigcup\left\{V\ss U\;\middle|\;
-\forall V'\ss V \tn{ open, and } \forall a\in A(V'), q_{V'}\big(a,\rest{b}{V'}\big)=V'\right\}.
+\big(\forall(a:A).q(a)\big)_U(b)\coloneqq\bigcup\left\{V\subseteq U\;\middle|\;
+\forall V'\subseteq V \tn{ open, and } \forall a\in A(V'), q_{V'}\big(a,\rest{b}{V'}\big)=V'\right\}.
 \]
 
 With all these definitions, logical deductions can be carried out in the usual style, with the caveat that they must be constructive. It is an extra axiom to say $\neg\neg V=^?V$ or $\neg\forall (a:A).q(a) =^? \exists (a:A)\neg q(a)$; such ``tricks'' with negation do not hold unless the site happens to have a simplified form (e.g.\ if it happens to be totally disconnected).
@@ -1743,7 +1697,7 @@ The analogy between any topos $\cat{E}$ and the category (topos) of sets is deep
 \begin{equation}\label{eqn.epi}
 \{f\colon A\to B\mid \forall (b:B).\exists(a:A). f(a)=b\}
 \end{equation}
-is the set-theoretic way of expressing the set of surjections $A\surj B$, i.e.\ epimorphisms in the category of sets. Using Kripke-Joyal semantics, this formula has a unique interpretation in an arbitrary topos $\cat{E}$ for arbitrary objects $A,B\in\cat{E}$. If $\cat{E}=\shv(X)$ for some space $X$ and $A,B$ are sheaves on $X$, then the above formula corresponds to the sheaf that assigns to $U\ss X$ the set of all epimorphisms of sheaves $A_U\to B_U$, where $A_U$ and $B_U$ are the restrictions of $A$ and $B$ to $U$ (see \cref{ex.representable_sheaf}).
+is the set-theoretic way of expressing the set of surjections $A\surj B$, i.e.\ epimorphisms in the category of sets. Using Kripke-Joyal semantics, this formula has a unique interpretation in an arbitrary topos $\cat{E}$ for arbitrary objects $A,B\in\cat{E}$. If $\cat{E}=\shv(X)$ for some space $X$ and $A,B$ are sheaves on $X$, then the above formula corresponds to the sheaf that assigns to $U\subseteq X$ the set of all epimorphisms of sheaves $A_U\to B_U$, where $A_U$ and $B_U$ are the restrictions of $A$ and $B$ to $U$ (see \cref{ex.representable_sheaf}).
 
 Perhaps more convincing is the case of real numbers. Dedekind's definition of a real number was as a pair of subsets of $\qq$ satisfying certain properties: one is down-closed, the other is up-closed, they do not intersect, etc. These properties can all be written set-theoretically and interpreted in $\cat{E}=\shv(X)$ using Kripke-Joyal semantics. It turns out that the resulting sheaf $\trr$ is precisely the sheaf of Dedekind real numbers on $X$ from \cref{ex.sections}, i.e.\ $\trr(U)\cong\{f\colon U\to\rr\mid f\tn{ continuous}\}$. This is often considered strong evidence that the Kripke-Joyal semantics works sensibly.
 
@@ -1770,17 +1724,17 @@ Here is a list of rules for $\forces$,%
 }
 where $I$ denotes any set, $U, U_i, V$ denote any opens, and $\varphi,\varphi_i,\psi$ denote any predicates:
 \begin{enumerate}
-	\item Suppose that the open set corresponding to $\varphi\in\prop$ is $U\in\Op[X]$. Then $V\forces\varphi$ iff $V\ss U$.
+	\item Suppose that the open set corresponding to $\varphi\in\prop$ is $U\in\Op[X]$. Then $V\forces\varphi$ iff $V\subseteq U$.
   \item If $\varphi\leq\psi$ in $\prop$ and $U\forces\varphi$ then $U\forces\psi$.
   \item $U_i\forces\varphi$ for each $i\in I$ implies $\left(\bigcup_{i\in I}U_i\right)\forces\varphi$.
   \item $U\forces\true$ for every $U$.
   \item $U\forces\false$ iff $U=\varnothing$.
   \item $U\forces\varphi\wedge\psi$ iff $U\forces\varphi$ and $U\forces\psi$.
   \item $U\forces\varphi_1\vee\varphi_2$ iff there exist $U_1,U_2$ with $U=U_1\cup U_2$ and $U_1\forces\varphi_1$ and $U_2\forces\varphi_2$.
-  \item $U\forces \varphi\imp\psi$ iff whenever $V\forces\varphi$ holds for $V\ss U$, then also $V\forces\psi$ holds.
-  \item $U\forces\neg\varphi$ iff whenever $V\forces\varphi$ holds for $V\ss U$, then $V=\varnothing$.
+  \item $U\forces \varphi\imp\psi$ iff whenever $V\forces\varphi$ holds for $V\subseteq U$, then also $V\forces\psi$ holds.
+  \item $U\forces\neg\varphi$ iff whenever $V\forces\varphi$ holds for $V\subseteq U$, then $V=\varnothing$.
   \item $U\forces\exists (a:A).\varphi(a)$ iff there exists $(U_i)_{i\in I}$ and $a_i\in A(U_i)$ for each $i\in I$, with $U=\bigcup_iU_i$ and $U_i\forces\varphi(a_i)$.
-  \item $U\forces\forall (a:A).\varphi(a)$ iff for every $V\ss U$ and $a\in A(V)$ it holds that $V\forces \varphi(a)$.
+  \item $U\forces\forall (a:A).\varphi(a)$ iff for every $V\subseteq U$ and $a\in A(V)$ it holds that $V\forces \varphi(a)$.
 \end{enumerate}
 We say that $\varphi$ holds in the topos $\shv(X)$ when $X\forces\varphi$.
 
@@ -1788,7 +1742,7 @@ We say that $\varphi$ holds in the topos $\shv(X)$ when $X\forces\varphi$.
 \begin{example}
 Let $X=\{*\}$. We will show that the formula $\varphi\coloneqq\forall (p:\prop).p\vee\neg p$ holds using the Kripke-Joyal semantics, i.e.\ that $X\forces\varphi$. The proof goes as follows:
 
-By rule 11, we need that for every $V\ss X$ and every $p:\prop(V)$ it holds that $V\forces p\vee\neg p$. But $V$ is either $\varnothing$ or $X$ and in the first case $V$ forces everything by rule 1, so we may assume $V=X$. By rule 7, it suffices to show that $X\forces p$ and $\varnothing\forces\neg p$ or that $X\forces\neg p$ and $\varnothing\forces p$. Again by rule 1 this reduces to showing either that $X\forces p$ or $X\forces\neg p$.
+By rule 11, we need that for every $V\subseteq X$ and every $p:\prop(V)$ it holds that $V\forces p\vee\neg p$. But $V$ is either $\varnothing$ or $X$ and in the first case $V$ forces everything by rule 1, so we may assume $V=X$. By rule 7, it suffices to show that $X\forces p$ and $\varnothing\forces\neg p$ or that $X\forces\neg p$ and $\varnothing\forces p$. Again by rule 1 this reduces to showing either that $X\forces p$ or $X\forces\neg p$.
 
 Now $p\in\prop$ corresponds to an open of which there are only two: namely $X$ and $\varnothing$. If it is $X$ then $X\forces p$ by rule 1. So we may assume $p$ corresponds to $\varnothing$, in which case only $\varnothing\forces p$ by rule 1 and we have $X\forces\neg p$ by rule 9, completing the proof.
 \end{example}
@@ -1841,9 +1795,9 @@ It turns out that modalities on $\cat{E}$ correspond one-to-one with subtoposes 
 \begin{definition}\label{def.open_closed_qc}
 Let $u:\prop$ be a proposition. We have the following modalities:
 \begin{description}
-	\item[Open:] $O_u(p)\coloneqq u\imp p$;
-	\item[Closed:] $C_u(p)\coloneqq u\vee p$; and
-	\item[Quasi-closed:] $Q_u(p)\coloneqq (p\imp u)\imp u$.
+	\item[Open] $O_u(p)\coloneqq u\imp p$;
+	\item[Closed] $C_u(p)\coloneqq u\vee p$; and
+	\item[Quasi-closed] $Q_u(p)\coloneqq (p\imp u)\imp u$.
 \end{description}
 \end{definition}
 
@@ -1869,7 +1823,7 @@ Proving that $j=Q_c$ is a modality is basically more of the same. We prove only 
 Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
 \end{example}
 
-This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\ss (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
+This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\subseteq (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
 
 
 
@@ -1905,7 +1859,7 @@ Suppose $j$ is decidable. Then for all $P,Q:\prop$, we have
 Assume $(P\wedge Q)\imp j \false$. By \cref{ax.decidability} we may assume also that $j P$ and $j Q$, hence $j (P\wedge Q)$ and finally $j \bot$.
 \end{proof}
 
-\begin{proposition}[$\At$ is quasi-closed]
+\begin{proposition}[$\at$ is quasi-closed]
 Suppose $j$ is decidable. Then for all $P:\prop$ we have
 \[j P=\big((P\imp j\bot)\imp j\bot\big).\]
 \end{proposition}
@@ -1931,11 +1885,14 @@ We now turn to the treatment of the existential quantifier.
 
 
 
-\section*{Acknowledgements}
-David Spivak acknowledges the support from Honeywell and from AFOSR grants FA9550-17-1-0058 and FA9550-19-1-0113.
+\section{Geometric formulas}
 
-We also benefited very much from conversations with Nelson Niu; in particular he developed an early form of \cref{vals_vs_modalities}.
+We follow Blechschmidt's account of geometric formulas and their interactions with modalities~\cite[Chapter~2~and~6]{blechschmidt2017internal}, also referring to Vicker's lucid review of geometric logic for background~\cite{vickers_geometric_logic}.
 
-\printbibliography
+\clearpage
+
+\bibliographystyle{plain}
+\bibliography{InternalValsStochProc}
+
 
 \end{document}
