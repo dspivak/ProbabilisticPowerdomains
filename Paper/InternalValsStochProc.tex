@@ -155,7 +155,7 @@ urlcolor=myurlcolor}
 \newcommand{\zz}{\mathbb{Z}}
 \newcommand{\lr}{\ul{\mathbb{R}}}
 
-\newcommand{\hs}{\hspace{1.5pt}}
+\newcommand{\hs}{\hspace{1pt}}
 \newcommand{\tnn}{\internal{N}\hs}
 \newcommand{\tqq}{\internal{Q}\hs}
 \newcommand{\tqqint}{\internal{Q}\hs_{[0,1)}}
@@ -164,7 +164,7 @@ urlcolor=myurlcolor}
 \newcommand{\tqqub}{\qq^\infty}
 \newcommand{\trr}{\internal{R}}
 \newcommand{\tii}{\ubar{\internal{I\hs\hs}}\!\hs}
-\newcommand{\tlrr}{\ubar{\trr}_+\hs}
+\newcommand{\tlrr}{\ubar{\trr}\hs}
 
 \newcommand{\cast}{\textit{cast}}
 \newcommand{\germs}[2]{\mathsf{germs}_{#2}({#1})}
@@ -224,8 +224,8 @@ urlcolor=myurlcolor}
 \newcommand{\down}{\mathord{\downarrow}}
 \newcommand{\up}{\mathord{\uparrow}}
 
-\newcommand{\imp}{\rightarrow}
-\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\imp}{\Rightarrow}
+\renewcommand{\iff}{\Leftrightarrow}
 \newcommand{\true}{\top}
 \newcommand{\false}{\bot}
 \newcommand{\bool}{\set{bool}}
@@ -341,10 +341,14 @@ David Spivak acknowledges the support from Honeywell and from AFOSR grants FA955
 We thank Bas Spitters for pointing out the relevance of geometric logic to us. 
 We also benefited very much from conversations with Nelson Niu; in particular he developed an early form of \cref{vals_vs_modalities}.
 
-\section{Axioms for toposes with enough points}
+\section{Systems of point modalities}
 \label{axioms_soundness}
 
-In this section, we introduce a collection of modalities which express the idea that a given topos has enough points internally. To this end, we fix a type $\pts$ and a function $\at[]\colon\pts\to\decmod$, where $\decmod$ is the object of decidable modalities; see \cref{def.decidable_modality}. The idea is that $\pts$ is an object which (internally) indexes the points, and for every $\pt \in \pts$, the modality $\at : \prop \to \prop$ checks whether a given proposition holds at $\pt$. 
+In this section, we introduce \emph{systems of point modalities}, which are collections of decidable modalities which express the idea that a given topos has enough points internally. 
+We leave it understood that all of this section takes place internally, and correspondingly we only use constructive reasoning.
+We then discuss the primary intended semantics of systems of point modalities in the second half of the section.
+
+We fix a type $\pts$ and a function $\at[]\colon\pts\to\decmod$, where $\decmod$ is the set of decidable modalities; see \cref{def.decidable_modality}. The idea is that $\pts$ is an object which (internally) indexes the points, and for every $\pt \in \pts$, the modality $\at : \prop \to \prop$ checks whether a given proposition holds at $\pt$. 
 while this type of setup is conceptually reminiscent of Garner's \emph{ionads}~\cite{garner2012ionads}, we currently do not know what the technical relation is.
 
 Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\at$ is the quasi-closed modality associated to the open set $T \setminus \overline{\{\pt\}}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $T$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
@@ -514,10 +518,13 @@ More generally, the semantics of types of $\at$-closed predicates is as follows.
 
 \part{Constructive theory of valuations}
 
+In this part, we develop aspects of the theory of (continuous) valuations constructively.
+While the first two sections serve as an introduction to the existing constructive theory of valuations as developed by Vickers~\cite{vickers_integrals,vickers_valuation_locales} as well as by Coquand and Spitters~\cite{coquandspitters2009integrals}.
+The latter two sections then develop aspects of the interaction of valuations with modalities, which as far as we know is new. The central results here are \Cref{vals_vs_modalities}, a criterion for when a valuation commutes with a decidable modality, and \Cref{main_internal}, stating that 
 
-\section{Background on lower nonnegative reals}
+We assume familiarity with constructive reasoning, modalities, geometric formulas as well as with the systems of point modalities from \Cref{axioms_soundness}.
 
-We assume familiarity with sheaves, toposes, their internal logic, modalities and basics of geometric logic.
+\section{Background on lower reals}
 
 \tob{See \cref{sec.topos_background} for some of this background?}
 
@@ -525,153 +532,132 @@ We spell out some additional more specific background in this section and the fo
 
 \subsection{Definition and basic properties}
 
-The number system in which valuations land is the lower nonnegative reals. We therefore introduce them here and discuss their relevant properties.
+The number system in which valuations land is the lower reals. We therefore introduce them here and discuss their relevant properties. For the following considerations, recall first that the rationals $\tqq$ form a number system with decidable equality and decidable ordering, so that we can work with $\tqq$ just as we do in classical mathematics.
 
-\begin{definition}[Lower nonnegative reals]\label{def.lower_nn_reals}
-A \emph{lower nonnegative real} is a function $r_>\colon\tqq\to\prop$ satisfying the following axioms:%
-\footnote{Here $r_>$ is just a symbol, but it reminds the reader that a lower real is defined as a set of rational ``lower bounds''.}
-\begin{enumerate}
-	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
-	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
-	\item (rounded) $\forall (q:\tqq).r_>q\imp\exists (q':\tqq).q'>q\wedge r_>q'$.
-\end{enumerate}
-Accordingly, the type of lower nonnegative reals, denoted $\tlrr$, is
+\begin{definition}[Lower reals]\label{def.lower_nn_reals}
+A \emph{lower real} is a function $r\colon\tqq\to\prop$ satisfying the following axioms:%
+\begin{itemize}
+	\item Inhabited: there is $q:\tqq$ such that $r(q)$.
+	\item Down-closed: if $q_1,q_2:\tqq$ are such that $r(q_1)$ and $q_1 > q_2$, then also $r(q_2)$.
+	\item Rounded: if $q_1 \in \tqq$ is such that $r(q_1)$, then there is $q_2 \in \tqq$ with $q_2 > q_1$ and $r_>(q_2)$.
+\end{itemize}
+Accordingly, the set of lower reals, denoted $\tlrr$, is
 \[
-	\tlrr\coloneqq\{r_>\colon\tqq\to\prop\mid r_>\tn{ nonnegative, down-closed, rounded}\}.
+	\tlrr\coloneqq\{r_>\colon\tqq\to\prop\mid r \textrm{ is down-closed and rounded}\}.
 \]
 \end{definition}
 
-We often abuse notation and write $r>q$ or $q<r$ to mean the proposition $r_>(q)$. We often refer to lower nonnegative reals simply as \emph{lower reals}.
+The value $r(q)$ is to be thought of as synonymous with $r > q$.
+Correspondingly, we often abuse notation and write $r > q$ or $q < r$ to mean the proposition $r(q)$. Note that $\infty$ is a lower real, defined as $\infty(q) \coloneqq \top$ for all $q$.
+
+For example, every rational $p \in \tqq$ itself defines a lower real, with
+\[
+	p(q) \:\::\iff\:\: p > q,
+\]
+where $>$ now denotes the usual ordering on $\tqq$. Leaving type casting implicit, we therefore have both $p : \tqq$ and $p : \tlrr$, resulting in the canonical inclusion $\tqq \subseteq \tlrr$.
 
 We now want to define order and some algebraic structure on $\tlrr$, as well as the inclusion of rational numbers and propositions as special lower nonnegative reals.
 
-\begin{definition}[Order on lower nonnegative reals]
-Given lower reals $r,r'$,
-we say that $r$ \emph{is above} $r'$ and write $r\geq r'$ to denote the following proposition:
+\begin{definition}[Order on lower reals]
+Given lower reals $r_1,r_2$,
+we write $r_1 \geq r_2$ as shorthand for the following proposition,
 \begin{equation}\label{eqn.real_order}
-	r\geq r' \:\coloneqq\: \forall(q:\tqq).r'>q\imp r>q.
+	r_1 \geq r_2 \:\:\coloneqq\:\: \forall q:\tqq \, . \, r_2 > q \imp r_1 > q.
 \end{equation}
-We also write $r'\leq r$ to denote $r\geq r'$.
+We also write $r_2 \leq r_1$ as synonymous with $r_1 \geq r_2$.
 \end{definition}
 
-It is straightforward to show that $\geq$ is indeed a partial order relation on $\tlrr$ (in the internal logic). We therefore consider $\tlrr$ as a partially ordered object from now on.
+It is straightforward to show that $\geq$ is indeed a partial order relation on $\tlrr$, and that it extends the usual order on $\tqq \subseteq \tlrr$. We consider $\tlrr$ as a partially ordered set from now on, noting that totality of this partial ordering is not provable constructively.
 
-\begin{definition}[Addition of lower nonnegative reals]\label{def.sum_lr}
-Let $r_1,r_2:\tlrr$ be lower nonnegative reals. Define their \emph{sum}, denoted $(r_1+r_2)_>:\tqq\to\prop$ to be the predicate
+\begin{definition}[Addition of lower reals]\label{def.sum_lr}
+Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum} $r_1 + r_2 : \tqq\to\prop$ to be the lower real with
 \begin{equation}\label{eqn.sum_lr}
-(r_1+r_2)_>q\coloneqq\exists (q_1,q_2:\tqq).(r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).
+r_1+r_2 > q \:\::\iff\:\: \exists (q_1,q_2:\tqq) \,.\, (r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).
 \end{equation}
 \end{definition}
 
-Again, 
+We leave it to the reader to verify that $r_1 + r_2$ indeed is a lower real, that this definition extends the usual addition of rational numbers, and that it makes $\tlrr$ into a partially ordered commutative monoid.
 
-\begin{lemma}\label{lem.sum_lr}
-The predicate $(r_1+r_2)_>$ defined in \cref{def.sum_lr} is a lower real.
-\end{lemma}
-\begin{proof}
-We need to show that $(r_1+r_2)_>$ is nonnegative, down-closed, and rounded.
-
-\noindent (Nonnegative): If $0>q$, take $q_1=q_2\coloneqq q/2$. Then $q_1+q_2=q$ and $r_1>q_1$ and $r_2>q_2$ by assumption, so $r_1+r_2>q$.
-
-\noindent(Down-closed): Choose rationals $q'>q$ with $r_1+r_2>q'$. By definition we have $q_1',q_2'$ with $r_1>q_1'$ and $r_2>q_2'$ and $q'=q_1'+q_2'$. Let $\varepsilon\coloneqq (q'-q)/2$ and for each $i=1,2$, let $q_i\coloneqq q_i'-\varepsilon$. Then $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$, so $r_1+r_2>q$ as desired.
-
-\noindent(Rounded): Choose a rational $q$ and suppose $(r_1+r_2)>q$. By definition we have $q_1,q_2$ with $r_1>q_1$ and $r_2>q_2$ and $q=q_1+q_2$. By roundedness of $r_1$ and $r_2$, we have rationals $q_1',q_2'$ with $r_1>q_1'>q_1$ and $r_2>q_2'>q_2$. Then letting $q'=q_1'+q_2'$, we have $(r_1+r_2)>q'$ and $q'>q$, as desired.
-\end{proof}
-
-\begin{lemma}\label{lemma.sums_bigger}
-For any $q:\tqq$ and $r,r':\tlrr$, if $q<r$ then $q<r+r'$.
-\end{lemma}
-\begin{proof}
-Take $q<r$ and use roundedness to produce $q<q'<r$. Then $q-q'<0<r'$ so $q=q'+(q-q')<r+r'$ as desired.
-\end{proof}
-
+\begin{remark}
+	\label{rational_ineq_move}
+	For $p,q : \tqq$ and $r : \tlrr$, we have $p + r > q$ iff $r > q - p$, where $p + r$ denotes addition of lower reals.
+\end{remark}
 
 \begin{definition}[Pairwise minima, arbitrary suprema]\label{def.min_sup}
-Let $r,r':\tlrr$. We define their \emph{minimum}, denoted $\min(r,r')$ by
-\[q<\min(r,r') \iff (q<r)\wedge(q<r').\]
-
-Let $I\in\cat{E}$ be an object and $r:I\to\tlrr$ be an $I$-indexed family of lower reals. Its \emph{supremum}, denoted $\sup_{i:I}r_i:\tlrr$ is the lower real defined  by 
-\[q<\sup_{i:I}r_i\iff (q<0)\vee\exists(i:I).(q<r_i).\]
+Let $r_1,r_2:\tlrr$. We define their \emph{minimum} $\min(r_1,r_2)$ by
+\[
+	\min(r_1, r_2) > q \:\::\iff\:\: r_1 > q \,\wedge\, r_2 > q.
+\]
+Let $S \subseteq \tlrr$ be a subset of lower reals.
+Its \emph{supremum} $\sup S$ is the lower real defined  by 
+\[
+	\sup S > q \:\::\iff\:\: \exists r : S \,.\, r > q.
+\]
 \end{definition}
 
-\begin{proposition}
-Pairwise minima and arbitrary suprema of lower reals are indeed lower reals.
-\end{proposition}
-\begin{proof}
-We leave the first claim to the reader. If $r$ is an $I$-indexed family of lower reals, then $r\coloneqq\sup_{i:I}r_i$ is nonnegative by construction. To see that it is down-closed and rounded, suppose $q<r$ and $q_0<q$. There exists $i:I$ with $q<r_i$. But since $r_i:\tlrr$, it is down-closed and rounded so we have $q_0<r_i$, and there exists some $q'<r_i$ with $q<q'$. It follows that $q_0<r$ and $q'<r$ as required.
-\end{proof}
+In other words, binary minima and arbitrary suprema of lower reals can be computed pointwise in $q$. We again leave it to the reader to verify that these prescriptions indeed define lower reals. It is then obvious that these lower reals are, as our terminology suggests, the binary meets (greatest lower bounds) and arbitrary joins (least upper bounds) in $\tlrr$ as a partially ordered set. In other words, we have identified $\tlrr$ with a subframe of $\prop^{\tqq}$.
 
-It is easy to check that $\min(r,r')$ as defined in \cref{def.min_sup} is indeed a minimum (greatest lower bound) of $r,r'$ and that $\sup_{i:I}r_i$ is indeed a supremum (least upper bound) of $(r_i)_{i\in I}$. That is, $\forall(j:I).(r_j\leq\sup_{i:I}r_i)$ and if $\forall(i:I).r_i\leq r$ then $\sup_{i:I}r_i\leq r$.
+Our next goal is to prove that addition is not only monotone, but conversely that bounded lower reals can also be subtracted from inequalities (\Cref{cancellative_bounds}). This uses a sequence of arguments communicated to us by Simon Henry~\cite{henry2012simplification}.
 
-
-\begin{definition}[Rationals ``are'' lower reals]\label{def.rationals_are_reals}
-Let $\tqq_{\geq0}\coloneqq\{q:\tqq\mid q\geq0\}$. There is a function $\tqq_{\geq0}\to\tlrr$ sending $q$ to the predicate $q_>\colon\tqq\to\prop$ given by $q_>q'\coloneqq q>q'$.%
-\footnote{We leave it to the reader to check that $q_>$ is indeed a lower real.}
- We often write $q:\tlrr$ to denote this lower real.
-\end{definition}
-
-
-We leave the following to the reader.
-\begin{proposition}
-The inclusion of nonnegative rationals into lower reals from \cref{def.rationals_are_reals} preserves order and sum.
-\end{proposition}
-
-\begin{proposition}
-The lower reals form a commutative monoid $(\tlrr,0,+)$.
-\end{proposition}
-\begin{proof}
-\noindent (Commutativity): obvious from the definition \eqref{eqn.sum_lr}.
-
-\noindent (Unitality): First we show that $r>q$ implies $r+0>q$. By roundedness, take $r>q'>q$ and let $q_0=q-q'$. Then $r>q'$, $0>q_0$, and $q=q'+q_0$, so $r+0>q$. Second we show that $r+0>q$ implies $r>q$. By definition there exists $q_1,q_2$ with $r>q_1$, $0>q_2$, and $q=q_1+q_2$. But then $r>q_1>q_1+q_2=q$.
-
-\noindent (Associativity): Both sides of associativity $(r_1+r_2)+r_3=^?r_1+(r_2+r_3)$ are directly seen to be equivalent to the formula $\exists(q_1,q_2,q_3:\tqq).(r_1>q_1)\wedge(r_2>q_2)\wedge(r_3>q_3)\wedge(q=q_1+q_2+q_3)$.
-\end{proof}
-
-\begin{lemma}\label{lemma.rational_cancellativity}
-For all $q,q':\tqq$ and $r:\tlrr$, if $q'+q<q'+r$ then $q<r$.
+\begin{lemma}
+	\label{cancel_rationals}
+	For all $q:\tqq$ and $r_1,r_2:\tlrr$, if $p + r_1\leq p + r_2$ then $r_1 \leq r_2$.
 \end{lemma}
+
 \begin{proof}
-By \cref{def.sum_lr}, there exist rational $q'_0<q'$ and $q_0<r$ such that $q'_0+q_0=q'+q$. Thus we have $q<q+q'-q'_0=q_0<r$.
+	Suppose $q < r_1$. Then also $p + q < p + r_1$ by \Cref{rational_ineq_move}, and therefore $p + q < p + r_2$ by assumption and transitivity of order. But then we get the desired $q < r_2$, again from \Cref{rational_ineq_move}.
 \end{proof}
 
-\begin{proposition}\label{prop.cancel_rationals}
-For all $q:\tqq$ and $r_1,r_2:\tlrr$, if $q+r_1\leq q+r_2$ then $r_1\leq r_2$.
-\end{proposition}
-\begin{proof}
-Take $q_1<r_1$; we want to show $q_1<r_2$. Use roundedness to produce $q_1<q_1'<r_1$, and let $q_0\coloneqq q+q_1-q_1'$. We have $q_0<q$ and hence $q+q_1=q_0+q_1'<q+r_1$, and the result follows from \cref{lemma.rational_cancellativity}
-\end{proof}
+For any proposition $P : \prop$, we have the \emph{indicator lower real} $\ind{P}$ defined by
+\[
+	q < 1_P \:\::\iff\:\: (q < 0) \lor (P \land (q < 1)).
+\]
+The assignment $P \mapsto \ind{P}$ defines an order embedding $\prop \hookrightarrow \tlrr$.
 
-We want to show order cancellativity, \cref{cor.order_cancel}. To do so we follow a proof of Simon Henry~\cite{henry2012simplification}.
-
-\begin{lemma}\label{lemma.order_cancel_props}
+\begin{lemma}\label{order_cancel_props}
 For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\leq \ind{P}+r_2$ then $r_1\leq r_2$.
 \end{lemma}
+
 \begin{proof}
-Suppose $q_1<r_1$. Then by \cref{lemma.sums_bigger}, $q_1<\ind{P}+r_1$ so by assumption $q_1<\ind{P}+r_2$. By \cref{def.sum_lr}, there exist $q<\ind{P}$ and $q_2<r_2$ with $q_1=q+q_2$. There are two cases: $q<0$ or $(q<1)\wedge P$. If $q<0$ then $q_1=q+q_2<q_2<r_2$, as desired. In the second case, we have $P$ so by \cref{eqn.indicator,prop.cancel_rationals}, $\ind{P}+r_1\leq \ind{P}+r_2$ directly implies $r_1\leq r_2$.
+Suppose $q < r_1$. Then trivially $q < \ind{P} + r_1$, so by assumption $q_1<\ind{P}+r_2$. By \cref{def.sum_lr}, this means that there exist $q_1 < \ind{P}$ and $q_2 < r_2$ with $q = q_1 + q_2$.
+
+Now $q_1 < \ind{P}$ gives us two cases: $q_1 < 0$ or $P \land (q_1 < 1)$. If $q_1 < 0$, then $q = q_1 + q_2 < q_2 < r_2$, as desired. If $P \land (q_1 < 1)$ instead, then we have in particular $1_P = 1$, and therefore the claim follows by \Cref{cancel_rationals}.
 \end{proof}
 
-\begin{lemma}[\cite{henry2012simplification}]\label{lemma.cancellative_bounds}
-Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\geq 1$, there exists $r_n:\tlrr$ satisfying the following
-\begin{enumerate}
-	\item $r_n\leq r\leq r_n+1/n$; and
-	\item for any $a,b:\tlrr$ if $r_n+a\leq r_n+b$ then $a\leq b$.
-\end{enumerate}
+Following Henry, we show next that the order cancellative lower reals are dense.
+
+\begin{lemma}[\cite{henry2012simplification}]
+\label{cancellative_bounds}
+	Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\geq 1$, there exists $r_n:\tlrr$ satisfying the following:
+	\begin{enumerate}
+		\item $r_n\leq r\leq r_n + \frac{1}{n}$.
+		\item For any $a,b:\tlrr$, if $r_n+a\leq r_n+b$ then $a\leq b$.
+	\end{enumerate}
 \end{lemma}
+
 \begin{proof}
-Define $r_n:\tlrr$ to be the following linear combination of indicator functions:
-\begin{equation}\label{eqn.cancellative_bounds}
-r_n\coloneqq \frac{1}{n}\cdot\sum_{i=1}^{n\cdot N}\ind{(i/n)<r}.
-\end{equation}
-For the claim that $r_n\leq r$, take $q<r_n$; we will show $q<r$. By \cref{def.Q_action,def.sum_lr}, we have $nq=q_1+\cdots+q_{nN}$ with $q_i<0$ or $(q_i<1)\wedge (i/n<r)$ for each $i$. Let $i_r$ be the largest $i$ with $0<q_i$. Then $i_r/n<r$ and hence for all $i\leq i_r$ we have $i/n<r$, so $q_i<1$, and for all $i>i_r$ we have $q_i<0$. It follows that $nq<i_r$, i.e.\ that $q<i_r/n<r$, as desired.
+	Since multiplying by $n$ implements an automorphism of $\tlrr$ as a partially ordered commutative monoid, it is enough to consider the case $n = 1$ without loss of generality.
 
-For the claim that $r\leq r_n+1/n$, take $q<r$; we will show $q<r_n+1/n$ or equivalently $nq<nr_n+1$. Let $n_0\coloneqq\floor{nq}$ be the largest integer with $n_0\leq nq$. Then $nq<n_0+1$ and it suffices to show that $n_0\leq nr_n=\sum_{i=1}^{nN}\ind{(i/n)<r}$. Since $q<r$ we have $i/n<r$, and hence $\ind{(i/n)<r}=1$ for all integers $1\leq i\leq n_0$. This gives $n_0\leq nr_n$ as desired.
+	Then define $r_n:\tlrr$ to be the following linear combination of indicator functions,
+	\begin{equation}
+		\label{eqn.cancellative_bounds}
+		r_1 \coloneqq \sum_{i=1}^{N} \ind{i < r}.
+	\end{equation}
+	For the claim that $r_1\leq r$, take $q < r_1$; we will show $q < r$. By \cref{def.sum_lr}, we have $q = q_1 + \ldots + q_N$ with $q_i < 0$ or $(i < r) \land (q_i < 1)$ for each $i$. But then also
+	\[
+		q = q_1 + \ldots + q_N < \#\{ i \le N \mid i < r \} \le r,
+	\]
+	as was to be shown.
 
-Finally, suppose $r_n+a\leq r_n+b$. Then $nr_n+na\leq nr_n+nb$ and it follows by induction on $Nn$ using \cref{lemma.order_cancel_props} that $na\leq nb$. Hence $a\leq b$.
+	For the claim that $r\leq r_1+1$, take likewise $q<r$; we will show $q < r_1 + 1$. Let $n \coloneqq \floor{q}$.  Then $q < n + 1$ and it suffices to show that $n \leq r_1 = \sum_{i=1}^{N} \ind{i < r}$. Since $q < r$ we have $i < r$, and hence $\ind{i < r} = 1$ for all integers $1\leq i\leq n$. This gives $n\leq r_1$, as desired
+
+	Finally, suppose $r_1 + a \leq r_1 + b$. Then it follows by induction on $N$ using \cref{order_cancel_props} that $a\leq b$, as desired.
 \end{proof}
 
-\begin{corollary}[Order cancellativity, \cite{henry2012simplification}]\label{cor.order_cancel}
-Suppose $r,s,s':\tlrr$ are lower nonnegative reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
-\end{corollary}
+\begin{proposition}[Order cancellativity, \cite{henry2012simplification}]\label{cor.order_cancel}
+	Suppose $r,s,s':\tlrr$ are lower nonnegative reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
+\end{proposition}
+
 \begin{proof}
 Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{lemma.cancellative_bounds}, we have 
 \[r_n+s\leq r+s\leq r+s'\leq r_n+s'+1/n,\]
@@ -684,6 +670,10 @@ For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'
 \begin{proof}
 If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{cor.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
 \end{proof}
+
+\subsection{Lower reals and modalities}
+
+We now investigate the interaction between lower reals and modalities, also referring to~\cite{schultz2019temporal} for related considerations.
 
 \begin{proposition}\label{prop.commute_exists_commute_addition}
 Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then $j$ commutes with addition of lower reals
@@ -825,185 +815,6 @@ The nonnegativity and down-closedness conditions are identical. Given a lower re
 Supposing $j$ commutes with $\exists(q':\tqq)$, the $j$-rounded assumption on $r$ says that if $r_>q$ then there exists $q'_0$ with $j(q'_0>q)\wedge j(r_>q'_0)$. Since the order on $\tqq$ is decidable, either $q'_0>q$ or $\neg(q'_0>q)$. In the first case since $r_>$ is $j$-closed, we can prove $\exists (q':\tqq).q'>q\wedge r_>q'$. In the second case, we immediately obtain $j\bot$ and hence $j(r_>q')$ for any $q'$, e.g.\ $q'\coloneqq q+1$. Again since $r_>$ is $j$-closed, we can prove $\exists (q':\tqq).q'>q\wedge r_>q'$.
 \end{proof}
 
-\section{Background on internal spaces and Moerdijk's theorem}
-
-
-Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be $\prop^X$. \cref{def.internal_space} returns the usual notion of topological space, when $\cat{E}=\Set$.
-
-\begin{definition}\label{def.internal_space}
-	Let $X\in\cat{E}$ be an object, let $\Op[X]\colon\pow(X)\to\prop$ be a predicate on $\pow(X)$, and write $\Op[X]\coloneq\{U:\pow(X)\mid\Op[X](U)\}$. We say $(X,\Op[X])$ is an \emph{internal topological space in $\cat{E}$} (and $\Op[X]$ is a \emph{topology on $X$}) whenever the following conditions hold:
-\begin{enumerate}
-	\item $\Op[X](\top)$,
-	\item $\Op[X](\bot)$,
-	\item $(\Op[X](U)\wedge\Op[X](V))\imp \Op[X](U\wedge V)$ for any $U,V\in\pow(X)$, and
-	\item $\big(\forall(i:I).\Op[X](U_i)\big)\imp\Op[X]\big(\exists(i:I).U_i\big)$ for any $I\in\cat{E}$ and $U\colon I\to\pow(X)$.
-\end{enumerate}
-The fourth condition can also be restated as follows:
-\begin{enumerate}[label=4'.]
-	\item $\Op[X](\exists(P:\Op[X]).S(P)\wedge P)$ for any $S\colon\Op[X]\to\prop$. 
-\end{enumerate}
-\begin{enumerate}[label=4''.]
-	\item $\Op[X](\exists(P:S).P)$ for any $S\subseteq\Op[X]$.
-\end{enumerate}
-
-A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Op[Y](U)\imp\Op[X](f^{-1}(U))$ holds for any $U\subseteq X$. We denote the category of internal topological spaces as $\Top_\cat{E}$.
-\end{definition}
-
-\begin{proposition}
-In \cref{def.internal_space}, conditions 4, 4', and 4'' are equivalent.
-\end{proposition}
-\begin{proof}
-Clearly 4'$\iff$ 4''. We first show $4\imp 4'$. Given $S\colon\Op[X]\to\prop$, define $I\coloneqq\{P:\Op[X]\mid S(P)\}$ and $U\colon I\to\pow(X)$ by $U(P)\coloneqq P$. Then $\forall(i:I).\Op[X](U_i)$ holds, so by 4 we have $\Op[X](\exists(i:I).U_i)$, which is equivalent to $\Op[X](\exists(P:\Op[X]).S(P)\wedge P)$, as desired.
-
-For $4'\imp 4$, take $I\in\cat{E}$ and $U\colon I\to\pow(X)$, and assume $\forall(i:I).\Op[X](U_i)$. Let $S\colon\Op[X]\to\prop$ be given by $S(V)\coloneqq\exists(i:I).V=U_i$. By 4' we have that $\exists(P:\Op[X]).S(P)\wedge P$, which is equivalent to $\exists(P:\Op[X])(i:I).(P=U_i)\wedge P$, which in turn is equivalent to $\exists(i:I).U_i$, is open as desired.
-\end{proof}
-
-The fourth condition is a powerful assumption with the following surprising consequences.
-
-\begin{lemma}
-	\label{props_open}
-	Let $(X,\Op[X])$ be an internal topological space. Then:
-	\begin{enumerate}
-		\item For every open $U : \Op[X]$ and every modality $j$, also $jU$ is open.
-		\item For every $P : \prop$, the constant predicate $x \mapsto P$ is open.
-	\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-	\begin{enumerate}
-		\item Consider the join $J$ of the predicate $S : \Op[X] \to \prop$ given by
-			\[
-				S(Q) \: := \: j(Q \Rightarrow U).
-			\]
-			This join, which is open by 4', is given by
-			\[
-				J\coloneqq\exists(Q : \Op[X]) . j(Q \Rightarrow U) \land Q.
-			\]
-			It remains to show $J=jU$. The implication $J\imp jU$ follows easily from \cref{def.modality} (def.\ of modality); its converse $jU\imp J$ holds by taking $Q := \top$.
-		\item Apply the previous statement to the open $U\coloneqq\bot$ and the closed modality $j\coloneqq P \lor -$. \qedhere
-	\end{enumerate}
-\end{proof}
-
-\begin{corollary}\label{cor.top_on_one}
-There is precisely one topology on the terminal object $*\in\cat{E}$, and $*$ is terminal in $\Top_\cat{E}$.
-\end{corollary}
-\begin{proof}
-We have $\pow(*)=\prop$ and it is a topology because by definition $\Op[P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2]. There is a unique function $X\to *$ for every $X$ and it is continuous, so $*$ is terminal.
-\end{proof}
-
-Recall from \cref{prop.local_homeo} that there is an equivalence between the category $\shv(T)$ of sheaves on a topological space $T$ and that of local homeomorphisms over $T$.
-
-\begin{theorem}[{\cite[Theorem 1.5]{moerdijk1984spaced}}]
-\label{moerdijks_theorem}
-Let $T$ be a topological space, $X\in\shv(T)$ a sheaf on it, and $p\colon E_X\to T$ the corresponding local homeomorphism. Then there is a one-to-one correspondence between internal topologies $\Op$ on $X$ and diagrams of topological spaces
-\[
-\begin{tikzcd}
-	E_X\ar[dr, "p"']\ar[rr, "c^{\Op{X}}"]&&
-	E_X^{\Op{X}}\ar[dl, "p^{\Op{X}}"]\\&
-	T
-\end{tikzcd}
-\]
-for which the map $c$ is identity on points.
-\end{theorem}
-
-% ==== Section ====%
-\subsection{$j$-local internal spaces}
-
-Similar to the $j$-local lower reals, also the definition of internal space localizes with respect to a modality $j$.
-
-\tob{At the moment this allows the frame of opens to live on any object, not just a $j$-sheaf. We may or may not want to change that}
-
-More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Op[X]^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\subseteq(\prop_j)^X$ denote the $j$-closed subobject classified by $\Op(X)j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
-
-\begin{enumerate}
-	\item $\Op[X]^j(\top)$,
-	\item $\Op[X]^j(j\bot)$,
-	\item $(\Op[X]^j(U)\wedge\Op[X]^j(V))\imp \Op[X]^j(U\wedge V)$ for any $U,V\in\pow_j(X)$, and
-	\item $\Op[X]^j(j\exists(P:S). P)$ for any $j$-closed subobject $S\subseteq\Op[X]^j$. 
-\end{enumerate}
-
-\begin{lemma}
-	\label{space_localize}
-	For any internal space $(X,\Op[X])$, the predicate
-	\[
-		j \Op[X] \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Op[X](P)
-	\]
-	produces a $j$-local internal space that we denote $(X,j \Op[X])$. 
-\end{lemma}
-
-\begin{proof}
-	$j\bot$ is $j$-locally open since any constant predicate is open already in the original space.	The $j$-opens are (automatically $j$-locally) closed under finite intersections since the original opens are and $j$ commutes with intersections. 
-
-	For the $j$-local openness of \eqref{global_sup}, note that for any $S\subseteq j\Op[X]$, this predicate is equivalent to
-	\[
-		\exists (Q : \Op[X]) . \left[ S(jQ) \land (jQ \imp  Q) \right] \land Q,
-	\]
-	which is open in the original topology. But then applying $j$ to it produces a $j$-local open, in the sense that it satisfies $j \Op[X]$.
-\end{proof}
-
-% ==== Section ====%
-\subsection{Valuations}\label{sec.valuations}
-
-\begin{definition}[Directed poset]\label{def.directed}
-Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
-\begin{enumerate}
-	\item $\exists(p:P).\top$, and
-	\item $\forall(p,p':P).\exists(q:P).(p\vee p')\imp q$.
-\end{enumerate}
-\end{definition}
-
-
-Recall the lower unit interval type $\tii$ from \cref{def.unit_interval}. We may implicitly cast $r:\tii$ as a lower real using the function $\cast\colon\tii\to\tlrr$ from \cref{prop.unit_interval_cast}. For example in the modular condition (3) below, the expression $r+r'$ on either side of the equation is shorthand $\cast(r)+\cast(r')$. However condition (3) is the only place where we need to invoke $\cast$; e.g.\ in the continuity condition (4), recall from \cref{prop.cast_sups} that the $\sup$ can be computed in $\tii$.
-
-\begin{definition}[Probability valuation]\label{def.prob_valuation}
-Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation} on $(X,\Op[X])$ is a function $\mu\colon\Op[X]\to\tii$ satisfying the following conditions:
-\begin{enumerate}
-	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
-	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
-	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-	\item If $D\subseteq\Op[X]$ is a directed subposet (\cref{def.directed}), then
-\[
-	\mu\big(\exists(U:D).U\big)= \sup_{U: D}\mu(U).
-\]
-\end{enumerate}
-\end{definition}
-Note that the inequality $\sup_{U: D}\mu(U)\leq\mu\big(\exists(U:D).U\big)$ is purely formal, so Scott continuity is equivalent to
-\begin{equation}\label{eqn.scott_continuity}
-	\mu\big(\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
-\end{equation}
-
-
-\begin{proposition}[Push-forward valuation]\label{prop.pushforward}
-	Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op[Y]\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f^{-1}(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
-\end{proposition}
-\begin{proof}
-	The pullback functor $f^{-1}\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f^{-1}(U)\imp f^{-1}(V)$, so $\mu(f^{-1}(U))\leq\mu(f^{-1}(V))$, proving the result.
-\end{proof}
-
-\begin{theorem}
-Probability valuations coincide with probability measures on Polish spaces.
-\end{theorem}
-
-\dis{Explain somewhere how to get $j$-local version of anything; explain $j$-logic.}
-
-\begin{definition}[$j$-local probability valuation]\label{def.at_prob_val}
-\dis{Explain what's going on in terms of $j$'s and the interval $\mathbb{I}$.}
-Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probability valuation} on $(X,\Op[X])$ is a function $\mu\colon j\Op[X]\to j\tii$ satisfying the following conditions:
-\begin{enumerate}
-	\item $\mu(j\bot)=0$ and $\mu(\top)=1$;
-	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
-	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-	\item If $D\subseteq j\Op[X]$ is a directed $j$-closed subposet then
-	\begin{equation}\label{eqn.local_scott_continuity}
-	\mu\big(j\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
-	\end{equation}
-\end{enumerate}
-\end{definition}
-
-
-
-
-% ======== Chapter ========%
 \section{Basic theory of valuations}
 
 Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the inclusion $\inc : \prop \to \tii$, given by the constant function $\ind{P}(q)\coloneqq P$. When we discuss the modularity condition, we will implicitly use $\cast\colon\tii\to\tlrr$, sending $r\mapsto (q<0)\vee ((q<1)\wedge (q<r))$ as discussed in \cref{sec.valuations}. Recall also from \cref{cor.top_on_one} that $\prop$ is the unique topology on the one-point space $\{*\}$.
@@ -1192,7 +1003,7 @@ To see this, consider the predicate
 \end{proof}
 
 
-\section{Main theorem}
+\section{Valuations and systems of point modalities}
 
 We now want to consider the relation between valuations and an internal space and families of $\at[]$-locally defined valuations.
 
@@ -1380,9 +1191,187 @@ which was the desired inequality \eqref{goal_continuous}. This establishes the S
 	Applying \Cref{vals_vs_modalities} again turns this into an instance of the enough points axiom.
 \end{proof}
 
-% ======== Chapter ========%
+\newpage
+\part{Pointwise semantics of internal valuations}
 
-\part{Pointwise structure of internal valuations}
+\section{Background on internal spaces and Moerdijk's theorem}
+
+Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be $\prop^X$. \cref{def.internal_space} returns the usual notion of topological space, when $\cat{E}=\Set$.
+
+\begin{definition}\label{def.internal_space}
+	Let $X\in\cat{E}$ be an object, let $\Op[X]\colon\pow(X)\to\prop$ be a predicate on $\pow(X)$, and write $\Op[X]\coloneq\{U:\pow(X)\mid\Op[X](U)\}$. We say $(X,\Op[X])$ is an \emph{internal topological space in $\cat{E}$} (and $\Op[X]$ is a \emph{topology on $X$}) whenever the following conditions hold:
+\begin{enumerate}
+	\item $\Op[X](\top)$,
+	\item $\Op[X](\bot)$,
+	\item $(\Op[X](U)\wedge\Op[X](V))\imp \Op[X](U\wedge V)$ for any $U,V\in\pow(X)$, and
+	\item $\big(\forall(i:I).\Op[X](U_i)\big)\imp\Op[X]\big(\exists(i:I).U_i\big)$ for any $I\in\cat{E}$ and $U\colon I\to\pow(X)$.
+\end{enumerate}
+The fourth condition can also be restated as follows:
+\begin{enumerate}[label=4'.]
+	\item $\Op[X](\exists(P:\Op[X]).S(P)\wedge P)$ for any $S\colon\Op[X]\to\prop$. 
+\end{enumerate}
+\begin{enumerate}[label=4''.]
+	\item $\Op[X](\exists(P:S).P)$ for any $S\subseteq\Op[X]$.
+\end{enumerate}
+
+A \emph{morphism of internal topological spaces} (also called a \emph{continuous map}) is a function $f\colon X\to Y$ such that $\Op[Y](U)\imp\Op[X](f^{-1}(U))$ holds for any $U\subseteq X$. We denote the category of internal topological spaces as $\Top_\cat{E}$.
+\end{definition}
+
+\begin{proposition}
+In \cref{def.internal_space}, conditions 4, 4', and 4'' are equivalent.
+\end{proposition}
+\begin{proof}
+Clearly 4'$\iff$ 4''. We first show $4\imp 4'$. Given $S\colon\Op[X]\to\prop$, define $I\coloneqq\{P:\Op[X]\mid S(P)\}$ and $U\colon I\to\pow(X)$ by $U(P)\coloneqq P$. Then $\forall(i:I).\Op[X](U_i)$ holds, so by 4 we have $\Op[X](\exists(i:I).U_i)$, which is equivalent to $\Op[X](\exists(P:\Op[X]).S(P)\wedge P)$, as desired.
+
+For $4'\imp 4$, take $I\in\cat{E}$ and $U\colon I\to\pow(X)$, and assume $\forall(i:I).\Op[X](U_i)$. Let $S\colon\Op[X]\to\prop$ be given by $S(V)\coloneqq\exists(i:I).V=U_i$. By 4' we have that $\exists(P:\Op[X]).S(P)\wedge P$, which is equivalent to $\exists(P:\Op[X])(i:I).(P=U_i)\wedge P$, which in turn is equivalent to $\exists(i:I).U_i$, is open as desired.
+\end{proof}
+
+The fourth condition is a powerful assumption with the following surprising consequences.
+
+\begin{lemma}
+	\label{props_open}
+	Let $(X,\Op[X])$ be an internal topological space. Then:
+	\begin{enumerate}
+		\item For every open $U : \Op[X]$ and every modality $j$, also $jU$ is open.
+		\item For every $P : \prop$, the constant predicate $x \mapsto P$ is open.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Consider the join $J$ of the predicate $S : \Op[X] \to \prop$ given by
+			\[
+				S(Q) \: := \: j(Q \Rightarrow U).
+			\]
+			This join, which is open by 4', is given by
+			\[
+				J\coloneqq\exists(Q : \Op[X]) . j(Q \Rightarrow U) \land Q.
+			\]
+			It remains to show $J=jU$. The implication $J\imp jU$ follows easily from \cref{def.modality} (def.\ of modality); its converse $jU\imp J$ holds by taking $Q := \top$.
+		\item Apply the previous statement to the open $U\coloneqq\bot$ and the closed modality $j\coloneqq P \lor -$. \qedhere
+	\end{enumerate}
+\end{proof}
+
+\begin{corollary}\label{cor.top_on_one}
+There is precisely one topology on the terminal object $*\in\cat{E}$, and $*$ is terminal in $\Top_\cat{E}$.
+\end{corollary}
+\begin{proof}
+We have $\pow(*)=\prop$ and it is a topology because by definition $\Op[P)$ holds for every $P:\prop$. It is unique by \cref{props_open} (2]. There is a unique function $X\to *$ for every $X$ and it is continuous, so $*$ is terminal.
+\end{proof}
+
+Recall from \cref{prop.local_homeo} that there is an equivalence between the category $\shv(T)$ of sheaves on a topological space $T$ and that of local homeomorphisms over $T$.
+
+\begin{theorem}[{\cite[Theorem 1.5]{moerdijk1984spaced}}]
+\label{moerdijks_theorem}
+Let $T$ be a topological space, $X\in\shv(T)$ a sheaf on it, and $p\colon E_X\to T$ the corresponding local homeomorphism. Then there is a one-to-one correspondence between internal topologies $\Op$ on $X$ and diagrams of topological spaces
+\[
+\begin{tikzcd}
+	E_X\ar[dr, "p"']\ar[rr, "c^{\Op{X}}"]&&
+	E_X^{\Op{X}}\ar[dl, "p^{\Op{X}}"]\\&
+	T
+\end{tikzcd}
+\]
+for which the map $c$ is identity on points.
+\end{theorem}
+
+% ==== Section ====%
+\subsection{$j$-local internal spaces}
+
+Similar to the $j$-local lower reals, also the definition of internal space localizes with respect to a modality $j$.
+
+\tob{At the moment this allows the frame of opens to live on any object, not just a $j$-sheaf. We may or may not want to change that}
+
+More concretely, this means that a $j$-local internal space consists of an object $X$ and an openness predicate $\Op[X]^j : (\prop_j)^X \to \prop_j$, where $\prop_j$ is the object of $j$-closed propositions. This openness predicate needs to satisfy the obvious $j$-versions of the conditions above. Let $\Op[X]_j\subseteq(\prop_j)^X$ denote the $j$-closed subobject classified by $\Op(X)j$. Reducing the number of occurrences of $j$ as much as possible, these conditions are as follows:
+
+\begin{enumerate}
+	\item $\Op[X]^j(\top)$,
+	\item $\Op[X]^j(j\bot)$,
+	\item $(\Op[X]^j(U)\wedge\Op[X]^j(V))\imp \Op[X]^j(U\wedge V)$ for any $U,V\in\pow_j(X)$, and
+	\item $\Op[X]^j(j\exists(P:S). P)$ for any $j$-closed subobject $S\subseteq\Op[X]^j$. 
+\end{enumerate}
+
+\begin{lemma}
+	\label{space_localize}
+	For any internal space $(X,\Op[X])$, the predicate
+	\[
+		j \Op[X] \: : \: \prop_j^X \longrightarrow \prop_j, \qquad P \longmapsto j \Op[X](P)
+	\]
+	produces a $j$-local internal space that we denote $(X,j \Op[X])$. 
+\end{lemma}
+
+\begin{proof}
+	$j\bot$ is $j$-locally open since any constant predicate is open already in the original space.	The $j$-opens are (automatically $j$-locally) closed under finite intersections since the original opens are and $j$ commutes with intersections. 
+
+	For the $j$-local openness of \eqref{global_sup}, note that for any $S\subseteq j\Op[X]$, this predicate is equivalent to
+	\[
+		\exists (Q : \Op[X]) . \left[ S(jQ) \land (jQ \imp  Q) \right] \land Q,
+	\]
+	which is open in the original topology. But then applying $j$ to it produces a $j$-local open, in the sense that it satisfies $j \Op[X]$.
+\end{proof}
+
+% ==== Section ====%
+\subsection{Valuations}\label{sec.valuations}
+
+\begin{definition}[Directed poset]\label{def.directed}
+Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
+\begin{enumerate}
+	\item $\exists(p:P).\top$, and
+	\item $\forall(p,p':P).\exists(q:P).(p\vee p')\imp q$.
+\end{enumerate}
+\end{definition}
+
+
+Recall the lower unit interval type $\tii$ from \cref{def.unit_interval}. We may implicitly cast $r:\tii$ as a lower real using the function $\cast\colon\tii\to\tlrr$ from \cref{prop.unit_interval_cast}. For example in the modular condition (3) below, the expression $r+r'$ on either side of the equation is shorthand $\cast(r)+\cast(r')$. However condition (3) is the only place where we need to invoke $\cast$; e.g.\ in the continuity condition (4), recall from \cref{prop.cast_sups} that the $\sup$ can be computed in $\tii$.
+
+\begin{definition}[Probability valuation]\label{def.prob_valuation}
+Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation} on $(X,\Op[X])$ is a function $\mu\colon\Op[X]\to\tii$ satisfying the following conditions:
+\begin{enumerate}
+	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
+	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
+	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
+	\item If $D\subseteq\Op[X]$ is a directed subposet (\cref{def.directed}), then
+\[
+	\mu\big(\exists(U:D).U\big)= \sup_{U: D}\mu(U).
+\]
+\end{enumerate}
+\end{definition}
+Note that the inequality $\sup_{U: D}\mu(U)\leq\mu\big(\exists(U:D).U\big)$ is purely formal, so Scott continuity is equivalent to
+\begin{equation}\label{eqn.scott_continuity}
+	\mu\big(\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
+\end{equation}
+
+
+\begin{proposition}[Push-forward valuation]\label{prop.pushforward}
+	Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op[Y]\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f^{-1}(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
+\end{proposition}
+\begin{proof}
+	The pullback functor $f^{-1}\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f^{-1}(U)\imp f^{-1}(V)$, so $\mu(f^{-1}(U))\leq\mu(f^{-1}(V))$, proving the result.
+\end{proof}
+
+\begin{theorem}
+Probability valuations coincide with probability measures on Polish spaces.
+\end{theorem}
+
+\dis{Explain somewhere how to get $j$-local version of anything; explain $j$-logic.}
+
+\begin{definition}[$j$-local probability valuation]\label{def.at_prob_val}
+\dis{Explain what's going on in terms of $j$'s and the interval $\mathbb{I}$.}
+Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probability valuation} on $(X,\Op[X])$ is a function $\mu\colon j\Op[X]\to j\tii$ satisfying the following conditions:
+\begin{enumerate}
+	\item $\mu(j\bot)=0$ and $\mu(\top)=1$;
+	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
+	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
+	\item If $D\subseteq j\Op[X]$ is a directed $j$-closed subposet then
+	\begin{equation}\label{eqn.local_scott_continuity}
+	\mu\big(j\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
+	\end{equation}
+\end{enumerate}
+\end{definition}
+
+
+
+
+% ======== Chapter ========%
 
 \section{Consequences for the semantics of internal valuations}
 
@@ -1496,6 +1485,7 @@ Recall that $x \le x'$ in the specialization preorder means that every neighborh
 	\tob{in progress}
 \end{proof}
 
+\newpage
 \part{Application to stochastic processes and Euclidean QFTs}
 
 \section{Stochastic processes as internal valuations}
@@ -1848,6 +1838,8 @@ A proposition $P:\prop$ is called \emph{$j$-closed} if $P=jP$. The type of $j$-c
 
 % ==== Section ====%
 \section{Decidable modalities}
+
+\tob{check and state equivalence with $j\prop$ being Boolean}
 
 \begin{definition}\label{def.decidable_modality}
 We say that a modality $j$ is \emph{decidable} if 
