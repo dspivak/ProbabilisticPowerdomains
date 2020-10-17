@@ -292,6 +292,8 @@ urlcolor=myurlcolor}
 
 \section{Introduction}
 
+\tob{mention Lawvere's work on toposes of laws of motion, which also formalize dynamical systems?}
+
 Entities we observe---either casually or as scientists---exhibit time-varying behavior that we may wish to model. We may be able to monitor the entity with respect to a collection of variables whose values change as the entity performs various actions. The variables we monitor for a weather system are quite different than those we monitor for a mouse, but in each case we notice that the variables take on certain characteristic patterns as they change through time. The better we can understand and model the entity's behavior patterns, the better we are able to predict and have some degree of control when we interact with the entity.
 
 The characteristic patterns of an entity can be formalized using a stochastic process \cite{doob1934stochastic}. For example Brownian motion as developed by Albert Einstein to model the random movement of pollen particles in water \cite{einstein1956investigations}, was later formalized by Norbert Weiner as a stochastic process. Given a measurable space $S$ (the \emph{state space}) and a set $T$ (the \emph{time line}), a stochastic process can be defined as a probability distribution $p$ on $S^T$, the measurable space of functions $s\colon T\to S$. Each such $s$ is a behavior, and the stochastic process tells us the probability that any given measurable set of behaviors will occur.
@@ -349,7 +351,7 @@ We leave it understood that all of this section takes place internally, and corr
 We then discuss the primary intended semantics of systems of point modalities in the second half of the section.
 
 We fix a type $\pts$ and a function $\at[]\colon\pts\to\decmod$, where $\decmod$ is the set of decidable modalities; see \cref{def.decidable_modality}. The idea is that $\pts$ is an object which (internally) indexes the points, and for every $\pt \in \pts$, the modality $\at : \prop \to \prop$ checks whether a given proposition holds at $\pt$. 
-while this type of setup is conceptually reminiscent of Garner's \emph{ionads}~\cite{garner2012ionads}, we currently do not know what the technical relation is.
+while this type of setup is conceptually reminiscent of Garner's \emph{ionads}~\cite{garner2012ionads}, we currently do not know what the technical relation is, but note that the recent results of Di Liberti~\cite{diliberti2020topology} may possibly shed some light on this.
 
 Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\at$ is the quasi-closed modality associated to the open set $T \setminus \overline{\{\pt\}}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $T$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
 \begin{equation}\label{eqn.at_semantics}
