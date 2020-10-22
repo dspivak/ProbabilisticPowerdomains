@@ -526,6 +526,130 @@ The latter two sections then develop aspects of the interaction of valuations wi
 
 We assume familiarity with constructive reasoning, modalities, geometric formulas as well as with the systems of point modalities from \Cref{axioms_soundness}.
 
+\section{Background on modalities}
+
+\subsection{Modalities}
+
+Modalities operate on propositions to give new propositions that hold more generally. More precisely, we have the following definition. 
+
+\begin{definition}[Modality]
+	\label{def.modality}
+	A \emph{modality} is a map $j \colon \prop \to \prop$ satisfying the following three axioms for all $P,Q \in \prop$:
+	\begin{enumerate}
+		\item $P\imp jP$.
+		\item $jjP \imp jP$.
+  		\item If $P \imp Q$, then also $jP \imp jQ$.
+	\end{enumerate}
+\end{definition}
+
+In other words, a modality is a closure operator on truth values. Note that the first condition alone is equivalent to $j\top = \top$. For if this holds, and $P$ holds, then we can conclude $jP$ from $jP = j\top = \top$.
+
+A modality automatically satisfies the following additional properties for all $P,Q \in \prop$,
+\begin{enumerate}
+	\setcounter{enumi}{3}	% somehow using [resume] results in a label off by 1
+	\item\label{j_useful} If $jP$ and $P\imp jQ$, then also $jQ$.
+	\item If $j(P\imp Q)$ and $jP$, then also $jQ$.
+	\item If $jP$ and $jQ$, then also $j(P\wedge Q)$.
+\end{enumerate}
+See e.g.~\cite[Lemma~4.6]{schultz2019temporal} for the proof. Property \ref{j_useful} will turn out to be especially useful in our proofs: when proving a statement of the form $jQ$, it lets us strengthen an assumption of the form $jP$ to assuming $P$.
+
+It turns out that modalities in the internal logic of a topos correspond one-to-one with its subtoposes, although we will not need that here.
+
+We now give three concrete examples of modalities, called \emph{open}, \emph{closed}, and \emph{quasi-closed}, associated to truth values $U \in \prop$. The quasi-closed ones will be the most central ones to us.
+
+\tob{continue here}
+
+\begin{definition}\label{def.open_closed_qc}
+Let $u:\prop$ be a proposition. We have the following modalities:
+\begin{description}
+	\item[Open] $O_u(p)\coloneqq u\imp p$;
+	\item[Closed] $C_u(p)\coloneqq u\vee p$; and
+	\item[Quasi-closed] $Q_u(p)\coloneqq (p\imp u)\imp u$.
+\end{description}
+\end{definition}
+
+Above we promised to give examples of logical deductions. Now we will show that each of the purported modalities in \cref{def.open_closed_qc} is indeed a modality using logical deductions.
+
+\begin{example}\label{ex.modality_deduction}
+Let $u:\prop$; we want to show that $O_u$, $C_u$, and $Q_u$ from \cref{def.open_closed_qc} are modalities in the sense of \cref{def.modality}. We begin with $j=O_u$; let $p:\prop$ be a proposition. We begin by being quite pedantic and eventually move toward the style of deduction that we will use in the paper.
+
+Claim: $p\imp (u\imp p)$. Proof: 1. To show $p\imp (u\imp p)$ it suffices to assume $p$ and prove $u\imp p$. 2. Assume $p$. 3. To prove $u\imp p$ it suffices to assume $u$ and prove $p$. 4. Assume $u$. 5. $p$ holds by line 2, completing the proof.
+
+Claim: $(u\imp(u\imp p))\imp (u\imp p)$. Proof: Assume $u\imp (u\imp p)$; we wish to prove $u\imp p$. Assume $u$; we wish to prove $p$. Since $u\imp (u\imp p)$ and $u$, we have $u\imp p$. Since $u\imp p$ and $u$, we have $p$, completing the proof.
+
+Claim: $(p\imp q)\imp (u\imp p)\imp (u\imp q)$. Proof: Assume $p\imp q$; we need to show $(u\imp p)\imp (u\imp q)$. Assume $u\imp p$; we need to show $u\imp q$. Assume $u$; we need to show $q$. Since $u$ and $u\imp p$ we have $p$. Since $p$ and $p\imp q$ we have $q$.
+
+Here's a faster version of the third claim. Assume $p\imp q$ and $u\imp q$ and $u$. Then $q$. We will follow this style going forward.
+
+Proving that $j=C_u$ is a modality will give us practice with $\vee$, which could be useful since proving $p\vee q$ is not the same as proving $\neg(\neg p\wedge\neg q)$. To prove $p\vee q$, one must prove $p$ or prove $q$. To prove $p\vee q \imp r$, one must prove $p\imp r$ and $q\imp r$.
+
+Claim: $p\imp (u\vee p)$; proof: assume $p$ then $u\vee p$. Claim: $(u\vee (u\vee p))\imp (u\vee p)$; proof: if $u$ then $u\vee p$; if $p$ then $u\vee p$. Claim: $(p\imp q)\imp (u\vee p)\imp (u\vee q)$; proof: assume $p\imp q$ and $u\vee p$; if $u$ then $u\vee q$ and if $p$ then $q$, so $u\vee q$.
+
+Proving that $j=Q_c$ is a modality is basically more of the same. We prove only axiom 2 and leave the rest to the reader.
+
+Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
+\end{example}
+
+This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\subseteq (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
+
+
+
+\begin{definition}[$j$-closed propositions]\label{def.j_closed_props}
+A proposition $P:\prop$ is called \emph{$j$-closed} if $P=jP$. The type of $j$-closed propositions is denoted $\prop_j$.
+\end{definition}
+
+\subsection{Decidable modalities}
+
+\tob{check and state equivalence with $j\prop$ being Boolean}
+
+\begin{definition}
+	\label{def.decidable_modality}
+	A modality $j$ is \emph{decidable} if 
+	\[
+		jP\vee (P\imp j\false)
+	\]
+	for all $P:\prop$. We write $\decmod$ for the set of decidable modalities.
+\end{definition}
+
+\begin{proposition}[Decidable modalities commute with $\vee$]\label{prop.dec_mod_or}
+Suppose $j$ is decidable. Then for all $P,Q:\prop$ we have
+\[j (P \lor Q) = j P \lor j Q.\]
+\end{proposition}
+\begin{proof}
+The direction $(j P \lor j Q)\imp j (P \lor Q)$ is straightforward. For the converse, assume $j (P \lor Q)$. By decidability we may assume $P\imp j \bot$ and $Q\imp j \bot$. But then we have $j \bot$, which in turn proves $j P$.
+\end{proof}
+
+\begin{proposition}[$j \bot$ is prime for decidable $j$]
+Suppose $j$ is decidable. Then for all $P,Q:\prop$, we have
+\[\big((P\wedge Q)\imp j \false\big)\imp\big((P\imp j \false)\vee(Q\imp j \false)\big)\]
+\end{proposition}
+\begin{proof}
+Assume $(P\wedge Q)\imp j \false$. By \cref{ax.decidability} we may assume also that $j P$ and $j Q$, hence $j (P\wedge Q)$ and finally $j \bot$.
+\end{proof}
+
+\begin{proposition}[$\at$ is quasi-closed]
+Suppose $j$ is decidable. Then for all $P:\prop$ we have
+\[j P=\big((P\imp j\bot)\imp j\bot\big).\]
+\end{proposition}
+\begin{proof}
+The forward direction would hold for any modality, and the backward direction follows directly from decidability.
+\end{proof}
+
+We now turn to the treatment of the existential quantifier.
+
+\begin{lemma}%[The $j$-existential quantifier as a double $j$-negation]--It's not really a double negation, right?
+	Let $j$ be a decidable modality, $X$ any type, and $P : X \to \prop$ a predicate. Then
+	\[
+		j \exists (x : X) . P(x) \quad \Longleftrightarrow \quad \left( \forall (x : X). (P(x) \imp j \bot) \right) \imp j \bot.
+	\]
+\end{lemma}
+
+\begin{proof}
+	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
+
+	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. (P(x) \imp j\bot)$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
+\end{proof}
+
 \section{Background on lower reals}
 
 \tob{See \cref{sec.topos_background} for some of this background?}
@@ -1727,121 +1851,7 @@ We showed in \cref{eqn.prop_order} that $(\prop,\le)$ is an internal poset.
 \end{example}
 
 % ==== Section ====%
-\section{Modalities on $\shv(X)$}\label{sec.modalities}sec.logic
 
-Modalities operate on propositions to give new propositions that hold more generally. More precisely, we have the following definition. 
-
-\begin{definition}[Modality]\label{def.modality}
-A \emph{modality} on a topos $\cat{E}$ is a morphism $j\colon\prop\to\prop$ satisfying the following three axioms for $p,q:\prop$:
-\begin{enumerate}
-	\item $p\imp j(p)$;
-	\item $j(j(p))=j(p)$.
-\end{enumerate}
-These first two say that $j$ is a \emph{closure operator}. The following four axioms are equivalent, and to be a modality $j$ is required to satisfy any one---hence all---of them:
-\begin{enumerate}[label=3\alph*.]
-  \item $(p\imp q)\imp jp\imp jq$
-  \item $jp\imp(p\imp jq)\imp jq$
-  \item $j(p\imp q)\imp jp\imp jq$
-  \item $(jp\wedge jq)\imp j(p\wedge q)$.
-\end{enumerate}
-\end{definition}
-The equivalence of the conditions 3a -- 3d can be found in \cite[Lemma 4.6]{schultz2019temporal}.
-
-It turns out that modalities on $\cat{E}$ correspond one-to-one with subtoposes of $\cat{E}$, though we do not need that here. We will discuss three sorts of modalities, called \emph{open, closed}, and \emph{quasi-closed}, associated to open sets $U\in\Op[X]$, or equivalently to propositions $u:\prop$.
-
-\tob{We probably only really need quasi-closed modalities. Or perhaps even only decidable ones: decidable is apparently equivalent to quasi-closed and prime, and this seems to be what we want}
-
-\begin{definition}\label{def.open_closed_qc}
-Let $u:\prop$ be a proposition. We have the following modalities:
-\begin{description}
-	\item[Open] $O_u(p)\coloneqq u\imp p$;
-	\item[Closed] $C_u(p)\coloneqq u\vee p$; and
-	\item[Quasi-closed] $Q_u(p)\coloneqq (p\imp u)\imp u$.
-\end{description}
-\end{definition}
-
-Above we promised to give examples of logical deductions. Now we will show that each of the purported modalities in \cref{def.open_closed_qc} is indeed a modality using logical deductions.
-
-\begin{example}\label{ex.modality_deduction}
-Let $u:\prop$; we want to show that $O_u$, $C_u$, and $Q_u$ from \cref{def.open_closed_qc} are modalities in the sense of \cref{def.modality}. We begin with $j=O_u$; let $p:\prop$ be a proposition. We begin by being quite pedantic and eventually move toward the style of deduction that we will use in the paper.
-
-Claim: $p\imp (u\imp p)$. Proof: 1. To show $p\imp (u\imp p)$ it suffices to assume $p$ and prove $u\imp p$. 2. Assume $p$. 3. To prove $u\imp p$ it suffices to assume $u$ and prove $p$. 4. Assume $u$. 5. $p$ holds by line 2, completing the proof.
-
-Claim: $(u\imp(u\imp p))\imp (u\imp p)$. Proof: Assume $u\imp (u\imp p)$; we wish to prove $u\imp p$. Assume $u$; we wish to prove $p$. Since $u\imp (u\imp p)$ and $u$, we have $u\imp p$. Since $u\imp p$ and $u$, we have $p$, completing the proof.
-
-Claim: $(p\imp q)\imp (u\imp p)\imp (u\imp q)$. Proof: Assume $p\imp q$; we need to show $(u\imp p)\imp (u\imp q)$. Assume $u\imp p$; we need to show $u\imp q$. Assume $u$; we need to show $q$. Since $u$ and $u\imp p$ we have $p$. Since $p$ and $p\imp q$ we have $q$.
-
-Here's a faster version of the third claim. Assume $p\imp q$ and $u\imp q$ and $u$. Then $q$. We will follow this style going forward.
-
-Proving that $j=C_u$ is a modality will give us practice with $\vee$, which could be useful since proving $p\vee q$ is not the same as proving $\neg(\neg p\wedge\neg q)$. To prove $p\vee q$, one must prove $p$ or prove $q$. To prove $p\vee q \imp r$, one must prove $p\imp r$ and $q\imp r$.
-
-Claim: $p\imp (u\vee p)$; proof: assume $p$ then $u\vee p$. Claim: $(u\vee (u\vee p))\imp (u\vee p)$; proof: if $u$ then $u\vee p$; if $p$ then $u\vee p$. Claim: $(p\imp q)\imp (u\vee p)\imp (u\vee q)$; proof: assume $p\imp q$ and $u\vee p$; if $u$ then $u\vee q$ and if $p$ then $q$, so $u\vee q$.
-
-Proving that $j=Q_c$ is a modality is basically more of the same. We prove only axiom 2 and leave the rest to the reader.
-
-Claim: $((((p\imp u)\imp u)\imp u)\imp u)\imp (p\imp u)\imp u$. Proof: Suppose $(((p\imp u)\imp u)\imp u)\imp u$ and $p\imp u$. It suffices to show $((p\imp u)\imp u)\imp u$, so assume $(p\imp u)\imp u$. But then since $p\imp u$ holds, $u$ holds, completing the proof.
-\end{example}
-
-This gave us a taste of how logical arguments can go. The fact is that anything we can prove with such a logical argument is also sound when we consider the claims semantically. For example, if $U$ is an open set then for any open $P$ we have $P\subseteq (U\cup P)$ and $U\cup(U\cup P)=U\cup P$. These are trivial to see; it is much more interesting to consider that the other seven claims from \cref{ex.modality_deduction} in light of the open-set semantics of $\imp$ from \eqref{eqn.implication}. The logic is handling quite a lot of point-set topology for us.
-
-
-
-\begin{definition}[$j$-closed propositions]\label{def.j_closed_props}
-A proposition $P:\prop$ is called \emph{$j$-closed} if $P=jP$. The type of $j$-closed propositions is denoted $\prop_j$.
-\end{definition}
-
-% ==== Section ====%
-\section{Decidable modalities}
-
-\tob{check and state equivalence with $j\prop$ being Boolean}
-
-\begin{definition}\label{def.decidable_modality}
-We say that a modality $j$ is \emph{decidable} if 
-\[jP\vee (P\imp j\false)\]
-holds for all $P:\prop$. Define the type $\decmod$ of decidable modalities by
-\[
-\decmod\coloneqq\{j\colon\prop\to\prop\mid j\tn{ is a modality and } \forall(P:\prop).jP\vee P\imp j\bot\}.
-\]
-\end{definition}
-
-\begin{proposition}[Decidable modalities commute with $\vee$]\label{prop.dec_mod_or}
-Suppose $j$ is decidable. Then for all $P,Q:\prop$ we have
-\[j (P \lor Q) = j P \lor j Q.\]
-\end{proposition}
-\begin{proof}
-The direction $(j P \lor j Q)\imp j (P \lor Q)$ is straightforward. For the converse, assume $j (P \lor Q)$. By decidability we may assume $P\imp j \bot$ and $Q\imp j \bot$. But then we have $j \bot$, which in turn proves $j P$.
-\end{proof}
-
-\begin{proposition}[$j \bot$ is prime for decidable $j$]
-Suppose $j$ is decidable. Then for all $P,Q:\prop$, we have
-\[\big((P\wedge Q)\imp j \false\big)\imp\big((P\imp j \false)\vee(Q\imp j \false)\big)\]
-\end{proposition}
-\begin{proof}
-Assume $(P\wedge Q)\imp j \false$. By \cref{ax.decidability} we may assume also that $j P$ and $j Q$, hence $j (P\wedge Q)$ and finally $j \bot$.
-\end{proof}
-
-\begin{proposition}[$\at$ is quasi-closed]
-Suppose $j$ is decidable. Then for all $P:\prop$ we have
-\[j P=\big((P\imp j\bot)\imp j\bot\big).\]
-\end{proposition}
-\begin{proof}
-The forward direction would hold for any modality, and the backward direction follows directly from decidability.
-\end{proof}
-
-We now turn to the treatment of the existential quantifier.
-
-\begin{lemma}%[The $j$-existential quantifier as a double $j$-negation]--It's not really a double negation, right?
-	Let $j$ be a decidable modality, $X$ any type, and $P : X \to \prop$ a predicate. Then
-	\[
-		j \exists (x : X) . P(x) \quad \Longleftrightarrow \quad \left( \forall (x : X). (P(x) \imp j \bot) \right) \imp j \bot.
-	\]
-\end{lemma}
-
-\begin{proof}
-	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
-
-	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. (P(x) \imp j\bot)$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
-\end{proof}
 
 
 
