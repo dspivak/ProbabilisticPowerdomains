@@ -376,14 +376,14 @@ where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\
 If $\pt\in U$ then $j_\pt(U)=T$ and conditions \ref{j_increasing}, \ref{j_idempotent}, and \ref{j_decidable} are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\subseteq \{\pt\}^c$ and hence $U\subseteq j_\pt(U)$, giving condition \ref{j_increasing}. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition \ref{j_idempotent}. Since $U\subseteq j_\pt(\varnothing)$, we have $T=U^c\cup U\subseteq (U^c\cup j_\pt(\varnothing))$ so we also have condition \ref{j_decidable}. For condition \ref{j_meets}, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\at[]}$ from \eqref{eqn.at_semantics}.
 
 \begin{definition}[Specialization order]\label{def.specialization}
-For points $\pt,\pt' \in T$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\leq\pt$ if every open set containing $\pt'$ also contains $\pt$.
+For points $\pt,\pt' \in T$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\le\pt$ if every open set containing $\pt'$ also contains $\pt$.
 \end{definition}
 
 \begin{lemma}\label{prop.specialization}
-For points $\pt,\pt'\in T$, we have $\pt'\leq\pt$ iff $T\models\at\false\imp\at[\pt']\false$ holds in $\shv(T)$.
+For points $\pt,\pt'\in T$, we have $\pt'\le\pt$ iff $T\models\at\false\imp\at[\pt']\false$ holds in $\shv(T)$.
 \end{lemma}
 \begin{proof}
-We have $T\models\at\false\imp\at[\pt']\false$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\leq\pt$ as in \cref{def.specialization}.
+We have $T\models\at\false\imp\at[\pt']\false$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\le\pt$ as in \cref{def.specialization}.
 \end{proof}
 
 
@@ -562,14 +562,14 @@ We now want to define order and some algebraic structure on $\tlrr$, as well as 
 
 \begin{definition}[Order on lower reals]
 Given lower reals $r_1,r_2$,
-we write $r_1 \geq r_2$ as shorthand for the following proposition,
+we write $r_1 \ge r_2$ as shorthand for the following proposition,
 \begin{equation}\label{eqn.real_order}
-	r_1 \geq r_2 \:\:\coloneqq\:\: \forall q:\tqq \, . \, r_2 > q \imp r_1 > q.
+	r_1 \ge r_2 \:\:\coloneqq\:\: \forall q:\tqq \, . \, r_2 > q \imp r_1 > q.
 \end{equation}
-We also write $r_2 \leq r_1$ as synonymous with $r_1 \geq r_2$.
+We also write $r_2 \le r_1$ as synonymous with $r_1 \ge r_2$.
 \end{definition}
 
-It is straightforward to show that $\geq$ is indeed a partial order relation on $\tlrr$, and that it extends the usual order on $\tqq \subseteq \tlrr$. We consider $\tlrr$ as a partially ordered set from now on, noting that totality of this partial ordering is not provable constructively.
+It is straightforward to show that $\ge$ is indeed a partial order relation on $\tlrr$, and that it extends the usual order on $\tqq \subseteq \tlrr$. We consider $\tlrr$ as a partially ordered set from now on, noting that totality of this partial ordering is not provable constructively.
 
 \begin{definition}[Addition of lower reals]\label{def.sum_lr}
 Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum} $r_1 + r_2 : \tqq\to\prop$ to be the lower real with
@@ -603,7 +603,7 @@ Our next goal is to prove that addition is not only monotone, but conversely tha
 
 \begin{lemma}
 	\label{cancel_rationals}
-	For all $q:\tqq$ and $r_1,r_2:\tlrr$, if $p + r_1\leq p + r_2$ then $r_1 \leq r_2$.
+	For all $q:\tqq$ and $r_1,r_2:\tlrr$, if $p + r_1\le p + r_2$ then $r_1 \le r_2$.
 \end{lemma}
 
 \begin{proof}
@@ -614,10 +614,10 @@ For any proposition $P : \prop$, we have the \emph{indicator lower real} $\ind{P
 \[
 	q < 1_P \:\::\iff\:\: (q < 0) \lor (P \land (q < 1)).
 \]
-The assignment $P \mapsto \ind{P}$ defines an order embedding $\prop \hookrightarrow \tlrr$.
+The assignment $P \mapsto \ind{P}$ defines an order embedding $\prop \hookrightarrow \tlrr$ with $\ind{\bot} = 0$ and $\ind{\top} = 1$.
 
 \begin{lemma}\label{order_cancel_props}
-For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\leq \ind{P}+r_2$ then $r_1\leq r_2$.
+For any $P:\prop$ and $r_1,r_2:\tlrr$, if $\ind{P}+r_1\le \ind{P}+r_2$ then $r_1\le r_2$.
 \end{lemma}
 
 \begin{proof}
@@ -630,10 +630,10 @@ Following Henry, we show next that the order cancellative lower reals are dense.
 
 \begin{lemma}[\cite{henry2012simplification}]
 \label{cancellative_bounds}
-	Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\geq 1$, there exists $r_n:\tlrr$ satisfying the following:
+	Let $r:\tlrr$ be bounded by some $N:\tnn$, i.e. $r<N$. For any $n:\tnn$ with $n\ge 1$, there exists $r_n:\tlrr$ satisfying the following:
 	\begin{enumerate}
-		\item $r_n\leq r\leq r_n + \frac{1}{n}$.
-		\item For any $a,b:\tlrr$, if $r_n+a\leq r_n+b$ then $a\leq b$.
+		\item $r_n\le r\le r_n + \frac{1}{n}$.
+		\item For any $a,b:\tlrr$, if $r_n+a\le r_n+b$ then $a\le b$.
 	\end{enumerate}
 \end{lemma}
 
@@ -645,149 +645,54 @@ Following Henry, we show next that the order cancellative lower reals are dense.
 		\label{eqn.cancellative_bounds}
 		r_1 \coloneqq \sum_{i=1}^{N} \ind{i < r}.
 	\end{equation}
-	For the claim that $r_1\leq r$, take $q < r_1$; we will show $q < r$. By \cref{def.sum_lr}, we have $q = q_1 + \ldots + q_N$ with $q_i < 0$ or $(i < r) \land (q_i < 1)$ for each $i$. But then also
+	For the claim that $r_1\le r$, take $q < r_1$; we will show $q < r$. By \cref{def.sum_lr}, we have $q = q_1 + \ldots + q_N$ with $q_i < 0$ or $(i < r) \land (q_i < 1)$ for each $i$. But then also
 	\[
 		q = q_1 + \ldots + q_N < \#\{ i \le N \mid i < r \} \le r,
 	\]
 	as was to be shown.
 
-	For the claim that $r\leq r_1+1$, take likewise $q<r$; we will show $q < r_1 + 1$. Let $n \coloneqq \floor{q}$.  Then $q < n + 1$ and it suffices to show that $n \leq r_1 = \sum_{i=1}^{N} \ind{i < r}$. Since $q < r$ we have $i < r$, and hence $\ind{i < r} = 1$ for all integers $1\leq i\leq n$. This gives $n\leq r_1$, as desired
+	For the claim that $r\le r_1+1$, take likewise $q<r$; we will show $q < r_1 + 1$. Let $k \coloneqq \floor{q}$.  Then $q < k + 1$ and it suffices to show that $k \le r_1 = \sum_{i=1}^{N} \ind{i < r}$. Since $q < r$ we have $i < r$, and hence $\ind{i < r} = 1$, for all integers $1\le i\le k$. This gives $n\le r_1$, as desired
 
-	Finally, suppose $r_1 + a \leq r_1 + b$. Then it follows by induction on $N$ using \cref{order_cancel_props} that $a\leq b$, as desired.
+	Finally, suppose $r_1 + a \le r_1 + b$. Then the desired $a \le b$ follows by induction on $N$ using \cref{order_cancel_props} that $a\le b$, as desired.
 \end{proof}
 
 \begin{proposition}[Order cancellativity, \cite{henry2012simplification}]\label{cor.order_cancel}
-	Suppose $r,s,s':\tlrr$ are lower nonnegative reals and that $r<N$ is bounded by $N:\tnn$. If $r+s\leq r+s'$ then $s\leq s'$.
+	Suppose $r,s_1,s_2:\tlrr$ are lower reals, and that $r<N$ for some $N:\tnn$. Then
+	\[
+		s_1 + r \le s_2 + r \quad \Longrightarrow \quad s_1 \le s_2.
+	\]
 \end{proposition}
 
 \begin{proof}
-Suppose $r+s\leq r+s'$; to conclude $s\leq s'$ we take $q<s$ and wish to prove $q_1<s'$. By roundedness, take $q<q'<s$, let $n:\tnn$ be an integer with $1/n<q'-q$, and let $r_n$ be as in \eqref{eqn.cancellative_bounds}. Then by \cref{lemma.cancellative_bounds}, we have 
-\[r_n+s\leq r+s\leq r+s'\leq r_n+s'+1/n,\]
-and moreover we can conclude $s\leq s'+1/n$. But then $q+1/n<q'<s\leq s'+1/n$ and the result follows from \cref{prop.cancel_rationals}.
+	Assuming $s_1 + r \le s_2 + r$, to conclude $s_1 \le s_2$ we take rational $q < s_1$ and wish to prove $q < s_2$. By roundedness, we can find $n \in \tnn$ such that even
+	\[
+		q + \frac{1}{n} < s_1.
+	\]
+	Now let $r_n$ be as in \eqref{eqn.cancellative_bounds}, which in particular results in
+	\[
+		s_1 + r_n \le s + r \le s_2 + r \le s_2 + \frac{1}{n} + r_n,
+	\]
+	so that we can conclude $s_1 \le s_2 + \frac{1}{n}$ by \Cref{cancellative_bounds}. But then
+	\[
+		q + \frac{1}{n} < s_1 \le s_2 + \frac{1}{n},
+	\]
+	and the claim $q < s_2$ follows upon cancelling $\frac{1}{n}$ from both sides.
 \end{proof}
 
 \begin{corollary}\label{cor.favorite}
-For all $r_1,r_2,r_1',r_2':\tlrr$, suppose $r_1+r_2=r_1'+r_2'$. If $r_1\leq r_1'$ and $r_2\leq r_2'$ then $r_1=r_1'$ and $r_2=r_2'$.
+	Suppose that $r_1,r_2,s_1,s_2:\tlrr$ are such that $r_1 + r_2 = s_1 + s_2$ and $r_1, r_2 \le N$ for some natural $N$. Then
+	\[
+		r_1\le s_1, \quad r_2\le s_2 \quad \Longrightarrow \quad r_1 = s_1, \quad r_2 = s_2.
+	\]
 \end{corollary}
+
 \begin{proof}
-If $r_1\leq r_1'$ then $r_1+r_2'\leq r_1'+r_2'=r_1+r_2$, so $r_2'\leq r_2$ by \cref{cor.order_cancel}. The second assumption $r_2\leq r_2'$ implies $r_2=r_2'$, and similarly we find $r_1=r_1'$.
+	If $r_1 \le s_1$, then $r_1 + s_2 \le s_1 + s_2 = r_1 + r_2$, so $s_2 \le r_2$ by \cref{cor.order_cancel} and $r_1 \le N$. The second assumption $r_2 \le s_2$ then implies $r_2 = s_2$. Similarly we find $r_1 = s_1$.
 \end{proof}
 
 \subsection{Lower reals and modalities}
 
-We now investigate the interaction between lower reals and modalities, also referring to~\cite{schultz2019temporal} for related considerations.
-
-\begin{proposition}\label{prop.commute_exists_commute_addition}
-Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then $j$ commutes with addition of lower reals
-\[
-	jr_1+jr_2=j(r_1+r_2).
-\]
-\end{proposition}
-\begin{proof}
-More precisely, we need to show that for all $q:\tqq$ we have
-\begin{multline*}
-	\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)\iff\\
-	j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2)).
-\end{multline*}
-For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).jP(x)\imp j\exists(x:X).P(x)$. The $\imp$ implication follows immediately.
-
-For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
-\end{proof}
-
-\begin{corollary}\label{cor.closed_sum}
-Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, the sum $r_1+r_2$ is $j$-closed iff $r_1$ and $r_2$ are.
-\end{corollary}
-\begin{proof}
-Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\leq jr_1$ and $r_2\leq jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
-\end{proof}
-
-\begin{definition}[Indicator functions as lower reals]\label{def.props_are_reals}
-There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\colon\tqq\to\prop$ given by:%
-\footnote{We leave it to the reader to check that $\ind{P}$ is indeed a lower nonnegative real.}
-\[\ind{P}(q)\coloneqq(q<0)\vee ((q<1)\wedge P).\]
-\end{definition}
-
-Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
-\begin{equation}\label{eqn.indicator}
-P\imp (\ind{P}+r=1+r).
-\end{equation}
-
-The following is straightforward.
-\begin{lemma}\label{lemma.ind_monotonic}
-We have $\ind{\bot}=0$, $\ind{\top}=1$, and if $P\imp Q$ then $\ind{P}\leq\ind{Q}$.
-\end{lemma}
-
-\begin{lemma}\label{lemma.j_indicator}
-Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
-\end{lemma}
-\begin{proof}
-Clearly $j\ind{P}\leq j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
-\end{proof}
-
-\subsection{Multiplicative structure}
-
-\begin{definition}[$\tqq_+$-action on lower reals]\label{def.Q_action}
-For any $r:\tlrr$ and $q\in\tqq$ with $q\geq 0$, define $q r:\tqq\to\prop$ by cases.
-\[
-(q r)_>(q')\coloneqq
-\begin{cases}
-	0>q'&\tn{ if }q=0\\
-	r>q'/q&\tn{ if }q>0.
-\end{cases}
-\]
-\end{definition}
-
-A simple case distinction with respect to $q = 0$ or $q > 0$ easily shows that $q r$ is indeed again a lower nonnegative real.
-
-\subsection{The lower unit interval $[0,1]$}
-
-We will work extensively with elements of the unit interval, and it will be convenient to give it a special definition. Let $\tqqint\coloneqq\{q:\tqq\mid 0\leq q< 1\}$.
-
-\begin{definition}\label{def.unit_interval}
-The \emph{unit interval}, denoted $\tii$, is defined to be the type of functions $r_>\colon\tqqint\to\prop$ satisfying
-\begin{equation}\label{eqn.down_closed_rounded_for_interval}
-	\forall(q:\tqqint).r_>q\iff\exists(q':\tqqint).(r_>q')\wedge (q'>q).
-\end{equation}
-As usual we write $q<r$ or $r>q$ to denote the proposition $r_>q$.
-\end{definition}
-
-The following is straightforward to prove.
-\begin{proposition}\label{prop.unit_interval_cast}
-There is a pair of maps $a\colon\tlrr\to\tii$ and $\cast\colon\tii\to\tlrr$ given by
-\[
-a(r)>q\iff r>q
-\qquad\textrm{and}\qquad
-\cast(r')>q\iff (q<0)\vee\big((q<1)\wedge q<r'\big)
-\]
-that form a retraction: $a(\cast(r'))=r'$ for any $r'\in\tii$. In the other direction, $\cast(a(r))=\min(r,1)$.
-\end{proposition}
-
-\begin{definition}\label{def.sup_unit_interval}
-For any $I\in\cat{E}$ and $r\colon I\to\tii$, define $\sup_{i:I}r_i$ to be the predicate $\tqqint\to\prop$ given by
-\[
-q<\sup_{i:I}r_i\iff \exists(i:I).(q<r_i).
-\]
-\end{definition}
-
-The proofs of \cref{prop.cast_sups,prop.inc_const} are straightforward.
-\begin{proposition}\label{prop.cast_sups}
-For any $I\in\cat{E}$ and $r\colon I\to\tii$, we have $\cast(\sup_{i:I}r_i)=\sup_{i:I}\cast(r_i).$
-\end{proposition}
-
-\begin{proposition}\label{prop.inc_const}
-The morphism $\inc\colon\prop\to\tlrr$ factors as
-\[
-\begin{tikzcd}
-	\prop\ar[r, "\textit{const}\ P"]&[5pt]
-	\tii\ar[r, "\cast"]&
-	\tlrr
-\end{tikzcd}
-\]
-where $(\textit{const}\ P)\colon\tqqint\to\prop$ is the constant at $P$.
-\end{proposition}
-We denote $\textit{const}\ P$ simply by $\ind{P}\colon\tqqint\to\prop$.
-
-\subsection{$j$-local lower nonnegative reals}
+We now investigate the interaction between lower reals and modalities, also referring to~\cite{schultz2019temporal} for related considerations. Throughout this subsection, $j$ is a modality.
 
 We follow \cite[Definition 4.21]{schultz2019temporal} in the following definition (see also loc.\ cit.\ Remark 4.9).
 
@@ -816,6 +721,53 @@ The nonnegativity and down-closedness conditions are identical. Given a lower re
 
 Supposing $j$ commutes with $\exists(q':\tqq)$, the $j$-rounded assumption on $r$ says that if $r_>q$ then there exists $q'_0$ with $j(q'_0>q)\wedge j(r_>q'_0)$. Since the order on $\tqq$ is decidable, either $q'_0>q$ or $\neg(q'_0>q)$. In the first case since $r_>$ is $j$-closed, we can prove $\exists (q':\tqq).q'>q\wedge r_>q'$. In the second case, we immediately obtain $j\bot$ and hence $j(r_>q')$ for any $q'$, e.g.\ $q'\coloneqq q+1$. Again since $r_>$ is $j$-closed, we can prove $\exists (q':\tqq).q'>q\wedge r_>q'$.
 \end{proof}
+
+\begin{proposition}\label{prop.commute_exists_commute_addition}
+Suppose that
+\[
+	j\exists(n:\tnn) . P(n)\imp \exists(q:\tqq).jP(q)
+\]
+holds for every $P:\tqq\to\prop$. Then $j$ commutes with addition of lower reals
+\[
+	jr_1+jr_2=j(r_1+r_2).
+\]
+\end{proposition}
+\begin{proof}
+More precisely, we need to show that for all $q:\tqq$ we have
+\begin{multline*}
+	\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)\iff\\
+	j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2)).
+\end{multline*}
+For any modality $j$, any type $X$, and any $P:X\to\prop$ we have $\exists(x:X).jP(x)\imp j\exists(x:X).P(x)$. The $\imp$ implication follows immediately.
+
+For $\Leftarrow$, assume $j(\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge (q_1<r_1)\wedge(q_2<r_2))$. By the commutivity of $j$ with $\exists$, we have $\exists(q_1,q_2:\tqq).j(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$. Now equality of rationals is decidable so either $q=q_1+q_2$, in which case we are done, or $\neg(q=q_1+q_2)$. In the latter case we obtain $j\bot$, at which point the desired statement $\exists(q_1,q_2:\tqq).(q=q_1+q_2)\wedge j(q_1<r_1)\wedge j(q_2<r_2)$ holds using $q_1=q$ and $q_2=0$.
+\end{proof}
+
+\begin{corollary}\label{cor.closed_sum}
+Suppose $j\exists(q:\tqq).P(q)\imp \exists(q:\tqq).jP(q)$ holds for every $P:\tqq\to\prop$. Then for any $r_1,r_2:\tlrr$, the sum $r_1+r_2$ is $j$-closed iff $r_1$ and $r_2$ are.
+\end{corollary}
+\begin{proof}
+Given the assumption that $j$ commutes with $\exists$, it is easy to check that if $r_1$ and $r_2$ are $j$-closed then so is $r_1+r_2$. For the converse, we begin by noting that $r_1\le jr_1$ and $r_2\le jr_2$. Now by \cref{prop.commute_exists_commute_addition}, if $r_1+r_2=j(r_1+r_2)$ then $r_1+r_2=jr_1+jr_2$, and the result follows from \cref{cor.favorite}.
+\end{proof}
+
+\begin{definition}[Indicator functions as lower reals]\label{def.props_are_reals}
+There is a function $\prop\to\tlrr$ sending $P:\prop$ to the function $\ind{P}\colon\tqq\to\prop$ given by:%
+\footnote{We leave it to the reader to check that $\ind{P}$ is indeed a lower nonnegative real.}
+\[\ind{P}(q)\coloneqq(q<0)\vee ((q<1)\wedge P).\]
+\end{definition}
+
+Combining \cref{def.props_are_reals,def.rationals_are_reals}, we have for any $P:\prop$ and $r:\tlrr$
+\begin{equation}\label{eqn.indicator}
+P\imp (\ind{P}+r=1+r).
+\end{equation}
+
+\begin{lemma}\label{lemma.j_indicator}
+Let $j$ be a modality. Then for any $P:\prop$ we have $j\ind{P}=j\ind{jP}$.
+\end{lemma}
+\begin{proof}
+Clearly $j\ind{P}\le j\ind{jP}$ so we prove the other inequality. We assume $j(q<\ind{jP})$ and want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q<\ind{jP}$. Thus $(q<0)\vee((q<1)\wedge jP)$; if $q<0$ then $q<\ind{P}$ and we're done. If $(q<1)\wedge jP$ then we can strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
+\end{proof}
+
 
 \section{Basic theory of valuations}
 
@@ -863,7 +815,7 @@ By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuatio
 	\begin{equation}\label{eqn.ind_less_val}
 		\ind{P} \le \mu(P).
 	\end{equation}
-	for all $P:\prop$. Indeed if $q<\ind{P}$ for some $0 \leq q<1$ then $P$, in which case $\mu(P)=\mu(\top)=1$. 
+	for all $P:\prop$. Indeed if $q<\ind{P}$ for some $0 \le q<1$ then $P$, in which case $\mu(P)=\mu(\top)=1$. 
 	
 	The other inequality requires more work. For $P:\prop$, consider the predicate
 	\[
@@ -977,7 +929,7 @@ Note that this lands indeed in $j \tlrr$ because of \Cref{vals_vs_modalities}.
 
 	Now let $D \subseteq j \Op[X]$ be a $j$-locally directed $j$-closed subposet. We want to prove that \eqref{eqn.local_scott_continuity} holds, i.e.\
 	\[
-		\mu\left( j \exists (P : D) . P \right) \leq j \exists (P : D). \mu(P).
+		\mu\left( j \exists (P : D) . P \right) \le j \exists (P : D). \mu(P).
 	\]
 To see this, consider the predicate
 	\[
@@ -1082,7 +1034,7 @@ Recall from \cref{def.at_prob_val} that an \emph{$\at$-local valuation} on an in
 	\end{enumerate}
 \end{definition}
 
-By \cref{ax.local_dec,prop.specialization}, for any two points $\pt,\pt'\in\pts$ either $\at[\pt']\false\imp\at[\pt]\false$ or $\at[\pt]\at[\pt']\false$, corresponding to whether or not $\pt\leq\pt'$. In order to understand the compatibility condition of \cref{def.valuations_compatible_lowersemi}, we consider these cases separately. 
+By \cref{ax.local_dec,prop.specialization}, for any two points $\pt,\pt'\in\pts$ either $\at[\pt']\false\imp\at[\pt]\false$ or $\at[\pt]\at[\pt']\false$, corresponding to whether or not $\pt\le\pt'$. In order to understand the compatibility condition of \cref{def.valuations_compatible_lowersemi}, we consider these cases separately. 
 
 In the second case, the assumption that $P$ is $\at[\pt']$-closed implies $\at[\pt] P$, so that the left-hand side is $1$. But since $\mu_{\pt'}$ takes values in $\at[\pt']$-lower reals, also the right-hand side is $1$. Thus the compatibility condition is nontrivial only in the other case, $\at[\pt'] \bot \imp \at[\pt] \bot$.
 
@@ -1123,7 +1075,7 @@ We now consider the inverse problem of stitching together a compatible lower sem
 		\label{stitching_reproduces}
 		\at \mu(P) = \mu_\pt(\at P).
 	\end{equation}
-	By definition of $\mu$ and the fact that $\mu_\pt$ is $\at$-closed the inequality $\at \mu(P) \le \mu_\pt(\at P)$ is clear, so we just need to show that $\mu_\pt(\at P) \le \at \mu_{\pt'}(\at[\pt'] P)$ for all $\pt' : \pts$. But this holds by monotonicity, $\mu_\pt(\at P)\leq\mu_\pt(\at\at[\pt']P)$ and the fact that
+	By definition of $\mu$ and the fact that $\mu_\pt$ is $\at$-closed the inequality $\at \mu(P) \le \mu_\pt(\at P)$ is clear, so we just need to show that $\mu_\pt(\at P) \le \at \mu_{\pt'}(\at[\pt'] P)$ for all $\pt' : \pts$. But this holds by monotonicity, $\mu_\pt(\at P)\le\mu_\pt(\at\at[\pt']P)$ and the fact that
 	\[
 		\mu_\pt(\at \at[\pt'] P) = \at \mu_{\pt'}(\at[\pt'] P),
 	\]
@@ -1162,7 +1114,7 @@ To start, let $d\colon P\to\prop$ classify $D\subseteq P$, and consider the pred
 	\begin{align*}
 			\mu_\pt(\at \exists (P : D) . P) &\le
 			\mu_\pt(\at \exists (Q : D_k). Q)\\&=
-			\at \exists (Q : D_\pt).\mu_\pt(Q)\\&\leq
+			\at \exists (Q : D_\pt).\mu_\pt(Q)\\&\le
 			\at \exists (P : D). \mu_\pt(\at P)\\&=
 			\at \exists (P : D). \at\mu(P)\\&=
 			\at \exists (P : D). \mu(P),
@@ -1315,7 +1267,7 @@ More concretely, this means that a $j$-local internal space consists of an objec
 \subsection{Valuations}\label{sec.valuations}
 
 \begin{definition}[Directed poset]\label{def.directed}
-Let $(P,\leq)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
+Let $(P,\le)$ be an internal poset in $\cat{E}$ (\cref{def.internal_poset}). It is \emph{directed} if it satisfies
 \begin{enumerate}
 	\item $\exists(p:P).\top$, and
 	\item $\forall(p,p':P).\exists(q:P).(p\vee p')\imp q$.
@@ -1329,7 +1281,7 @@ Recall the lower unit interval type $\tii$ from \cref{def.unit_interval}. We may
 Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation} on $(X,\Op[X])$ is a function $\mu\colon\Op[X]\to\tii$ satisfying the following conditions:
 \begin{enumerate}
 	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
-	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
+	\item $(U\imp V)\imp\mu(U)\le\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 	\item If $D\subseteq\Op[X]$ is a directed subposet (\cref{def.directed}), then
 \[
@@ -1337,9 +1289,9 @@ Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation
 \]
 \end{enumerate}
 \end{definition}
-Note that the inequality $\sup_{U: D}\mu(U)\leq\mu\big(\exists(U:D).U\big)$ is purely formal, so Scott continuity is equivalent to
+Note that the inequality $\sup_{U: D}\mu(U)\le\mu\big(\exists(U:D).U\big)$ is purely formal, so Scott continuity is equivalent to
 \begin{equation}\label{eqn.scott_continuity}
-	\mu\big(\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
+	\mu\big(\exists(U:D).U\big)\le\sup_{U: D}\mu(U).
 \end{equation}
 
 
@@ -1347,7 +1299,7 @@ Note that the inequality $\sup_{U: D}\mu(U)\leq\mu\big(\exists(U:D).U\big)$ is p
 	Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op[Y]\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f^{-1}(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
 \end{proposition}
 \begin{proof}
-	The pullback functor $f^{-1}\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f^{-1}(U)\imp f^{-1}(V)$, so $\mu(f^{-1}(U))\leq\mu(f^{-1}(V))$, proving the result.
+	The pullback functor $f^{-1}\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f^{-1}(U)\imp f^{-1}(V)$, so $\mu(f^{-1}(U))\le\mu(f^{-1}(V))$, proving the result.
 \end{proof}
 
 \begin{theorem}
@@ -1361,11 +1313,11 @@ Probability valuations coincide with probability measures on Polish spaces.
 Let $(X,\Op[X])$ be an internal topological space. An \emph{$j$-local probability valuation} on $(X,\Op[X])$ is a function $\mu\colon j\Op[X]\to j\tii$ satisfying the following conditions:
 \begin{enumerate}
 	\item $\mu(j\bot)=0$ and $\mu(\top)=1$;
-	\item $(U\imp V)\imp\mu(U)\leq\mu(V)$; and
+	\item $(U\imp V)\imp\mu(U)\le\mu(V)$; and
 	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
 	\item If $D\subseteq j\Op[X]$ is a directed $j$-closed subposet then
 	\begin{equation}\label{eqn.local_scott_continuity}
-	\mu\big(j\exists(U:D).U\big)\leq\sup_{U: D}\mu(U).
+	\mu\big(j\exists(U:D).U\big)\le\sup_{U: D}\mu(U).
 	\end{equation}
 \end{enumerate}
 \end{definition}
@@ -1671,7 +1623,7 @@ We can think of $\Omega$ as the sheaf of ``answers to yes/no questions''. Imagin
 
 Fix a space $X$. The sheaf $\Omega\in\shv(X)$ is a \emph{poset object}, i.e.\ its sections on any $U\in\Op[X]$ are endowed with a natural ordering. Indeed, we can identify any two sections $V,V'\in\Omega(U)$ with opens $V,V'\subseteq U$ and write
 \begin{equation}\label{eqn.prop_order}
-V\leq V'\tn{ iff }V\subseteq V'.
+V\le V'\tn{ iff }V\subseteq V'.
 \end{equation} 
 Clearly this order is reflexive, transitive, and antisymmetric. In the case $X=\{*\}$ this ordering is just $\false<\true$.
 
@@ -1681,7 +1633,7 @@ Implication and negation are only slightly more involved. Logically, we say that
 \begin{equation}\label{eqn.implication}
 	(V_1\imp V_2)\coloneqq\bigcup\{V\subseteq U\mid (V\cap V_1)\subseteq V_2\}.
 \end{equation}
- As a particular case, defining $\neg V\coloneqq (V\imp \false)$, we can identify $\neg V$ with the interior of the complement of $V$. For example, if $U=\rr$ and $V=\rr-\{0\}$, then $\neg V=\false$ and $\neg\neg V=\true$; in general there is an inequality $V\leq\neg\neg V$, which may be strict. Toposes for which $\neg\neg V=V$ are called \emph{boolean}, and correspond to topological spaces that are totally disconnected.
+ As a particular case, defining $\neg V\coloneqq (V\imp \false)$, we can identify $\neg V$ with the interior of the complement of $V$. For example, if $U=\rr$ and $V=\rr-\{0\}$, then $\neg V=\false$ and $\neg\neg V=\true$; in general there is an inequality $V\le\neg\neg V$, which may be strict. Toposes for which $\neg\neg V=V$ are called \emph{boolean}, and correspond to topological spaces that are totally disconnected.
 
 To define $\exists$ and $\forall$, we need to discuss predicates. For any sheaf $A$, a \emph{predicate on $A$} is a sheaf morphism $p\colon A\to\Omega$. The quantifiers $\forall(a:A)$ and $\exists(a:A)$ take a predicate in two variables, say $q\colon A\times B\to\Omega$ and return a predicate $B\to\Omega$ in one variable. Namely, define $\exists(a:A).q(a)$ to be the sheaf morphism $B\to\Omega$ that on any $U\in\Op[X]$ assigns to a given $b\in B(U)$ the open set
 \[
@@ -1724,7 +1676,7 @@ In the comprehension syntax $\{x:X\mid\varphi(x)\}$, the right-hand part is a lo
 
 The Kripke-Joyal semantics invites us not to give the largest open set throughout which a proposition $\varphi$ is true, but instead to simply know whether it is true throughout a given open $U\in\Op[X]$. The notation for this is $U\models\varphi$ and pronounced \emph{$U$ forces $\varphi$}.%
 \footnote{The terminology ``forcing'' comes from Cohen's proof of the independence of the continuum hypothesis.}
-We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\leq$ on $\prop$ given in \eqref{eqn.prop_order}.
+We use the notation $\prop$ rather than $\Omega$ in this context, because it is becoming standard. Similarly, we denote $\top\in\Omega$ by $\true:\prop$ and $\false\coloneqq\neg\true$. Recall the order $\le$ on $\prop$ given in \eqref{eqn.prop_order}.
 
 Here is a list of rules for $\models$,%
 \footnote{The list is not minimal: many of the rules shown follow from others. In fact rule 1 is complete! The other rules simply remind us of the semantics of the logical symbols.
@@ -1732,7 +1684,7 @@ Here is a list of rules for $\models$,%
 where $I$ denotes any set, $U, U_i, V$ denote any opens, and $\varphi,\varphi_i,\psi$ denote any predicates:
 \begin{enumerate}
 	\item Suppose that the open set corresponding to $\varphi\in\prop$ is $U\in\Op[X]$. Then $V\models\varphi$ iff $V\subseteq U$.
-  \item If $\varphi\leq\psi$ in $\prop$ and $U\models\varphi$ then $U\models\psi$.
+  \item If $\varphi\le\psi$ in $\prop$ and $U\models\varphi$ then $U\models\psi$.
   \item $U_i\models\varphi$ for each $i\in I$ implies $\left(\bigcup_{i\in I}U_i\right)\models\varphi$.
   \item $U\models\true$ for every $U$.
   \item $U\models\false$ iff $U=\varnothing$.
@@ -1760,18 +1712,18 @@ In general, we write $A\imp B\imp C$ to mean $A\imp(B\imp C)$. Similarly, we wri
 An \emph{internal poset} in $\cat{E}$ consists of
 \begin{enumerate}
 	\item an object $P\in\cat{E}$ and
-	\item a morphism $(\leq)\colon P\to P\to\prop$
+	\item a morphism $(\le)\colon P\to P\to\prop$
 \end{enumerate}
 satisfying the following conditions, written in the internal language:
 \begin{enumerate}[label=\alph*.]
-	\item $\forall (p:P).p\leq p$
-	\item $\forall (p,q,r:P).(p\leq q)\imp (q\leq r)\imp(p\leq r)$.
-	\item $\forall (p,q:P).(p\leq q)\imp(q\leq p)\imp (p=q).$
+	\item $\forall (p:P).p\le p$
+	\item $\forall (p,q,r:P).(p\le q)\imp (q\le r)\imp(p\le r)$.
+	\item $\forall (p,q:P).(p\le q)\imp(q\le p)\imp (p=q).$
 \end{enumerate}
 \end{definition}
 
 \begin{example}
-We showed in \cref{eqn.prop_order} that $(\prop,\leq)$ is an internal poset.
+We showed in \cref{eqn.prop_order} that $(\prop,\le)$ is an internal poset.
 \end{example}
 
 % ==== Section ====%
