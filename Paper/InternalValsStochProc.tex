@@ -197,6 +197,7 @@ urlcolor=myurlcolor}
 \newcommand{\pts}{\mathtt{Pts}}		% internal type of points (for indexing the at-modalities)
 \newcommand{\modts}{\mathtt{Mod}}		% internal type of modalities
 \newcommand{\decmod}{\mathtt{DecMod}}	% internal type of decidable modalities
+\newcommand{\ptmod}{\mathtt{PtMod}}	% internal type of decidable modalities
 \newcommand{\bas}[1]{\wh{#1}}
 
 
@@ -234,6 +235,10 @@ urlcolor=myurlcolor}
 \let\originalright\right
 \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
 \renewcommand{\right}{\aftergroup\egroup\originalright}
+
+% numbered equations
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
 
 % vertical spacing in multiline equations
 \setlength{\jot}{6pt}
@@ -341,178 +346,6 @@ David Spivak acknowledges the support from Honeywell and from AFOSR grants FA955
 We thank Bas Spitters for pointing out the relevance of geometric logic to us. 
 We also benefited very much from conversations with Nelson Niu; in particular he developed an early form of \cref{vals_vs_modalities}.
 
-\section{Systems of point modalities}
-\label{axioms_soundness}
-
-In this section, we introduce \emph{systems of point modalities}, which are collections of decidable modalities which express the idea that a given topos has enough points internally. 
-We leave it understood that all of this section takes place internally, and correspondingly we only use constructive reasoning.
-We then discuss the primary intended semantics of systems of point modalities in the second half of the section.
-
-We fix a type $\pts$ and a function $\at[]\colon\pts\to\decmod$, where $\decmod$ is the set of decidable modalities; see \cref{def.decidable_modality}. The idea is that $\pts$ is an object which (internally) indexes the points, and for every $\pt \in \pts$, the modality $\at : \prop \to \prop$ checks whether a given proposition holds at $\pt$. 
-while this type of setup is conceptually reminiscent of Garner's \emph{ionads}~\cite{garner2012ionads}, we currently do not know what the technical relation is, but note that the recent results of Di Liberti~\cite{diliberti2020topology} may possibly shed some light on this.
-
-Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\at$ is the quasi-closed modality associated to the open set $T \setminus \overline{\{\pt\}}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $T$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
-\begin{equation}\label{eqn.at_semantics}
-	\church{\at[]}\colon\church{\pts}\to\church{\decmod}.
-\end{equation}
-Since sheafification is left adjoint to the underlying presheaf functor, and since the inclusion of constant presheaves is left adjoint to the global sections functor, the sheaf morphism $\at[]$ can be identified with a single function $j\colon T\to\church{\decmod}(T)$. So fix a point $\pt\in T$;
-to define an element $j_\pt\in\church{\decmod}(T)$ is to give a sheaf morphism $j_\pt\colon\Op[T]\to\Op[T]$ satisfying the following properties for all $U,V\in\Op[T]$:
-\begin{enumerate}
-	\item\label{j_increasing} $U\subseteq j_\pt(U)$;
-	\item\label{j_idempotent} $j_\pt j_\pt(U)=j_\pt(U)$;
-	\item\label{j_meets} $j_\pt(U\cap V)=j_\pt(U)\cap j_\pt(V)$; and
-	\item\label{j_decidable} $j_\pt(U)\cup (U^c\cup j_\pt(\varnothing))^\circ=T$.
-\end{enumerate}
-where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\to\Op[T]$ by
-\begin{equation}\label{eqn.j_k}
-	j_\pt(U)\coloneqq
-	\begin{cases}
-		(\{\pt\}^c)^\circ&\tn{ if }\pt\not\in U\\
-		T&\tn{ if } \pt\in U
-	\end{cases}
-\end{equation}
-If $\pt\in U$ then $j_\pt(U)=T$ and conditions \ref{j_increasing}, \ref{j_idempotent}, and \ref{j_decidable} are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\subseteq \{\pt\}^c$ and hence $U\subseteq j_\pt(U)$, giving condition \ref{j_increasing}. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition \ref{j_idempotent}. Since $U\subseteq j_\pt(\varnothing)$, we have $T=U^c\cup U\subseteq (U^c\cup j_\pt(\varnothing))$ so we also have condition \ref{j_decidable}. For condition \ref{j_meets}, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\at[]}$ from \eqref{eqn.at_semantics}.
-
-\begin{definition}[Specialization order]\label{def.specialization}
-For points $\pt,\pt' \in T$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\le\pt$ if every open set containing $\pt'$ also contains $\pt$.
-\end{definition}
-
-\begin{lemma}\label{prop.specialization}
-For points $\pt,\pt'\in T$, we have $\pt'\le\pt$ iff $T\models\at\bot\imp\at[\pt']\bot$ holds in $\shv(T)$.
-\end{lemma}
-\begin{proof}
-We have $T\models\at\bot\imp\at[\pt']\bot$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\le\pt$ as in \cref{def.specialization}.
-\end{proof}
-
-
-\medskip
-
-Similar to how a point of a locale is a completely prime filter on its frame of opens, we think of every $\at $ as specifying a point (although there is nothing in our axiomatics which requires the associated subtopos to be equivalent to $\cat{Set}$). 
-
-To summarize, we assume:
-
-\begin{axiom}[{$\at[]$-Local decidability}]\label{ax.local_dec}
-	For all $\pt : \pts$ and $P : \prop$,
-	\[
-		\at P \: \lor \: (P \imp \at \bot).
-	\]
-\end{axiom}
-
-\begin{soundproof}
-	This is simply the fact that $\church{\at}$ satisfies condition \ref{j_decidable}, as shown above.
-\end{soundproof}
-
-\begin{axiom}[Enough points]\label{ax.enough_pts}
-	For all $P : \prop$,
-	\[
-		\big( \forall (\pt : \pts). \at P \big) \: \Rightarrow \: P.
-	\]
-\end{axiom}
-
-\begin{soundproof}
-Take $U\subseteq T$ and suppose $U\models\forall (\pt : \pts). \at P$. For each point $\pt\in T$, we have $U\models\at P$ iff either $\pt\in P$ or $U\subseteq\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\subseteq P$ which gives $U\models P$ as desired.
-\end{soundproof}
-
-\begin{axiom}
-	\label{ax.N_flabby}
-	For all $\pt : \pts$ and predicates $P : \tnn \to \prop$,
-	\[
-		\at \exists (n : \tnn) . P(n) \quad \Longrightarrow \quad \exists (n : \tnn) . \at P(n).
-	\]
-\end{axiom}
-
-\begin{soundproof}
-Suppose $T\models\at \exists (n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\models\exists (n : \tnn) . P(n)$, so take $n\in\tnn(U)$ and suppose $P(n)$. Since $\tnn$ is the sheafification of the constant presheaf $V\mapsto\nn$, a section of it on $U$ can be identified with a cover $U=\bigcup_{i\in I}V_i$ and a natural number $n_i\in\nn$ with $\rest{P}{V_i}(n_i)$ for each $i$. We have $k\in V_i$ for at least one such $V_i$. Thus we can take $n_i\in\tnn(U)$, and and prove $U\models\exists(n:\tnn).\at P(n)$.
-\end{soundproof}
-
-Since $\tnn$ and $\tqq$ are internally bijective, it follows that the commutation of $\at[]$ and $\exists$ holds likewise for predicates on $\tqq$.
-
-We now show that these axioms are independent.
-
-\begin{proposition}
-	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos together with an object $\pts$ and a morphism $\at[] \colon \pts \to \modts$ which does not satisfy that axiom while satisfying the other two.
-\end{proposition}
-
-\begin{proof}
-	For \Cref{ax.local_dec}, consider any non-Boolean topos with only the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with only the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
-
-	Let the space $T := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
-	\begin{itemize}
-		\item $T$ is compact and extremally disconnected.
-		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
-		\item $\nn \subseteq T$ is dense.
-	\end{itemize}
-	The extremal disconnectedness implies that $\shv(T)$ is a de Morgan topos~\cite[D4.6]{elephant2}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $T$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (since by the soundness proof above, it already held without adding $\neg\neg$). 
-	
-	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \models \exists n. P(n)$, and therefore $B \models \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
-	
-	For contradiction, suppose $B \models \exists n . \lnot\lnot P(n)$ were to hold as well. Then there  is some cover $(U_i)$ of $B$ and external naturals $(n_i)$ such that $U_i\models\neg\neg P(n_i)$. By compactness, we may assume $I$ is finite. Since each $\{n\}$ is open, the only natural number in the open set $\church{\neg\neg P(n_i)}$ is $n_i$, and the finiteness of $I$ and the fact that $U_i\subseteq \church{\neg\neg P(n_i)}$ present the anticipated contradiction.
-
-%	For \Cref{ax.local_dec}, consider any non-Boolean topos with the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
-%
-%	Let the space $B := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
-%	\begin{itemize}
-%		\item $B$ is compact and extremally disconnected.
-%		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
-%		\item $\nn \subseteq B$ is dense.
-%	\end{itemize}
-	
-%	The extremal disconnectedness implies that $\shv(B)$ is a de Morgan topos \cite{nlab--DeMorganTopos}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $B$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (by the soundness proof above, it already held without adding $\neg\neg$). 
-	
-%	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \models \exists n. P(n)$, and therefore $B \models \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
-%
-%However, if $B \models \exists n . \lnot\lnot P(n)$ were to hold as well, then there would need to be a covering of $B$ by opens $(U_n)_{n \in \nn}$ such that $U_n \models \lnot\lnot P(n)$. Then finitely many of those are enough by compactness. But since every $n \in \nn$ is an isolated point of $B$, the concrete form of $P$ shows that we can have $m \in U_n$ only if $m = n$. Therefore finitely many $U_n$ cannot cover $B$, contradiction.
-	
-\end{proof}
-
-\tob{Move the following to where it belongs. Technically those statements aren't quite right yet, since $\pt$ on the left is internal while it's external on the right. But for now I'll pretend that something like this makes sense, and similarly further down in Sec 7}
-
-Consider the geometric morphism
-\[
-	\adj{\shv(B)}{-_\pt}{\sky_\pt}{\Set}
-\]
-corresponding to the inclusion of the point $\pt\in B$. The type of $\at$-closed propositions has the following semantics. Here $X_\pt$ is called the \emph{stalk} of sheaf $X$ at $\pt$ and $\sky_\pt(S)$ is called the skyscraper sheaf of set $S$ at $\pt$. In particular,
-\[
-\sky_\pt(S)(U)=
-\begin{cases}
-	S&\tn{ if }\pt\in U\\
-	1&\tn{ if } \pt\not\in U
-\end{cases}
-\]
-
-\begin{lemma}
-	\label{at_props_semantics}
-	In the intended semantics on $\shv(B)$, we have 
-	\[
-		\church{\at \prop} \cong \sky_\pt(\{\bot,\top\}).
-	\]
-\end{lemma}
-
-\begin{proof}
-By \eqref{eqn.j_k}we have the following for any open $U$:
-\[
-	\church{\at\prop}(U)=\{V\subseteq U\mid V=(\{\pt\}^c)^\circ \text{ or }V=U\}.
-\]
-This set has two elements when $\pt\in U$ and one element when $\pt\not\in U$.
-\end{proof}
-
-More generally, the semantics of types of $\at$-closed predicates is as follows.
-
-\begin{lemma}
-	\label{at_preds_semantics}
-	For any type $X$,
-	\[
-		\church{\at \prop^X} \cong \sky_\pt(\church{X}_\pt),
-	\]
-	\dis{This be $\church{\at \prop^X} \cong \sky_\pt(\{\bot,\top\}^{\church{X}_\pt})$, correct?}
-	where $\church{X}_\pt$ denotes the stalk.
-\end{lemma}
-
-\begin{proof}
-	Upon noting that $\at \prop^X$ is isomorphic to the function type $X \to \at \prop$,
-	\dis{Minor point, but isn't $\at\prop^X$ \emph{equal} to the function type $X \to \at \prop$?}
-	this follows from the previous lemma and a straightforward application of the standard semantics of function types.
-\end{proof}
 
 
 
@@ -555,8 +388,6 @@ It turns out that modalities in the internal logic of a topos correspond one-to-
 
 We now give three concrete examples of modalities, called \emph{open}, \emph{closed}, and \emph{quasi-closed}, associated to truth values $U \in \prop$. The quasi-closed ones will be the most central ones to us.
 
-\tob{continue here}
-
 \begin{definition}
 	\label{def.open_closed_qc}
 	Let $U \in \prop$ be a truth value. We have the following modalities, defined in terms of $U$:
@@ -582,16 +413,56 @@ We leave it to the reader to verify that these maps are indeed modalities.
 	A proposition $P : \prop$ is \emph{$j$-closed} if $P = jP$. The set of $j$-closed propositions is denoted $\prop_j$.
 \end{definition}
 
+A set $X$ is canonically isomorphic to the set of predicates $P : X \to \prop$ which are \emph{singleton}, by which they mean that they satisfy
+\[
+	\exists x \in X \, . \, \forall x' \in X \, . \, P(x') \Leftrightarrow (x' = x).
+\]
+The following definition is based on localizing this definition with respect to $j$.
+
+\begin{definition}
+	For a set $X$, the \emph{$j$-sheafification} $jX$ is the set of predicates $P : X \to \prop_j$ satisfying 
+	\beq
+		\label{j_singleton}
+		j \, \exists x \in X \, . \, \forall x' \in X \, . \, P(x) \Leftrightarrow j(x' = x).
+	\eeq
+\end{definition}
+
+There is a canonical map
+\[
+	X \longrightarrow jX, \qquad x \longmapsto j(x = \_).
+\]
+We say that $X$ is a \emph{$j$-sheaf} if this map is an isomorphism. The $j$-sheaves form a subtopos, and in particular a reflective subcategory. Hence $j$ acts functorially on sets, and the canonical maps $X \to jX$ make up the unit of this reflector.
+
+As we show now, the $j$-sheafification of $\prop$ is exactly the set of $j$-closed truth values.
+
+\begin{lemma}
+	The map
+	\[
+		\prop_j \longrightarrow j \prop, \qquad P \longmapsto j(P = \_)
+	\]
+	is injective.
+\end{lemma}
+
+\tob{Not sure if this statement has any significance at all. Surjectivity apparently not provable, and probably semantically false}
+
+Note that this map is exactly the composite of the inclusion $\prop_j \hookrightarrow \prop$ with the above unit component $\prop \to j\prop$.
+
+\begin{proof}
+	Suppose that $P_1, P_2 \in \prop$ are such that
+	\[
+		j(P_1 = Q) \quad \Leftrightarrow \quad j(P_2 = Q)
+	\]
+	for all $Q \in \prop$. Then in particular $j(P_1 = P_2)$ holds. But this implies $jP_1 \imp jP_2$, or equivalently $P_1 \imp P_2$ by the assumed $j$-closedness. But then $P_2 \imp P_2$ follows analogously, and we can conclude $P_1 = P_2$ by propositional extensionality.
+\end{proof}
+
 \subsection{Decidable modalities}
 
 
-A truth value $P$ is decidable if it is true or false,
+A truth value $P \in \prop$ is decidable if it is true or false,
 \[
 	P \, \lor (P \imp \bot).
 \]
 The axiom of excluded middle holds if and only if every truth value is decidable.
-
-\tob{check and state equivalence with $\prop_j$ being Boolean}
 
 \begin{definition}
 	\label{def.decidable_modality}
@@ -602,44 +473,95 @@ The axiom of excluded middle holds if and only if every truth value is decidable
 	for all $P \in \prop$. We write $\decmod$ for the set of decidable modalities.
 \end{definition}
 
-\begin{proposition}[Decidable modalities commute with $\lor$]\label{prop.dec_mod_or}
-Suppose $j$ is decidable. Then for all $P,Q:\prop$ we have
-\[j (P \lor Q) = j P \lor j Q.\]
-\end{proposition}
+We now make a few elementary but useful observation on decidable modalities.
+
+\begin{lemma}[Decidable modalities commute with $\lor$]
+	\label{prop.dec_mod_or}
+	Suppose $j$ is decidable. Then for all $P,Q:\prop$ we have
+	\[
+		j (P \lor Q) = j P \lor j Q.
+	\]
+\end{lemma}
+
 \begin{proof}
-The direction $(j P \lor j Q)\imp j (P \lor Q)$ is straightforward. For the converse, assume $j (P \lor Q)$. By decidability we may assume $P\imp j \bot$ and $Q\imp j \bot$. But then we have $j \bot$, which in turn proves $j P$.
+	The direction $(j P \lor j Q)\imp j (P \lor Q)$ is obvious. For the converse, assume $j (P \lor Q)$. By decidability we may assume $P\imp j \bot$ and $Q\imp j \bot$. But then we get $j \bot$, which in particular proves $j P$.
 \end{proof}
 
-\begin{proposition}[$j \bot$ is prime for decidable $j$]
+\begin{lemma}[$j \bot$ is prime for decidable $j$]
 Suppose $j$ is decidable. Then for all $P,Q:\prop$, we have
 \[\big((P\wedge Q)\imp j \bot\big)\imp\big((P\imp j \bot)\lor(Q\imp j \bot)\big)\]
-\end{proposition}
+\end{lemma}
+
 \begin{proof}
-Assume $(P\wedge Q)\imp j \bot$. By \cref{ax.decidability} we may assume also that $j P$ and $j Q$, hence $j (P\wedge Q)$ and finally $j \bot$.
+Assume $(P\wedge Q)\imp j \bot$. By decidability we may assume also that $j P$ and $j Q$, since otherwise the consequent already holds. But then also $j (P\wedge Q)$, and finally $j \bot$ upon using the assumption.
 \end{proof}
 
-\begin{proposition}[$\at$ is quasi-closed]
-Suppose $j$ is decidable. Then for all $P:\prop$ we have
-\[j P=\big((P\imp j\bot)\imp j\bot\big).\]
-\end{proposition}
+We now show that if $j$ is a decidable modality, then the values $jP$ as $P \in \prop$ are already determined by $j\bot$ alone.
+
+\begin{lemma}[Decidable $j$ is quasi-closed]
+	Suppose $j$ is decidable. Then for all $P:\prop$ we have
+	\[
+		j P=\big((P\imp j\bot)\imp j\bot\big).
+	\]
+\end{lemma}
+
 \begin{proof}
-The forward direction would hold for any modality, and the backward direction follows directly from decidability.
+	The forward direction $\Rightarrow$ holds for any modality, and the backward direction $\Leftarrow$ follows directly from decidability.
 \end{proof}
 
-We now turn to the treatment of the existential quantifier.
+We now turn to the $j$-local existential quantifier.
 
-\begin{lemma}%[The $j$-existential quantifier as a double $j$-negation]--It's not really a double negation, right?
-	Let $j$ be a decidable modality, $X$ any type, and $P : X \to \prop$ a predicate. Then
+\begin{lemma}
+	Let $j$ be a decidable modality, $X$ any set, and $P : X \to \prop$ a predicate. Then
 	\[
 		j \exists (x : X) . P(x) \quad \Longleftrightarrow \quad \left( \forall (x : X). (P(x) \imp j \bot) \right) \imp j \bot.
 	\]
 \end{lemma}
 
 \begin{proof}
-	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$.
+	From left to right, we can assume $j \left( \exists x. P(x)\right)$ and $\forall x. P(x) \imp j\bot$ to prove $j\bot$. Since the goal is $j$-closed, we can strengthen the first assumption to $\exists x. P(x)$. Choosing $x$ with $P(x)$ and applying $P(x) \imp j\bot$ therefore results in $j\bot$. In particular, this implication holds regardless of whether $j$ is decidable.
 
 	From right to left, suppose by $j$-decidability that $\left( \exists x. P(x) \right) \imp j\bot$. Therefore $\forall x. (P(x) \imp j\bot)$. Plugging this into the assumption on the right shows $j\bot$, which is enough.
 \end{proof}
+
+\subsection{Countably coherent modalities}
+
+Throughout the paper, we will work with decidable modalities which satisfy an additional condition closely related to coherent and geometric logic.
+
+\begin{definition}
+	\label{countably_coherent}
+	A modality $j$ is \emph{countably coherent} if for all predicates $P : \tnn \to \prop$,
+	\[
+		j \exists n \in \tnn . P(n) \quad \Longrightarrow \quad \exists n \in \tnn . jP(n).
+	\]
+\end{definition}
+
+Note that the converse implication from right to left holds for every modality $j$. Thus a countably coherent modality is one for which preserves countable existential quantification, or equivalently is such that the existential quantification of a $j$-closed predicate on $\tnn$ is again $j$-closed. It is easy to see that a countably coherent modality in particular must commute with $\lor$ by taking $P(n) \coloneqq \bot$ for all $n \ge 2$.
+
+Our application of countable coherence will use the commutation of $j$ and $\exists$ for predicates on $\tqq$, for which it holds likewise since $\tnn$ and $\tqq$ are in canonical bijection.
+
+\subsection{Systems of point modalities}
+\label{axioms_soundness}
+
+We use the term \emph{point modality} to refer to a decidable and countably coherent modality, and write $\ptmod$ for the set of point modalities. 
+In this subsection, we introduce \emph{systems of point modalities}, which are collections of decidable and countably coherent modalities which express the idea that a given topos has enough points internally.
+
+\begin{definition}
+	A \emph{system of point modalities} consists of a set $\pts$ together with a map
+	\[
+		\at[] \colon \pts \to \ptmod		
+	\]
+	such that for all for all $P \in \prop$,
+	\beq
+		\label{enough_pts}
+		\left( \forall \pt \in \pts . \at P \right) \: \Rightarrow \: P.
+	\eeq
+\end{definition}
+
+Note that again the converse implication of \eqref{enough_pts} is immediate, so that we actually have a logical equivalence between $P$ and $\forall \pt . \at P$. The idea of the definition is that $\pts$ is an object which (internally) indexes points, and for every $\pt \in \pts$, the modality $\at : \prop \to \prop$ maps a given truth value to its value at $\pt$. Condition~\eqref{enough_pts} then can be interpreted as saying that there are enough points.
+However, we will discuss the primary intended semantics of systems of point modalities at a technical level only in \Cref{points_semantics}.
+
+While a setup like this is conceptually reminiscent of Garner's \emph{ionads}~\cite{garner2012ionads}, we currently do not know what the technical relation is, but note that the recent results of Di Liberti~\cite{diliberti2020topology} may possibly shed some light on this.
 
 \section{Background on lower reals}
 
@@ -656,7 +578,7 @@ A \emph{lower real} is a function $r\colon\tqq\to\prop$ satisfying the following
 \begin{itemize}
 	\item Inhabited: there is $q:\tqq$ such that $r(q)$.
 	\item Down-closed: if $q_1,q_2:\tqq$ are such that $r(q_1)$ and $q_1 > q_2$, then also $r(q_2)$.
-	\item Rounded: if $q_1 \in \tqq$ is such that $r(q_1)$, then there is $q_2 \in \tqq$ with $q_2 > q_1$ and $r_>(q_2)$.
+	\item Rounded: if $q_1 \in \tqq$ is such that $r(q_1)$, then there is $q_2 \in \tqq$ with $q_2 > q_1$ and $r(q_2)$.
 \end{itemize}
 Accordingly, the set of lower reals, denoted $\tlrr$, is
 \[
@@ -807,21 +729,34 @@ Following Henry, we show next that the order cancellative lower reals are dense.
 
 \subsection{Lower reals and modalities}
 
-We now investigate the interaction between lower reals and modalities, also referring to~\cite{schultz2019temporal} for related considerations. Throughout this subsection, $j$ is a modality.
+We now investigate the interaction between lower reals and modalities, also referring to~\cite[Section~4.3]{schultz2019temporal} for related considerations. Throughout this subsection, $j$ is a modality.
 
-We follow \cite[Definition 4.21]{schultz2019temporal} in the following definition (see also loc.\ cit.\ Remark 4.9).
-
-\begin{definition}[$j$-local lower nonnegative reals]\label{def.j_loc_lower_reals}
-The \emph{$j$-local lower nonnegative reals}, denoted $\tlrr_j$, is the type of functions $r_>\colon\tqq\to\prop$ satisfying the following axioms:
-\begin{enumerate}[start=0]
-	\item ($j$-closed) $\forall(q:\tqq).j(r_>q)\imp r_>q$.
-	\item (nonnegative) $\forall(q:\tqq).0>q\imp r_>q$.
-	\item (down-closed) $\forall(q,q':\tqq). r_>q'\imp q'>q\imp r_>q$.
-	\item ($j$-rounded) $\forall (q:\tqq).r_>q\imp j\exists (q':\tqq).q'>q\wedge r_>q'$.
-\end{enumerate}
+\begin{definition}
+	A lower real $r \in \tlrr$ is \emph{$j$-closed} if it is $j$-closed as a predicate $\tqq \to \prop$, meaning that if
+	\[
+		\forall q \in \tqq \, . \, j(q < r) \imp (q < r).
+	\]
 \end{definition}
 
-Note that, using decidability of the order on $\tqq$, it follows that the nonnegativity and down-closure properties are automatically $j$-closed. A similarly simple argument shows that also the $j$-roundedness condition is $j$-closed.
+\begin{lemma}
+	Suppose that $j$ is countably coherent. For $r \in \tlrr$, the predicate $jr$ is a $j$-closed lower real with
+	\[
+		q < jr \quad \Longleftrightarrow \quad j(q < r),
+	\]
+	and it is the smallest $j$-closed lower real with $r \le jr$.
+\end{lemma}
+
+\begin{proof}
+	The only nontrivial part is to show that $jr$ is indeed a lower real. The inhabitedness is obvious. For down-closure, suppose that $q_1 < q_2 < jr$, where the second inequality by definition means $j(q_2 < r)$. But since $r$ itself is down-closed, we also have
+	\[
+		j(q_2 < r) \: \imp \: j(q_1 < r),
+	\]
+	and therefore the desired $j(q_1 < r)$.
+
+	Roundedness is where countable coherence comes in. Indeed the assumption $j(q_1 < r)$ lets us prove that there $j$-locally exists $q_2 \in \tqq$ with $q_2 > q_1$ and $q_2 < r$. But then by the commutation of $j$ and existential quantification, as well as the commutation with and, we obtain $q_2 \in \tqq$ such that $j(q_2 > q_1)$ and $j(q_2 < r)$. Now we are done if $q_2 > q_1$; while if $q_2 \le q_1$, then together with $j(q_2 > q_1)$ we conclude $j\bot$, and therefore again $j(q_2 < r)$.
+\end{proof}
+
+\tob{continue here}
 
 \begin{proposition}
 The $j$-closure of a lower real is a $j$-local lower real.
@@ -1263,6 +1198,150 @@ which was the desired inequality \eqref{goal_continuous}. This establishes the S
 \newpage
 \part{Pointwise semantics of internal valuations}
 
+\section{Intended semantics of systems of point modalities}
+\label{points_semantics}
+
+Our primary intended semantics is that our topos is $\shv(T)$ for some topological space $T$, and that every modality $\at$ is the quasi-closed modality associated to the open set $T \setminus \overline{\{\pt\}}$. More precisely, consider the underlying set $T$ of the space, and consider the associated constant presheaf on $T$, which assigns the set $T$ to each open $U\in\Op[T]$. We take $\church{\pts}$ to be the sheafification of this presheaf. Our next goal is to define a sheaf homomorphism
+\beq
+	\church{\at[]}\colon\church{\pts}\to\church{\decmod}.
+\eeq
+Since sheafification is left adjoint to the underlying presheaf functor, and since the inclusion of constant presheaves is left adjoint to the global sections functor, the sheaf morphism $\at[]$ can be identified with a single function $j\colon T\to\church{\decmod}(T)$. So fix a point $\pt\in T$;
+to define an element $j_\pt\in\church{\decmod}(T)$ is to give a sheaf morphism $j_\pt\colon\Op[T]\to\Op[T]$ satisfying the following properties for all $U,V\in\Op[T]$:
+\begin{enumerate}
+	\item\label{j_increasing} $U\subseteq j_\pt(U)$;
+	\item\label{j_idempotent} $j_\pt j_\pt(U)=j_\pt(U)$;
+	\item\label{j_meets} $j_\pt(U\cap V)=j_\pt(U)\cap j_\pt(V)$; and
+	\item\label{j_decidable} $j_\pt(U)\cup (U^c\cup j_\pt(\varnothing))^\circ=T$.
+\end{enumerate}
+where $^c$ is complement and $^\circ$ is interior. We define $j_\pt\colon\Op[T]\to\Op[T]$ by
+\begin{equation}\label{eqn.j_k}
+	j_\pt(U)\coloneqq
+	\begin{cases}
+		(\{\pt\}^c)^\circ&\tn{ if }\pt\not\in U\\
+		T&\tn{ if } \pt\in U
+	\end{cases}
+\end{equation}
+If $\pt\in U$ then $j_\pt(U)=T$ and conditions \ref{j_increasing}, \ref{j_idempotent}, and \ref{j_decidable} are trivially satisfied. Supposing now that $\pt\not\in U$ then $U\subseteq \{\pt\}^c$ and hence $U\subseteq j_\pt(U)$, giving condition \ref{j_increasing}. Since $\pt\not\in(\{\pt\}^c)^\circ=j_\pt(U)$, we also have condition \ref{j_idempotent}. Since $U\subseteq j_\pt(\varnothing)$, we have $T=U^c\cup U\subseteq (U^c\cup j_\pt(\varnothing))$ so we also have condition \ref{j_decidable}. For condition \ref{j_meets}, if $\pt\in U\cap V$ then both sides are $T$; if $\pt\not\in U\cap V$ then $\pt\not\in U$ or $\pt\not\in V$ in which case both sides are $(\{\pt\}^c)^\circ$. Thus \eqref{eqn.j_k} satisfies the necessary conditions, and we have defined our sheaf homomorphism $\church{\at[]}$ from \eqref{eqn.at_semantics}.
+
+\begin{definition}[Specialization order]\label{def.specialization}
+For points $\pt,\pt' \in T$, say that $\pt$ is a \emph{specialization} of $\pt'$, denoted $\pt'\le\pt$ if every open set containing $\pt'$ also contains $\pt$.
+\end{definition}
+
+\begin{lemma}\label{prop.specialization}
+For points $\pt,\pt'\in T$, we have $\pt'\le\pt$ iff $T\models\at\bot\imp\at[\pt']\bot$ holds in $\shv(T)$.
+\end{lemma}
+
+\begin{proof}
+We have $T\models\at\bot\imp\at[\pt']\bot$ iff $(\{\pt\}^c)^\circ\subseteq(\{\pt'\}^c)^\circ$. This holds iff $(\{\pt\}^c)^\circ\subseteq\{\pt'\}^c$. Letting $\ol{\{\pt\}}$ denote the closure of $\{\pt\}$, then $(\{\pt\}^c)^\circ=\ol{\{\pt\}}^c$, so the above holds iff $\ol{\{\pt\}}^c\subseteq\{\pt'\}^c$, iff $\pt'\in\ol{\{\pt\}}$, iff every closed set containing $\pt$ contains $\pt'$, iff $\pt'\le\pt$ as in \cref{def.specialization}.
+\end{proof}
+
+\begin{axiom}[{$\at[]$-Local decidability}]\label{ax.local_dec}
+	For all $\pt : \pts$ and $P : \prop$,
+	\[
+		\at P \: \lor \: (P \imp \at \bot).
+	\]
+\end{axiom}
+
+\begin{soundproof}
+	This is simply the fact that $\church{\at}$ satisfies condition \ref{j_decidable}, as shown above.
+\end{soundproof}
+
+\begin{axiom}[Countable coherence]
+	\label{ax.N_flabby}
+	For all $\pt : \pts$ and predicates $P : \tnn \to \prop$,
+	\[
+		\at \exists (n : \tnn) . P(n) \quad \Longrightarrow \quad \exists (n : \tnn) . \at P(n).
+	\]
+\end{axiom}
+
+\begin{soundproof}
+Suppose $T\models\at \exists (n : \tnn) . P(n)$; then there is a neighborhood $U\ni\pt$ such that $U\models\exists (n : \tnn) . P(n)$, so take $n\in\tnn(U)$ and suppose $P(n)$. Since $\tnn$ is the sheafification of the constant presheaf $V\mapsto\nn$, a section of it on $U$ can be identified with a cover $U=\bigcup_{i\in I}V_i$ and a natural number $n_i\in\nn$ with $\rest{P}{V_i}(n_i)$ for each $i$. We have $k\in V_i$ for at least one such $V_i$. Thus we can take $n_i\in\tnn(U)$, and and prove $U\models\exists(n:\tnn).\at P(n)$.
+\end{soundproof}
+
+\begin{axiom}[Enough points]
+	\label{ax.enough_pts}
+	For all $P : \prop$,
+	\[
+		\big( \forall (\pt : \pts). \at P \big) \: \Rightarrow \: P.
+	\]
+\end{axiom}
+
+\begin{soundproof}
+Take $U\subseteq T$ and suppose $U\models\forall (\pt : \pts). \at P$. For each point $\pt\in T$, we have $U\models\at P$ iff either $\pt\in P$ or $U\subseteq\{\pt\}^c$. In particular for every $\pt\in U$ we have $\pt\in P$; hence $U\subseteq P$ which gives $U\models P$ as desired.
+\end{soundproof}
+
+We now show that these axioms are independent.
+
+\begin{proposition}
+	For each one of \Cref{ax.local_dec,ax.enough_pts,ax.N_flabby}, there is a topos together with an object $\pts$ and a morphism $\at[] \colon \pts \to \modts$ which does not satisfy that axiom while satisfying the other two.
+\end{proposition}
+
+\begin{proof}
+	For \Cref{ax.local_dec}, consider any non-Boolean topos with only the identity modality. For \Cref{ax.enough_pts}, take $\cat{Set}$ with only the terminal modality $\top$. The case of \Cref{ax.N_flabby} requires a bit of elaboration.
+
+	Let the space $T := \beta\nn$ be the Stone-\v{C}ech compactification of the natural numbers. This space has the following properties:
+	\begin{itemize}
+		\item $T$ is compact and extremally disconnected.
+		\item For every $n \in \nn$, the point $n \in \nn$ is isolated.
+		\item $\nn \subseteq T$ is dense.
+	\end{itemize}
+	The extremal disconnectedness implies that $\shv(T)$ is a de Morgan topos~\cite[D4.6]{elephant2}, meaning that the double negation modality $\lnot\lnot$ satisfies the decidability property of \Cref{ax.local_dec}. Thus let $\pts$ be the constant sheaf on the points of $T$, giving rise to the point modalities $\at[]$ as above, together with one additional element for the double negation modality. Then the enough points condition of \Cref{ax.enough_pts} holds (since by the soundness proof above, it already held without adding $\neg\neg$). 
+	
+	The proof will be complete upon showing that the double negation modality fails \Cref{ax.N_flabby} globally. To this end, consider the globally defined predicate $P$ where $\church{P} : \church{N} \to \church{\prop}$ is the unique sheaf map induced by the presheaf map out of the constant presheaf $\nn$ which takes every $n \in \nn$ to the open set $\{n\}$. Then $\nn \models \exists n. P(n)$, and therefore $B \models \lnot \lnot \exists n. P(n)$ by density of $\nn \subseteq B$. 
+	
+	For contradiction, suppose $B \models \exists n . \lnot\lnot P(n)$ were to hold as well. Then there  is some cover $(U_i)$ of $B$ and external naturals $(n_i)$ such that $U_i\models\neg\neg P(n_i)$. By compactness, we may assume $I$ is finite. Since each $\{n\}$ is open, the only natural number in the open set $\church{\neg\neg P(n_i)}$ is $n_i$, and the finiteness of $I$ and the fact that $U_i\subseteq \church{\neg\neg P(n_i)}$ present the anticipated contradiction.
+\end{proof}
+
+\tob{Move the following to where it belongs. Technically those statements aren't quite right yet, since $\pt$ on the left is internal while it's external on the right. But for now I'll pretend that something like this makes sense, and similarly further down in Sec 7}
+
+Consider the geometric morphism
+\[
+	\adj{\shv(B)}{-_\pt}{\sky_\pt}{\Set}
+\]
+corresponding to the inclusion of the point $\pt\in B$. The type of $\at$-closed propositions has the following semantics. Here $X_\pt$ is called the \emph{stalk} of sheaf $X$ at $\pt$ and $\sky_\pt(S)$ is called the skyscraper sheaf of set $S$ at $\pt$. In particular,
+\[
+\sky_\pt(S)(U)=
+\begin{cases}
+	S&\tn{ if }\pt\in U\\
+	1&\tn{ if } \pt\not\in U
+\end{cases}
+\]
+
+\begin{lemma}
+	\label{at_props_semantics}
+	In the intended semantics on $\shv(B)$, we have 
+	\[
+		\church{\at \prop} \cong \sky_\pt(\{\bot,\top\}).
+	\]
+\end{lemma}
+
+\begin{proof}
+By \eqref{eqn.j_k}we have the following for any open $U$:
+\[
+	\church{\at\prop}(U)=\{V\subseteq U\mid V=(\{\pt\}^c)^\circ \text{ or }V=U\}.
+\]
+This set has two elements when $\pt\in U$ and one element when $\pt\not\in U$.
+\end{proof}
+
+More generally, the semantics of types of $\at$-closed predicates is as follows.
+
+\begin{lemma}
+	\label{at_preds_semantics}
+	For any type $X$,
+	\[
+		\church{\at \prop^X} \cong \sky_\pt(\church{X}_\pt),
+	\]
+	\dis{This be $\church{\at \prop^X} \cong \sky_\pt(\{\bot,\top\}^{\church{X}_\pt})$, correct?}
+	where $\church{X}_\pt$ denotes the stalk.
+\end{lemma}
+
+\begin{proof}
+	Upon noting that $\at \prop^X$ is isomorphic to the function type $X \to \at \prop$,
+	\dis{Minor point, but isn't $\at\prop^X$ \emph{equal} to the function type $X \to \at \prop$?}
+	this follows from the previous lemma and a straightforward application of the standard semantics of function types.
+\end{proof}
+
+
 \section{Background on internal spaces and Moerdijk's theorem}
 
 Recall that for a sheaf $X$, the sheaf of subobjects $\pow(X)$ is defined to be $\prop^X$. \cref{def.internal_space} returns the usual notion of topological space, when $\cat{E}=\Set$.
@@ -1562,8 +1641,8 @@ Recall that $x \le x'$ in the specialization preorder means that every neighborh
 We now apply the results of the previous two sections to hyperspaces.
 
 
-\appendix
 
+\appendix
 \part{Appendix: Topos-theoretic background}\label{sec.topos_background}
 
 \section{Sheaves on a topological space}
