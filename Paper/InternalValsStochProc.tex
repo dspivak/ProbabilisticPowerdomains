@@ -815,19 +815,23 @@ There is also a simple interaction between a modality $j$ and the formation of i
 We now consider the interaction of lower reals with systems of point modalities (\Cref{system_defn}).
 
 \begin{definition}
-	A family of lower reals $(r_\pt)_{\pt \in \pts}$ is \emph{lower semicontinuous} if for every $q \in \tqq$ there exists a $U \in \prop$ such that for all $\pt \in \pts$,
-	\beq
-		\label{lsc_lr}
-		q < r_\pt \: \Longleftrightarrow \: \at U.
-	\eeq
+	A family of lower reals $(r_\pt)_{\pt \in \pts}$ is \emph{lower bounded semicontinuous} if the following hold:
+	\begin{enumerate}
+		\item There is $q \in \tqq$ such that $q < r_\pt$ for all $\pt \in \pts$.
+		\item For every $q \in \tqq$ there exists a $U \in \prop$ such that for all $\pt \in \pts$,
+			\beq
+				\label{lsc_lr}
+				q < r_\pt \: \Longleftrightarrow \: \at U.
+			\eeq
+	\end{enumerate}
 \end{definition}
 
-In particular, this implies that every $r_x$ is $\at$-closed. Moreover, a lower semicontinuous family automatically satisfies the following monotonicity condition: for all $\pt,\pt' : \pts$, we have
+In particular, the second condition implies that every $r_x$ is $\at$-closed. It also implies the following monotonicity condition: for all $\pt,\pt' : \pts$, we have
 \begin{equation}
 	\label{r_pt_monotone}
 	r_\pt \le \at r_{\pt'},
 \end{equation}
-since $\at U \imp \at \at[\pt'] U$.
+since $\at U \imp \at \at[\pt'] U$ for all $U \in \prop$.
 
 \begin{proposition}[{$\at[]$-Locality of lower reals}]
 	\label{LR_locality}
@@ -840,43 +844,44 @@ since $\at U \imp \at \at[\pt'] U$.
 		\label{lr_from_family}
 		(r_\pt)_{\pt\in\pts} \longmapsto \forall(\pt \in \pts).r_\pt
 	\eeq
-	are mutually inverse bijections between $\tlrr$ and the lower semicontinuous families of lower reals.
+	are mutually inverse bijections between $\tlrr$ and the lower bounded semicontinuous families of lower reals.
 \end{proposition}
 
+Here, the universal quantification in \eqref{lr_from_family} is to interpreted in the pointwise sense, meaning that by definition
+\[
+	q < \forall (\pt \in \pts) . r_\pt \quad \Longleftrightarrow \quad \forall \pt \in \pts \, . \, q < r_\pt,
+\]
+so that the right-hand side of \eqref{lr_from_family} is in particular equal to the infimum of the family $(r_x)$.
+
 \begin{proof}
-	For every $r : \tlrr$, the family with $r_\pt\coloneqq \at r$ for each $k\in\pts$ satisfies lower semicontinuity; indeed for any $q$ we can take $U \coloneqq (q < r)$ itself and \eqref{lsc_lr} holds by definition.
+	For every $r : \tlrr$, the family with $r_\pt\coloneqq \at r$ for each $k\in\pts$ satisfies the lower bounded semicontinuous conditions: the lower bound exists by inhabitedness, and for any $q$ in the second condition we can take $U \coloneqq (q < r)$ itself and \eqref{lsc_lr} holds by definition.
 
-	Similarly, we need to show that \eqref{lr_from_family} indeed defines a lower real.
-	\tob{continue here: inhabitedness does not yet need to hold} 
-	Downward closure is obvious, since the downward closure property of an $\at[]$-lower real is exactly the usual one which then transfers to $r$ (see \cref{def.j_loc_lower_reals}). Thus it remains to prove roundedness, which by the enough points property amounts to showing that if $r(q)$, then 
+	Similarly, we also need to show that \eqref{lr_from_family} indeed defines a lower real.
+	Inhabitedness holds by the boundedness assumption.
+	Downward closure is obvious.
+	Thus it remains to prove roundedness, which is a bit less trivial; to this end, we first show that
+	\beq
+		\label{at_recover_lr}
+		\at \left( \forall \pt' \in \pts \, . \, r_{\pt'} \right) = r_\pt,
+	\eeq
+	for all $\pt \in \pts$. When unfolded, this takes the form
 	\[
-		\at \exists q'. (q' > q) \wedge r(q')
+		\at \left( \forall \pt' \in \pts \, . \, q < r_{\pt'} \right) \quad \Longleftrightarrow \quad q < r_\pt
 	\]
-	for any $\pt : \pts$. But then by \Cref{ax.N_flabby}, this is equivalent to $\exists q'. (q' > q)\wedge \at r(q')$, and the claim now follows by $\at r(q') = r_\pt(q')$.
+	for all $q \in \tqq$.
+	Indeed this follows by the lower semicontinuity assumption, which provides us with $U \in \prop$ such that $q < r_{\pt'}$ if and only if $\at[x'] U$, thereby reducing the problem to
+	\[
+		\at \left( \forall \pt' \in \pts \, . \, \at[\pt'] U \right) \quad \Longleftrightarrow \quad \at U,
+	\]
+	which is indeed true by the enough points property, which makes $U$ equivalent to $\forall \pt' \in \pts . \at[\pt'] U$. We now turn to roundedness of \eqref{lr_from_family}, writing $r \coloneqq \forall \pt \in \pts \, . \, r_\pt$ as shorthand.
+	Then by the enough points property, it is enough to show that if $q < r$, then for every $\pt \in \pts$ there $\at$-locally exists rational $q' > q$ with $q' < r$.
+	But then by countable coherence, this is equivalent to the existence of rational $q'$ such that $\at (q' > q)$ and $\at (q' < r)$. But by~\eqref{at_recover_lr}, the latter is equivalent to $q' < r_\pt$, so that the claim follows by roundedness of $r_\pt$.
 
-	Finally, we prove that the above two constructions are inverses. Starting with $r \in \tlrr$, we need to prove that
+	Finally, we need to show that the two constructions are inverses. Starting with $r \in \tlrr$, we need to prove that for every $q \in \tqq$,
 	\[
-		r(q) = \forall (\pt : \pts) . \at r(q),
+		q < r \quad \Longleftrightarrow \quad \forall (\pt : \pts) . \at (q < r),
 	\]
-	which is an instance of the enough points condition. Starting with a lower semicontinuous family $(r_\pt)$, the relevant property is the equation
-	\[
-		\at \forall (\pt' : \pts) . \at[\pt'] r_{\pt'}(q) = r_\pt(q),
-	\]
-	i.e.\ \eqref{eqn.round_trip}, which was proven above.
-
-	We next show that the map from lower semicontinuous families $(r_\pt)_{\pt\in\pts}$ back to lower reals by putting
-	\begin{equation}
-		r(q) := \forall (\pt : \pts) . r_\pt(q).
-	\end{equation}
-	We first show that $\at r = r_\pt$ for every $\pt$, or equivalently
-	\[
-		\at \forall (\pt':\pts) . r_{\pt'}(q) \quad \Longleftrightarrow \quad r_\pt(q)
-	\]
-	for every $q$. So given $q$, take $U$ as in \eqref{eqn.witness} and the problem is reduced to showing that
-	\begin{equation}\label{eqn.round_trip}
-		\at \forall (\pt':\pts) . \at[\pt'] U \quad \Longleftrightarrow \quad \at U,
-	\end{equation}
-	which is now obvious since $\forall \pt' . \at[\pt'] U$ is equivalent to $U$.
+	which is an instance of the enough points condition. Starting instead with a lower semicontinuous family $(r_\pt)$, the fact that it gets recovered upon applying the two maps round-trip recovers the family is exactly~\eqref{at_recover_lr} from above.
 \end{proof}
 
 \section{Background on topological spaces}
