@@ -382,7 +382,7 @@ A modality automatically satisfies the following additional properties for all $
 	\setcounter{enumi}{3}	% somehow using [resume] results in a label off by 1
 	\item\label{j_useful} If $jP$ and $P\imp jQ$, then also $jQ$.
 	\item If $j(P\imp Q)$ and $jP$, then also $jQ$.
-	\item If $jP$ and $jQ$, then also $j(P\wedge Q)$.
+	\item If $jP$ and $jQ$, then also $j(P\land Q)$.
 \end{enumerate}
 See e.g.~\cite[Lemma~4.6]{schultz2019temporal} for the proof. Property \ref{j_useful} will turn out to be especially useful in our proofs: when proving a statement of the form $jQ$, it lets us strengthen an assumption of the form $jP$ to assuming $P$.
 
@@ -507,11 +507,11 @@ We now make a few elementary but useful observation on decidable modalities.
 
 \begin{lemma}[$j \bot$ is prime for decidable $j$]
 Suppose $j$ is decidable. Then for all $P,Q:\prop$, we have
-\[\big((P\wedge Q)\imp j \bot\big)\imp\big((P\imp j \bot)\lor(Q\imp j \bot)\big)\]
+\[\big((P\land Q)\imp j \bot\big)\imp\big((P\imp j \bot)\lor(Q\imp j \bot)\big)\]
 \end{lemma}
 
 \begin{proof}
-Assume $(P\wedge Q)\imp j \bot$. By decidability we may assume also that $j P$ and $j Q$, since otherwise the consequent already holds. But then also $j (P\wedge Q)$, and finally $j \bot$ upon using the assumption.
+Assume $(P\land Q)\imp j \bot$. By decidability we may assume also that $j P$ and $j Q$, since otherwise the consequent already holds. But then also $j (P\land Q)$, and finally $j \bot$ upon using the assumption.
 \end{proof}
 
 We now show that if $j$ is a decidable modality, then the values $jP$ as $P \in \prop$ are already determined by $j\bot$ alone.
@@ -628,7 +628,7 @@ It is straightforward to show that $\ge$ is indeed a partial order relation on $
 \begin{definition}[Addition of lower reals]\label{def.sum_lr}
 Let $r_1,r_2:\tlrr$ be lower reals. Define their \emph{sum} $r_1 + r_2 : \tqq\to\prop$ to be the lower real with
 \begin{equation}\label{eqn.sum_lr}
-r_1+r_2 > q \:\::\iff\:\: \exists (q_1,q_2:\tqq) \,.\, (r_1>q_1)\wedge (r_2> q_2)\wedge (q=q_1+q_2).
+r_1+r_2 > q \:\::\iff\:\: \exists (q_1,q_2:\tqq) \,.\, (r_1>q_1)\land (r_2> q_2)\land (q=q_1+q_2).
 \end{equation}
 \end{definition}
 
@@ -642,7 +642,7 @@ We leave it to the reader to verify that $r_1 + r_2$ indeed is a lower real, tha
 \begin{definition}[Pairwise minima, arbitrary suprema]\label{def.min_sup}
 Let $r_1,r_2:\tlrr$. We define their \emph{minimum} $\min(r_1,r_2)$ by
 \[
-	\min(r_1, r_2) > q \:\::\iff\:\: r_1 > q \,\wedge\, r_2 > q.
+	\min(r_1, r_2) > q \:\::\iff\:\: r_1 > q \,\land\, r_2 > q.
 \]
 Let $S \subseteq \tlrr$ be a subset of lower reals.
 Its \emph{supremum} $\sup S$ is the lower real defined  by 
@@ -734,8 +734,9 @@ Following Henry, we show next that the order cancellative lower reals are dense.
 	and the claim $q < s_2$ follows upon cancelling $\frac{1}{n}$ from both sides.
 \end{proof}
 
-\begin{corollary}\label{cor.favorite}
-	Suppose that $r_1,r_2,s_1,s_2:\tlrr$ are such that $r_1 + r_2 = s_1 + s_2$ and $r_1, r_2 \le N$ for some natural $N$. Then
+\begin{corollary}
+	\label{cancel_improved_lr}
+	Suppose that $r_1, r_2, s_1, s_2 \in \tlrr$ are such that $r_1 + r_2 = s_1 + s_2$ and $r_1, r_2 \le N$ for some natural $N$. Then
 	\[
 		r_1\le s_1, \quad r_2\le s_2 \quad \Longrightarrow \quad r_1 = s_1, \quad r_2 = s_2.
 	\]
@@ -809,7 +810,7 @@ There is also a simple interaction between a modality $j$ and the formation of i
 \end{lemma}
 
 \begin{proof}
-	Clearly $j\ind{P}\le j\ind{jP}$, so we only have to prove the other inequality. Given $q \in \tqq$ with $j(q < \ind{jP})$, we want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q < \ind{jP}$. Thus $q < 0$ or $(q < 1) \land jP$. If $q < 0$, then $q < \ind{P}$ and we are done. If $(q < 1) \land jP$, then we can again strengthen the hypothesis and get $(q<1)\wedge P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
+	Clearly $j\ind{P}\le j\ind{jP}$, so we only have to prove the other inequality. Given $q \in \tqq$ with $j(q < \ind{jP})$, we want to prove $j(q<\ind{P})$, so we may strengthen the hypothesis to $q < \ind{jP}$. Thus $q < 0$ or $(q < 1) \land jP$. If $q < 0$, then $q < \ind{P}$ and we are done. If $(q < 1) \land jP$, then we can again strengthen the hypothesis and get $(q<1)\land P$, giving $q<\ind{P}$ and hence $j(q<\ind{P})$ as desired.
 \end{proof}
 
 We now consider the interaction of lower reals with systems of point modalities (\Cref{system_defn}).
@@ -941,34 +942,76 @@ The closure of $\Op[X]$ under arbitrary unions has powerful consequences for the
 	Every predicate on $1$ is constant, and therefore every subset of $1$ must be open by \Cref{props_open}.
 \end{proof}
 
-\section{Basic theory of valuations}
-
-Valuations on topological spaces are a constructively well-behaved variant of probability measures. If $X$ is a topological space, then we generically write $\Op[X]$ for its partially ordered set of opens, considered as a subset of 
-
-\begin{definition}[Probability valuation]\label{def.prob_valuation}
-Let $(X,\Op[X])$ be an internal topological space. A \emph{probability valuation} on $(X,\Op[X])$ is a function $\mu\colon\Op[X]\to\tii$ satisfying the following conditions:
-\begin{enumerate}
-	\item $\mu(\bot)=0$ and $\mu(\top)=1$;
-	\item $(U\imp V)\imp\mu(U)\le\mu(V)$; and
-	\item $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
-	\item If $D\subseteq\Op[X]$ is a directed subposet (\cref{def.directed}), then
-\[
-	\mu\big(\exists(U:D).U\big)= \sup_{U: D}\mu(U).
-\]
-\end{enumerate}
+\begin{definition}
+	Let $X$ be a set and $j$ a modality. A \emph{$j$-local topology} is a subset $\Op[X]_j \subseteq \prop^X_j$ such that:
+	\begin{enumerate}
+		\item\label{j_top_trivial} $j\emptyset, X \in \Op[X]$.
+		\item\label{j_top_intersection} If $U,V \in \Op[X]$, then also $U \cap V \in \Op[X]$.
+		\item\label{j_top_union} For any $S \subseteq \Op[X]$, we also have $j\bigcup S \in \Op[X]$.
+	\end{enumerate}
 \end{definition}
 
-Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the inclusion $\inc : \prop \to \tii$, given by the constant function $\ind{P}(q)\coloneqq P$. When we discuss the modularity condition, we will implicitly use $\cast\colon\tii\to\tlrr$, sending $r\mapsto (q<0)\lor ((q<1)\wedge (q<r))$ as discussed in \cref{sec.valuations}. Recall also from \cref{top_on_one} that $\prop$ is the unique topology on the one-point space $\{*\}$.
+If $\Op[X]$ is a topology and $j$ is a modality, then we also consider the set of $j$-closed opens,
+\[
+	j \Op[X] := \{ U \in \Op[X] \mid j U = U \},
+\]
+where $jU = U$ means that $U$ is $j$-closed when considered as a predicate on $X$.
 
-\begin{proposition}
-	\label{prop.existence_val_on_1}
-	There exists a valuation on the one-point space $\{*\}$, namely the indicator function $\inc : \prop \to \tii$.
-\end{proposition}
-
-\tob{Comment on the way in how the internal reasoning looks absurd at first look?}
+\begin{lemma}
+	$j\Op[X]$ is a $j$-local topology.
+\end{lemma}
 
 \begin{proof}
-	We first show that $\inc$ is indeed valuation. The normalization conditions and monotonicity follow directly from \cref{lemma.ind_monotonic}. 	Concerning modularity, for $P,Q : \prop$ we prove both inequality directions of the claimed equation
+	Condition \ref{j_top_trivial} is trivial. Condition \ref{j_top_intersection} follows by $j(U \cap V) = jU \cap jV$. For condition \ref{j_top_union}, the assumptions result in $\bigcup S \in \Op[X]$, and therefore $j \bigcup S \in j \Op[X]$ by \Cref{props_open}.
+\end{proof}
+
+\section{Basic theory of valuations}
+
+Valuations on topological spaces are a constructively well-behaved variant of probability measures. 
+
+\begin{definition}[Probability valuation]
+	\label{def.prob_valuation}
+	Let $X$ be a topological space with set of opens $\Op[X]$. A \emph{probability valuation} on $X$ is a function $\mu \colon \Op[X] \to \tlrr$ satisfying the following conditions:
+	\begin{enumerate}
+		\item Normalization: $\mu(\emptyset) = 0$ and $\mu(X) = 1$.
+		\item Monotonicity: if $U \subseteq V$, then $\mu(U)\le\mu(V)$.
+		\item Modularity: $\mu(U)+\mu(V)=\mu(U\cup V)+\mu(U\cap V)$.
+		\item Scott continuity: if $D \subseteq \Op[X]$ is a directed subset, then
+			\beq
+				\label{val_scott}
+				\mu \left( \bigcup D \right) = \sup_{U \in D} \mu(U).
+			\eeq
+	\end{enumerate}
+\end{definition}
+
+Note that the inequality $\ge$ in \eqref{val_scott} holds already by monotonicity.
+
+\begin{proposition}[Push-forward valuation]
+	\label{prop.pushforward}
+	Suppose that $f \colon X \to Y$ is a continuous map between topological spaces. Then for any valuation $\mu$ on $X$, the function
+	\[
+		f_* \mu \: \colon \:
+		\begin{matrix}
+			\Op[Y]	& \longrightarrow	& \tlrr	\\[2pt]
+			U	& \longmapsto		& \mu(f^{-1}(U))
+		\end{matrix}
+	\]
+	is a valuation on $Y$.
+\end{proposition}
+
+\begin{proof}
+	The map $f^{-1} \colon \Op[Y] \to \Op[X]$ is monotone and preserves finite meets and arbitrary joins, so any of the defining conditions of valuation that holds for $\mu$ holds for $f_*\mu$ also.
+\end{proof}
+
+Recall from \cref{top_on_one} that $\prop$ is the unique topology on the singleton set $1$.
+
+\begin{lemma}
+	\label{existence_val_on_1}
+	There exists a valuation on the one-point space $1$, namely the indicator function $\inc : \prop \to \tlrr$.
+\end{lemma}
+
+\begin{proof}
+	The normalization conditions and monotonicity are obvious. Concerning modularity, for $P,Q : \prop$, we prove both inequality directions of the claimed equation
 	\[
 		\ind{P \lor Q} + \ind{P \land Q} = \ind P + \ind Q.
 	\]
@@ -978,71 +1021,83 @@ Let $\tii$ be the unit interval as in \cref{def.unit_interval}, and recall the i
 	\]
 	There are three cases.
 	\begin{enumerate}[label=(\arabic*)]
-		\item If $q_\lor<0$ and $q_\wedge<0$ then $q=q_\lor+q_\wedge<0<\ind P + \ind Q$.
-		\item If  $(q_\lor<1)\wedge(P\lor Q)$ and $q_\wedge<0$, then we have two similar subcases, either $P$ or $Q$. Assuming $P$ we have $q_\lor<\ind P$ and $q_\wedge<\ind Q$, so $q<\ind P+\ind Q$.
-		\item If $(q_\wedge<1)\wedge(P\wedge Q)$, then both $P$ and $Q$ (and also $q_\lor<1$), so $q_\lor<\ind P$ and $q_\wedge<\ind Q$, and thus $q<\ind P + \ind Q$.
+		\item If $q_\lor < 0$ and $q_\land < 0$, then $q = q_\lor + q_\land < 0 < \ind P + \ind Q$.
+		\item If  $(q_\lor < 1) \land (P \lor Q)$ and $q_\land < 0$, then we have two analogous subcases, namely $P$ or $Q$. Assuming $P$, we have $q_\lor < \ind P$ and $q_\land < \ind Q$, so again $q < \ind P + \ind Q$.
+		\item If $(q_\land < 1) \land (P \land Q)$, then both $P$ and $Q$ (and also $q_\lor < 1$), so $q_\lor < \ind P$ and $q_\land < \ind Q$, and thus again $q < \ind P + \ind Q$.
 	\end{enumerate}
-	
-	For the other direction, assume $q < \ind{P} + \ind{Q}$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \ind{P}$ and $q_Q < \ind{Q}$. Again we have cases. (1) If $q_P<0$ and $q_Q<0$ then $q=q_P + q_Q<0<\ind{P \lor Q} + \ind{P \land Q}$. (2) If $q_P<0$ and $(q_Q<1)\wedge Q$ then $q_Q<\ind{P\lor Q}$ and $q_P<\ind{P\wedge Q}$; similarly if $q_Q<0$ and $(q_P<1)\wedge P$. (3) If $(q_P<1)\wedge P$ and $(q_Q<1)\wedge Q$ then $q_P<\ind{P\lor Q}$ and $q_Q<\ind{P\wedge Q}$.
-	
-	
+	For the other direction, assume $q < \ind{P} + \ind{Q}$. This means that we have $q_P$ and $q_Q$ with $q = q_P + q_Q$ as well as $q_P < \ind{P}$ and $q_Q < \ind{Q}$. Again we have cases.
+	\begin{enumerate}[label=(\arabic*)]
+		\item If $q_P < 0$ and $q_Q < 0$, then $q = q_P + q_Q < 0 < \ind{P \lor Q} + \ind{P \land Q}$.
+		\item If $q_P < 0$ and $(q_Q < 1)\land Q$, then $q_Q < \ind{P\lor Q}$ and $q_P < \ind{P \land Q}$, and therefore again $q < \ind{P \lor Q} + \ind{P \land Q}$. Similarly if $q_Q < 0$ and $(q_P < 1) \land P$. 
+		\item If $(q_P < 1) \land P$ and $(q_Q < 1) \land Q$, then $q_P < \ind{P \lor Q}$ and $q_Q < \ind{P \land Q}$.
+	\end{enumerate}
+	This ends the proof of modularity.	
 
-	Concerning Scott continuity \eqref{eqn.scott_continuity}, for any subtype $D \subseteq \prop$, directed or otherwise, both sides of the desired continuity equation
+	Concerning Scott continuity \eqref{eqn.scott_continuity}, consider any $D \subseteq \prop$, where we will not actually need directedness. We then show that
 	\[
-		\sup_{P : D} \ind{P} = \ind{\exists (P:D) P},
+		\ind{\bigcup D} = \sup_{P \in D} \ind{P} ,
 	\]
-	are identical; both sides are the constant predicate $\exists(P:D).P$ (see \cref{def.sup_unit_interval,prop.inc_const,prop.cast_sups}). Thus $\inc : \prop \to \tii$ is indeed a valuation.
+	where the $\ge$ direction is already trivial. But if $q < \ind{\bigcup D}$, then $q < 0$, in which case we are done, or $q < 1$ and $\bigcup D$. The latter means exactly that $P$ holds for some $P \in D$. Therefore $1_P = 1$, and the right-hand side is $1$, establishing the remaining inequality $\le$.
 \end{proof}
 
-\begin{proposition}\label{prop.uniqueness_val_on_1}
-	There is precisely one valuation on $\{*\}$, namely the indicator function $\inc : \prop \to \tii$.
+\begin{proposition}
+	\label{uniqueness_val_on_1}
+	There is precisely one valuation on $1$, namely the indicator function $\inc : \prop \to \tlrr$.
 \end{proposition}
+
 \begin{proof}
-By \cref{prop.existence_val_on_1} it suffices to show that an arbitrary valuation $\mu : \prop \to \tii$ on $\{*\}$ satisfies $\mu(P) = \ind{P}$ for all $P : \prop$. One direction is easy, namely
-	\begin{equation}\label{eqn.ind_less_val}
+	By \cref{existence_val_on_1}, it suffices to show that an arbitrary valuation $\mu \colon \prop \to \tlrr$ satisfies $\mu(P) = \ind{P}$ for all $P : \prop$. One direction is easy, namely
+	\begin{equation}
+		\label{ind_less_val}
 		\ind{P} \le \mu(P).
 	\end{equation}
-	for all $P:\prop$. Indeed if $q<\ind{P}$ for some $0 \le q<1$ then $P$, in which case $\mu(P)=\mu(\top)=1$. 
+	for all $P \in \prop$. Indeed if $q < \ind{P}$ for some $0 \le q < 1$, then $P$, in which case also $\mu(P) = \mu(1) = 1$, so that $q < \mu(P)$.
 	
-	The other inequality requires more work. For $P:\prop$, consider the predicate
+	The other inequality requires more work. For $P \in \prop$, consider the subset $D_P \subseteq \prop$ given by
 	\[
-		d_P(Q) := \left( \mu(Q) = \ind{Q} \right) \land (Q \Rightarrow P).
+		D_P := \left\{ Q \subseteq P \mid \mu(Q) = 1_Q \right\}.
 	\]
-	We claim that $D_P\coloneqq\{Q:\prop\mid d_P(Q)\}$ defines a directed subtype of $\prop$. Since $d_P(\bot)$ holds we have $\exists(Q:D_P).\top$. Now suppose that $d_P(Q_1)$ and $d_P(Q_2)$ for $Q_1, Q_2 : \prop$; we then claim that also $d_P(Q_1 \lor Q_2)$. Since $Q_1 \Rightarrow P$ and $Q_2 \Rightarrow P$, the part $(Q_1 \lor Q_2) \Rightarrow P$ is clear, so we need to show that also $\mu(Q_1 \lor Q_2) = \ind{Q_1 \lor Q_2}$. Using \eqref{eqn.ind_less_val} and the assumed modularity equation, we have
+	We claim that $D_P$ is directed. For inhabitedness, $\emptyset \in D_P$ is trivial. Now for any $Q_1, Q_2 \in D_P$, we claim that also $Q_1 \cup Q_2 \in D_P$. Since $Q_1, Q_2 \subseteq P$, the part $Q_1 \cup Q_2 \subseteq P$ is clear, so it remains to be shown that also $\mu(Q_1 \cup Q_2) = \ind{Q_1 \cup Q_2}$. Using \eqref{ind_less_val} and the assumed modularity equation, we have
 	\begin{align*}
-		\ind{Q_1 \lor Q_2} + \ind{Q_1 \land Q_2}	& \le \mu(Q_1 \lor Q_2) + \mu(Q_1 \land Q_2)	\\
+		\ind{Q_1 \cup Q_2} + \ind{Q_1 \cap Q_2}		& \le \mu(Q_1 \cup Q_2) + \mu(Q_1 \cap Q_2)	\\
 								& = \mu(Q_1) + \mu(Q_2) \\
 								& = \ind{Q_1} + \ind{Q_2},
 	\end{align*}
-	where the last step uses the assumptions $d_P(Q_1)$ and $d_P(Q_2)$. But since $\inc$ is a valuation by \cref{prop.existence_val_on_1}, the left-hand side and the right-hand side of this chain of inequalities are equal, so $\ind{Q_1 \lor Q_2} = \mu(Q_1 \lor Q_2)$ by \cref{cor.favorite}. We have now proved our claim that $d_P(Q_1 \lor Q_2)$, making $D_P$ directed.
+	where the last step uses the assumption $Q_1, Q_2 \in D_P$. But since $\inc$ is a valuation by \Cref{existence_val_on_1}, the left-hand side and the right-hand side of this chain of inequalities are equal, so that $\ind{Q_1 \lor Q_2} = \mu(Q_1 \lor Q_2)$ by \Cref{cancel_improved_lr}. We have therefore $Q_1 \cup Q_2 \in D_P$, proving that $D_P$ is indeed directed.
 
-	A straightforward logical argument shows that
+	The next step is to note that
 	\begin{equation}
 		\label{PfromDQ}
-		\exists (Q : D_P). Q \qquad \Longleftrightarrow \qquad P,
+		\bigcup D_P = P.
 	\end{equation}
-	where the implication from left to right combines the assumptions $Q$ and $Q \Rightarrow P$ to $P$, while the implication from right to left becomes trivial with $Q := \top$. Since $\mu$ is Scott continuous \eqref{eqn.scott_continuity}, we have
+	Indeed the inclusion from left to right is trivial. For the inclusion from right to left, show that if $x \in P$, then also $x \in \bigcup D_P$. Since the only inhabited predicate on $1$ is truth $\top$, we obtain that $P = 1$, and therefore also $1 \in D_P$, resulting in the desired $x \in \bigcup D_P$.
+
+	Thus since $\mu$ is Scott continuous, we have
 	\[
-		\mu(P) = \mu\big( \exists (Q : D_P) . Q \big) = \sup_{Q : D_P} \mu(Q).
+		\mu(P) = \mu \left( \bigcup D_P \right) = \sup_{Q \in D_P} \mu(Q).
 	\]
-	But now since $d_P(Q)$ implies $\mu(Q) = \ind{Q}$ by definition, we have by the Scott continuity of the valuation $\inc$ that
+	But now since $Q \in D_P$ means in particular $\mu(Q) = \ind{Q}$, we have by the Scott continuity of the valuation $\inc$ that
 	\[
-		\sup_{Q : D_P} \mu(Q) = \sup_{Q : D_P} \ind{Q} = \ind{\exists(Q:D_P).Q}.
+		\sup_{Q \in D_P} \mu(Q) = \sup_{Q \in D_P} \ind{Q} = \ind{\bigcup D_P}.
 	\]
-Now we can conclude using \eqref{PfromDQ} that $\mu(P)=\ind{P}$ as desired.
+	Now we can conclude the desired $\mu(P) = \ind{P}$ from another use of \eqref{PfromDQ}.
 \end{proof}
 
-Recall from \Cref{props_open} that for every $P : \prop$, the associated constant predicate $\_ \mapsto P$ is open in any topological space $(X,\Op[X])$. 
+Recall from \Cref{props_open} that for every $P \in \prop$, the associated constant predicate $\_ \mapsto P$ is open in any topological space.
 
 \begin{corollary}\label{cor.val_const_indicator}
-	Let $(X,\Op[X])$ be a topological space and $\mu : \Op[X] \to [0,1]$ any valuation. Then $\mu(\,\_\mapsto P) = \ind{P}$ for all $P : \prop$.
+	Let $X$ be a topological space and $\mu \colon \Op[X] \to \tlrr$ any valuation. Then
+	\[
+		\mu(\,\_\mapsto P) = \ind{P}
+	\]
+	for all $P \in \prop$.
 \end{corollary}
 
 \begin{proof}
-	By \cref{top_on_one,prop.pushforward,prop.uniqueness_val_on_1}, we can take the pushforward of $\mu$ along the unique continuous map $!\colon X\to (*,\prop)$ and find $\mu(\_\mapsto P)=!_*\mu(P)=\ind{P}$.
+	Apply \Cref{uniqueness_val_on_1} to the pushforward of $\mu$ along the unique continuous map $X\to 1$.
 \end{proof}
 
-From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\mapsto P)\colon X\to\prop$ on any type $X$.
+From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\mapsto P)\colon X\to\prop$ on any set $X$.
 
 \section{Interaction of valuations and modalities}
 
@@ -1454,7 +1509,7 @@ More concretely, this means that a $j$-local internal space consists of an objec
 \begin{enumerate}
 	\item $\Op[X]^j(\top)$,
 	\item $\Op[X]^j(j\bot)$,
-	\item $(\Op[X]^j(U)\wedge\Op[X]^j(V))\imp \Op[X]^j(U\wedge V)$ for any $U,V\in\pow_j(X)$, and
+	\item $(\Op[X]^j(U)\land\Op[X]^j(V))\imp \Op[X]^j(U\land V)$ for any $U,V\in\pow_j(X)$, and
 	\item $\Op[X]^j(j\exists(P:S). P)$ for any $j$-closed subobject $S\subseteq\Op[X]^j$. 
 \end{enumerate}
 
@@ -1493,17 +1548,11 @@ Recall the lower unit interval type $\tii$ from \cref{def.unit_interval}. We may
 
 Note that the inequality $\sup_{U: D}\mu(U)\le\mu\big(\exists(U:D).U\big)$ is purely formal, so Scott continuity is equivalent to
 
-\begin{equation}\label{eqn.scott_continuity}
+\begin{equation}
+	\label{eqn.scott_continuity}
 	\mu\big(\exists(U:D).U\big)\le\sup_{U: D}\mu(U).
 \end{equation}
 
-
-\begin{proposition}[Push-forward valuation]\label{prop.pushforward}
-	Suppose that $f\colon X\to Y$ is a continuous map of internal topological spaces. Then for any valuation $\mu$ on $X$, the function $f_*\mu\colon\Op[Y]\to\tlrr$ given by $f_*\mu(U)\coloneqq\mu(f^{-1}(U))$. If $\mu$ is continuous (resp.\ a probability valuation) then $f_*\mu$ is too.
-\end{proposition}
-\begin{proof}
-	The pullback functor $f^{-1}\colon\pow(Y)\to\pow(X)$ preserves limits and colimits, so any of the conditions 1,3,4,5 that holds for $\mu$ holds for $f_*\mu$ also. For 2, suppose $U\imp V$. Then $f^{-1}(U)\imp f^{-1}(V)$, so $\mu(f^{-1}(U))\le\mu(f^{-1}(V))$, proving the result.
-\end{proof}
 
 \begin{theorem}
 Probability valuations coincide with probability measures on Polish spaces.
