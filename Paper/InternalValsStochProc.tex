@@ -907,18 +907,16 @@ As usual, the morphisms of topological spaces are the maps $f \colon X \to Y$ wh
 \subsection{Heyting algebra structure}
 
 For any set $X$, the power set $\prop^X$ has a Heyting algebra structure given by, for $P, Q \subseteq X$,
+\begin{align*}
+	(P \imp Q) \:	&	\coloneqq \: \{ x \in X \mid x \in P \imp x \in Q \}	\\
+			&	= \: \bigcup \, \left\{ R \subseteq X \mid P \cap R \subseteq Q \right\}.
+\end{align*}
+For a topological space $X$, it is easy to see that also $\Op[X]$ is a Heyting algebra, with exponential given by
 \[
-	(P \imp Q) \: \coloneqq \: \{ x \in X \mid x \in P \imp x \in Q \}.
+	(U \imp_{\Op[X]} V) \: = \: \bigcup \, \left\{ W \in \Op[X] \mid U \cap W \subseteq V \right\}.
 \]
-
-\begin{lemma}
-	Let $\Op[X]$ be a topology on any set $X$. Then for any $U,V \in \Op[X]$, we have $(U \imp V) \in \Op[X]$.
-\end{lemma}
-
-\begin{proof}
-	The Heyting implication $U \imp V$ is the union of all $W \subseteq X$ for which $U \cap W \subseteq V$.
-	\tob{continue here}
-\end{proof}
+We obviously have $(U \imp_{\Op[X]} V) \subseteq (U \imp V)$, and in fact $U \imp_{\Op[X]} V$ is exactly the interior of $U \imp V$.
+\tob{Not sure if this is relevant}
 
 \subsection{Interaction with modalities}
 
@@ -1119,7 +1117,7 @@ From now on we abuse notation, simply writing $P$ to denote the predicate $(\_\m
 
 \begin{theorem}
 	\label{vals_vs_modalities}
-	Let $j$ be a decidable modality and $\mu \colon \Op[X] \to \tlrr$ a valuation on a topological space $X$. Then for all $U \in \Op[X]$,
+	Let $j$ be a countably coherent and decidable modality, and $\mu \colon \Op[X] \to \tlrr$ a valuation on a topological space $X$. Then for all $U \in \Op[X]$,
 	\[
 		\mu(jU) = j \mu(U).	
 	\]
@@ -1132,11 +1130,12 @@ Note that if $U$ is open then so is $jU$ by \Cref{props_open}, and therefore ind
 	\begin{itemize}
 		\item If $V$ is any $j$-closed open, then $\mu(V) \in \tlrr$ is a $j$-closed lower real.
 			
-			To begin the proof, we have the equivalences
+			To begin the proof, we have the equalities
 			\begin{align*}
-				V \cap (Q \Rightarrow j\bot) \quad & \Longleftrightarrow \quad j\bot, \\
-				V \cup (Q \Rightarrow j\bot) \quad & \Longleftrightarrow \quad \top,
+				V \cap (V \Rightarrow_{\Op[X]} j\emptyset) \: & = \: j\emptyset, \\
+				V \cup (V \Rightarrow_{\Op[X]} j\emptyset) \: & = \: X,
 			\end{align*}
+			\tob{not right}
 			where the second one is an instance of the decidability assumption on $j$. Hence applying the modularity law to $Q$ and $Q \Rightarrow j\bot$ results in the equation
 			\begin{align}
 				\label{j_modularity}
